@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.member.MemberMapper">
+
+	<resultMap type="memberVo" id="detailInfoByManager">
+		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER"/>
+		<result property="email" javaType="string" column="email" jdbcType="VARCHAR"/>
+		<result property="grade" javaType="string" column="name" jdbcType="VARCHAR"/>
+		<result property="nickname" javaType="string" column="nickname" jdbcType="VARCHAR"/>
+		<result property="regDate" javaType="string" column="regdate" jdbcType="VARCHAR"/>
+		<result property="lastDate" javaType="string" column="lastdate" jdbcType="VARCHAR"/>
+		<result property="docs" javaType="int" column="docs" jdbcType="INTEGER"/>
+		<result property="comms" javaType="int" column="comms" jdbcType="INTEGER"/>
+		<result property="visits" javaType="int" column="visits" jdbcType="INTEGER"/>
+		<result property="ban" javaType="string" column="ban" jdbcType="VARCHAR"/>
+		<result property="isMember" javaType="int" column="ismember" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<resultMap type="memberVo" id="briefMemberInfo">
+		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER"/>
+		<result property="email" javaType="string" column="email" jdbcType="VARCHAR"/>
+		<result property="grade" javaType="string" column="name" jdbcType="VARCHAR"/>
+		<result property="regDate" javaType="string" column="regdate" jdbcType="VARCHAR"/>
+		<result property="visits" javaType="int" column="visits" jdbcType="INTEGER"/>
+		<result property="ban" javaType="string" column="ban" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	<select id="selectMemberList" parameterType="criteria" resultType="memberVo" resultMap="briefMemberInfo">
+		SELECT member_no,email, name, regdate, visits, ban
+		FROM Member M RIGHT JOIN grade G
+		ON M.grade_no = G.grade_no
+		WHERE member_no > 0
+		ORDER BY member_no ASC, ismember ASC
+		LIMIT #{pageStart}, #{dataPerPage}
+	</select>
+	
+	<select id="selectTotalMember" resultType="int">
+		SELECT COUNT(*)
+		FROM Member
+	</select>
+	
+	<select id="selectMemberByManager" parameterType="int" resultType="memberVo" resultMap="detailInfoByManager">
+		SELECT member_no, email, name, nickname, regdate, lastdate, M.docs, M.comms, visits, ban, ismember
+		FROM Member M RIGHT JOIN grade G
+		ON M.grade_no = G.grade_no
+		WHERE member_no = #{no}
+	</select>
+	
+	<update id="updateBan7days" parameterType="int">
+		UPDATE Member
+		SET	ban = DATE_ADD(NOW(), INTERVAL 7 DAY)
+		WHERE member_no = #{no}
+	</update>
+	
+	<update id="updateBan1day" parameterType="int">
+		UPDATE Member
+		SET	ban = DATE_ADD(NOW(), INTERVAL 1 DAY)
+		WHERE member_no = #{no}
+	</update>
+	
+	<update id="updateBan1minute" parameterType="int">
+		UPDATE Member
+		SET	ban = DATE_ADD(NOW(), INTERVAL 1 MINUTE)
+		WHERE member_no = #{no}
+	</update>
+	
+	<update id="updateMemberByForce" parameterType="int">
+		UPDATE Member
+		SET ismember = 2
+		WHERE member_no = #{no};
+	</update>
+	
+	<update id="plusMemberDocs" parameterType="int">
+		UPDATE Member
+    	SET docs = docs + 1
+    	WHERE member_no = #{no};
+	</update>
+	
+	<update id="minusMemberDocs" parameterType="int">
+		UPDATE Member
+    	SET docs = docs - 1
+    	WHERE member_no = #{no};
+	</update>
+	
+	<update id="plusMemberComms" parameterType="int">
+		UPDATE Member
+    	SET comms = comms + 1
+    	WHERE member_no = #{no};
+	</update>
+	
+    <update id="minusMemberComms" parameterType="int">
+    	UPDATE Member
+    	SET comms = comms - 1
+    	WHERE member_no = #{no};
+    </update>
+
+    <select id="selectMember_byIDPwd" parameterType="String" resultType="memberVo" resultMap="detailInfoByManager">
+        <!-- SELECT member.member_no, email, nickname -->
+        SELECT member_no, email, name, nickname, regdate, lastdate, M.docs, M.comms, visits, ban, ismember
+		FROM Member M RIGHT JOIN grade G
+		ON M.grade_no = G.grade_no
+        WHERE email=#{email} AND password=#{password}
+    </select>
+    
+    <update id = "updateLastDdate" parameterType = "int">
+	    UPDATE Member 
+	    SET lastdate = CURRENT_TIMESTAMP 
+	    WHERE member_no = #{no}
+    </update>
+  
+  <!-- 회원가입 -->
+	<insert id="insertMemberNo"  parameterType="HashMap">
+	<!-- ㄴ설명: insert 명령을 만들건데, 이름은 insertMemberNo이고 (내가 지은거),  파라미터값은 HashMap(자바에 원래 있는 타입)이다.-->
+		INSERT INTO MemberNo VALUES()
+			<!-- ㄴ설명: MemberNo가 Auto Incremental로 설정 되어있어서 VALUES()에 아무값도 안 넣으면 자동으로 값이 들어감(원래는 VALUES() 괄호 안에 값을 넣어야 함 -->
+		<selectKey resultType="int"  keyProperty="no" order="AFTER"> 
+		<!-- ㄴ설명:  resultType는 MemberNo의 가져오는 자바타입(이쪽으로 넘어왔을 때),  keyProperty는 "no" : "쿼리문결과" 이런 형태를 가지겠다는 의미. -->
+		<!-- ㄴ order="AFTER" 설명 :  (위에 있는) INSERT INTO MemberNo VALUES()을 먼저 실행 후, (아래에 있는) SELECT LAST_INSERT_ID()을 실행해라 -->
+			SELECT LAST_INSERT_ID()
+			<!-- ㄴ설명: 마지막에 insert 된 값을 선택-->
+		</selectKey>
+	</insert>
+
+	<insert id="insertMember"  parameterType="memberVo">   <!-- parameterType(경로)의 괄호 안에 들어간 건 MemberVO에 있는 @Alias("memberVO")과 이름이 
+			일치해야 함 -->
+		INSERT INTO Member(member_no, email, password, nickname)
+		VALUES (#{no}, #{email}, #{password}, #{nickname}) <!-- #{}안에는 
+			MemberVO에서 선언한 변수명과 일치해야 함 -->
+	</insert>
+	
+	<!-- 회원가입 시 이메일 중복확인 -->
+	<select id="selectEmail"  parameterType="String"  resultType="String">
+		SELECT email
+		FROM Member
+		WHERE email = #{email}
+	</select>
+	
+	<update id="updateTempPassword"  parameterType="memberVo">    
+      UPDATE Member
+      SET password = #{password}
+      WHERE email = #{email} AND ismember = 0
+   </update>
+</mapper>

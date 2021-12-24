@@ -1,0 +1,107 @@
+@charset "utf-8";
+
+.detailArticle-table-style {
+	margin-top: 20px;
+}
+
+.detailArticle-table-style table th {
+	background-color: #cccccc;
+	text-align: center;
+}
+
+.detailArticle-table-style table th, .detailArticle-table-style table td
+	{
+	border: 1px solid #000000;
+	padding: 10px;
+	font-size: 18px;
+	vertical-align: middle;
+}
+
+.detailArticle-table-style table tr:nth-last-child(2) td,
+	.detailArticle-table-style table tr:last-child td {
+	border: none;
+}
+
+.detailArticle-table-style table tr:nth-last-child(2) {
+	border: 1px solid #000000;
+}
+
+.detailArticle-btn-style{
+	display: flex;
+}
+
+.detailArticle-function-style{
+	margin-right: 10px;
+}
+
+.detailArticle-like-style{
+	display: flex;
+}
+
+.detailArticle-like-style button{
+	outline: none;
+	border: none;
+	background-color: #ffffff;
+}
+.detail-userCheck-style{
+	width: 100%;
+}
+
+.detail-userBtn-style{
+	display: flex;
+
+}
+
+.detail-userBtn-style input:first-child{
+	margin-right: 10px;
+}
+.detailArticle-reply-style {
+	display: flex;
+}
+
+.detailArticle-reply-style textarea {
+	resize: none;
+	height: 100px;
+	margin-right: 10px;
+	padding: 10px 0 0 10px;
+}
+
+.detailArticle-reply-style button {
+	width: 100px;
+}
+
+
+.reply_list{
+	margin-top: 10px;
+	width: 50%;
+}
+.reply_list table{
+	width: 100%;	
+}
+
+.reply_list table th,
+.reply_list table td{
+	border: 1px solid #000000;
+	vertical-align: middle;
+	padding: 5px;
+}
+
+.reply_list table th{
+	text-align: center;
+}
+
+.reply_list table tfoot td{
+	padding: 10px;
+	border: none;
+}
+
+.reply_list table tfoot td input{
+	width:100px;
+	padding: 5px;
+}
+
+.reply_list table tfoot td input:first-child{
+	margin-right: 10px;
+}
+
+

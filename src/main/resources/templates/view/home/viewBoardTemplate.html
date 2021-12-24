@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default_layout}">
+
+<th:block layout:fragment="head">
+	<title>반려동물 카페</title>
+	<link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+	<link
+		th:href="@{https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css}"
+		rel="stylesheet" />
+	<link th:href="@{../css/theme_styles.css}" rel="stylesheet" />
+
+	<link th:href="@{../css/homeContentsStyle.css}" rel="stylesheet" />
+	<link th:href="@{../css/homeNavStyle.css}" rel="stylesheet" />
+
+	<script
+		th:src="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js}"
+		th:crossorigin="anonymous"></script>
+</th:block>
+
+<body class="sb-nav-fixed">
+
+	<!-- Header -->
+	<th:block layout:fragment="viewFrameHeader"
+		th:include="@{/fragments/viewFrameHeader}"></th:block>
+
+	<div id="layoutSidenav">
+		<!-- Nav -->
+		<th:block layout:fragment="nav" th:include="@{/fragments/nav}"></th:block>
+		
+		<!-- Content -->
+		<!-- NomalList -->
+		<div th:if="${boardkind == 0}">
+		<th:block layout:fragment="viewMainContent"
+			th:include="@{/view/board/listArticleNomal}"></th:block>
+		</div>
+		
+		<!-- Content -->
+		<!-- ThumbnailList -->
+		<div th:if="${boardkind == 1}">
+		<th:block layout:fragment="viewMainContent"
+			th:include="@{/view/board/listArticleThumbnail}"></th:block>
+		</div>
+		
+		<!-- Content -->
+		<!-- SimpleList -->
+		<div th:if="${boardkind == 2}">
+		<th:block layout:fragment="viewMainContent"
+			th:include="@{/view/board/listArticleSimple}"></th:block>
+		</div>
+	</div>
+
+	<!-- footer -->
+	<th:block layout:fragment="viewFrameFooter"
+		th:include="@{/fragments/viewFrameFooter}"></th:block>
+
+	<!-- Script -->
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js}"
+		th:crossorigin="anonymous"></script>
+	<script th:src="@{../js/scripts.js}"></script>
+	<script
+		th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js}"
+		th:crossorigin="anonymous"></script>
+	<script th:src="@{../js/chart-area-demo.js}"></script>
+	<script th:src="@{../js/chart-bar-demo.js}"></script>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@latest}"
+		th:crossorigin="anonymous"></script>
+	<script th:src="@{../js/datatables-simple-demo.js}"></script>
+
+
+</body>
+</html>

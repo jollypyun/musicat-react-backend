@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/musicat
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        #        show_sql: true #sysout으로 찍는다
+        format_sql: true
+
+# hibernate가 생성하는 SQL이 모두 보인다.
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace

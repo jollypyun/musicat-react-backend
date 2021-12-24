@@ -1,0 +1,117 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<link th:href="@{../css/gradeManagerStyle.css}" rel="stylesheet" />
+
+<div id="layoutSidenav_content">
+	<main>
+		<div class="container-fluid px-4">
+			<div class="row mt-5 mb-5">
+				<form th:action="@{/grades}" method="POST">
+
+					<div class="gradeList-table-style">
+						<table id="Grade">
+							<colgroup>
+								<col width="10%" />
+								<col width="20%" />
+								<col width="10%" />
+								<col width="20%" />
+								<col width="15%" />
+								<col width="15%" />
+								<col width="10%" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th>번호</th>
+									<th>등급 이름</th>
+									<th>열람 가능</th>
+									<th>게시글 갯수</th>
+									<th>댓글 갯수</th>
+									<th>등급 회원 수</th>
+									<th>비고</th>
+								</tr>
+							</thead>
+
+							<tbody th:each="grade : ${grades}">
+								<tr>
+									<td><input type="text" th:placeholder="${grade.gradeNo}"
+										name="gradeNo" th:value="${grade.gradeNo}"></td>
+									<td><input type="text" th:placeholder="${grade.name}"
+										name="name" th:value="${grade.name}"></td>
+									<td><button type="button" th:value="${grade.gradeNo}"
+											id="checkBtn">확인</button></td>
+									<td><input type="text" th:placeholder="${grade.docs}"
+										name="docs" th:value="${grade.docs}"></td>
+									<td><input type="text" th:placeholder="${grade.comms}"
+										name="comms" th:value="${grade.comms}"></td>
+									<td th:text="${grade.person} + '명'"></td>
+									<td><button type="button" th:value="${grade.gradeNo}"
+											id="deleteBtn" onclick="delRow(this)">삭제</button></td>
+								</tr>
+							</tbody>
+
+
+						</table>
+					</div>
+					<div class="gradeList-btn-style">
+						<button type="button" id="addBtn" onclick="addRow()">등급
+							추가</button>
+						<button type="submit" id="submitBtn">저장</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+</div>
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script>
+	$("#checkBtn").click(function() {
+		const gradeNo = this.val();
+		$.ajax({
+			url : '/grades/' + gradeNo,
+			type : 'GET',
+			dataType : 'json',
+			success : function(data) {
+				location.href = 'gradeList.html';
+			},
+			error : function(err) {
+				console.log(err);
+			}
+		});
+	});
+	function addRow() {
+		var Row = Grade.insertRow();
+		Row.onmouseover = function() {
+			Grade.clickedRowIndex = this.rowIndex;
+		}
+
+		var Cell1 = Row.insertCell();
+		Cell1.innerHTML = "<input type='text' name='gradeNo'>"
+
+		var Cell2 = Row.insertCell();
+		Cell2.innerHTML = "<input type='text' name='name'>"
+
+		var Cell3 = Row.insertCell();
+		Cell3.innerHTML = "<button type='button' id='checkBtn'>확인</button>"
+
+		var Cell4 = Row.insertCell();
+		Cell4.innerHTML = "<input type='text' name='docs'>"
+
+		var Cell5 = Row.insertCell();
+		Cell5.innerHTML = "<input type='text' name='comms'>"
+
+		var Cell6 = Row.insertCell();
+
+		var Cell7 = Row.insertCell();
+		Cell7.innerHTML = "<button type='button' onclick='delRow(this)' id='deleteBtn'>삭제</button>"
+	}
+
+	function delRow(obj) {
+		var com = confirm("정말로 삭제하시겠습니까?");
+		if (com) {
+			var tr = obj.parentNode.parentNode;
+			tr.parentNode.removeChild(tr);
+		}
+	}
+</script>
+</html>

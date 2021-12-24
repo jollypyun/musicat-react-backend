@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- <mapper namespace="com.example.vo.MemberVO"> -->
+<mapper namespace="com.example.mapper.board.ArticleMapper">
+
+	<resultMap type="articleVo" id="articleVOResult">
+		<result property="no" javaType="int" column="article_no"  jdbcType="INTEGER"/>
+		<result property="subject" javaType="String" column="subject"  jdbcType="VARCHAR"/>
+		<result property="nickname" javaType="String" column="nickname"  jdbcType="VARCHAR"/>
+		<result property="writeDate" javaType="String" column="writedate" jdbcType="VARCHAR"/>
+		<result property="viewcount" javaType="int" column="viewcount" jdbcType="VARCHAR"/>
+		<result property="likecount" javaType="int" column="likecount"  jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<select id="selectBoard" parameterType="Integer" statementType="CALLABLE" resultType="articleVo" resultMap="articleVOResult">
+		{ CALL sp_article_select_board(#{boardNo}) }
+	</select>
+
+	<resultMap type="articleVo" id="detailArticleVOResult">
+		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"/>
+		<result property="subject" javaType="String" column="subject"  jdbcType="VARCHAR"/>
+		<result property="nickname" javaType="String" column="nickname"  jdbcType="VARCHAR"/>
+		<result property="writeDate" javaType="String" column="writedate" jdbcType="VARCHAR"/>
+		<result property="content" javaType="String" column="content" jdbcType="VARCHAR"/>
+	</resultMap>
+	
+	
+	<resultMap type="fileVo" id="detailFileVOResult">
+		<result property="no" javaType="int" column="file_no" jdbcType="INTEGER" />
+		<result property="articleNo" javaType="int" column="article_no" jdbcType="INTEGER" />
+		<result property="originalFileName" javaType="String" column="originalfilename" jdbcType="VARCHAR" />
+		<result property="systemFileName" javaType="String" column="systemfilename" jdbcType="VARCHAR" />
+		<result property="fileSize" javaType="Long" column="filesize" jdbcType="BIGINT" />
+		<result property="fileType" javaType="int" column="filetype" jdbcType="TINYINT" />
+	</resultMap>
+	
+	<resultMap type="selectArticleVo" id="detailSelectMap">
+		<collection property="article" resultMap="detailArticleVOResult" />
+		<collection property="file" resultMap="detailFileVOResult" />
+	</resultMap>
+	
+	<select id="selectArticle" parameterType="Integer" statementType="CALLABLE" resultMap="detailSelectMap">
+		{ CALL sp_article_select_detail(#{articleNo}) }
+	</select>
+
+	<select id="selectViewCount" parameterType="Integer" resultType="int">
+		SELECT viewcount FROM Article WHERE article_no = #{articleNo}
+	</select>	
+	
+	<insert id="insertArticle" statementType="CALLABLE" parameterType="articleVo">
+		{ CALL sp_article_insert(#{memberNo}, #{boardNo}, #{nickname}, #{subject}, #{content}) }
+		
+		<selectKey resultType="int" keyProperty="no" keyColumn="article_no" order="AFTER" >
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	
+	<update id="updateArticle" parameterType="articleVo" statementType="CALLABLE">
+		{ CALL sp_article_update(#{no},#{subject},#{content}) }
+	</update>
+	
+	
+	
+	<update id="upViewcount" parameterType="int" statementType="CALLABLE" >
+		{ CALL sp_up_viewcount(#{articleNo}) }
+	</update>
+	
+	
+	<delete id="deleteArticle" parameterType="int" statementType="CALLABLE">
+		{ CALL sp_article_delete(#{articleNo}) }
+	</delete>
+	
+	
+	
+	<!-- 추천 -->
+	
+	<insert id="insertLike" parameterType="likeVo" statementType="CALLABLE">
+		{ CALL sp_insert_like(#{memberNo}, #{articleNo}) }
+	</insert>
+	
+	<resultMap type="likeVo" id="selectLikeMap">
+		<result property="no" javaType="int" column="recommend_no" jdbcType="INTEGER"/>
+		<result property="memberNo" javaType="int" column="member_no" jdbcType="INTEGER"/>
+		<result property="articleNo" javaType="int" column="article_no" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<select id="selectLike" parameterType="likeVo" statementType="CALLABLE" resultMap="selectLikeMap">
+		{ CALL sp_select_like( #{memberNo}, #{articleNo}) }
+	</select>
+	
+	<delete id="deleteLike" parameterType="int"  statementType="CALLABLE">
+		{ CALL sp_delete_like( #{no} ) }
+	</delete>
+	
+	
+	<select id="totalLikeCount" statementType="CALLABLE" parameterType="int" resultType="int">
+			{ CALL sp_totalcount_like(#{articleNo} ) }
+	</select>
+	
+	
+	
+</mapper>
