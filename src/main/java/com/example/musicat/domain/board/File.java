@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -14,25 +15,52 @@ public class File {
 
     @Id @GeneratedValue
     @Column(name = "file_no")
-    Integer no;
+    private Integer no;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_no")
-    Article article;
+    private Article article;
 
     @Column(name = "originalfilename")
-    String originalFileName;
+    private String originalFileName;
 
     @Column(name = "systemfilename")
-    String systemFileName;
+    private String systemFileName;
 
     @Column(name = "filesize")
-    int fileSize;
+    private int fileSize;
+
+    @Column(name = "filetype")
+    private int fileType;
+
+    @Column(name = "writedate", nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp writedate;
 
     //==연관관계 편의 메소드==//
     public void addArticle(Article article) {
         this.article = article;
         article.getFileList().add(this);
+    }
+
+    //==생성 메소드==//
+    public static File createFile(String originalFileName, String systemFileName, int fileSize, int fileType){
+        File file = new File();
+        file.originalFileName = originalFileName;
+        file.systemFileName = systemFileName;
+        file.fileSize = fileSize;
+        file.fileType = fileType;
+        return file;
+    }
+
+    @Override
+    public String toString() {
+        return "File{" +
+                "no=" + no +
+//                ", article=" + article +
+                ", originalFileName='" + originalFileName + '\'' +
+                ", systemFileName='" + systemFileName + '\'' +
+                ", fileSize=" + fileSize +
+                '}';
     }
 
 }

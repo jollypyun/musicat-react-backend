@@ -1,15 +1,14 @@
 package com.example.musicat.repository.board;
 
+import com.example.musicat.controller.ArticleForm;
 import com.example.musicat.domain.board.Article;
 import com.example.musicat.domain.board.Board;
+import com.example.musicat.domain.board.File;
+import com.example.musicat.domain.board.Reply;
 import com.example.musicat.domain.member.Member;
-import com.example.musicat.repository.BaseRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,80 +16,125 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @Slf4j
+@Transactional
+@Rollback(value = false)
 class ArticleRepositoryTest {
 
-    @Autowired EntityManager em;
+    @Autowired
+    EntityManager em;
 
-    @Autowired @Qualifier("articleRepository")
-    private BaseRepository articleRepository;
+    @Autowired
+    private ArticleRepositoryImpl articleRepository;
+    @Autowired
+    private ReplyRepositoryImpl replyRepository;
+
+
 
     @Test
-    @Transactional
-    @Rollback(value = false)
     public void 게시글_등록() throws Exception {
         //given ~가 주어졌을 때
-        Member findMember = em.find(Member.class, 3);
-        Board findBoard = em.find(Board.class, 2);
-//        Article article = Article.builder()
-//                .member(findMember)
-//                .board(findBoard)
-//                .nickname("Test용")
-//                .subject("Test용")
-//                .content("Test")
-//                .build();
+        Member member = em.find(Member.class, 4);
+        Board board = em.find(Board.class, 6);
+        Article article = Article.createArticle(member, board, "Test용30", "Test용30", "Test30");
+        File createFile = File.createFile("TestFile1", "TestFile2", 1313, 1);
+        File createFile2 = File.createFile("TestFile1", "TestFile2", 1313, 1);
+        File createFile3 = File.createFile("TestFile1", "TestFile2", 1313, 1);
+        createFile.addArticle(article);
+        createFile2.addArticle(article);
+        createFile3.addArticle(article);
+
         //when 이것을 실행하면
-//        articleRepository.save(article);
-//        em.persist(article);
+        articleRepository.save(article);
+
         //then 결과가 이렇게 나와야 한다.
-        log.info(findMember.toString());
-        log.info(findBoard.toString());
+//        Object findArticle = articleRepository.findOne(29);
+//        assertEquals(article, findArticle);
     }
 
     @Test
     public void 게시글_삭제() throws Exception {
         //given
-
+        int removeNo = 33;
         //when
-
+        articleRepository.remove(removeNo);
         //then
     }
 
     @Test
     public void 게시글_수정() throws Exception {
         //given
+        ArticleForm form = new ArticleForm();
+        form.setBoardNo(5);
+        form.setSubject("수정 테스트4");
+        form.setContent("수정 테스트2");
+
+        Board board = em.find(Board.class, form.getBoardNo());
+        Object findArticle = articleRepository.findOne(27);
 
         //when
-
-        //then
-    }
-
-    @Test
-    public void 게시글_단건_조회() throws Exception {
-        //given
-
-        //when
-
-        //then
-    }
-
-    @Test
-    public void 게시글_게시판별_조회() throws Exception {
-        //given
-
-        //when
+        Article.updateArticle((Article) findArticle, board, form);
 
         //then
     }
 
     @Test
     @Transactional(readOnly = true)
+    public void 게시글_단건_조회() throws Exception {
+        //given
+        int articleNo = 25;
+        Article findArticle = (Article) articleRepository.findOne(24);
+
+        //when
+        List<File> findFileList = findArticle.getFileList();
+        List<Reply> findReplyList = findArticle.getReplyList();
+
+        //then
+        assertEquals(24, ((Article) findArticle).getNo());
+        assertEquals(2, findReplyList.size(), "25번 게시글의 댓글의 수는 2이다.");
+        assertEquals(2, findFileList.size(), "25번 게시글의 첨부 파일의 수는 2이다.");
+        for (Reply reply : findReplyList) {
+            log.info("=================================");
+            log.info(reply.toString());
+            log.info("=================================");
+        }
+        for (File file : findFileList) {
+            log.info("=================================");
+            log.info(file.toString());
+            log.info("=================================");
+        }
+    }
+
+    @Test
+    @Transactional(readOnly = true)
+    public void 게시글_게시판별_조회() throws Exception {
+        //given
+        Board findBoard = em.find(Board.class, 3);
+        List<Article> articles = articleRepository.findByBoardNo(findBoard);
+
+        //when
+
+        //then
+        assertEquals(2, articles.size());
+        for (Article article : articles) {
+            log.info(article.toString());
+        }
+    }
+
+    @Test
+    @Transactional(readOnly = true)
     public void 게시글_모두_조회() throws Exception {
         //given
-        List articles = articleRepository.findAll();
+        List<Article> articles = articleRepository.findAll();
         //when
         //then
+        assertEquals(5, articles.size());
+        for (Article article : articles) {
+            log.info(article.toString());
+        }
     }
 
 

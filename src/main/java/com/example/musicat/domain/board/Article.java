@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,11 +23,11 @@ public class Article {
     @Column(name = "article_no")
     private Integer no;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_no")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_no")
     private Board board;
 
@@ -39,11 +41,11 @@ public class Article {
     private int viewcount; // 조회수
     private int likecount; // 추천수
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = LAZY, mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> fileList = new ArrayList<>(); // 이미지 List
 
     // 삭제시만 같이 하기 위해 Casacade Remove
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(fetch = LAZY, mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Reply> replyList = new ArrayList<>(); // 댓글
 
 //    private FileVO attacheFile; //첨부 파일
@@ -53,14 +55,15 @@ public class Article {
 
 
     //==생성 메소드==//
-    @Builder
-    public Article(Member member, Board board, String nickname, String subject, String content) {
+//    @Builder
+    public static Article createArticle(Member member, Board board, String nickname, String subject, String content) {
         Article article = new Article();
         article.member = member;
         article.board = board;
         article.nickname = nickname;
         article.subject = subject;
         article.content = content;
+        return article;
     }
 
 
@@ -88,4 +91,21 @@ public class Article {
         this.likecount -= 1;
     }
 
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "no=" + no +
+                ", member=" + member +
+                ", board=" + board +
+                ", nickname='" + nickname + '\'' +
+                ", subject='" + subject + '\'' +
+                ", content='" + content + '\'' +
+                ", writedate=" + writedate +
+                ", viewcount=" + viewcount +
+                ", likecount=" + likecount +
+//                ", fileList=" + fileList +
+//                ", replyList=" + replyList +
+                '}';
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.musicat.service.board;
 
 import com.example.musicat.repository.BaseRepository;
+import com.example.musicat.repository.board.ArticleRepositoryImpl;
 import com.example.musicat.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,13 @@ import java.util.List;
 
 @Service("articleService")
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class ArticleServiceImpl implements BaseService {
+//@RequiredArgsConstructor
+public class ArticleServiceImpl implements ArticleService {
 
-    @Qualifier("articleRepository")
-    private final BaseRepository articleRepository;
+    @Autowired
+    private ArticleRepositoryImpl articleRepository;
+
+//    private final ArticleRepositoryImpl articleRepository;
 
     @Override
     @Transactional
