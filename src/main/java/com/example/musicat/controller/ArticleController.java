@@ -23,14 +23,15 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequiredArgsConstructor
-@RequestMapping("/articles")
+//@RequiredArgsConstructor
+@RequestMapping("articles")
 public class ArticleController {
 
     private final ArticleServiceImpl articleService;
 
-//    @Autowired
-//    private ArticleService articleService;
+    public ArticleController(ArticleServiceImpl articleService) {
+        this.articleService = articleService;
+    }
 
     /**
      * 전체글 조회
@@ -79,20 +80,22 @@ public class ArticleController {
     @GetMapping("/addArticle")
     public String saveForm(Model model) throws Exception{
         List<BoardEx> boardList = new ArrayList<>(); //임시로 만든 static class
-        for (int i = 0; i < 6; i++) {
+        ArticleForm form = new ArticleForm();
+        for (int i = 1; i <= 6; i++) {
             BoardEx bx = new BoardEx();
             bx.setBoardNo(i);
             bx.setBoardName("게시판" + i);
             boardList.add(bx);
         }
-        model.addAttribute("gradeNo", 1);
+        for (BoardEx boardEx : boardList) {
+            log.info("boardEx: {}", boardEx.toString());
+        }
+//        form.setBoardList(boardList);
         model.addAttribute("boardList", boardList);
-        log.info("before form");
-        model.addAttribute("articleForm", new ArticleForm());
-        model.addAttribute("HomeContent", "/view/board/writeArticleForm");
-//        return "view/home/viewHomeTemplate";
-        log.info("after form");
-        return "/view/board/writeArticleForm";
+        model.addAttribute("gradeNo", 1);
+        model.addAttribute("form", form);
+//        model.addAttribute("HomeContent", "/view/board/writeArticleForm");
+        return "view/board/writeArticleForm";
     }
 
     /**
@@ -160,9 +163,19 @@ public class ArticleController {
         return rv;
     }
 
+
+    //==임시 Test용 Class==//
     static class BoardEx{
         private int boardNo;
         private String boardName;
+
+        @Override
+        public String toString() {
+            return "BoardEx{" +
+                    "boardNo=" + boardNo +
+                    ", boardName='" + boardName + '\'' +
+                    '}';
+        }
 
         public int getBoardNo() {
             return boardNo;

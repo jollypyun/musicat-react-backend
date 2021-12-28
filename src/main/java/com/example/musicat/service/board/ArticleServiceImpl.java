@@ -17,13 +17,17 @@ import java.util.List;
 
 @Service("articleService")
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 
 //    private final BoardRepositoryImpl boardRepository;
     private final EntityManager em;
     private final ArticleRepositoryImpl articleRepository;
 
+    public ArticleServiceImpl(EntityManager em, ArticleRepositoryImpl articleRepository) {
+        this.em = em;
+        this.articleRepository = articleRepository;
+    }
 
     /**
      * 1. 게시글 등록

@@ -10,10 +10,14 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository("fileRepository")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class FileRepositoryImpl implements BaseRepository {
 
     private final EntityManager em;
+
+    public FileRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public void save(Object data) {

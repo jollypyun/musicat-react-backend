@@ -14,8 +14,8 @@ import java.util.List;
 import static javax.persistence.FetchType.*;
 
 @Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Getter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "article")
 public class Article {
 
@@ -107,5 +107,52 @@ public class Article {
 //                ", fileList=" + fileList +
 //                ", replyList=" + replyList +
                 '}';
+    }
+
+    protected Article() {
+    }
+
+    public Integer getNo() {
+        return no;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Timestamp getWritedate() {
+        return writedate;
+    }
+
+    public int getViewcount() {
+        return viewcount;
+    }
+
+    public int getLikecount() {
+        return likecount;
+    }
+
+    public List<File> getFileList() {
+        return fileList;
+    }
+
+    public List<Reply> getReplyList() {
+        return replyList;
     }
 }

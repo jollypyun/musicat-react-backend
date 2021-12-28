@@ -11,10 +11,14 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository("replyRepository")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ReplyRepositoryImpl implements BaseRepository {
 
     private final EntityManager em;
+
+    public ReplyRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public void save(Object data) {

@@ -9,8 +9,8 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Getter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "files")
 public class File {
 
@@ -74,5 +74,36 @@ public class File {
     @Override
     public int hashCode() {
         return Objects.hash(getNo(), getArticle(), getOriginalFileName(), getSystemFileName(), getFileSize(), getFileType(), getWritedate());
+    }
+
+    private File() {
+    }
+
+    public Integer getNo() {
+        return no;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public String getOriginalFileName() {
+        return originalFileName;
+    }
+
+    public String getSystemFileName() {
+        return systemFileName;
+    }
+
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public int getFileType() {
+        return fileType;
+    }
+
+    public Timestamp getWritedate() {
+        return writedate;
     }
 }

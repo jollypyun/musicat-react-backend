@@ -9,8 +9,8 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Getter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reply {
 
     @Id @GeneratedValue
@@ -65,5 +65,33 @@ public class Reply {
                 ", writedate=" + writedate +
                 ", content='" + content + '\'' +
                 '}';
+    }
+
+
+    protected Reply() {
+    }
+
+    public Integer getNo() {
+        return no;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public Timestamp getWritedate() {
+        return writedate;
+    }
+
+    public String getContent() {
+        return content;
     }
 }

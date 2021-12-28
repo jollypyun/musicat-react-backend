@@ -12,10 +12,14 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository("articleRepository")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class ArticleRepositoryImpl implements BaseRepository {
 
     private final EntityManager em;
+
+    public ArticleRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public void save(Object data) {
