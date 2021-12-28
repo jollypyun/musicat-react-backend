@@ -17,7 +17,7 @@
 	
 	<select id="selectGradeList" resultType="gradeVo" resultMap="gradeInfo">
 		SELECT G.grade_no, name, G.docs, G.comms, COUNT(M.grade_no) AS person
-		FROM Member M RIGHT JOIN Grade G
+		FROM member M RIGHT JOIN grade G
 		ON M.grade_no = G.grade_no
 		GROUP BY G.grade_no, name, G.docs, G.comms
 		ORDER BY G.grade_no ASC
@@ -29,11 +29,11 @@
 	
 	<select id="selectReadBoardByGrade" parameterType="int" resultType="boardVO" resultMap="boardNameInfo">
 		SELECT boardName
-		FROM Board
+		FROM board
 		WHERE board_no = 
 		ANY(
 		SELECT board_no
-		FROM Board_Grade BG LEFT JOIN Grade G
+		FROM board_grade BG LEFT JOIN grade G
 		ON BG.grade_no = G.grade_no
 		WHERE (readwrite = 0) AND ((G.grade_no &lt; #{gradeNo}) OR (G.grade_no = #{gradeNo}))
 		)
@@ -41,11 +41,11 @@
 	
 	<select id="selectWriteBoardByGrade" parameterType="int" resultType="boardVO" resultMap="boardNameInfo">
 		SELECT boardName
-		FROM Board
+		FROM board
 		WHERE board_no = 
 		ANY(
 		SELECT board_no
-		FROM Board_Grade BG LEFT JOIN Grade G
+		FROM board_grade BG LEFT JOIN grade G
 		ON BG.grade_no = G.grade_no
 		WHERE (readwrite = 1) AND ((G.grade_no &lt; #{gradeNo}) OR (G.grade_no = #{gradeNo}))
 		)
@@ -59,7 +59,7 @@
 	</parameterMap>
 	
 	<insert id="updateGrade" parameterType="gradeVo" parameterMap="insertVo">
-		INSERT INTO Grade(grade_no, name, docs, comms)
+		INSERT INTO grade(grade_no, name, docs, comms)
 		VALUES (#{gradeNo}, #{name}, #{docs}, #{comms}) 
 		ON DUPLICATE KEY UPDATE name = #{name}, docs = #{docs}, comms = #{comms}   
 	</insert>
@@ -69,7 +69,7 @@
 	</update>
 	
 	<delete id="deleteGrade" parameterType="int">
-		DELETE FROM Grade
+		DELETE FROM grade
 		WHERE grade_no = #{no}
 	</delete>
 	

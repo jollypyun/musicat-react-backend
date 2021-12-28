@@ -45,7 +45,7 @@
 	
 	<select id="selectMemberList" parameterType="criteria" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT member_no,email, name, regdate, visits, ban
-		FROM Member M RIGHT JOIN Grade G
+		FROM member M RIGHT JOIN grade G
 		ON M.grade_no = G.grade_no
 		WHERE member_no > 0
 		ORDER BY member_no ASC, ismember ASC
@@ -54,60 +54,60 @@
 	
 	<select id="selectTotalMember" resultType="int">
 		SELECT COUNT(*)
-		FROM Member
+		FROM member
 	</select>
 	
 	<select id="selectMemberByManager" parameterType="int" resultType="memberVo" resultMap="detailInfoByManager">
 		SELECT member_no, email, name, nickname, regdate, lastdate, M.docs, M.comms, visits, ban, ismember
-		FROM Member M RIGHT JOIN Grade G
+		FROM member M RIGHT JOIN grade G
 		ON M.grade_no = G.grade_no
 		WHERE member_no = #{no}
 	</select>
 	
 	<update id="updateBan7days" parameterType="int">
-		UPDATE Member
+		UPDATE member
 		SET	ban = DATE_ADD(NOW(), INTERVAL 7 DAY)
 		WHERE member_no = #{no}
 	</update>
 	
 	<update id="updateBan1day" parameterType="int">
-		UPDATE Member
+		UPDATE member
 		SET	ban = DATE_ADD(NOW(), INTERVAL 1 DAY)
 		WHERE member_no = #{no}
 	</update>
 	
 	<update id="updateBan1minute" parameterType="int">
-		UPDATE Member
+		UPDATE member
 		SET	ban = DATE_ADD(NOW(), INTERVAL 1 MINUTE)
 		WHERE member_no = #{no}
 	</update>
 	
 	<update id="updateMemberByForce" parameterType="int">
-		UPDATE Member
+		UPDATE member
 		SET ismember = 2
 		WHERE member_no = #{no};
 	</update>
 	
 	<update id="plusMemberDocs" parameterType="int">
-		UPDATE Member
+		UPDATE member
     	SET docs = docs + 1
     	WHERE member_no = #{no};
 	</update>
 	
 	<update id="minusMemberDocs" parameterType="int">
-		UPDATE Member
+		UPDATE member
     	SET docs = docs - 1
     	WHERE member_no = #{no};
 	</update>
 	
 	<update id="plusMemberComms" parameterType="int">
-		UPDATE Member
+		UPDATE member
     	SET comms = comms + 1
     	WHERE member_no = #{no};
 	</update>
 	
     <update id="minusMemberComms" parameterType="int">
-    	UPDATE Member
+    	UPDATE member
     	SET comms = comms - 1
     	WHERE member_no = #{no};
     </update>
@@ -115,13 +115,13 @@
     <select id="selectMember_byIDPwd" parameterType="String" resultType="memberVo" resultMap="loginInfo">
         <!-- SELECT member.member_no, email, nickname -->
         SELECT member_no, email, name, nickname, regdate, lastdate, M.grade_no, M.docs, M.comms, visits, ban, ismember
-		FROM Member M RIGHT JOIN Grade G
+		FROM member M RIGHT JOIN grade G
 		ON M.grade_no = G.grade_no
         WHERE email=#{email} AND password=#{password}
     </select>
     
     <update id = "updateLastDdate" parameterType = "int">
-	    UPDATE Member 
+	    UPDATE member
 	    SET lastdate = CURRENT_TIMESTAMP 
 	    WHERE member_no = #{no}
     </update>
@@ -129,7 +129,7 @@
   <!-- 회원가입 -->
 	<insert id="insertMemberNo"  parameterType="HashMap">
 	<!-- ㄴ설명: insert 명령을 만들건데, 이름은 insertMemberNo이고 (내가 지은거),  파라미터값은 HashMap(자바에 원래 있는 타입)이다.-->
-		INSERT INTO MemberNo VALUES()
+		INSERT INTO memberno VALUES()
 			<!-- ㄴ설명: MemberNo가 Auto Incremental로 설정 되어있어서 VALUES()에 아무값도 안 넣으면 자동으로 값이 들어감(원래는 VALUES() 괄호 안에 값을 넣어야 함 -->
 		<selectKey resultType="int"  keyProperty="no" order="AFTER"> 
 		<!-- ㄴ설명:  resultType는 MemberNo의 가져오는 자바타입(이쪽으로 넘어왔을 때),  keyProperty는 "no" : "쿼리문결과" 이런 형태를 가지겠다는 의미. -->
@@ -141,7 +141,7 @@
 
 	<insert id="insertMember"  parameterType="memberVo">   <!-- parameterType(경로)의 괄호 안에 들어간 건 MemberVO에 있는 @Alias("memberVO")과 이름이 
 			일치해야 함 -->
-		INSERT INTO Member(member_no, email, password, nickname)
+		INSERT INTO member(member_no, email, password, nickname)
 		VALUES (#{no}, #{email}, #{password}, #{nickname}) 
 		<!-- #{}안에는 MemberVO에서 선언한 변수명과 일치해야 함 -->
 	</insert>
@@ -149,7 +149,7 @@
 	<!-- 회원가입 시 이메일 중복확인 -->
 	<select id="selectEmail"  parameterType="String"  resultType="String">
 		SELECT email
-		FROM Member
+		FROM member
 		WHERE email = #{email}
 	</select>
 	
@@ -161,7 +161,7 @@
 
 	<select id="selectSearchMemberByEmail" parameterType="string" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT member_no,email, name, regdate, visits, ban
-		FROM Member M RIGHT JOIN Grade G
+		FROM member M RIGHT JOIN grade G
 		ON M.grade_no = G.grade_no
 		WHERE email LIKE CONCAT('%', #{keyword}, '%')
 		ORDER BY member_no ASC, ismember ASC
@@ -169,43 +169,42 @@
 	
 	<select id="selectSearchMemberByGrade" parameterType="string" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT member_no,email, name, regdate, visits, ban
-		FROM Member M RIGHT JOIN Grade G
+		FROM member M RIGHT JOIN grade G
 		ON M.grade_no = G.grade_no
 		WHERE M.grade_no =
 		ANY(SELECT grade_no
-		FROM Grade G
+		FROM grade G
 		WHERE name LIKE CONCAT('%', #{keyword}, '%'))
 		ORDER BY member_no ASC, ismember ASC
 	</select>
 	
 	<select id="selectTotalSearchMemberByEmail" parameterType="string" resultType="int">
 		SELECT COUNT(member_no)
-		FROM Member
+		FROM member
 		WHERE email LIKE CONCAT('%', #{keyword}, '%')
 	</select>
 	
 	<select id="selectTotalSearchMemberByGrade" parameterType="string" resultType="int">
 		SELECT COUNT(member_no)
-		FROM Member
+		FROM member
 		WHERE grade_no =
 		ANY(SELECT grade_no
-		FROM Grade
+		FROM grade
 		WHERE name LIKE CONCAT('%', #{keyword}, '%'))
 	</select>
 	
 		<!-- 회원 자진 탈퇴-->
-			<update id="updateMember"  parameterType="memberVo">   
+	<update id="updateMember"  parameterType="memberVo">
 			<!-- id는  MemberDao의 메소드 명과 일치해야 함 -->
 			<!-- parameterType(경로)의 괄호 안에 들어간 건 MemberVO에 있는 @Alias("memberVo")과 이름이 일치해야 함 -->
-			
-		UPDATE petopia.Member
-		SET petopia.Member.ismember = 1
+		UPDATE member
+		SET member.ismember = 1
 		WHERE member_no = #{no}
 		<!-- #{}안에는	MemberVO에서 선언한 변수명과 일치해야 함 -->
 	</update>
 
 	<update id="updateTempPassword" parameterType="memberVo">
-		UPDATE Member
+		UPDATE member
 		SET password = #{password}
 		WHERE email = #{email}
 	</update>
@@ -215,8 +214,8 @@
 			<!-- id는  MemberDao의 메소드 명과 일치해야 함 -->
 			<!-- parameterType(경로)의 괄호 안에 들어간 건 MemberVO에 있는 @Alias("memberVo")과 이름이 일치해야 함 -->
 				
-		UPDATE petopia.Member
-		SET petopia.Member.password = #{password}
+		UPDATE member
+		SET member.password = #{password}
 		WHERE member_no = #{no}
 		<!-- #{}안에는	MemberVO에서 선언한 변수명과 일치해야 함 -->
 	</insert>

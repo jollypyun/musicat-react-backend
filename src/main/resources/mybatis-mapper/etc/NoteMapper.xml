@@ -6,17 +6,17 @@
 <mapper namespace="com.example.musicat.mapper.etc.NoteMapper">
 	<select id="test" resultType="noteVo">
 		SELECT *
-		FROM Note
+		FROM note
 		WHERE note_no = 1 
 	</select>
 
 	<!-- 쪽지 리스트 select -->
 	<select id="selectNoteList" parameterType="noteVO" resultType="noteVo">
-		SELECT Note.note_no, Note.member_no, Note.notecontent_no, Note.counterpart_no, Note.counterpart_nickname, 
-		noteContent.content, Note.sendDate, Note.readdate, Note.sendrecieve
-		FROM Note, noteContent
-		WHERE Note.member_no = #{userNo} AND Note.sendrecieve = #{isUserReciever} 
-		AND Note.notecontent_no = noteContent.notecontent_no
+		SELECT note.note_no, note.member_no, note.notecontent_no, note.counterpart_no, note.counterpart_nickname,
+		notecontent.content, note.sendDate, note.readdate, note.sendrecieve
+		FROM note, notecontent
+		WHERE note.member_no = #{userNo} AND note.sendrecieve = #{isUserReciever}
+		AND note.notecontent_no = notecontent.notecontent_no
 		ORDER BY note_no DESC
 		LIMIT #{pageSize} OFFSET #{startOffset}
 	</select>
@@ -24,34 +24,34 @@
 	<!-- 쪽지 갯수 select -->
 	<select id="selectTotalNoteCount" resultType="INTEGER">
 		SELECT COUNT(*)
-		FROM Note
+		FROM note
 		WHERE member_no = #{userNo} AND sendrecieve = #{isRecieve}
 	</select>
 	
 
 	<!-- 쪽지 상세 조회 select -->
 	<select id="selectNote" resultType="noteVo">
-		SELECT Note.note_no, noteContent.notecontent_no, Note.counterpart_no, Note.counterpart_nickname, noteContent.content,
-		Note.sendDate, Note.readdate, Note.sendrecieve  
-		FROM Note, noteContent 
-		WHERE Note.note_no = #{noteNo} AND Note.notecontent_no = noteContent.notecontent_no 
+		SELECT note.note_no, notecontent.notecontent_no, note.counterpart_no, note.counterpart_nickname, notecontent.content,
+			   note.sendDate, note.readdate, note.sendrecieve
+		FROM note, notecontent
+		WHERE note.note_no = #{noteNo} AND note.notecontent_no = notecontent.notecontent_no
 	</select>
 	
 	<!-- 쪽지 읽음 update -->
 	<update id="updateRead_member">
-		UPDATE Note
+		UPDATE note
 		SET readdate = NOW()
-		WHERE Note.notecontent_no = #{noteNo} AND member_no = #{userNo} AND Note.sendrecieve = #{isRecieve}
+		WHERE note.notecontent_no = #{noteNo} AND member_no = #{userNo} AND note.sendrecieve = #{isRecieve}
 	</update>
 	<update id="updateRead_counterpart">
-		UPDATE Note
+		UPDATE note
 		SET readdate = NOW()
-		WHERE Note.notecontent_no = #{noteNo} and counterpart_no = #{userNo} and Note.sendrecieve = #{isRecieve}
+		WHERE note.notecontent_no = #{noteNo} and counterpart_no = #{userNo} and note.sendrecieve = #{isRecieve}
 	</update>
 	
 	<!-- 쪽지 insert -->
 	<insert id = "insertNoteContent">
-		INSERT INTO noteContent(content) VALUES(#{content})
+		INSERT INTO notecontent(content) VALUES(#{content})
 	</insert>
 	<select id = "selectLastID" resultType="INTEGER">
 		SELECT LAST_INSERT_ID()
@@ -67,21 +67,21 @@
 	
 	<!-- 쪽지 삭제 -->
 	<delete id = "deleteNote" parameterType="noteVo">
-		DELETE FROM Note
+		DELETE FROM note
 		WHERE notecontent_no = #{notecontent_no} AND member_no = #{member_no}
 	</delete>
 	<update id = "updateRecieveDeleteOnNoteContent" parameterType="noteVo">
-		UPDATE noteContent
+		UPDATE notecontent
 		SET recieveDelete = 1
 		WHERE notecontent_no = #{notecontent_no} 
 	</update>
 	<update id = "updateSendDeleteOnNoteContent" parameterType="noteVo">
-		UPDATE noteContent
+		UPDATE notecontent
 		SET sendDelete = 1
 		WHERE notecontent_no = #{notecontent_no} 
 	</update>
 	<delete id="deleteNoteContent">
-		DELETE FROM noteContent
+		DELETE FROM notecontent
 		WHERE recieveDelete = 1 AND sendDelete = 1
 	</delete>
 	

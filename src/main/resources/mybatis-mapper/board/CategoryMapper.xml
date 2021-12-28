@@ -9,25 +9,25 @@
 
 	<!-- 카테고리 등록 -->
 	<insert id="insertCategory">
-		INSERT INTO Category (categoryname) VALUE ( #{categoryName} )
+		INSERT INTO category (categoryname) VALUE ( #{categoryName} )
 	</insert>
 	
 	
 	<!-- 카테고리 수정 -->
   	<update id="updateCategory">
-		UPDATE Category SET categoryname = #{categoryName}
+		UPDATE category SET categoryname = #{categoryName}
 		WHERE category_no = #{categoryNo}
 	</update> 
 
 
 	<!-- 카테고리와 연결된 게시판 유무 체크 -->
 	<select id="selectConnectBoard" resultType="int">
-		SELECT count(*) FROM Board WHERE category_no = #{categoryNo};
+		SELECT count(*) FROM board WHERE category_no = #{categoryNo};
 	</select>
 
 	<!-- 카테고리 삭제 -->
 	<delete id="deleteCategory">
-		DELETE FROM Category WHERE category_no = #{categoryNo}
+		DELETE FROM category WHERE category_no = #{categoryNo}
 	</delete>
 
 
@@ -39,14 +39,14 @@
 
 	<select id="selectOneCategory" resultType="categoryVO" resultMap="selectCategoryResultMap"	>
 		SELECT categoryname, category_no 
-		FROM Category 
+		FROM category
 		WHERE category_no = #{categoryNo};
 	</select>
 
 	<!-- 카테고리 목록 조회 -->
 	<select id="selectCategoryList" resultType="categoryVO" resultMap="selectCategoryResultMap">
 		SELECT category_no, categoryname 
-		FROM Category 
+		FROM category
 		GROUP BY category_no;
 	</select>
 	
@@ -72,7 +72,7 @@
 		
 	<select id="selectCategoryBoardList"  resultType="categoryBoardVO" resultMap="selectCategoryBoardListResultMap">
 		SELECT c.category_no, c.categoryname, b.board_no, b.boardname, b.boardkind
-		FROM Category AS c LEFT JOIN Board AS b
+		FROM category AS c LEFT JOIN board AS b
 		ON c.category_no = b.category_no
 		ORDER BY c.category_no, b.board_no
 	</select>
@@ -82,7 +82,7 @@
 	<!-- 카테고리 이름 중복 체크 -->
 	<select id="selectDuplicateCategory" resultType="int">
 		SELECT count(*) 
-		FROM Category 
+		FROM category
 		WHERE categoryname = #{categoryName};
 	</select>
 	

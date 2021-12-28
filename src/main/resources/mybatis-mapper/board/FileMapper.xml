@@ -15,7 +15,7 @@
 	</parameterMap>
 	
 	<insert id="insertFile" parameterType="fileVo" parameterMap="insertFileMap">
-		INSERT INTO File (article_no, originalfilename, systemfilename, filesize, filetype)
+		INSERT INTO file (article_no, originalfilename, systemfilename, filesize, filetype)
 		VALUES (?,?,?,?,?) 
 	</insert>
 	
@@ -42,11 +42,11 @@
 	
 	
 	<delete id="deleteFile" parameterType="int" statementType="CALLABLE">
-		DELETE FROM File WHERE article_no = #{no}
+		DELETE FROM file WHERE article_no = #{no}
 	</delete>
 	
 	<delete id="allDelete" parameterType="int">
-		DELETE FROM File WHERE article_no = #{articleNo}
+		DELETE FROM file WHERE article_no = #{articleNo}
 	</delete>
 	
 	

@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectAllArticle" resultType="articleVo" resultMap="articleVOResult">
-		SELECT * FROM Article ORDER BY writedate DESC
+		SELECT * FROM article ORDER BY writedate DESC
 	</select>
 	
 
@@ -102,12 +102,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<delete id="deleteLike" parameterType="articleVo"  statementType="CALLABLE">
-		DELETE FROM ArticleRecommend WHERE member_no = #{memberNo} AND article_no = #{no}
+		DELETE FROM articlerecommend WHERE member_no = #{memberNo} AND article_no = #{no}
 	</delete>
 	
 	
 	<select id="likeCheck" parameterType="articleVo" resultType="int" >
-		SELECT COUNT(*) FROM ArticleRecommend WHERE member_no = #{memberNo} AND article_no = #{no}
+		SELECT COUNT(*) FROM articlerecommend WHERE member_no = #{memberNo} AND article_no = #{no}
 	</select>
 	
 	
