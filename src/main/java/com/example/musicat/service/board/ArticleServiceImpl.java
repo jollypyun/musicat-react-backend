@@ -1,102 +1,115 @@
 package com.example.musicat.service.board;
 
-import com.example.musicat.controller.ArticleForm;
-import com.example.musicat.domain.board.Article;
-import com.example.musicat.domain.board.Board;
-import com.example.musicat.repository.BaseRepository;
-import com.example.musicat.repository.board.ArticleRepositoryImpl;
-import com.example.musicat.service.BaseService;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.musicat.domain.board.ArticleVO;
+import com.example.musicat.domain.board.FileVO;
+import com.example.musicat.domain.board.SelectArticleVO;
+import com.example.musicat.mapper.member.MemberMapper;
+import com.example.musicat.repository.board.ArticleDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.List;
 
 @Service("articleService")
-@Transactional(readOnly = true)
-//@RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 
-//    private final BoardRepositoryImpl boardRepository;
-    private final EntityManager em;
-    private final ArticleRepositoryImpl articleRepository;
+	@Autowired
+	private ArticleDao articleDao;
+	@Autowired
+	private FileService fileService;
+	@Autowired
+	private ReplyService replyService;
+	@Autowired
+	private MemberMapper memberMapper;
 
-    public ArticleServiceImpl(EntityManager em, ArticleRepositoryImpl articleRepository) {
-        this.em = em;
-        this.articleRepository = articleRepository;
-    }
+	@Override
+	@Transactional
+	public ArticleVO retrieveArticle(int articleNo) { // 세부 조회
+		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
+		System.out.println("results : " + results.size());
+		ArticleVO article = results.get(0).getArticle(); // 게시글 정보 출력
+		List<FileVO> fileList = new ArrayList<FileVO>();
+			if(results.get(0).getFile() != null) { // 파일이 있을 때
+				for (SelectArticleVO result : results) {
+					fileList.add(result.getFile());
+				}
+			} else { // 첨부된 파일이 없을 때
+				fileList=null;
+			}
+		return this.fileService.fileList(article, fileList);
+	}
 
-    /**
-     * 1. 게시글 등록
-     * 2. 파일 업로드 (persist은 필요 없음)
-     * 3. 유저 작성글 + 1게시글 추가
-     * @param article 추가될 게시글 Controller에서 값 settiong되어서 넘어온다.
-     */
-    @Override
-    @Transactional
-    public int save(Article article) {
-        articleRepository.save(article);
-//        article.getMember().addArticleCount(); // 임의로 선언 해놓은것 (member 관계자와 협의할 것)
-        return article.getNo();
-    }
+	@Override
+	public List<ArticleVO> retrieveBoard(int boardNo) { // 게시판 목록 조회
+		return this.articleDao.selectBoard(boardNo);
+	}
 
-    /**
-     * 1. 게시글 세부 조회
-     * 2. 조회수 증가
-     * @param id 세부 조회할 게시글 no
-     * @return
-     */
-    @Override
-    public Article findOne(Integer id) {
-        Article findArticle = (Article) articleRepository.findOne(id);
-        findArticle.addViewcount(); // 조회수 증가
-        return findArticle;
-    }
+	// 게시글 추가
+	@Override
+	@Transactional
+	public void registerArticle(ArticleVO article) {
+		this.memberMapper.plusMemberDocs(article.getMemberNo());
+		this.articleDao.insertArticle(article); // 게시글 추가
+		this.fileService.uploadFile(article);
+	}
 
-    /**
-     * 전체글 조회
-     */
-    @Override
-    public List findAll() {
-        List<Article> articles = articleRepository.findAll();
-        return articles;
-    }
+	@Override
+	@Transactional
+	public void modifyArticle(ArticleVO article) {
+		this.articleDao.updateArticle(article);
+	}
 
-    /**
-     * 게시글 수정
-     * @param form 수정 Data
-     * @param articleNo 수정되는 게시글의 No
-     */
-    @Override
-    @Transactional
-    public void update(ArticleForm form, Integer articleNo) {
-        Board updateBoard = em.find(Board.class, form.getBoardNo());
-        Object findArticle = articleRepository.findOne(articleNo);
-        Article.updateArticle((Article) findArticle, updateBoard, form);
-    }
+	@Override
+	@Transactional
+	public void removeArticle(int articleNo, int memberNo) {
+		this.memberMapper.minusMemberDocs(memberNo);
+		this.fileService.allDelete(articleNo);
+		this.replyService.allDelete(articleNo);
+		this.articleDao.deleteArticle(articleNo);
+	}
 
-    /**
-     * 게시글 삭제
-     * @param id 수정되는 게시글 No
-     */
-    @Override
-    @Transactional
-    public void remove(Integer id) {
-        articleRepository.remove(id);
-    }
+	@Override
+	public void upViewcount(int articleNo) {
+		this.articleDao.upViewcount(articleNo);
+	}
+	
+	@Override
+	public List<ArticleVO> retrieveAllArticle() {
+		return this.articleDao.selectAllArticle();
+	}
+	
+	
+	// 추천
+	@Override
+	public void recUpdate(int memberNo, int articleNo) {
+		ArticleVO articleVO = new ArticleVO();
+		articleVO.setMemberNo(memberNo);
+		articleVO.setNo(articleNo);
+		this.articleDao.upLikecount(articleNo);
+		this.articleDao.insertLike(articleVO);	
+	}
+//	
+	@Override
+	public int totalRecCount(int articleNo) {
+		return this.articleDao.totalRecCount(articleNo);
+	}
+	
+	@Override
+	public void recDelete(ArticleVO articleVO) {
+		this.articleDao.downLikecount(articleVO.getNo());
+		this.articleDao.deleteLike(articleVO);
+	}
 
-    /**
-     * 게시판 별 게시글 목록 조회
-     * @param boardNo 게시판
-     * @return 게시판의 게시글
-     */
-    @Override
-    public List<Article> findByBoardNo(int boardNo) {
-        Board findBoard = em.find(Board.class, boardNo);
-        List<Article> articles = articleRepository.findByBoardNo(findBoard);
-        return articles;
-    }
+	// 추천 여부 체크
+	@Override
+	public int likeCheck(int memberNo, int ArticleNo) {
+		ArticleVO art = new ArticleVO();
+		art.setMemberNo(memberNo);
+		art.setNo(ArticleNo);
+		return this.articleDao.likeCheck(art);
+	}
+	
 }

@@ -1,12 +1,8 @@
 package com.example.musicat.controller;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.context.annotation.Scope;
+import com.example.musicat.domain.board.BoardVO;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.musicat.domain.board.Board;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,8 +22,7 @@ public class ArticleForm {
     @NotBlank(message = "내용을 입력해 주세요")
     private String content;
 
-    private List<ArticleController.BoardEx> boardList = new ArrayList<>(); //작성 게시글 목록
-//    private List<Board> boardList = new ArrayList<>(); //작성 게시글 목록
+    private List<BoardVO> boardList = new ArrayList<>(); //작성 게시글 목록
     private int displayNotice; //공지 설정
 
 
@@ -39,6 +34,7 @@ public class ArticleForm {
     public ArticleForm() {
     }
 
+    //==Getter & Setter==//
     public int getBoardNo() {
         return boardNo;
     }
@@ -61,14 +57,6 @@ public class ArticleForm {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public List<ArticleController.BoardEx> getBoardList() {
-        return boardList;
-    }
-
-    public void setBoardList(List<ArticleController.BoardEx> boardList) {
-        this.boardList = boardList;
     }
 
     public int getDisplayNotice() {

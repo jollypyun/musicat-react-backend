@@ -77,6 +77,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.2.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -138,12 +143,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-        <!--		XSS 공격 방어-->
-        <!--		<dependency>-->
-        <!--			<groupId>com.navercorp.lucy</groupId>-->
-        <!--			<artifactId>lucy-xss-servlet</artifactId>-->
-        <!--			<version>2.0.0</version>-->
-        <!--		</dependency>-->
+        		XSS 공격 방어
+        		<dependency>
+        			<groupId>com.navercorp.lucy</groupId>
+        			<artifactId>lucy-xss-servlet</artifactId>
+        			<version>2.0.0</version>
+        		</dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>

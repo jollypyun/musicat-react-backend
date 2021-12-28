@@ -9,7 +9,7 @@
 
 			<div class="row mt-3 mb-5">
 				<div id="write_board_page" class="write_board_style">
-					<form enctype="multipart/form-data" th:object="${article}"
+					<form enctype="multipart/form-data" th:object="${articleVO}"
 						th:action="@{/updateArticle/{articleNo}(articleNo=${articleNo})}"
 						method="post">
 						<div id="selectBoard">
@@ -42,24 +42,24 @@
 
 							<div id="in_subject" class="write-subject-style">
 								<textarea id="utitle" th:field="*{subject}" rows="1" cols="55"
-									placeholder="제목" maxlength="100" th:value="${article.subject}"
+									placeholder="제목" maxlength="100" th:value="${articleVO.subject}"
 									required></textarea>
 							</div>
 							<div id="in_content" class="write-content-style">
 								<textarea id="ucontent" th:field="*{content}"
-									th:value="${article.content}" placeholder="내용" required
+									th:value="${articleVO.content}" placeholder="내용" required
 									rows="1" cols="71"></textarea>
 							</div>
 							<div id="import_bth" class="write-area-style">
 								<!-- 첨부파일 -->
-								<input type="file" th:if="${article.attacheFile == null}"
-									name="importAttacheFile" /> <input type="file"
-									th:unless="${article.getAttacheFile == null}"
-									th:text="${article.getAttacheFile().getOriginalFileName()}|"
+								<input type="fileVO" th:if="${articleVO.attacheFile == null}"
+									name="importAttacheFile" /> <input type="fileVO"
+									th:unless="${articleVO.getAttacheFile == null}"
+									th:text="${articleVO.getAttacheFile().getOriginalFileName()}|"
 									name="importAttacheFile" />
 								<!-- 이미지 파일 첨부 -->
-								<input type="file" name="imageFiles" multiple="multiple" /><br />
-								<img th:each="imageFile : ${article.fileList}"
+								<input type="fileVO" name="imageFiles" multiple="multiple" /><br />
+								<img th:each="imageFile : ${articleVO.fileList}"
 									th:src="|/images/${imageFile.getSystemFileName()}|" width="200"
 									height="200" />
 							</div>

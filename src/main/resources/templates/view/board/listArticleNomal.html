@@ -7,10 +7,10 @@
 
 			<div class="row mt-3 mb-5">
 				<div class="articleList">
-					<div class="article-header">
+					<div class="articleVO-header">
 						<i class="board-name" th:text="${boardName}">게시판 이름</i>
 					</div>
-					<div class="articles card-body">
+					<div class="articleVOS card-body">
 						<div class="dataTable-top"></div>
 						<div class="dataTable-container">
 							<table class="dataTable-table">
@@ -26,18 +26,18 @@
 								</thead>
 
 								<tbody>
-									<tr th:each="article : ${articles}">
-										<td th:text="${article.no}"></td>
+									<tr th:each="articleVO : ${articleVOS}">
+										<td th:text="${articleVO.no}"></td>
 										<td>
-											<a th:text="${article.subject}"
-												th:href="|/detailArticle/${article.no}|"></a>
+											<a th:text="${articleVO.subject}"
+												th:href="|/detailArticle/${articleVO.no}|"></a>
 										</td>
 										<td >
-										<a th:id = "${article.memberNo}" onclick=openNote(this) th:text="${article.nickname}"></a>
+										<a th:id = "${articleVO.memberNo}" onclick=openNote(this) th:text="${articleVO.nickname}"></a>
 										</td>
-										<td th:text="${article.writeDate}"></td>
-										<td th:text="${article.viewcount}"></td>
-										<td th:text="${article.likecount}"></td>
+										<td th:text="${articleVO.writeDate}"></td>
+										<td th:text="${articleVO.viewcount}"></td>
+										<td th:text="${articleVO.likecount}"></td>
 									</tr>
 								</tbody>
 							</table>
