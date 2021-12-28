@@ -10,13 +10,10 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository("fileRepository")
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class FileRepositoryImpl implements BaseRepository {
 
-    @Autowired
-    private EntityManager em;
-
-//    private final EntityManager em;
+    private final EntityManager em;
 
     @Override
     public void save(Object data) {
@@ -25,7 +22,7 @@ public class FileRepositoryImpl implements BaseRepository {
 
     @Override
     public void remove(Integer id) {
-        File removeFile = em.find(File.class, id);
+        File removeFile = em.find(File.class, (Integer)id);
         em.remove(removeFile);
     }
 

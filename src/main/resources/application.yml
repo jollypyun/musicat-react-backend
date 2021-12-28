@@ -1,11 +1,9 @@
 spring:
   datasource:
-    hikari:
-#      jdbc-url: jdbc:mysql://13.124.245.202:3306/musicat
-      jdbc-url: jdbc:mysql://localhost:3306/musicat
-      username: root
-      password: mymysql
-      driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/musicat
+    username: root
+    password: mymysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -20,3 +18,11 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+#server:
+#  error:
+#    include-exception: true
+#    include-stacktrace: always
+#    include-message: always
+#    whitelabel:
+#      enabled: false

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -28,7 +29,7 @@ public class File {
     private String systemFileName;
 
     @Column(name = "filesize")
-    private int fileSize;
+    private Long fileSize;
 
     @Column(name = "filetype")
     private int fileType;
@@ -43,7 +44,7 @@ public class File {
     }
 
     //==생성 메소드==//
-    public static File createFile(String originalFileName, String systemFileName, int fileSize, int fileType){
+    public static File createFile(String originalFileName, String systemFileName, Long fileSize, int fileType){
         File file = new File();
         file.originalFileName = originalFileName;
         file.systemFileName = systemFileName;
@@ -56,11 +57,22 @@ public class File {
     public String toString() {
         return "File{" +
                 "no=" + no +
-//                ", article=" + article +
                 ", originalFileName='" + originalFileName + '\'' +
                 ", systemFileName='" + systemFileName + '\'' +
                 ", fileSize=" + fileSize +
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        File file = (File) o;
+        return getFileSize() == file.getFileSize() && getFileType() == file.getFileType() && Objects.equals(getNo(), file.getNo()) && Objects.equals(getArticle(), file.getArticle()) && Objects.equals(getOriginalFileName(), file.getOriginalFileName()) && Objects.equals(getSystemFileName(), file.getSystemFileName()) && Objects.equals(getWritedate(), file.getWritedate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNo(), getArticle(), getOriginalFileName(), getSystemFileName(), getFileSize(), getFileType(), getWritedate());
+    }
 }

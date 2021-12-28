@@ -16,8 +16,6 @@ import java.util.List;
 public class ArticleRepositoryImpl implements BaseRepository {
 
     private final EntityManager em;
-//    @Autowired
-//    private EntityManager em;
 
     @Override
     public void save(Object data) {

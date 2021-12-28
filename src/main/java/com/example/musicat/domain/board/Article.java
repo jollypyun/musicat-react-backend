@@ -56,13 +56,13 @@ public class Article {
 
     //==생성 메소드==//
 //    @Builder
-    public static Article createArticle(Member member, Board board, String nickname, String subject, String content) {
+    public static Article createArticle(Member member, Board board, String nickname, ArticleForm form) {
         Article article = new Article();
         article.member = member;
         article.board = board;
         article.nickname = nickname;
-        article.subject = subject;
-        article.content = content;
+        article.subject = form.getSubject();
+        article.content = form.getContent();
         return article;
     }
 

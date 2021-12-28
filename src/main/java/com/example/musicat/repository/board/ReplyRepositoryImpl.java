@@ -11,13 +11,10 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository("replyRepository")
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class ReplyRepositoryImpl implements BaseRepository {
 
-//    private final EntityManager em;
-
-    @Autowired
-    private EntityManager em;
+    private final EntityManager em;
 
     @Override
     public void save(Object data) {
@@ -26,7 +23,7 @@ public class ReplyRepositoryImpl implements BaseRepository {
 
     @Override
     public void remove(Integer id) {
-        Reply removeReply = em.find(Reply.class, id);
+        Reply removeReply = em.find(Reply.class, (Integer)id);
         em.remove(removeReply);
     }
 
