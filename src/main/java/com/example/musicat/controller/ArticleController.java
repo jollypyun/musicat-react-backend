@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.example.musicat.domain.board.*;
+import com.example.musicat.controller.form.ArticleForm;
 import com.example.musicat.domain.member.MemberVO;
-import com.example.musicat.service.board.*;
 import com.example.musicat.util.FileManager;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -26,16 +25,13 @@ import com.example.musicat.service.board.BoardService;
 import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.board.FileService;
 import com.example.musicat.service.board.ReplyService;
-import com.example.musicat.util.FileManager;
 //import com.example.util.FileManager;
 import com.example.musicat.domain.board.ArticleVO;
-import com.example.musicat.domain.board.BoardBoardGradeVO;
 import com.example.musicat.domain.board.BoardVO;
 import com.example.musicat.domain.board.CategoryVO;
-import com.example.musicat.domain.board.FileFormVO;
+import com.example.musicat.controller.form.FileFormVO;
 import com.example.musicat.domain.board.FileVO;
 import com.example.musicat.domain.board.ReplyVO;
-import com.example.musicat.domain.member.MemberVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,11 +76,10 @@ public class ArticleController {
 		int boardNo = article.getBoardNo();
 		int gradeNo = member.getGradeNo();
 		boolean grade = this.boardService.retrieveAllReadBoard(boardNo, gradeNo);
+
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
-		CategoryVO categoryVo = new CategoryVO();
-		model.addAttribute("categoryVo", categoryVo);
-		
+
 		// side bar -------------
 		if (grade) {
 			int memberNo = member.getNo();
@@ -94,11 +89,6 @@ public class ArticleController {
 			List<ReplyVO> replys = this.replyService.retrieveAllReply(articleNo);
 			int totalCount = this.articleService.totalRecCount(articleNo);
 			int likeCheck = this.articleService.likeCheck(memberNo, articleNo);
-
-			article.setLikeCheck(likeCheck);
-//			article.setNo(articleNo); //굳이 할 필요가 있는지 의문
-			article.setReplyList(replys);
-			article.setLikecount(totalCount);
 
 			ArticleVO result = ArticleVO.addReplyAndLike(article, likeCheck, replys, totalCount); //리팩토링
 
@@ -119,10 +109,13 @@ public class ArticleController {
 		return "view/home/viewHomeTemplate";
 	}
 
-	@GetMapping("/writeArticleForm")
+	/**
+	 * 작성 폼 이동
+	 */
+	@GetMapping("/insert")
 	public String writeForm(HttpServletRequest req, Model model) {
 		// create
-		ArticleVO articleVO = new ArticleVO(); // WriteForm에서 값들을 담을 객체
+//		ArticleVO articleVO = new ArticleVO(); // WriteForm에서 값들을 담을 객체
 		ArticleForm form = new ArticleForm(); // 변경
 
 		HttpSession session = req.getSession();
@@ -130,54 +123,25 @@ public class ArticleController {
 		// bind
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
-		CategoryVO categoryVo = new CategoryVO();
-		model.addAttribute("categoryVo", categoryVo);
-		
+
 		int gradeNo = member.getGradeNo();
 		log.info("writeForm get No::::" + gradeNo);
 		// bind
 		List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(gradeNo);
 		// view
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("article", form);
+		model.addAttribute("form", form);
 		model.addAttribute("gradeNo", gradeNo); // 나중에 seesion member에 접근해서 grade_no 받아올 것
 		model.addAttribute("HomeContent", "/view/board/writeArticleForm");
 		return "view/home/viewHomeTemplate";
 	}
 
-	@GetMapping("/updateArticleForm/{articleNo}")
-	public String writeForm(@PathVariable int articleNo, HttpServletRequest req, Model model) {
-//		log.info("updateForm articleNo: " + articleNo);
-		ArticleVO article = this.articleService.retrieveArticle(articleNo); // 게시글 정보 가져오기
-		// create
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
-		int gradeNo = member.getGradeNo();
-		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
-		model.addAttribute("categoryBoardList", categoryList);
-		CategoryVO categoryVo = new CategoryVO();
-		model.addAttribute("categoryVo", categoryVo);
-		String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
-		article.setSubject(escapeSubject);
-		String escapeContent = StringEscapeUtils.unescapeHtml4(article.getContent());
-		article.setContent(escapeContent);
-
-		// bind
-		List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(gradeNo);
-		log.info("수정으로 넘어온 게시글 번호" +articleNo);
-		// view
-		model.addAttribute("boardList", boardList);
-		model.addAttribute("article", article);
-		model.addAttribute("gradeNo", member.getGrade()); // 나중에 seesion member에 접근해서 grade_no 받아올 것
-		model.addAttribute("HomeContent", "/view/board/updateArticleForm");
-		return "view/home/viewHomeTemplate";
-	}
-
-// Create
-
-	@PostMapping("/insertArticle")
-	public RedirectView insertArticle(@ModelAttribute("articleVO") ArticleVO articleVO, @ModelAttribute FileFormVO form,
-			HttpServletRequest req) throws IOException {
+	/**
+	 * 작성
+	 */
+	@PostMapping("/insert")
+	public RedirectView insertArticle(@ModelAttribute("form") ArticleForm articleForm, @ModelAttribute FileFormVO form,
+									  HttpServletRequest req) throws IOException {
 		log.info("insert접근");
 		// create
 		RedirectView redirectView = new RedirectView();
@@ -190,23 +154,51 @@ public class ArticleController {
 			fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
 		}
 		// bind
-		articleVO.setMemberNo(member.getNo());
-		articleVO.setNickname(member.getNickname());
-		articleVO.setAttacheFile(attacheFile);
-		articleVO.setFileList(imageFiles);
+		ArticleVO article = ArticleVO.createArticle(member.getNo(), member.getNickname(), articleForm, attacheFile, imageFiles);
 
-		this.articleService.registerArticle(articleVO);
-		int articleNo = articleVO.getNo(); // 작성 후 게시글 세부조회page로 넘어가기 때문에 게시글 번호를 넘겨준다.
-		log.info("입력 게시글={}", articleVO.toString());
+		this.articleService.registerArticle(article);
+		int articleNo = article.getNo(); // 작성 후 게시글 세부조회page로 넘어가기 때문에 게시글 번호를 넘겨준다. (insert문 실행 뒤 Last ID 받아온다.)
+		log.info("입력 게시글={}", article.toString());
 		// view
-		redirectView.setUrl("/detailArticle/" + articleNo);
+		redirectView.setUrl("/articles/" + articleNo);
 		return redirectView;
 	}
-	
+
+
+	/**
+	 * 수정 폼 이동
+	 */
+	@GetMapping("/update/{articleNo}")
+	public String updateForm(@PathVariable int articleNo, HttpServletRequest req, Model model) {
+//		log.info("updateForm articleNo: " + articleNo);
+		ArticleVO article = this.articleService.retrieveArticle(articleNo); // 게시글 정보 가져오기
+		ArticleForm form = ArticleForm.updateArticle(article);
+		// create
+		HttpSession session = req.getSession();
+		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		int gradeNo = member.getGradeNo();
+
+		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+		model.addAttribute("categoryBoardList", categoryList);
+
+		// bind
+		List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(gradeNo);
+		log.info("수정으로 넘어온 게시글 번호" +articleNo);
+
+		// view
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("form", form); //유효성 검사 항목들
+		model.addAttribute("article", article);
+		model.addAttribute("gradeNo", gradeNo); // 나중에 seesion member에 접근해서 grade_no 받아올 것
+		model.addAttribute("HomeContent", "/view/board/updateArticleForm");
+		return "view/home/viewHomeTemplate";
+	}
+
 	// 게시글 수정
-	@PostMapping("/updateArticle/{articleNo}")
-	public RedirectView updatetArticle(@ModelAttribute("article") ArticleVO articleVO,
-			@ModelAttribute FileFormVO form,
+	@PostMapping("/update/{articleNo}")
+	public RedirectView updatetArticle(@ModelAttribute("article") ArticleVO article
+			,@ModelAttribute("form") ArticleForm articleForm
+			,@ModelAttribute FileFormVO form,
 			@PathVariable("articleNo") int articleNo,
 			HttpServletRequest request)
 			throws IOException {
@@ -220,74 +212,26 @@ public class ArticleController {
 			fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
 		}
 		// bind
-		articleVO.setNo(articleNo);
-		articleVO.setAttacheFile(attacheFile);
-		articleVO.setFileList(imageFiles);
-		this.articleService.modifyArticle(articleVO);
-//		int articleNo = articleVO.getNo();
-		log.info("**********************: " + articleVO.toString());
+		ArticleVO.updateArticle(article, articleNo, articleForm,attacheFile,imageFiles);
+		this.articleService.modifyArticle(article);
+//		int articleNo = article.getNo();
+		log.info("**********************: " + article.toString());
 		log.info("**********************: " + articleNo);
-//		log.info("입력 게시글={}", articleVO.toString());
 		// view
-		redirectView.setUrl("/detailArticle/" + articleNo);
+		redirectView.setUrl("/articles/" + articleNo);
 		return redirectView;
 	}
 	
-	
 
-// 게시판 목록 조회
 
-	@GetMapping("/nListArticle/{boardNo}")
-	public String selectAllNomalArticle(@PathVariable("boardNo") int boardNo,
-														Model model) {
-		// create
-		List<ArticleVO> articles = this.articleService.retrieveBoard(boardNo);
-		// bind
-		FileVO file = new FileVO();
-		for (ArticleVO article : articles) {
-			// Html 변환
-			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
-			article.setSubject(escapeSubject);
-			
-			file.setArticleNo(article.getNo());
-			file.setFileType(1);
-			FileVO thumbFile = this.fileService.retrieveThumbFile(file);
-			if(thumbFile != null) {
-				article.setThumbnail(thumbFile);
-			} else {
-				FileVO noFile = new FileVO();
-				noFile.setSystemFileName("noimage.png");
-				article.setThumbnail(noFile);
-			}
-		}
-		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
-		CategoryVO categoryVo = new CategoryVO();
-		
-		BoardBoardGradeVO bbgVO = this.boardService.retrieveOneBoard(boardNo);
-		String boardName = bbgVO.getBoardVo().getBoardName();
-		
-		
-		int boardkind = bbgVO.getBoardVo().getBoardkind();
-		
-		model.addAttribute("categoryBoardList", categoryList);
-		model.addAttribute("categoryVo", categoryVo);
-		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
-		model.addAttribute("articles", articles); // 게시글 정보 전송
-		model.addAttribute("boardkind", boardkind); // 게시글 유형
-		return "/view/home/viewBoardTemplate";
-	}
-	
-	
-	
-	@GetMapping("/removeArticle/{articleNo}/{boardNo}")
-	public RedirectView removeArticle(@PathVariable("articleNo") int articleNo, HttpServletRequest req,
-			@PathVariable("boardNo") int boardNo) {
+	@GetMapping("/remove/{articleNo}")
+	public RedirectView removeArticle(@PathVariable("articleNo") int articleNo, HttpServletRequest req) {
 		RedirectView redirectView = new RedirectView();
 		HttpSession session = req.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
 		int memberNo = member.getNo();
-		this.articleService.removeArticle(articleNo, memberNo);
-		redirectView.setUrl("/nListArticle/" + boardNo);
+		int boardNo = this.articleService.removeArticle(articleNo, memberNo);
+		redirectView.setUrl("/board/" + boardNo + "/articles");
 		return redirectView;
 	}
 

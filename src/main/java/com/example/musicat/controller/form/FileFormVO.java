@@ -1,4 +1,4 @@
-package com.example.musicat.domain.board;
+package com.example.musicat.controller.form;
 
 import java.util.List;
 

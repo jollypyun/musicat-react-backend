@@ -1,6 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
-<meta charset="UTF-8">
+	xmlns:th="http://thymeleaf.org">
 <meta charset="UTF-8"/>
 	<!-- 작성 폼 css -->
 	<link th:href="@{../css/writeArticleStyle.css}" rel="stylesheet" />
@@ -13,7 +12,7 @@
 
 				<div id="write_board_page" class="write-board-style">
 					<form enctype="multipart/form-data" th:object="${form}"
-						  th:action="@{/articleVOS/addArticle}" method="post">
+						  th:action="@{/articles/insert}" method="post">
 
 <!--						 게시판 설정-->
 						<div id="selectBoard" class="select-board-style">
@@ -51,21 +50,21 @@
 									placeholder="제목" maxlength="100"></textarea>
 							</div>
 
-<!--							<div id="import_bth" class="write-area-style">-->
-<!--								&lt;!&ndash; 첨부파일 &ndash;&gt;-->
-<!--								&lt;!&ndash; <label class="write-file-style" for="write-file-upload"><i-->
-<!--									class="fas fa-file-upload fa-2x"></i></label> &ndash;&gt;-->
-<!--								<input type="file" id="write-file-upload"-->
-<!--									name="importAttacheFile" />-->
+							<div id="import_bth" class="write-area-style">
+								<!-- &lt;!&ndash; 첨부파일 &ndash;&gt; -->
+								<label class="write-file-style" for="write-attachefile-upload">
+									<i class="fas fa-file-upload fa-2x"></i></label> 
+								<input type="file" id="write-attachefile-upload" th:field="*{importAttacheFile}" />
 
-<!--								&lt;!&ndash; 이미지 파일 첨부 &ndash;&gt;-->
-<!--								&lt;!&ndash; <label class="write-image-style" for="write-file-upload"><i-->
-<!--									class="far fa-file-image fa-2x"></i></label>  &ndash;&gt;-->
-<!--								<input type="file" id="write-file-upload" name="imageFiles"-->
-<!--									multiple="multiple" /> <a name="selectbtnimage"-->
-<!--									id="selectimage"></a>-->
-<!--								&lt;!&ndash; <img src="/importfile.png" board='0'onclick="document.all.selectFile.click();document.all.selectbtnimage.value=document.all.selectFile.value" /> &ndash;&gt;-->
-<!--							</div>-->
+								<!-- &lt;!&ndash; 이미지 파일 첨부 &ndash;&gt; -->
+								<label class="write-image-style" for="write-imagefile-upload">
+									<i class="far fa-file-image fa-2x"></i></label>
+								<input type="file" id="write-imagefile-upload" th:field="*{imageFiles}"
+									multiple="multiple" /> 
+									<a name="selectbtnimage" id="selectimage"></a>&nbsp;<br/>
+								
+								<img src="/importfile.png" board='0'onclick="document.all.selectFile.click();document.all.selectbtnimage.value=document.all.selectFile.value" />
+							</div>
 
 							<div id="in_content" class="write-content-style">
 								<textarea id="content" th:field="*{content}" placeholder="내용"

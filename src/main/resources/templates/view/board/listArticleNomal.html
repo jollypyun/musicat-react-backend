@@ -45,7 +45,8 @@
 						<div class="dataTable-bottom"></div>
 					</div>
 					<div class="write_article_btn">
-						<button id="writeForm_btn" th:onclick="|location.href='@{/writeArticleForm}'|"
+						<!-- <button id="writeForm_btn" th:onclick="|location.href='@{/articles/insert}'|" -->
+							<button id="writeForm_btn" onclick="writeForm()"
 							type="button">글쓰기</button>
 					</div>
 				</div>
@@ -55,6 +56,10 @@
 </div>
 <script th:src="@{../js/jquery-3.6.0.min.js}"></script>
 <script>
+
+	function writeForm(){
+		location.href="/articles/insert";
+	}
 /* 	function openNote(e) {
 			const memberNo = e.id;
 			console.log(1, memberNo);

@@ -16,7 +16,7 @@ public interface ArticleService {
 	
 	void modifyArticle(ArticleVO article); // 수정
 	
-	void removeArticle(int articleNo,int memberNo); // 삭제
+	int removeArticle(int articleNo,int memberNo); // 삭제
 	
 	List<ArticleVO> retrieveAllArticle(); // 전체글 조회
 	

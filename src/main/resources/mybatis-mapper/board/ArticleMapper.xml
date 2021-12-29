@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 
 	<resultMap type="articleVo" id="detailArticleVOResult">
+		<result property="no" javaType="int" column="article_no"  jdbcType="INTEGER"/>
 		<result property="memberNo" javaType="int" column="member_no" jdbcType="INTEGER"/>
 		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"/>
 		<result property="subject" javaType="String" column="subject"  jdbcType="VARCHAR"/>
@@ -35,7 +36,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<resultMap type="fileVo" id="detailFileVOResult">
 		<result property="no" javaType="int" column="file_no" jdbcType="INTEGER" />
-		<result property="articleNo" javaType="int" column="article_no" jdbcType="INTEGER" />
 		<result property="originalFileName" javaType="String" column="originalfilename" jdbcType="VARCHAR" />
 		<result property="systemFileName" javaType="String" column="systemfilename" jdbcType="VARCHAR" />
 		<result property="fileSize" javaType="Long" column="filesize" jdbcType="BIGINT" />
@@ -51,7 +51,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		{ CALL sp_article_select_detail(#{articleNo}) }
 	</select>
 
-	
 	
 	<insert id="insertArticle" statementType="CALLABLE" parameterType="articleVo">
 		{ CALL sp_article_insert(#{memberNo}, #{boardNo}, #{nickname}, #{subject}, #{content}) }

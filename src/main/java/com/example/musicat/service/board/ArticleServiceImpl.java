@@ -31,7 +31,7 @@ public class ArticleServiceImpl implements ArticleService {
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
 		System.out.println("results : " + results.size());
 		ArticleVO article = results.get(0).getArticle(); // 게시글 정보 출력
-		List<FileVO> fileList = new ArrayList<FileVO>();
+		List<FileVO> fileList = new ArrayList<>();
 			if(results.get(0).getFile() != null) { // 파일이 있을 때
 				for (SelectArticleVO result : results) {
 					fileList.add(result.getFile());
@@ -64,11 +64,13 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional
-	public void removeArticle(int articleNo, int memberNo) {
+	public int removeArticle(int articleNo, int memberNo) {
 		this.memberMapper.minusMemberDocs(memberNo);
 		this.fileService.allDelete(articleNo);
 		this.replyService.allDelete(articleNo);
+		int boardNo = this.articleDao.selectArticle(articleNo).get(0).getArticle().getBoardNo();
 		this.articleDao.deleteArticle(articleNo);
+		return boardNo;
 	}
 
 	@Override

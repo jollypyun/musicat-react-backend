@@ -46,12 +46,12 @@
 											<div th:if="${board.boardkind == 0}">
 												<span> <i class="far fa-list-alt"></i>
 												</span> <a th:text="${board.boardName}"
-													th:href="@{/nListArticlereq/{boardNo}/{boardkind}(boardNo = ${board.boardNo}, boardkind = ${board.boardkind})}"></a>
+													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
 											</div>
 											<div th:unless="${board.boardkind == 0}">
 												<span> <i class="far fa-image"></i>
 												</span> <a th:text="${board.boardName}"
-													th:href="@{/nListArticlereq/{boardNo}/{boardkind}(boardNo = ${board.boardNo}, boardkind = ${board.boardkind})}"></a>
+													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
 											</div>
 
 										

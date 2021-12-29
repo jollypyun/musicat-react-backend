@@ -121,6 +121,9 @@ public class HomeController {
 		CategoryVO categoryVo = new CategoryVO();
 		model.addAttribute("categoryVo", categoryVo);
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		for (CategoryVO categoryVO : categoryList) {
+			log.info(categoryVO.toString());
+		}
 		if(member == null)
 			model.addAttribute("isLogin", 0);
 		else

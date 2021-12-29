@@ -9,12 +9,13 @@
 
 			<div class="row mt-3 mb-5">
 				<div id="write_board_page" class="write_board_style">
-					<form enctype="multipart/form-data" th:object="${articleVO}"
-						th:action="@{/updateArticle/{articleNo}(articleNo=${articleNo})}"
+					<form enctype="multipart/form-data" th:object="${form}"
+						th:action="@{/articles/update/{articleNo}(articleNo=${article.no})}"
 						method="post">
+
+						<input type="text" name="articleNo" th:value="${article.no}" />
 						<div id="selectBoard">
-							<input type="hidden" name="articleNo" value="${articleNo}" /> <select
-								id="boardList" th:field="*{boardNo}" required>
+							 <select id="boardList" th:field="*{boardNo}" required>
 								<option th:each="board: ${boardList}"
 									th:value="${board.boardNo}" th:text="${board.boardName}">
 								</option>
@@ -24,11 +25,11 @@
 						<div id="write_area" class="write-area-style">
 							<div class="write_options">
 								<!-- 공지사항 출력 여부 -->
-								<div id="selectBoard" class="select-board-style">
+								<div class="displayNotice">
 									<!-- 관리자가 아니면 미설정을 default로					
-							<input th:unless="${gradeNo}==1" type="hidden" name="displayNotice" value=0>
-							 관리자면 활성화 
-							<p id="noticeCheck" th:if="${gradeNo}==1" style="width: 50%;">공지등록</p> -->
+									<input th:unless="${gradeNo}==1" type="hidden" name="displayNotice" value=0>
+									 관리자면 활성화
+									<p id="noticeCheck" th:if="${gradeNo}==1" style="width: 50%;">공지등록</p> -->
 									<select id="displayNotice" th:if="${gradeNo}==1"
 										th:field="*{displayNotice}">
 										<option value="0" selected>미설정</option>
@@ -42,29 +43,30 @@
 
 							<div id="in_subject" class="write-subject-style">
 								<textarea id="utitle" th:field="*{subject}" rows="1" cols="55"
-									placeholder="제목" maxlength="100" th:value="${articleVO.subject}"
+									placeholder="제목" maxlength="100" th:value="${article.subject}"
 									required></textarea>
 							</div>
 							<div id="in_content" class="write-content-style">
 								<textarea id="ucontent" th:field="*{content}"
-									th:value="${articleVO.content}" placeholder="내용" required
+									th:value="${article.content}" placeholder="내용" required
 									rows="1" cols="71"></textarea>
 							</div>
 							<div id="import_bth" class="write-area-style">
 								<!-- 첨부파일 -->
-								<input type="fileVO" th:if="${articleVO.attacheFile == null}"
-									name="importAttacheFile" /> <input type="fileVO"
-									th:unless="${articleVO.getAttacheFile == null}"
-									th:text="${articleVO.getAttacheFile().getOriginalFileName()}|"
+								<input type="file" th:if="${article.attacheFile == null}"
+									name="importAttacheFile" /> <input type="file"
+									th:unless="${article.getAttacheFile == null}"
+									th:text="${article.getAttacheFile().getOriginalFileName()}|"
 									name="importAttacheFile" />
 								<!-- 이미지 파일 첨부 -->
-								<input type="fileVO" name="imageFiles" multiple="multiple" /><br />
-								<img th:each="imageFile : ${articleVO.fileList}"
+								<input type="file" name="imageFiles" multiple="multiple" /><br />
+								<img th:each="imageFile : ${article.fileList}"
 									th:src="|/images/${imageFile.getSystemFileName()}|" width="200"
 									height="200" />
 							</div>
 							<input type="button" value="취소" onclick="history.back(-1)">
 							<button type="submit">등록</button>
+						</div>
 					</form>
 				</div>
 			</div>
