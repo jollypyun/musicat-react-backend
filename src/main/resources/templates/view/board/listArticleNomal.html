@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
+<meta charset="UTF-8"/>
 
 <div id="layoutSidenav_content">
 	<main>
@@ -26,18 +26,18 @@
 								</thead>
 
 								<tbody>
-									<tr th:each="articleVO : ${articleVOS}">
-										<td th:text="${articleVO.no}"></td>
+									<tr th:each="article : ${articles}">
+										<td th:text="${article.no}"></td>
 										<td>
-											<a th:text="${articleVO.subject}"
-												th:href="|/detailArticle/${articleVO.no}|"></a>
+											<a th:text="${article.subject}"
+												th:href="|/articles/${article.no}|"></a>
 										</td>
 										<td >
-										<a th:id = "${articleVO.memberNo}" onclick=openNote(this) th:text="${articleVO.nickname}"></a>
+										<a th:id = "${article.memberNo}" onclick=openNote(this) th:text="${article.nickname}"></a>
 										</td>
-										<td th:text="${articleVO.writeDate}"></td>
-										<td th:text="${articleVO.viewcount}"></td>
-										<td th:text="${articleVO.likecount}"></td>
+										<td th:text="${article.writeDate}"></td>
+										<td th:text="${article.viewcount}"></td>
+										<td th:text="${article.likecount}"></td>
 									</tr>
 								</tbody>
 							</table>

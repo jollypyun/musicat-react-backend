@@ -54,6 +54,13 @@ public class ArticleVO {
         articleVO.content = form.getContent();
     }
 
+    public static ArticleVO addReplyAndLike(ArticleVO article, int likeCheck, List<ReplyVO> replys, int totalCount) {
+        article.setLikeCheck(likeCheck);
+        article.setReplyList(replys);
+        article.setLikecount(totalCount);
+        return article;
+    }
+
 
     //조회수 증가
     public void addViewcount(){

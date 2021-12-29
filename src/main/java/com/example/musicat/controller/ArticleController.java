@@ -18,12 +18,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.musicat.service.board.ArticleService;
@@ -47,6 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
+@RequestMapping("articles")
 public class ArticleController {
 
 	private ArticleService articleService;
@@ -67,7 +63,15 @@ public class ArticleController {
 		this.categoryService = categoryService;
 	}
 
-	@GetMapping("/detailArticle/{articleNo}")
+	/**
+	 * 세부 조회
+	 * @param articleNo 게시글 번호
+	 * @param request 사용자 정보 가져오기 위한 세션 접근
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/{articleNo}")
 	public String detailArticle(@PathVariable("articleNo") int articleNo,HttpServletRequest request,HttpServletResponse response, Model model) {
 		// create
 		HttpSession session = request.getSession();
@@ -90,19 +94,23 @@ public class ArticleController {
 			List<ReplyVO> replys = this.replyService.retrieveAllReply(articleNo);
 			int totalCount = this.articleService.totalRecCount(articleNo);
 			int likeCheck = this.articleService.likeCheck(memberNo, articleNo);
+
 			article.setLikeCheck(likeCheck);
-			article.setNo(articleNo);
+//			article.setNo(articleNo); //굳이 할 필요가 있는지 의문
 			article.setReplyList(replys);
 			article.setLikecount(totalCount);
+
+			ArticleVO result = ArticleVO.addReplyAndLike(article, likeCheck, replys, totalCount); //리팩토링
+
 			// xss 처리 Html tag로 변환
-			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
-			article.setSubject(escapeSubject);
-			String escapeContent = StringEscapeUtils.unescapeHtml4(article.getContent());
-			article.setContent(escapeContent);
+//			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
+//			article.setSubject(escapeSubject);
+//			String escapeContent = StringEscapeUtils.unescapeHtml4(article.getContent());
+//			article.setContent(escapeContent);
 			// view
 			
 			// side bar -------------
-			model.addAttribute("article", article);
+			model.addAttribute("article", result);
 			log.info("detail 넘기는 aritcle: {}", article.toString());
 			model.addAttribute("HomeContent", "/view/board/detailArticle");
 		} else {
@@ -115,6 +123,8 @@ public class ArticleController {
 	public String writeForm(HttpServletRequest req, Model model) {
 		// create
 		ArticleVO articleVO = new ArticleVO(); // WriteForm에서 값들을 담을 객체
+		ArticleForm form = new ArticleForm(); // 변경
+
 		HttpSession session = req.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
 		// bind
@@ -129,8 +139,8 @@ public class ArticleController {
 		List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(gradeNo);
 		// view
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("articleVO", articleVO);
-		model.addAttribute("gradeNo", member.getGradeNo()); // 나중에 seesion member에 접근해서 grade_no 받아올 것
+		model.addAttribute("article", form);
+		model.addAttribute("gradeNo", gradeNo); // 나중에 seesion member에 접근해서 grade_no 받아올 것
 		model.addAttribute("HomeContent", "/view/board/writeArticleForm");
 		return "view/home/viewHomeTemplate";
 	}
