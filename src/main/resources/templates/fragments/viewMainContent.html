@@ -64,16 +64,16 @@
 							</tr>
 						</tfoot>
 						<tbody>
-							<tr th:each="article : ${articleList}">
-								<td th:text="${article.no}"></td>
+							<tr th:each="articleVO : ${articleList}">
+								<td th:text="${articleVO.no}"></td>
 								<td>
-									<a th:text="${article.subject}"
-										th:href="|/detailArticle/${article.no}|"></a>
+									<a th:text="${articleVO.subject}"
+										th:href="|/detailArticle/${articleVO.no}|"></a>
 								</td>
-								<td th:text="${article.nickname}"></td>
-								<td th:text="${article.writeDate}"></td>
-								<td th:text="${article.viewcount}"></td>
-								<td th:text="${article.likecount}"></td>
+								<td th:text="${articleVO.nickname}"></td>
+								<td th:text="${articleVO.writeDate}"></td>
+								<td th:text="${articleVO.viewcount}"></td>
+								<td th:text="${articleVO.likecount}"></td>
 							</tr>
 						</tbody>
 					</table>

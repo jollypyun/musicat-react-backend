@@ -37,8 +37,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<resultMap type="selectArticleVo" id="detailSelectMap">
-		<collection property="article" resultMap="detailArticleVOResult" />
-		<collection property="file" resultMap="detailFileVOResult" />
+		<collection property="articleVO" resultMap="detailArticleVOResult" />
+		<collection property="fileVO" resultMap="detailFileVOResult" />
 	</resultMap>
 	
 	<select id="selectArticle" parameterType="Integer" statementType="CALLABLE" resultMap="detailSelectMap">

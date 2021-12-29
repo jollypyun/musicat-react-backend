@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.musicat.mapper.board.BoardMapper">
+	
+	<!-- 게시판 추가 -->
+	<insert id="insertBoard" parameterType="boardVO">
+		INSERT INTO board (category_no, boardname, boardkind)
+		VALUE (#{categoryNo}, #{boardName}, #{boardkind});
+	</insert>
+	
+	<!-- 마지막에 추가된 게시판 번호 조회 -->
+	<select id="selectLastInsertBoardNo" resultType="int">
+		SELECT last_insert_id();
+	</select>
+	
+	<!-- 게시판 등급 추가 -->
+	<insert id="insertBoardGrade" statementType="CALLABLE">
+		<!-- {call sp_insert_board_grade_mapper(#{readGrade}, #{writeGrade}) } -->
+		{ call sp_insert_board_grade(#{boardNo}, #{readGrade}, #{writeGrade}) }
+	</insert>
+
+	<!-- 게시판 종류 조회 -->
+	<select id="selectBoardkind" resultType="int">
+		SELECT DISTINCT boardkind FROM board;
+	</select>
+
+	<!-- 게시판과 연결된 게시글 조회 -->
+	<select id="selectConnectArticle" resultType="int">
+		SELECT count(*) FROM article WHERE board_no = #{boardNo};
+	</select>
+	
+	<!-- 게시판 삭제 -->
+	<delete id="deleteBoard" statementType="CALLABLE">
+		{ CALL sp_delete_board(#{boardNo}) }
+	</delete>
+
+	<!-- 게시판 수정 -->
+	<update id="updateBoard" statementType="CALLABLE" parameterType="hashmap">
+		{ CALL sp_update_board(#{boardVo.boardNo}, 
+		#{boardVo.categoryNo}, #{boardVo.boardName}, #{boardVo.boardkind}, 
+		#{boardGradeVo.readGrade}, #{boardGradeVo.writeGrade}) }
+	</update>
+
+	<!-- 게시판 조회 -->
+	<resultMap type="boardVO" id="boardVOMap">
+		<result property="categoryNo" javaType="int" column="category_no" jdbcType="INTEGER"/>
+		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"/>
+		<result property="boardName" javaType="string" column="boardname" jdbcType="VARCHAR"/>
+		<result property="boardkind" javaType="int" column="boardkind" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<resultMap type="boardGradeVO" id="boardGradeVOMap">
+		<!-- selectOneBoard -->
+		<result property="readGrade" javaType="int" column="readgrade" jdbcType="INTEGER"/>
+		<result property="writeGrade" javaType="int" column="writegrade" jdbcType="INTEGER"/>
+		<!-- selectAllBoard -->
+		<result property="gradeNo" javaType="int" column="grade_no" jdbcType="INTEGER"/>
+		<result property="readwrite" javaType="int" column="readwrite" jdbcType="INTEGER"/>
+	</resultMap>
+ 
+	<resultMap type="boardBoardGradeVO" id="boardBoardGradeResultMap">
+		<collection property="boardVo" resultMap="boardVOMap"/>
+		<collection property="boardGradeVo" resultMap="boardGradeVOMap"/>
+	</resultMap>
+		
+	
+	<select id="selectOneBoard" resultType="boardBoardGradeVO" resultMap="boardBoardGradeResultMap">
+		{CALL sp_select_one_board(#{boardNo}) }	
+	</select>
+	
+	<!-- 게시판 조회 (전체 - 카테고리 이름 제외) -->
+	<select id="selectAllBoard" resultType="boardBoardGradeVO" resultMap="boardBoardGradeResultMap">
+		SELECT category_no, board_no, boardname, boardkind, grade_no, readwrite
+		FROM board_grade JOIN board USING (board_no);
+	</select>
+	
+	
+	
+	<!-- 게시판 중복 조회 -->
+	<select id="selectDuplicateBoard" resultType="int">
+		SELECT count(*) FROM board WHERE boardname = #{boardName};
+	</select>
+	
+	<!-- 즐겨찾기 게시판 추가 -->
+	<insert id="insertFavoriteBoard">
+		INSERT INTO favorite (member_no, board_no) VALUE (#{no}, #{boardNo});
+	</insert>
+
+	<!-- 즐겨찾기 게시판 삭제 -->
+	<delete id="deleteFavoriteBoard">
+		 DELETE FROM favorite WHERE member_no = #{no} AND board_no = #{boardNo};
+	</delete>
+	
+	<!-- 즐겨찾기 게시판 조회 -->
+  	<resultMap type="boardVO" id="selectFavoriteBoardListResultMap">
+		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"/>
+		<result property="boardName" javaType="string" column="boardname" jdbcType="VARCHAR"/>
+	</resultMap> 
+	
+	<select id="selectFavoriteBoardList" resultType="boardVO" resultMap="selectFavoriteBoardListResultMap">
+		SELECT f.board_no, boardname 
+		FROM favorite AS f JOIN board AS b ON f.board_no = b.board_no
+		WHERE member_no = #{no};
+	</select>
+	
+</mapper>
