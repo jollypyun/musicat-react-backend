@@ -22,7 +22,7 @@ public class ArticleVO {
     private String nickname; // 회원명
     private String subject; // 제목
     private String content; // 내용
-    private String writedate; // 작성일
+    private String writeDate; // 작성일
     private int viewcount; // 조회수
     private int likecount; // 추천수
     private int displayNotice;
@@ -77,7 +77,7 @@ public class ArticleVO {
                 ", nickname='" + nickname + '\'' +
                 ", subject='" + subject + '\'' +
                 ", content='" + content + '\'' +
-                ", writedate='" + writedate + '\'' +
+                ", writedate='" + writeDate + '\'' +
                 ", viewcount=" + viewcount +
                 ", likecount=" + likecount +
                 ", displayNotice=" + displayNotice +
