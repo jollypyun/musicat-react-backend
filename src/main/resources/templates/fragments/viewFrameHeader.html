@@ -48,10 +48,10 @@
 				<!-- <li><a class="dropdown-item" href="#!">가가가</a></li>
 				<li><a class="dropdown-item" href="#!">신입집사</a></li>
 				<li><hr class="dropdown-divider" /></li> -->
-				<li><a class="dropdown-item" href="#!">Profile</a></li>
+				<li><a class="dropdown-item" href="/myPage/Playlist">Profile</a></li>
 
 				<li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
-				<li><hr class="dropdown-divider" /></li>
+				<li th:if ="${isLogin == 1 || isLogin == 0}"><hr class="dropdown-divider" /></li>
 				<li th:if ="${isLogin == 1}"><a class="dropdown-item" href="/logout">Logout</a></li>
 				<li th:if ="${isLogin == 0}"><a class="dropdown-item" href="/petopialogin">Login</a></li>
 				<li><hr class="dropdown-divider" /></li>
