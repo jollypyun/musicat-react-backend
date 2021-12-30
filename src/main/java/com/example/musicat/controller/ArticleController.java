@@ -142,8 +142,13 @@ public class ArticleController {
 	 */
 	@PostMapping("/insert")
 	public RedirectView insertArticle(@ModelAttribute("form") ArticleForm articleForm, @ModelAttribute FileFormVO form,
-									  HttpServletRequest req) throws IOException {
+									  @RequestParam("tag-itme") String[] tag , HttpServletRequest req) throws IOException {
 		log.info("insert접근");
+		for (String s : tag) {
+			log.info("=========tag=============");
+			log.info(s);
+			log.info("=========tag=============");
+		}
 		// create
 		RedirectView redirectView = new RedirectView();
 		HttpSession session = req.getSession();
