@@ -60,6 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Transactional
 	public void modifyArticle(ArticleVO article) {
 		this.articleDao.updateArticle(article);
+		this.fileService.uploadFile(article);
 	}
 
 	@Override

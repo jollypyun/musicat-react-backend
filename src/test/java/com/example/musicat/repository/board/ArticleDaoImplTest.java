@@ -1,6 +1,7 @@
 package com.example.musicat.repository.board;
 
 import com.example.musicat.domain.board.SelectArticleVO;
+import com.example.musicat.mapper.board.FileMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ArticleDaoImplTest {
 
     @Autowired ArticleDaoImpl articleDao;
+    @Autowired FileMapper fm;
 
     @Test
     public void selectArticle() throws Exception{
@@ -34,6 +36,7 @@ class ArticleDaoImplTest {
 
     @Test
     void selectBoard() {
+        fm.deleteFile(22);
     }
 
     @Test

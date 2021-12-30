@@ -2,7 +2,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8"/>
 <!-- 작성 폼 css -->
-<link th:href="@{../css/writeArticleStyle.css}" rel="stylesheet" />
+<link th:href="@{/css/writeArticleStyle.css}" rel="stylesheet" />
 <div id="layoutSidenav_content">
 	<main>
 		<div class="container-fluid px-4">
@@ -13,7 +13,7 @@
 						th:action="@{/articles/update/{articleNo}(articleNo=${article.no})}"
 						method="post">
 
-						<input type="text" name="articleNo" th:value="${article.no}" />
+						<input id="articleNo" type="text" name="articleNo" th:value="${article.no}" />
 						<div id="selectBoard">
 							 <select id="boardList" th:field="*{boardNo}" required>
 								<option th:each="board: ${boardList}"
@@ -56,13 +56,18 @@
 								<input type="file" th:if="${article.attacheFile == null}"
 									name="importAttacheFile" /> <input type="file"
 									th:unless="${article.getAttacheFile == null}"
-									th:text="${article.getAttacheFile().getOriginalFileName()}|"
-									name="importAttacheFile" />
+									th:text="${article.getAttacheFile().getOriginalFileName()}" name="importAttacheFile" />
 								<!-- 이미지 파일 첨부 -->
 								<input type="file" name="imageFiles" multiple="multiple" /><br />
-								<img th:each="imageFile : ${article.fileList}"
-									th:src="|/images/${imageFile.getSystemFileName()}|" width="200"
-									height="200" />
+								<div id="viewImage">
+									<div th:each="imageFile : ${article.fileList}">
+											<div th:id = "${imageFile.getNo()}">
+												<img th:src="|/images/${imageFile.getSystemFileName()}|" width="200"
+												height="200" />
+												<input type="button" class="remove_file_btn"  value="삭제" />
+											</div>
+									</div>
+								</div>
 							</div>
 							<input type="button" value="취소" onclick="history.back(-1)">
 							<button type="submit">등록</button>
@@ -73,5 +78,44 @@
 		</div>
 	</main>
 </div>
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script>
+
+	$(document).ready(function (){
+		//파일 삭제
+		$(document).on('click', '.remove_file_btn', function (){
+			const fileNo = $(this).parents('div').attr('id');
+			console.log('삭제할 file 번호', fileNo);
+			$.ajax({
+				url: '/removeFile',
+				method: 'POST',
+				dataType: 'json',
+				data: {
+					fileNo: fileNo,
+					articleNo: $('#articleNo').val(),
+				},
+				success: function (data) {
+					fileList = data;
+					htmlStr = "";
+					$('#viewImage').html(""); //view창 비우기
+					for (let i = 0; i < fileList.length; i++) {
+						htmlStr += "<div id=" + fileList[i].no + ">";
+						htmlStr += "<img src='/images/" + fileList[i].systemFileName + "' width='200' height='200'/>";
+						htmlStr += "<input type='button' class='remove_file_btn' value='삭제'>";
+						htmlStr += "</div>";
+					}
+					console.log(htmlStr);
+					$('#viewImage').html(htmlStr);
+				},
+				error: function (e) {
+					console.trace();
+					reject(e);
+				}
+			});
+		});
+	});
+
+
+</script>
 </html>
 

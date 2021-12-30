@@ -57,7 +57,7 @@
 										<td th:if="${article.attacheFile == null}">첨부된 파일이 없습니다.</td>
 										<td th:unless="${article.attacheFile == null}"><a
 											th:href="|/attach/${article.getAttacheFile().getNo()}|"
-											th:text="${article.getAttacheFile().getSystemFileName()}|"></a>
+											th:text="${article.getAttacheFile().getSystemFileName()}"></a>
 										</td>
 										<th></th>
 										<td></td>
@@ -342,7 +342,7 @@
 
 		$(document).on('click', '#add_like_btn', function () {
 			$.ajax({
-				url: '/addLike',
+				url: '/articles/addLike',
 				method: 'POST',
 				dataType: 'json',
 				contentType: 'application/json',
@@ -369,7 +369,7 @@
 
 		$(document).on('click', '#del_like_btn', function () {
 			$.ajax({
-				url: "/delLike",
+				url: "/articles/delLike",
 				method: 'POST',
 				dataType: 'json',
 				contentType: 'application/json',

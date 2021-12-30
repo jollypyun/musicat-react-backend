@@ -11,7 +11,7 @@
 			<div class="row mt-3 mb-5">
 
 				<div id="write_board_page" class="write-board-style">
-					<form enctype="multipart/form-data" th:object="${form}"
+					<form id="insertForm" enctype="multipart/form-data" th:object="${form}"
 						  th:action="@{/articles/insert}" method="post">
 
 <!--						 게시판 설정-->
@@ -60,10 +60,13 @@
 								<label class="write-image-style" for="write-imagefile-upload">
 									<i class="far fa-file-image fa-2x"></i></label>
 								<input type="file" id="write-imagefile-upload" th:field="*{imageFiles}"
-									multiple="multiple" /> 
+									onchange="setThumbnail(event)" multiple="multiple" />
 									<a name="selectbtnimage" id="selectimage"></a>&nbsp;<br/>
 								
-								<img src="/importfile.png" board='0'onclick="document.all.selectFile.click();document.all.selectbtnimage.value=document.all.selectFile.value" />
+<!--								<img src="/importfile.png" board='0'onclick="document.all.selectFile.click();document.all.selectbtnimage.value=document.all.selectFile.value" />-->
+							</div>
+							<div id="image_container">
+<!--								<div id="image_container"></div>-->
 							</div>
 
 							<div id="in_content" class="write-content-style">
@@ -73,15 +76,100 @@
 
 							<div class="write-btn-style">
 								<input type="button" value="취소" onclick="history.back(-1)">
-								<button type="submit">등록</button>
+<!--								<button type="submit">등록</button>-->
+								<input type="button" id="write_btn" value="등록">
 							</div>
 						</div>
-
 					</form>
 				</div>
 			</div>
 		</div>
 	</main>
 </div>
+<script th:src="@{../js/jquery-3.6.0.min.js}"></script>
+<script>
 
+	$(document).ready(function (){
+		$('#write_btn').on('click', function (){
+			// var temp = document.querySelector('#write-imagefile-upload').files;
+			// var result = [...temp];
+			// // var result = $('#write-imagefile-upload').val();
+			// for (let i = 0; i < removeIndexArray.length; i++) {
+			// 	console.log(33, result);
+			// 	result.splice(removeIndexArray[i], 1);
+			// }
+			// console.log(33,result);
+			// console.log(typeof result);
+			// document.querySelector('#write-imagefile-upload').files = result;
+			$('#insertForm').submit();
+		});
+	});
+
+
+	let index = 0;
+	// let removeIndexArray = [];
+
+        function setThumbnail(event) {
+            for (var image of event.target.files) {
+
+
+                var reader = new FileReader();
+
+                reader.onload = function (event) {
+                    //image preview
+                    var $div = $('<div id=image' + index + ' class="preview-div">');
+                    var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="400" height="400">');
+                    // var $input = $('<button id=' + index + ' class="preview-de"></button>');
+                    // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
+
+                    // $input.append($i);
+                    $div.append($img);
+                    // $div.append($input);
+                    $('#image_container').append($div);
+
+                    index++;
+                };
+
+                console.log(image);
+                // reader.readAsDataURL(event.target.files[0]);
+                reader.readAsDataURL(image);
+            }
+
+        }
+
+		$(document).on('click', '#write-imagefile-upload', function (){
+			$('#image_container').html("");
+		})
+
+		// 미리보기 삭제
+        // $(document).on('click', '.preview-de', function () {
+        //     var removeNo = this.id;
+		// 	removeIndexArray.push(removeNo);
+        //     console.log('삭제');
+        //     console.log("index", removeNo);
+        //     // $("#image_container").empty()
+        //     deleteImageAction(removeNo);
+        // });
+		//
+        // function deleteImageAction(index) {
+		//
+        //     $("#image" + index).empty()
+        //     $("#image" + index).val("");
+        //     $("#image" + index).remove();
+        // }
+
+</script>
+<style>
+	.preview-de {
+		border: none;
+		background-color: transparent;
+		position: relative;
+		top: -375px;
+		right: 40px;
+	}
+
+	.fas {
+		color: #fd9d00;
+	}
+</style>
 </html>

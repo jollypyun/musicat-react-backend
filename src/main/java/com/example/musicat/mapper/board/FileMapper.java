@@ -19,4 +19,6 @@ public interface FileMapper {
 	 void deleteFile(int FileNo); // 삭제
 	 
 	 void allDelete(int articleNo);
+
+	 List<FileVO> selectArticleFiles(int articleNo);
 }

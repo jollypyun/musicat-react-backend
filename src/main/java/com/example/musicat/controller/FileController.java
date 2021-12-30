@@ -2,15 +2,17 @@ package com.example.musicat.controller;
 
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
+import java.util.List;
 
+import com.example.musicat.controller.form.FileFormVO;
+import com.example.musicat.service.board.FileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriUtils;
 
 import com.example.musicat.repository.board.FileDao;
@@ -27,6 +29,7 @@ public class FileController {
 
 	private final FileManager fileManager;
 	private final FileDao fileDao;
+	private final FileService fileService;
 	
 	// 이미지 다운로드
 	@ResponseBody
@@ -65,5 +68,20 @@ public class FileController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
 				.body(resource);
 	}
-	
+
+
+	/**
+	 * ajax로 파일 업로드 하기
+	 */
+	@ResponseBody
+	@PostMapping("/removeFile")
+	public List<FileVO> fileDelete(@RequestParam("fileNo") int fileNo, @RequestParam("articleNo") int articleNo){
+		// fileNo로 파일삭제
+		FileVO findFile = fileService.selectOneFile(fileNo);
+		fileService.removeFile(fileNo); // DB삭제
+		fileManager.deleteUploadFile(findFile); // upload 폴더에서 삭제
+		// articleNo로 파일 다불러오기
+		return fileService.selectArticleFiles(articleNo);
+	}
+
 }
