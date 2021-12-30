@@ -1,7 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://thymeleaf.org">
 
-<link th:href="@{../css/myPageStyle.css}" rel="stylesheet"/>
+<link th:href="@{/css/myPageStyle.css}" rel="stylesheet"/>
+<link th:href="@{/css/myPagePlaylistDetail.css}" rel="stylesheet"/>
 
 <div id="layoutSidenav_content">
     <main>
@@ -9,7 +10,7 @@
             <div class="row mt-3 mb-5">
                 <div class="myPage-top">
                     <div class="myPage-top-image">
-<!--                        플레이리스트 이미지 넣기-->
+                        <!--                        플레이리스트 이미지 넣기-->
                         <img src="/images/main-1.png">
                     </div>
                     <div class="myPage-top-profile">
@@ -24,7 +25,214 @@
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">
-                        디테일 페이지
+                        <div class="myPage-content-left-btn">
+                            <button>링크 복사</button>
+                            <button>삭제</button>
+                        </div>
+                        <div class="myPage-content-left-playlist">
+                            <div class="myPage-content-left-playlist-img">
+
+                                <img src="/images/main-1.png">
+
+                            </div>
+                            <div class="myPage-content-left-playlist-table">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="myPage-content-left-playlist">
+                            <div class="myPage-content-left-playlist-img">
+
+                                <img src="/images/main-1.png">
+
+                            </div>
+                            <div class="myPage-content-left-playlist-table">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <div class="myPage-content-left-playlist">
+                            <div class="myPage-content-left-playlist-img">
+
+                                <img src="/images/main-1.png">
+
+                            </div>
+                            <div class="myPage-content-left-playlist-table">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="5%">1</td>
+                                        <td width="20%">ArtistName</td>
+                                        <td width="20%">SongName</td>
+                                        <td width="15%">PlayTime</td>
+                                        <td width="10%">
+                                            <button>재생</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>좋아요</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>팔로우</button>
+                                        </td>
+                                        <td width="10%">
+                                            <button>삭제</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
                     </div>
                     <div class="myPage-content-right">
                         <div class="myPage-content-right-top">
