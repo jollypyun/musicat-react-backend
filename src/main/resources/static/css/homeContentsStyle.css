@@ -64,11 +64,9 @@
 .content-top-right-table table tr td:nth-child(2){
 	width: 15%;
 }
-.content-top-right-table table tr td:nth-child(3){
-	width: 10%;
-}
+
 .content-top-right-table table tr td:last-child{
-	width: 50%;
+	width: 60%;
 }
 .content-top-right-table table tr td img{
 	width: 40px;
