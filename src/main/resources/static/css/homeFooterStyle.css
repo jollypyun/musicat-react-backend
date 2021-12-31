@@ -1,1 +1,104 @@
 @charset "utf-8";
+
+footer{
+    height: 70px;
+    width: 100%;
+    font-size: 10px;
+}
+
+#footerPlayList{
+    position: fixed;
+    height: 80px;
+    bottom: 20px;
+    left: 260px;
+    right: 0;
+    z-index: 100;
+}
+
+.playListBar{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+    left: -15px;
+    margin: 0 auto;
+    background-color: #ffdeb4;
+    /*transition: width 0.15s ease-in-out;*/
+    transition: left 0.15s ease-in-out;
+
+    border-radius: 100px;
+
+
+
+}
+
+.sb-sidenav-toggled-footer .playListBar{
+    left: -130px;
+    transition: left 0.15s ease-in-out;
+}
+
+/* -----------------세팅 ----------------*/
+
+.playListBar-inner{
+    display: flex;
+    align-items: center;
+    justify-content:space-evenly;
+    width: 95%;
+    height: 100%;
+
+
+}
+.playListBar-inner>div{
+    margin-right: 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.playListBar-inner-time{
+    width: 30%;
+}
+
+.playListBar-inner-time span{
+    font-size: 14px;
+}
+
+.playListBar-inner-time input{
+    width: 70%;
+    margin: 0 10px;
+}
+
+.playListBar-inner-title span{
+    display: block;
+}
+.playListBar-inner-title span:first-child{
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.volume-mute-btn,
+.playListBar-inner-play-btn button,
+.playListBar-inner-func-btn button{
+    border: none;
+    background-color:transparent;
+}
+
+.playListBar-inner-play-btn button:hover,
+.playListBar-inner-play-btn button:hover,
+.playListBar-inner-func-btn button:hover{
+    font-size: 14px;
+    color: #8d0000;
+}
+
+.playListBar-inner-play-btn span,
+.playListBar-inner-func-btn span{
+
+}
+
+.playListBar-inner-img img{
+    width: 30px;
+    height: 30px;
+}
