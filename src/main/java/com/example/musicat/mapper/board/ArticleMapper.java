@@ -1,7 +1,9 @@
 package com.example.musicat.mapper.board;
 
 import java.util.List;
+import java.util.Map;
 
+import com.example.musicat.domain.board.TagVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.musicat.domain.board.ArticleVO;
@@ -37,4 +39,12 @@ public interface ArticleMapper {
 	void upLikecount(int articleNo);
 	
 	void downLikecount(int articleNo);
+
+	void insertTag(TagVO tagVO);
+
+	List<TagVO> selectArticleTags(int articleNo);
+
+	void deleteTag(int tagNo);
+
+	List<ArticleVO> search(Map<String, String> map);
 }

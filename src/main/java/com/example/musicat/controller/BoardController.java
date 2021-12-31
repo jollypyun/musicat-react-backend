@@ -275,5 +275,17 @@ public class BoardController {
 		model.addAttribute("boardkind", boardkind); // 게시글 유형
 		return "/view/home/viewBoardTemplate";
 	}
+
+	// 게시판 내 검색
+	@GetMapping("/board/search")
+	@ResponseBody
+	public List<ArticleVO> searchByBoard(@RequestParam("keyword") String keyword
+			, @RequestParam("content") String content){
+		HashMap<String, String> searchMap = new HashMap<>();
+		searchMap.put("keyword", keyword);
+		searchMap.put("content", content);
+		List<ArticleVO> results = articleService.search(searchMap);
+		return results;
+	}
 	
 }

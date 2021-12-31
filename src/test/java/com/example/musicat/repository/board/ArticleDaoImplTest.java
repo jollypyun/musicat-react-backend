@@ -1,6 +1,9 @@
 package com.example.musicat.repository.board;
 
+import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.board.SelectArticleVO;
+import com.example.musicat.domain.board.TagVO;
+import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.mapper.board.FileMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -8,7 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,6 +23,7 @@ class ArticleDaoImplTest {
 
     @Autowired ArticleDaoImpl articleDao;
     @Autowired FileMapper fm;
+    @Autowired ArticleMapper articleMapper;
 
     @Test
     public void selectArticle() throws Exception{
@@ -41,6 +47,8 @@ class ArticleDaoImplTest {
 
     @Test
     void insertArticle() {
+        String[] aa = {"태그테1", "태그테2"};
+        articleDao.insertTags(69, aa);
     }
 
     @Test
@@ -57,10 +65,20 @@ class ArticleDaoImplTest {
 
     @Test
     void selectAllArticle() {
+        List<TagVO> tagVOS = articleMapper.selectArticleTags(69);
+        for (TagVO tagVO : tagVOS) {
+            log.info(tagVO.toString());
+        }
     }
 
     @Test
     void insertLike() {
+        Map<String, String> map = new HashMap<>();
+        map.put("tagname", "태");
+        List<ArticleVO> search = articleMapper.search(map);
+        for (ArticleVO articleVO : search) {
+            log.info(articleVO.toString());
+        }
     }
 
     @Test

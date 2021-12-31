@@ -14,7 +14,9 @@
 					<form id="insertForm" enctype="multipart/form-data" th:object="${form}"
 						  th:action="@{/articles/insert}" method="post">
 
-<!--						 게시판 설정-->
+						<input type="hidden" id="tags" name="tags" value="">
+
+						<!-- 게시판 설정-->
 						<div id="selectBoard" class="select-board-style">
 							<select id="boardList" th:field="*{boardNo}">
 								<option value="0" selected>게시판을 선택하세요.</option>
@@ -140,7 +142,7 @@
 							// 태그 중복 검사
 							if (result.length == 0) {
 								$("#tag-list")
-										.append("<li class='tag-item' name='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+										.append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
 								addTag(tagValue);
 								self.val("");
 							} else {
@@ -197,19 +199,21 @@
 			});
 		});
 
-
-
+		// 게시글 Form 엔터키로 등록 차단
+		$('#insertForm').on("keydown", function (event) {
+			if((event.keyCode || event.which()) == 13){
+				event.preventDefault();
+			}
+		})
+		// 게시글 작성
 		$('#write_btn').on('click', function (){
-			// var temp = document.querySelector('#write-imagefile-upload').files;
-			// var result = [...temp];
-			// // var result = $('#write-imagefile-upload').val();
-			// for (let i = 0; i < removeIndexArray.length; i++) {
-			// 	console.log(33, result);
-			// 	result.splice(removeIndexArray[i], 1);
-			// }
-			// console.log(33,result);
-			// console.log(typeof result);
-			// document.querySelector('#write-imagefile-upload').files = result;
+			var children = $('#tag-list').children();
+			let tagList = [];
+			children.each(function (index,element){
+				console.log($(element).text());
+				tagList.push($(element).text());
+			})
+			$('#tags').val(tagList.join());
 			$('#insertForm').submit();
 		});
 	});

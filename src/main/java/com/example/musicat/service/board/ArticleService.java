@@ -4,6 +4,7 @@ import com.example.musicat.domain.board.ArticleVO;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 public interface ArticleService {
@@ -29,4 +30,8 @@ public interface ArticleService {
 	void recDelete(ArticleVO aritcleVO);
 	
 	int likeCheck(int memberNo, int ArticleNo);
+
+	void deleteTag(int tagNo);
+
+	List<ArticleVO> search(Map<String, String> map);
 }

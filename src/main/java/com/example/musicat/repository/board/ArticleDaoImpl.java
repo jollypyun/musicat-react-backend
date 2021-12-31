@@ -1,9 +1,11 @@
 package com.example.musicat.repository.board;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.board.SelectArticleVO;
+import com.example.musicat.domain.board.TagVO;
 import com.example.musicat.mapper.board.ArticleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -87,5 +89,27 @@ public class ArticleDaoImpl implements ArticleDao {
 	public void downLikecount(int articleNo) {
 		this.articleMapper.downLikecount(articleNo);
 	}
-	
+
+	@Override
+	public void insertTags(int articleNo, String[] tagList) {
+		for (int i = 0; i < tagList.length; i++) {
+			TagVO tagVO = new TagVO(articleNo, tagList[i].substring(0, tagList[i].length()-1));
+			this.articleMapper.insertTag(tagVO);
+		}
+	}
+
+	@Override
+	public List<TagVO> selectArticleTags(int articleNo) {
+		return articleMapper.selectArticleTags(articleNo);
+	}
+
+	@Override
+	public void deleteTag(int tagNo) {
+		this.articleMapper.deleteTag(tagNo);
+	}
+
+	@Override
+	public List<ArticleVO> search(Map<String, String> map) {
+		return this.articleMapper.search(map);
+	}
 }

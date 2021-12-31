@@ -51,6 +51,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		{ CALL sp_article_select_detail(#{articleNo}) }
 	</select>
 
+
+
+
+
+
 	
 	<insert id="insertArticle" statementType="CALLABLE" parameterType="articleVo">
 		{ CALL sp_article_insert(#{memberNo}, #{boardNo}, #{nickname}, #{subject}, #{content}) }
@@ -114,6 +119,57 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			{ CALL sp_totalcount_like(#{articleNo} ) }
 	</select>
 	
-	
+
+	<!-- tag -->
+	<insert id="insertTag" parameterType="tagVo">
+		{ CALL sp_insert_tag(#{articleNo}, #{name}) }
+	</insert>
+
+	<resultMap type="tagVo" id="selectTagMap">
+		<result property="tagNo" javaType="int" column="tag_no" jdbcType="INTEGER"/>
+		<result property="articleNo" javaType="int" column="article_no" jdbcType="INTEGER"/>
+		<result property="name" javaType="String" column="tagname" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="selectArticleTags" statementType="CALLABLE" parameterType="int" resultMap="selectTagMap">
+		{ CALL sp_select_article_tags(#{articleNo}) }
+	</select>
+
+	<delete id="deleteTag" statementType="CALLABLE" parameterType="int">
+		{ CALL sp_delete_tag(#{articleNo}) }
+	</delete>
+
+
+	<!-- 검색 -->
+
+	<resultMap type="articleVo" id="searchArticleMap">
+		<result property="no" javaType="int" column="article_no"  jdbcType="INTEGER"/>
+		<result property="memberNo" javaType="int" column="member_no" jdbcType="INTEGER"/>
+		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"/>
+		<result property="subject" javaType="String" column="subject"  jdbcType="VARCHAR"/>
+		<result property="nickname" javaType="String" column="nickname"  jdbcType="VARCHAR"/>
+		<result property="writeDate" javaType="String" column="writedate" jdbcType="VARCHAR"/>
+		<result property="content" javaType="String" column="content" jdbcType="VARCHAR"/>
+		<result property="viewcount" javaType="int" column="viewcount" jdbcType="INTEGER"/>
+	</resultMap>
+
+
+	<select id="search" parameterType="hashMap" resultMap="searchArticleMap">
+		SELECT * FROM article AS a
+		<where>
+			<if test="nickname != null and !nickname.equals('')">
+				AND a.nickname LIKE CONCAT('%',#{nickname},'%')
+			</if>
+			<if test="subject != null and !subject.equals('')">
+				AND a.subject LIKE CONCAT('%',#{subject},'%')
+			</if>
+			<if test="tagname != null and !tagname.equals('')">
+				AND a.article_no IN ( SELECT t.article_no FROM tag AS t WHERE t.tagname LIKE CONCAT('%',#{tagname},'%'))
+			</if>
+		</where>
+		ORDER BY writedate DESC
+	</select>
+
+
 	
 </mapper>

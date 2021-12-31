@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.example.musicat.controller.form.ArticleForm;
+import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.repository.board.ArticleDao;
 import com.example.musicat.util.FileManager;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -27,12 +29,7 @@ import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.board.FileService;
 import com.example.musicat.service.board.ReplyService;
 //import com.example.util.FileManager;
-import com.example.musicat.domain.board.ArticleVO;
-import com.example.musicat.domain.board.BoardVO;
-import com.example.musicat.domain.board.CategoryVO;
 import com.example.musicat.controller.form.FileFormVO;
-import com.example.musicat.domain.board.FileVO;
-import com.example.musicat.domain.board.ReplyVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,16 +45,17 @@ public class ArticleController {
 	private ReplyService replyService;
 	private BoardService boardService;
 	private CategoryService categoryService;
+	private ArticleDao articleDao;
 
 	@Autowired
-	public ArticleController(ArticleService articleService, FileManager fileManager, FileService fileService,
-			ReplyService replyService,  BoardService boardService, CategoryService categoryService) {
+	public ArticleController(ArticleService articleService, FileManager fileManager, FileService fileService, ReplyService replyService, BoardService boardService, CategoryService categoryService, ArticleDao articleDao) {
 		this.articleService = articleService;
 		this.fileManager = fileManager;
 		this.fileService = fileService;
 		this.replyService = replyService;
 		this.boardService = boardService;
 		this.categoryService = categoryService;
+		this.articleDao = articleDao;
 	}
 
 	/**
@@ -142,14 +140,10 @@ public class ArticleController {
 	 */
 	@PostMapping("/insert")
 	public RedirectView insertArticle(@ModelAttribute("form") ArticleForm articleForm, @ModelAttribute FileFormVO form,
-									  @RequestParam("tag-itme") String[] tag , HttpServletRequest req) throws IOException {
+									  @RequestParam("tags") String tags , HttpServletRequest req) throws IOException {
 		log.info("insert접근");
-		for (String s : tag) {
-			log.info("=========tag=============");
-			log.info(s);
-			log.info("=========tag=============");
-		}
 		// create
+		String[] tagList = tags.split(","); // tag들
 		RedirectView redirectView = new RedirectView();
 		HttpSession session = req.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
@@ -160,7 +154,7 @@ public class ArticleController {
 			fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
 		}
 		// bind
-		ArticleVO article = ArticleVO.createArticle(member.getNo(), member.getNickname(), articleForm, attacheFile, imageFiles);
+		ArticleVO article = ArticleVO.createArticle(member.getNo(), member.getNickname(), articleForm, attacheFile, imageFiles, tagList);
 
 		this.articleService.registerArticle(article);
 		int articleNo = article.getNo(); // 작성 후 게시글 세부조회page로 넘어가기 때문에 게시글 번호를 넘겨준다. (insert문 실행 뒤 Last ID 받아온다.)
@@ -204,12 +198,19 @@ public class ArticleController {
 	@PostMapping("/update/{articleNo}")
 	public RedirectView updatetArticle(@ModelAttribute("article") ArticleVO article
 			,@ModelAttribute("form") ArticleForm articleForm
-			,@ModelAttribute FileFormVO form,
+			,@ModelAttribute FileFormVO form, @RequestParam("tags") String tags,
 			@PathVariable("articleNo") int articleNo,
 			HttpServletRequest request)
 			throws IOException {
 		log.info("update접근");
 		// create
+		String[] tagList = tags.split(",");
+		for (String s : tagList) {
+			log.info("==========");
+			log.info("S: {}",s);
+			log.info("==========");
+		}
+		article.setTagList(tagList);
 		RedirectView redirectView = new RedirectView();
 		// 파일 첨부 지정 폴더에 Upload도 동시에 실행
 		FileVO attacheFile = fileManager.uploadFile(form.getImportAttacheFile()); // 첨부 파일
@@ -271,5 +272,28 @@ public class ArticleController {
 		map.put("totalcount", totalCount);
 		return map;
 	}
+
+
+	@PostMapping("/removeTag")
+	@ResponseBody
+	public List<TagVO> removeTag(@RequestParam("tagNo") int tagNo, @RequestParam("articleNo") int articleNo){
+		articleService.deleteTag(tagNo);
+		List<TagVO> findTags = articleDao.selectArticleTags(articleNo);
+		return findTags;
+	}
+
+	// 전체 검색
+	@GetMapping("/board/search")
+	public List<ArticleVO> searchByBoard(@RequestParam("keyword") String keyword
+			, @RequestParam("content") String content, Model model){
+		HashMap<String, String> searchMap = new HashMap<>();
+		searchMap.put("keyword", keyword);
+		searchMap.put("content", content);
+		List<ArticleVO> results = articleService.search(searchMap);
+		model.addAttribute("articles", results);
+		return results;
+	}
+
+
 
 }

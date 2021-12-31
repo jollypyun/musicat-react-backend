@@ -1,9 +1,11 @@
 package com.example.musicat.repository.board;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.board.SelectArticleVO;
+import com.example.musicat.domain.board.TagVO;
 
 public interface ArticleDao {
 
@@ -32,4 +34,12 @@ public interface ArticleDao {
 	void upLikecount(int articleNo);
 	
 	void downLikecount(int articleNo);
+
+	void insertTags(int articleNo, String[] tagList);
+
+	List<TagVO> selectArticleTags(int articleNo);
+
+	void deleteTag(int tagNo);
+
+	List<ArticleVO> search(Map<String, String> map);
 }

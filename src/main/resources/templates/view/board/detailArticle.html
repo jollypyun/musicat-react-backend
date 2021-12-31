@@ -96,6 +96,15 @@
 														<strong th:text="${article.likecount}"></strong>
 													</div>
 												</div>
+
+												<!--Tag 출력 부분-->
+												<div id="tag_area" class="detailArticle-tag-style">
+													<ul id="tag-list" >
+														<div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
+															<li class='tag-item'  th:text="${tag.name}"></li>
+														</div>
+													</ul>
+												</div>
 											</div>
 										</td>
 

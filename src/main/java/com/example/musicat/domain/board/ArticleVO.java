@@ -29,12 +29,13 @@ public class ArticleVO {
     private List<ReplyVO> replyList = new ArrayList<>(); // 댓글
     private FileVO attacheFile; //첨부 파일
     private FileVO thumbnail; // 썸네일
-//
+    private String[] tagList;
+    private List<TagVO> selectTags = new ArrayList<>();
     private int likeCheck;
 
 
     //==생성 메소드==//
-    public static ArticleVO createArticle(int memberNo, String nickname, ArticleForm form, FileVO attacheFile, List<FileVO> imageFiles) {
+    public static ArticleVO createArticle(int memberNo, String nickname, ArticleForm form, FileVO attacheFile, List<FileVO> imageFiles, String[] tagList) {
         ArticleVO articleVO = new ArticleVO();
         articleVO.memberNo = memberNo;
         articleVO.boardNo = form.getBoardNo();
@@ -43,6 +44,7 @@ public class ArticleVO {
         articleVO.content = form.getContent();
         articleVO.attacheFile = attacheFile;
         articleVO.fileList = imageFiles;
+        articleVO.tagList = tagList;
         return articleVO;
     }
 
