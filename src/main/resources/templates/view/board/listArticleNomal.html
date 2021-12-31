@@ -24,7 +24,7 @@
 									</tr>
 								</thead>
 
-								<tbody>
+								<tbody id="article_list" >
 									<tr th:each="article : ${articles}">
 										<td th:text="${article.no}"></td>
 										<td>
@@ -48,13 +48,69 @@
 							<button id="writeForm_btn" onclick="writeForm()"
 							type="button">글쓰기</button>
 					</div>
+					<div id="search_area">
+<!--						<form id="search_form" action="/board/search" method="get">-->
+							<select id="keyword" name="keyword">
+								<option value="subject">제목</option>
+								<option value="nickname">작성자</option>
+								<option value="tagname">태그</option>
+							</select>
+							<input type="text" id="search_content" name="content" placeholder="검색어를 입력해 주세요.">
+							<input type="button" id="search_by_board_btn" value="검색">
+<!--						</form>-->
+					</div>
 				</div>
 			</div>
 		</div>
 	</main>
 </div>
-<script th:src="@{../js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
 <script>
+
+	$('#search_by_board_btn').on('click', function (){
+		// const keyword = $('#keyword').val();
+		// const content = $('#search_content').text();
+		$.ajax({
+			url: '/board/search',
+			method: 'GET',
+			dataType: 'json',
+			data: {
+				keyword: $('#keyword').val(),
+				content: $('#search_content').text()
+			},
+			success: function (data) {
+				results = data;
+				htmlStr = "";
+				$('#article_list').html(""); //view창 비우기
+				for (let i = 0; i < results.length; i++) {
+					htmlStr += "<tr>";
+					htmlStr += "<td>" + results[i].no + "</td>";
+					htmlStr += "<td>";
+					htmlStr += "<a href='/articles/"+results[i].no + "'>" + results[i].subject + "</a>";
+					htmlStr += "</td>";
+					htmlStr += "<td>";
+					htmlStr += "<a id = " + results[i].memberNo + " onclick=openNote(this)>" + results[i].nickname + "</a>";
+					htmlStr += "</td>";
+					htmlStr += "<td>" + results[i].writedate + "</td>";
+					htmlStr += "<td>" + results[i].viewcount + "</td>";
+					htmlStr += "<td>" + results[i].likecount + "</td>";
+					htmlStr += "</tr>";
+				}
+				console.log(htmlStr);
+				$('#article_list').html(htmlStr);
+			},
+			error: function (e) {
+				console.trace();
+				reject(e);
+			}
+		});
+
+	});
+	article_list
+
+
+
+
 
 	function writeForm(){
 		location.href="/articles/insert";
