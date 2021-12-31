@@ -11,10 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.musicat.config.SessionConfig;
 import com.example.musicat.service.board.ArticleService;
@@ -161,8 +158,8 @@ public class HomeController {
 
     }
 
-    @PostMapping("/myPage/Playlist/{playlistNo}")
-    public String myPagePlaylistDetail(Model model) {
+    @GetMapping("/myPage/Playlist/{playlistNo}")
+    public String myPagePlaylistDetail(Model model, @PathVariable String playlistNo) {
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
