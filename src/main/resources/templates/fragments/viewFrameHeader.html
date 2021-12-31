@@ -2,9 +2,9 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-header-color">
 	<!-- Navbar Brand-->
-	<a class="navbar-brand ps-3" href="/main">Petopia</a>
+	<a class="navbar-brand ps-4 fw-bold " href="/main">Musicat</a>
 
 	<!-- Sidebar Toggle-->
 	<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
@@ -15,13 +15,13 @@
 	<!-- Navbar Search-->
 	<form
 		class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-		<div class="input-group">
-			<input class="form-control" type="text" placeholder="Search for..."
-				aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-			<button class="btn btn-primary" id="btnNavbarSearch" type="button">
-				<i class="fas fa-search"></i>
-			</button>
-		</div>
+<!--		<div class="input-group">-->
+<!--			<input class="form-control" type="text" placeholder="Search for..."-->
+<!--				aria-label="Search for..." aria-describedby="btnNavbarSearch" />-->
+<!--			<button class="btn btn-primary" id="btnNavbarSearch" type="button">-->
+<!--				<i class="fas fa-search"></i>-->
+<!--			</button>-->
+<!--		</div>-->
 	</form>
 
 	<!-- admin Toggle-->
@@ -48,10 +48,10 @@
 				<!-- <li><a class="dropdown-item" href="#!">가가가</a></li>
 				<li><a class="dropdown-item" href="#!">신입집사</a></li>
 				<li><hr class="dropdown-divider" /></li> -->
-				<li><a class="dropdown-item" href="#!">Profile</a></li>
+				<li><a class="dropdown-item" href="/myPage/Playlist">Profile</a></li>
 
 				<li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
-				<li><hr class="dropdown-divider" /></li>
+				<li th:if ="${isLogin == 1 || isLogin == 0}"><hr class="dropdown-divider" /></li>
 				<li th:if ="${isLogin == 1}"><a class="dropdown-item" href="/logout">Logout</a></li>
 				<li th:if ="${isLogin == 0}"><a class="dropdown-item" href="/petopialogin">Login</a></li>
 				<li><hr class="dropdown-divider" /></li>

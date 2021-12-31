@@ -11,14 +11,14 @@
 			</div>
 			<div class="fixed_img_col">
 				<ui style="list-style: none;">
-					<li th:each="article : ${articles}">
-						<!-- <div class="notEmpty" th:if="{article.getThumbnail() == null}"></div> -->
+					<li th:each="articleVO : ${articleVOS}">
+						<!-- <div class="notEmpty" th:if="{articleVO.getThumbnail() == null}"></div> -->
 						<div class="card"></div>
 						/thumbnailImages/systemfilename
-						<img th:src="|/thumbnailImages/${article.getThumbnail().getSystemFileName()}|" alt="" style="width: 190;height: 150;">
-						<span class="thumb"><a th:href="|/detailArticle/${article.no}|">
-								<strong th:text="${article.subject}"></strong></a></span>
-						<p th:text="${article.writeDate}"></p>
+						<img th:src="|/thumbnailImages/${articleVO.getThumbnail().getSystemFileName()}|" alt="" style="width: 190;height: 150;">
+						<span class="thumb"><a th:href="|/${articleVO.no}|">
+								<strong th:text="${articleVO.subject}"></strong></a></span>
+						<p th:text="${articleVO.writeDate}"></p>
 					</li>
 				</ui>
 			</div>

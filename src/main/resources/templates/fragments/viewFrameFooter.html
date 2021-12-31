@@ -1,3 +1,66 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
+
+<link th:href="@{/css/homeFooterStyle.css}" rel="stylesheet"/>
+
+<footer>
+    <div id="footerPlayList">
+        <div class="playListBar">
+            <div class="playListBar-inner">
+
+                <div class="playListBar-inner-play-btn">
+                    <button id="playlist-prev"><span class="material-icons">skip_previous</span></button>
+                    <button id="playlist-pause" style="display: none"><span class="material-icons">pause</span></button>
+                    <button id="playlist-play"><span class="material-icons">play_arrow</span></button>
+                    <button id="playlist-next"><span class="material-icons">skip_next</span></button>
+                </div>
+
+                <div class="playListBar-inner-time">
+                    <span class="playListBar-time-current">0:00</span>
+                    <input type="range" value="0" max="100" id="time-progress" class="time-progress"/>
+                    <span class="playListBar-time-duration">-:--</span>
+                </div>
+                <!-- .time -->
+
+                <div class="playListBar-inner-volume">
+                    <button class="volume-mute-btn" id="volume-mute">
+                        <span class="material-icons">volume_up</span>
+                        <span class="material-icons" style="display: none">volume_off</span>
+                    </button>
+                    <input
+                            type="range"
+                            value="100"
+                            max="100"
+                            id="volume-progress"
+                            class="volume-progress"
+                            style="display: none"
+                    />
+                </div>
+                <!-- .volume -->
+
+                <div class="playListBar-inner-img">
+                    <img src="/images/main-4.jpg">
+                </div>
+
+                <div class="playListBar-inner-title">
+                    <div class="playListBar-inner-title-div">
+                        <span class="playListBar-title-song">사랑해(feat 유리상자 '박승화')</span>
+                        <span class="playListBar-title-singer">SG워너비</span>
+                    </div>
+                </div>
+
+                <div class="playListBar-inner-func-btn">
+                    <button id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>
+                    <button id="playlist-heart" style="display: none"><span class="material-icons">favorite</span></button>
+                    <button id="playlist-psersonAdd"><span class="material-icons">person_add</span></button>
+                    <button id="playlist-songList"><span class="material-icons">queue_music</span></button>
+                </div>
+
+
+                <audio src="" id="audio"></audio>
+            </div>
+        </div>
+    </div>
+</footer>
+
 </html>
