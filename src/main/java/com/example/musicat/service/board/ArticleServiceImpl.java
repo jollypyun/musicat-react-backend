@@ -2,10 +2,13 @@ package com.example.musicat.service.board;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.board.FileVO;
 import com.example.musicat.domain.board.SelectArticleVO;
+import com.example.musicat.domain.board.TagVO;
+import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.board.ArticleDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +19,23 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
 
-	@Autowired
-	private ArticleDao articleDao;
-	@Autowired
-	private FileService fileService;
-	@Autowired
-	private ReplyService replyService;
-	@Autowired
-	private MemberMapper memberMapper;
+	@Autowired ArticleMapper articleMapper;
+	@Autowired private ArticleDao articleDao;
+	@Autowired private FileService fileService;
+	@Autowired private ReplyService replyService;
+	@Autowired private MemberMapper memberMapper;
 
 	@Override
 	@Transactional
 	public ArticleVO retrieveArticle(int articleNo) { // 세부 조회
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
+		List<TagVO> tags = articleMapper.selectArticleTags(articleNo);
 		System.out.println("results : " + results.size());
+
 		ArticleVO article = results.get(0).getArticle(); // 게시글 정보 출력
-		List<FileVO> fileList = new ArrayList<FileVO>();
+		article.setSelectTags(tags);
+
+		List<FileVO> fileList = new ArrayList<>();
 			if(results.get(0).getFile() != null) { // 파일이 있을 때
 				for (SelectArticleVO result : results) {
 					fileList.add(result.getFile());
@@ -54,21 +58,24 @@ public class ArticleServiceImpl implements ArticleService {
 		this.memberMapper.plusMemberDocs(article.getMemberNo());
 		this.articleDao.insertArticle(article); // 게시글 추가
 		this.fileService.uploadFile(article);
+		this.articleDao.insertTags(article.getNo(), article.getTagList());
 	}
 
 	@Override
 	@Transactional
 	public void modifyArticle(ArticleVO article) {
 		this.articleDao.updateArticle(article);
+		this.fileService.uploadFile(article);
+		this.articleDao.insertTags(article.getNo(), article.getTagList());
 	}
 
 	@Override
 	@Transactional
-	public void removeArticle(int articleNo, int memberNo) {
+	public int removeArticle(int articleNo, int memberNo) {
 		this.memberMapper.minusMemberDocs(memberNo);
-		this.fileService.allDelete(articleNo);
-		this.replyService.allDelete(articleNo);
+		int boardNo = this.articleDao.selectArticle(articleNo).get(0).getArticle().getBoardNo();
 		this.articleDao.deleteArticle(articleNo);
+		return boardNo;
 	}
 
 	@Override
@@ -111,5 +118,29 @@ public class ArticleServiceImpl implements ArticleService {
 		art.setNo(ArticleNo);
 		return this.articleDao.likeCheck(art);
 	}
-	
+
+	@Override
+	public void deleteTag(int tagNo) {
+		this.articleDao.deleteTag(tagNo);
+	}
+
+	@Override
+	public List<ArticleVO> search(Map<String, String> map) {
+		String keyword = map.get("keyword");
+		String content = map.get("content");
+		if ("subject".equals(keyword)) {
+			map.put("subject", content);
+		}
+		if ("nickname".equals(keyword)) {
+			map.put("nickname", content);
+		}
+		if ("tagname".equals(keyword)) {
+			map.put("tagname", content);
+		}
+		map.remove("keyword");
+		map.remove("content");
+
+		List<ArticleVO> result = this.articleDao.search(map);
+		return result;
+	}
 }

@@ -20,6 +20,7 @@
 	</insert>
 	
 	<resultMap type="fileVo" id="selectFileMap">
+		<result property="no" javaType="int" column="file_no" jdbcType="INTEGER" />
 		<result property="articleNo" javaType="int" column="article_no" jdbcType="INTEGER"/>
 		<result property="originalFileName" javaType="String" column="originalfilename" jdbcType="VARCHAR" />
 		<result property="systemFileName" javaType="String" column="systemfilename" jdbcType="VARCHAR" />
@@ -39,10 +40,13 @@
 	<select id="selectThumbFile" parameterType="fileVo" statementType="CALLABLE" resultType="fileVo" resultMap="selectFileMap">
 		{ CALL sp_file_select_thumbnail(#{articleNo}, #{fileType}) }
 	</select>
-	
+
+	<select id="selectArticleFiles" parameterType="int" statementType="CALLABLE" resultType="fileVo" resultMap="selectFileMap">
+		{ CALL sp_select_article_files(#{articleNo}) }
+	</select>
 	
 	<delete id="deleteFile" parameterType="int" statementType="CALLABLE">
-		DELETE FROM file WHERE article_no = #{no}
+		DELETE FROM file WHERE file_no = #{no}
 	</delete>
 	
 	<delete id="allDelete" parameterType="int">

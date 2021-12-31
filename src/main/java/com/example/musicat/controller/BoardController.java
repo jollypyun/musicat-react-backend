@@ -6,6 +6,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.example.musicat.domain.board.*;
+import com.example.musicat.service.board.ArticleService;
+import com.example.musicat.service.board.FileService;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +25,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.example.musicat.service.board.BoardService;
 import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.member.GradeService;
-import com.example.musicat.domain.board.BoardBoardGradeVO;
-import com.example.musicat.domain.board.BoardGradeVO;
-import com.example.musicat.domain.board.BoardVO;
-import com.example.musicat.domain.board.CategoryVO;
-import com.example.musicat.domain.board.CreateBoardVO;
 import com.example.musicat.domain.member.GradeVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +41,8 @@ public class BoardController {
 	
 	@Autowired
 	private GradeService gradeService;
+	@Autowired ArticleService articleService;
+	@Autowired FileService fileService;
 
 //	@GetMapping("/main")
 //	public String petopiaMain(Model model) {
@@ -222,15 +223,69 @@ public class BoardController {
 			
 			
 	
-	@GetMapping("/nListArticlereq/{boardNo}/{boardkind}")
-	public RedirectView amuguna(@PathVariable("boardNo") int boardNo, @PathVariable("boardkind") int boardkind, HttpServletRequest request) {
-		RedirectView rv = new RedirectView();
-		request.setAttribute("boardNo", boardNo);
-		rv.addStaticAttribute("boardKind", boardkind);
-		System.out.println("BoardController boardkind --------------------- " + boardkind);
-		System.out.println("BoardController boardNo --------------------- " + boardNo);
-		rv.setUrl("/nListArticle/" + boardNo);
-		return rv;
+//	@GetMapping("/nListArticlereq/{boardNo}/{boardkind}")
+//	public RedirectView amuguna(@PathVariable("boardNo") int boardNo, @PathVariable("boardkind") int boardkind, HttpServletRequest request) {
+//		RedirectView rv = new RedirectView();
+//		request.setAttribute("boardNo", boardNo);
+//		rv.addStaticAttribute("boardKind", boardkind);
+//		System.out.println("BoardController boardkind --------------------- " + boardkind);
+//		System.out.println("BoardController boardNo --------------------- " + boardNo);
+//		rv.setUrl("/nListArticle/" + boardNo);
+//		return rv;
+//	}
+
+
+	// 게시판 목록 조회
+	@GetMapping("/board/{boardNo}/articles")
+	public String selectAllNomalArticle(@PathVariable("boardNo") int boardNo,
+										Model model) {
+		// create
+		List<ArticleVO> articles = this.articleService.retrieveBoard(boardNo);
+		// bind
+		FileVO file = new FileVO();
+		for (ArticleVO article : articles) {
+			// Html 변환
+			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
+			article.setSubject(escapeSubject);
+
+			file.setArticleNo(article.getNo());
+			file.setFileType(1);
+			FileVO thumbFile = this.fileService.retrieveThumbFile(file);
+			if(thumbFile != null) {
+				article.setThumbnail(thumbFile);
+			} else {
+				FileVO noFile = new FileVO();
+				noFile.setSystemFileName("noimage.png");
+				article.setThumbnail(noFile);
+			}
+		}
+		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+		CategoryVO categoryVo = new CategoryVO();
+
+		BoardBoardGradeVO bbgVO = this.boardService.retrieveOneBoard(boardNo);
+		String boardName = bbgVO.getBoardVo().getBoardName();
+
+
+		int boardkind = bbgVO.getBoardVo().getBoardkind();
+
+		model.addAttribute("categoryBoardList", categoryList);
+		model.addAttribute("categoryVo", categoryVo);
+		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
+		model.addAttribute("articles", articles); // 게시글 정보 전송
+		model.addAttribute("boardkind", boardkind); // 게시글 유형
+		return "/view/home/viewBoardTemplate";
+	}
+
+	// 게시판 내 검색
+	@GetMapping("/board/search")
+	@ResponseBody
+	public List<ArticleVO> searchByBoard(@RequestParam("keyword") String keyword
+			, @RequestParam("content") String content){
+		HashMap<String, String> searchMap = new HashMap<>();
+		searchMap.put("keyword", keyword);
+		searchMap.put("content", content);
+		List<ArticleVO> results = articleService.search(searchMap);
+		return results;
 	}
 	
 }

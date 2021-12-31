@@ -33,6 +33,10 @@ spring:
             enable: true
             trust: smtp.naver.com
 
+server.error:
+  include-exception: true
+  include-stacktrace: always
+
 file:
   dir: D:/SpringBootHome/petopia2/src/main/resources/static/upload/
 
@@ -42,3 +46,9 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
+#      jdbc-url: jdbc:mysql://13.124.245.202:3306/musicat_temp
+#      username: scott
+#      password: Tiger_1234
+#      jdbc-url: jdbc:mysql://localhost:3306/musicat
+#      username: root
+#      password: mymysql

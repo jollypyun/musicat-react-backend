@@ -1,6 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
-<meta charset="UTF-8">
+	xmlns:th="http://thymeleaf.org">
 <meta charset="UTF-8"/>
 	<!-- 작성 폼 css -->
 	<link th:href="@{../css/writeArticleStyle.css}" rel="stylesheet" />
@@ -12,10 +11,12 @@
 			<div class="row mt-3 mb-5">
 
 				<div id="write_board_page" class="write-board-style">
-					<form enctype="multipart/form-data" th:object="${form}"
-						  th:action="@{/articleVOS/addArticle}" method="post">
+					<form id="insertForm" enctype="multipart/form-data" th:object="${form}"
+						  th:action="@{/articles/insert}" method="post">
 
-<!--						 게시판 설정-->
+						<input type="hidden" id="tags" name="tags" value="">
+
+						<!-- 게시판 설정-->
 						<div id="selectBoard" class="select-board-style">
 							<select id="boardList" th:field="*{boardNo}">
 								<option value="0" selected>게시판을 선택하세요.</option>
@@ -23,6 +24,15 @@
 									th:value="${board.boardNo}" th:text="${board.boardName}">
 								</option>
 							</select>
+							<!--tag-->
+							<div style="margin-top:40px; margin-left:40px;" class="content">
+								<div style="display: flex;">
+									<h1 style="width: 150px; margin-right:30px;">태그 입력</h1>
+										<input type="text" id="tag" size="20" placeholder="태그입력" />
+								</div>
+								<ul id="tag-list">
+								</ul>
+							</div>
 						</div>
 
 
@@ -51,21 +61,24 @@
 									placeholder="제목" maxlength="100"></textarea>
 							</div>
 
-<!--							<div id="import_bth" class="write-area-style">-->
-<!--								&lt;!&ndash; 첨부파일 &ndash;&gt;-->
-<!--								&lt;!&ndash; <label class="write-file-style" for="write-file-upload"><i-->
-<!--									class="fas fa-file-upload fa-2x"></i></label> &ndash;&gt;-->
-<!--								<input type="file" id="write-file-upload"-->
-<!--									name="importAttacheFile" />-->
+							<div id="import_bth" class="write-area-style">
+								<!-- &lt;!&ndash; 첨부파일 &ndash;&gt; -->
+								<label class="write-file-style" for="write-attachefile-upload">
+									<i class="fas fa-file-upload fa-2x"></i></label> 
+								<input type="file" id="write-attachefile-upload" th:field="*{importAttacheFile}" />
 
-<!--								&lt;!&ndash; 이미지 파일 첨부 &ndash;&gt;-->
-<!--								&lt;!&ndash; <label class="write-image-style" for="write-file-upload"><i-->
-<!--									class="far fa-file-image fa-2x"></i></label>  &ndash;&gt;-->
-<!--								<input type="file" id="write-file-upload" name="imageFiles"-->
-<!--									multiple="multiple" /> <a name="selectbtnimage"-->
-<!--									id="selectimage"></a>-->
-<!--								&lt;!&ndash; <img src="/importfile.png" board='0'onclick="document.all.selectFile.click();document.all.selectbtnimage.value=document.all.selectFile.value" /> &ndash;&gt;-->
-<!--							</div>-->
+								<!-- &lt;!&ndash; 이미지 파일 첨부 &ndash;&gt; -->
+								<label class="write-image-style" for="write-imagefile-upload">
+									<i class="far fa-file-image fa-2x"></i></label>
+								<input type="file" id="write-imagefile-upload" th:field="*{imageFiles}"
+									onchange="setThumbnail(event)" multiple="multiple" />
+									<a name="selectbtnimage" id="selectimage"></a>&nbsp;<br/>
+								
+<!--								<img src="/importfile.png" board='0'onclick="document.all.selectFile.click();document.all.selectbtnimage.value=document.all.selectFile.value" />-->
+							</div>
+							<div id="image_container">
+<!--								<div id="image_container"></div>-->
+							</div>
 
 							<div id="in_content" class="write-content-style">
 								<textarea id="content" th:field="*{content}" placeholder="내용"
@@ -74,15 +87,240 @@
 
 							<div class="write-btn-style">
 								<input type="button" value="취소" onclick="history.back(-1)">
-								<button type="submit">등록</button>
+<!--								<button type="submit">등록</button>-->
+								<input type="button" id="write_btn" value="등록">
 							</div>
 						</div>
-
 					</form>
 				</div>
 			</div>
 		</div>
 	</main>
 </div>
+<script th:src="@{../js/jquery-3.6.0.min.js}"></script>
+<script>
 
+	$(document).ready(function (){
+
+		// start tag
+		var tag = {};
+		var counter = 0;
+
+		// 태그를 추가한다.
+		function addTag(value) {
+			tag[counter] = value; // 태그를 Object 안에 추가
+			counter++; // counter 증가 삭제를 위한 del-btn 의 고유 id 가 된다.
+		}
+
+		// 최종적으로 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘긴다.
+		function marginTag() {
+			return Object.values(tag)
+					.filter(function (word) {
+						return word !== "";
+					});
+		}
+
+		$("#tag")
+				.on("keyup", function (e) {
+					var self = $(this);
+					console.log("keypress");
+
+					// input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
+					if (e.key === "Enter" || e.keyCode == 32) {
+
+						var tagValue = self.val(); // 값 가져오기
+
+						// 값이 없으면 동작 안합니다.
+						if (tagValue !== "") {
+
+							// 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
+							var result = Object.values(tag)
+									.filter(function (word) {
+										return word === tagValue;
+									})
+
+							// 태그 중복 검사
+							if (result.length == 0) {
+								$("#tag-list")
+										.append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+								addTag(tagValue);
+								self.val("");
+							} else {
+								alert("태그값이 중복됩니다.");
+							}
+						}
+						e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
+					}
+				});
+
+		// 삭제 버튼
+		// 삭제 버튼은 비동기적 생성이므로 document 최초 생성시가 아닌 검색을 통해 이벤트를 구현시킨다.
+		$(document)
+				.on("click", ".del-btn", function (e) {
+					var index = $(this)
+							.attr("idx");
+					tag[index] = "";
+					$(this)
+							.parent()
+							.remove();
+				});
+
+		// end tag
+
+
+		$(document).on('click', '#add_custom_tag',function (){
+			const tagName = $('#custom_tag_area').val();
+			console.log('customTagName', tagName);
+			$.ajax({
+				url: '/articles/addTag',
+				method: 'POST',
+				dataType: 'json',
+				data: {
+					tagName: tagName,
+					articleNo: $('#articleNo').val(),
+				},
+				success: function (data) {
+					fileList = data;
+					htmlStr = "";
+					$('#viewImage').html(""); //view창 비우기
+					for (let i = 0; i < fileList.length; i++) {
+						htmlStr += "<div id=" + fileList[i].no + ">";
+						htmlStr += "<img src='/images/" + fileList[i].systemFileName + "' width='200' height='200'/>";
+						htmlStr += "<input type='button' class='remove_file_btn' value='삭제'>";
+						htmlStr += "</div>";
+					}
+					console.log(htmlStr);
+					$('#viewImage').html(htmlStr);
+				},
+				error: function (e) {
+					console.trace();
+					reject(e);
+				}
+			});
+		});
+
+		// 게시글 Form 엔터키로 등록 차단
+		$('#insertForm').on("keydown", function (event) {
+			if((event.keyCode || event.which()) == 13){
+				event.preventDefault();
+			}
+		})
+		// 게시글 작성
+		$('#write_btn').on('click', function (){
+			var children = $('#tag-list').children();
+			let tagList = [];
+			children.each(function (index,element){
+				console.log($(element).text());
+				tagList.push($(element).text());
+			})
+			$('#tags').val(tagList.join());
+			$('#insertForm').submit();
+		});
+	});
+
+
+	let index = 0;
+	// let removeIndexArray = [];
+
+        function setThumbnail(event) {
+            for (var image of event.target.files) {
+
+
+                var reader = new FileReader();
+
+                reader.onload = function (event) {
+                    //image preview
+                    var $div = $('<div id=image' + index + ' class="preview-div">');
+                    var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="400" height="400">');
+                    // var $input = $('<button id=' + index + ' class="preview-de"></button>');
+                    // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
+
+                    // $input.append($i);
+                    $div.append($img);
+                    // $div.append($input);
+                    $('#image_container').append($div);
+
+                    index++;
+                };
+
+                console.log(image);
+                // reader.readAsDataURL(event.target.files[0]);
+                reader.readAsDataURL(image);
+            }
+
+        }
+
+		$(document).on('click', '#write-imagefile-upload', function (){
+			$('#image_container').html("");
+		})
+
+		// 미리보기 삭제
+        // $(document).on('click', '.preview-de', function () {
+        //     var removeNo = this.id;
+		// 	removeIndexArray.push(removeNo);
+        //     console.log('삭제');
+        //     console.log("index", removeNo);
+        //     // $("#image_container").empty()
+        //     deleteImageAction(removeNo);
+        // });
+		//
+        // function deleteImageAction(index) {
+		//
+        //     $("#image" + index).empty()
+        //     $("#image" + index).val("");
+        //     $("#image" + index).remove();
+        // }
+
+</script>
+<style>
+	.preview-de {
+		border: none;
+		background-color: transparent;
+		position: relative;
+		top: -375px;
+		right: 40px;
+	}
+
+	.fas {
+		color: #fd9d00;
+	}
+	* {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	ul {
+		padding: 16px 0;
+	}
+
+	ul li {
+		display: inline-block;
+		margin: 0 5px;
+		font-size: 14px;
+		letter-spacing: -.5px;
+	}
+
+	form {
+		padding-top: 16px;
+	}
+
+	ul li.tag-item {
+		padding: 4px 8px;
+		background-color: #777;
+		color: #000;
+	}
+
+	.tag-item:hover {
+		background-color: #262626;
+		color: #fff;
+	}
+
+	.del-btn {
+		font-size: 12px;
+		font-weight: bold;
+		cursor: pointer;
+		margin-left: 8px;
+	}
+</style>
 </html>

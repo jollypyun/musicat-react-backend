@@ -2,6 +2,8 @@
 	xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8"/>
 
+<!--<script th:src="@{../js/detailArticle.js}"></script>-->
+
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
 	crossorigin="anonymous">
@@ -19,12 +21,11 @@
 					<div class="detailArticle-table-style">
 						<h1>
 							<input type="hidden" id="login_no" th:value="${loginMemberNo}">
-							<input type="hidden" id="member_no"
-								th:value="${articleVO.memberNo}"> <input type="hidden"
-								id="article_no" th:value="${articleVO.no}"> <input
-								type="hidden" id="board_no" th:value="${articleVO.boardNo}">
+							<input type="hidden" id="member_no"	th:value="${article.memberNo}">
+							<input type="hidden" id="article_no" th:value="${article.no}">
+							<input type="hidden" id="board_no" th:value="${article.boardNo}">
 						</h1>
-						<form id="detailContent" th:object="${articleVO}" name="articleVO">
+						<form id="detailContent" th:object="${article}" name="article">
 							<table width=100%>
 								<colgroup>
 									<col width="15%">
@@ -35,36 +36,36 @@
 								<tbody>
 									<tr>
 										<th>제목</th>
-										<td th:text="${articleVO.subject}" th:field="*{subject}"></td>
+										<td th:text="${article.subject}" th:field="*{subject}"></td>
 										<th>조회수</th>
-										<td th:text="${articleVO.viewcount}" th:field="*{viewcount}"></td>
+										<td th:text="${article.viewcount}" th:field="*{viewcount}"></td>
 									</tr>
 									<tr>
 										<th>작성자</th>
-										<td th:text="${articleVO.nickname}" th:field="*{nickname}"></td>
+										<td th:text="${article.nickname}" th:field="*{nickname}"></td>
 										<th>작성일</th>
-										<td th:text="${articleVO.writeDate}"></td>
+										<td th:text="${article.writeDate}"></td>
 									</tr>
 									<tr>
 										<th>내용</th>
-										<td th:text="${articleVO.content}" th:field="*{content}"></td>
+										<td th:text="${article.content}" th:field="*{content}"></td>
 										<th></th>
 										<td></td>
 									</tr>
 									<tr>
 										<th>첨부파일</th>
-										<td th:if="${articleVO.attacheFile == null}">첨부된 파일이 없습니다.</td>
-										<td th:unless="${articleVO.attacheFile == null}"><a
-											th:href="|/attach/${articleVO.getAttacheFile().getNo()}|"
-											th:text="${articleVO.getAttacheFile().getSystemFileName()}|"></a>
+										<td th:if="${article.attacheFile == null}">첨부된 파일이 없습니다.</td>
+										<td th:unless="${article.attacheFile == null}"><a
+											th:href="|/attach/${article.getAttacheFile().getNo()}|"
+											th:text="${article.getAttacheFile().getSystemFileName()}"></a>
 										</td>
 										<th></th>
 										<td></td>
 									</tr>
-									<tr th:if="${articleVO.fileList != null}">
+									<tr th:if="${article.fileList != null}">
 
 										<td>
-											<!--이미지 파일들--> <img th:each="imageFile : ${articleVO.fileList}"
+											<!--이미지 파일들--> <img th:each="imageFile : ${article.fileList}"
 											th:src="|/images/${imageFile.getSystemFileName()}|"
 											width="200" height="200" />
 										</td>
@@ -74,40 +75,50 @@
 										<td colspan="2">
 											<div class="detailArticle-btn-style">
 												<div class="detailArticle-function-style">
-													<input type="button"
-														th:onclick="|location.href='@{/writeArticleForm}'|"
-														value="글쓰기" /> <input type="button"
-														th:onclick="|location.href='@{/nListArticle/{boardNo}(boardNo=${articleVO.boardNo})}'|"
+													<button id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
+													 <input type="button"
+														th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"
 														value="목록" />
 												</div>
 												<div id="like_area" class="detailArticle-like-style">
-													<div th:if="${articleVO.likeCheck eq 0}">
+													<div th:if="${article.likeCheck eq 0}">
 														<button type="button" id="add_like_btn" value="추천" />
 														<i class="far fa-heart"></i>
 														</button>
 													</div>
-													<div th:unless="${articleVO.likeCheck eq 0}">
+													<div th:unless="${article.likeCheck eq 0}">
 														<button type="button" id="del_like_btn">
 															<i class="fas fa-heart"></i>
 														</button>
 													</div>
 
 													<div>
-														<strong th:text="${articleVO.likecount}"></strong>
+														<strong th:text="${article.likecount}"></strong>
 													</div>
 												</div>
+
+												<!--Tag 출력 부분-->
+												<div id="tag_area" class="detailArticle-tag-style">
+													<ul id="tag-list" >
+														<div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
+															<li class='tag-item'  th:text="${tag.name}"></li>
+														</div>
+													</ul>
+												</div>
+											</div>
 										</td>
-										</div>
 
 										<!--본인만 가능-->
 										<div class="detail-userCheck-style"
-											th:if="${loginMemberNo == articleVO.memberNo}"
+											th:if="${loginMemberNo == article.memberNo}"
 											style="float: right;">
 											<td><div class="detail-userBtn-style">
 													<input type="button"
-														th:onclick="|location.href='@{/updateArticleForm/{articleNo}(articleNo=${articleVO.no})}'|"
-														value="수정" /> <input type="button"
-														id="remove_article_btn" value="삭제" />
+														th:onclick="|location.href='@{/articles/update/{articleNo}(articleNo=${article.no})}'|"
+														value="수정" />
+												<input type="button"
+													   th:onclick="|location.href='@{/articles/remove/{articleNo}(articleNo=${article.no})}'|"
+													   value="삭제" />
 												</div></td>
 										</div>
 
@@ -120,7 +131,7 @@
 					<!-- 댓글 -->
 
 
-					<div id="writeReplyForm" class="detailArticle-replyVO-style">
+					<div id="writeReplyForm" class="detailArticle-reply-style">
 						<textarea id="write_content" name="write_content" rwos="10"
 							cols="75" placeholder="댓글을 입력해주세요."></textarea>
 
@@ -129,8 +140,8 @@
 
 					<div id="replys">
 						<div class="reply_list"
-							th:each="replyVO : ${articleVO.getReplyList()}">
-							<table th:id="${replyVO.getNo()}">
+							th:each="reply : ${article.getReplyList()}">
+							<table th:id="${reply.getNo()}">
 								<colgroup>
 									<col width="15%">
 									<col width="35%">
@@ -138,20 +149,20 @@
 								<tbody>
 									<tr>
 										<th>내용</th>
-										<td class="Content" th:text="${replyVO.content}"></td>
+										<td class="Content" th:text="${reply.content}"></td>
 									</tr>
 									<tr>
 										<th>닉네임</th>
-										<td th:text="${replyVO.nickname}"></td>
+										<td th:text="${reply.nickname}"></td>
 									</tr>
 									<tr>
 										<th>작성 날짜</th>
-										<td th:text="${replyVO.writeDate}"></td>
+										<td th:text="${reply.writeDate}"></td>
 									</tr>
 								</tbody>
 								<tfoot>
 
-									<tr th:if="${loginMemberNo == replyVO.memberNo}">
+									<tr th:if="${loginMemberNo == reply.memberNo}">
 										<td colspan="2"><input type="button"
 											class="modify_Reply_Form_Btn" value="수정" /> <input
 											type="button" class="remove_Reply_Btn" value="삭제" /></td>
@@ -163,7 +174,7 @@
 					<!-- 수정 폼 -->
 					<div id="modify_reply_form" style="display: none;"
 						class="detailArticle-replyModify-style">
-						<div id="writeReplyForm">
+						<div id="updateReplyForm">
 							<input type="hidden" id="no" />
 							<textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
 							<button class="modify_cancle">취소</button>
@@ -178,13 +189,12 @@
 </div>
 <script th:src="@{../js/jquery-3.6.0.min.js}"></script>
 <script>
-	$(document).ready(function () {
 
-		$('#remove_article_btn').on('click', function () {
-			const boardNo = $("#board_no").val();
-			const articleNo = $("#article_no").val();
-			location.href = '/removeArticleVO/' + articleNo + '/' + boardNo;
-		})
+	function writeForm(){
+		location.href="/articles/insert";
+	}
+
+	$(document).ready(function () {
 
 		/*-------------------댓글 ------------------ */
 		const getAjax = function (url, no, content) {
@@ -210,7 +220,7 @@
 			});
 		}
 
-		const removeReplyVO = function (url, no) {
+		const removeReply = function (url, no) {
 			// resolve, reject는 자바스크립트에서 지원하는 콜백 함수이다.
 			return new Promise((resolve, reject) => {
 				$.ajax({
@@ -237,7 +247,7 @@
 				console.log("rP 접속");
 				let replyList = null;
 				if (content == null || content == '' || typeof content == "undefined") {
-					replyList = await removeReplyVO(url, no);
+					replyList = await removeReply(url, no);
 				} else {
 					console.log("GetAjAx 전");
 					replyList = await getAjax(url, no, content);
@@ -334,14 +344,14 @@
 		$(document).on('click', '.remove_Reply_Btn', function () {
 			const no = $(this).parents('table').attr('id');
 			console.log('remove', no)
-			requestProcess('/removeReplyVO', no);
+			requestProcess('/removeReply', no);
 		});
 
 
 
 		$(document).on('click', '#add_like_btn', function () {
 			$.ajax({
-				url: '/addLike',
+				url: '/articles/addLike',
 				method: 'POST',
 				dataType: 'json',
 				contentType: 'application/json',
@@ -368,7 +378,7 @@
 
 		$(document).on('click', '#del_like_btn', function () {
 			$.ajax({
-				url: "/delLike",
+				url: "/articles/delLike",
 				method: 'POST',
 				dataType: 'json',
 				contentType: 'application/json',
