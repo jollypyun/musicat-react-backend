@@ -10,6 +10,8 @@
 						<i class="board-name" th:text="${boardName}">게시판 이름</i>
 					</div>
 					<div class="articleVOS card-body">
+						<input type="hidden" id="boardNo" th:value="${boardNo}">
+
 						<div class="dataTable-top"></div>
 						<div class="dataTable-container">
 							<table class="dataTable-table">
@@ -68,15 +70,20 @@
 <script>
 
 	$('#search_by_board_btn').on('click', function (){
-		// const keyword = $('#keyword').val();
-		// const content = $('#search_content').text();
+		const keyword = $('#keyword').val();
+		const content = $('#search_content').val();
+		const boardNo = $('#boardNo').val();
+		console.log('boardNo', boardNo);
+		console.log('keyword', keyword);
+		console.log('content',content);
 		$.ajax({
 			url: '/board/search',
 			method: 'GET',
 			dataType: 'json',
 			data: {
-				keyword: $('#keyword').val(),
-				content: $('#search_content').text()
+				boardNo: boardNo,
+				keyword: keyword,
+				content: content
 			},
 			success: function (data) {
 				results = data;
@@ -91,7 +98,7 @@
 					htmlStr += "<td>";
 					htmlStr += "<a id = " + results[i].memberNo + " onclick=openNote(this)>" + results[i].nickname + "</a>";
 					htmlStr += "</td>";
-					htmlStr += "<td>" + results[i].writedate + "</td>";
+					htmlStr += "<td>" + results[i].writeDate + "</td>";
 					htmlStr += "<td>" + results[i].viewcount + "</td>";
 					htmlStr += "<td>" + results[i].likecount + "</td>";
 					htmlStr += "</tr>";

@@ -41,5 +41,5 @@ public interface ArticleDao {
 
 	void deleteTag(int tagNo);
 
-	List<ArticleVO> search(Map<String, String> map);
+	List<ArticleVO> search(Map<String, Object> map);
 }

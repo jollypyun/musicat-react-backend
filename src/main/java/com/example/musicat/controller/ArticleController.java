@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import com.example.musicat.controller.form.ArticleForm;
 import com.example.musicat.domain.board.*;
@@ -19,8 +20,11 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.musicat.service.board.ArticleService;
@@ -139,12 +143,26 @@ public class ArticleController {
 	 * 작성
 	 */
 	@PostMapping("/insert")
-	public RedirectView insertArticle(@ModelAttribute("form") ArticleForm articleForm, @ModelAttribute FileFormVO form,
-									  @RequestParam("tags") String tags , HttpServletRequest req) throws IOException {
+	public ModelAndView insertArticle(@Validated(ValidationSequence.class) @ModelAttribute("form") ArticleForm articleForm, BindingResult result,
+									  @ModelAttribute FileFormVO form,
+									  @RequestParam("tags") String tags , HttpServletRequest req
+									  ) throws IOException {
+		ModelAndView mv = new ModelAndView();
 		log.info("insert접근");
+		log.info("=====================");
+		log.info("tags: {}", tags);
+		log.info("=====================");
+		if (result.hasErrors()){
+			List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+			mv.addObject("categoryBoardList", categoryList);
+			List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(1);
+			// view
+			mv.addObject("boardList", boardList);
+			mv.addObject("HomeContent", "/view/board/writeArticleForm");
+			mv.setViewName("view/home/viewHomeTemplate");
+			return mv;
+		}
 		// create
-		String[] tagList = tags.split(","); // tag들
-		RedirectView redirectView = new RedirectView();
 		HttpSession session = req.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
 		// 파일 첨부 지정 폴더에 Upload도 동시에 실행
@@ -154,14 +172,23 @@ public class ArticleController {
 			fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
 		}
 		// bind
-		ArticleVO article = ArticleVO.createArticle(member.getNo(), member.getNickname(), articleForm, attacheFile, imageFiles, tagList);
+		ArticleVO article = ArticleVO.createArticle(member.getNo(), member.getNickname(), articleForm, attacheFile, imageFiles);
+
+		if(!tags.equals("")){ //입력된 tag가 있는 경우
+			log.info("tag null if문 입장");
+			String[] tagList = tags.split(","); // tag들
+			article.setTagList(tagList);
+		}
 
 		this.articleService.registerArticle(article);
 		int articleNo = article.getNo(); // 작성 후 게시글 세부조회page로 넘어가기 때문에 게시글 번호를 넘겨준다. (insert문 실행 뒤 Last ID 받아온다.)
 		log.info("입력 게시글={}", article.toString());
+
 		// view
+		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/articles/" + articleNo);
-		return redirectView;
+		mv.setView(redirectView);
+		return mv;
 	}
 
 
@@ -196,22 +223,33 @@ public class ArticleController {
 
 	// 게시글 수정
 	@PostMapping("/update/{articleNo}")
-	public RedirectView updatetArticle(@ModelAttribute("article") ArticleVO article
-			,@ModelAttribute("form") ArticleForm articleForm
+	public ModelAndView updatetArticle(@ModelAttribute("article") ArticleVO article
+			,@Validated @ModelAttribute("form") ArticleForm articleForm, BindingResult result
 			,@ModelAttribute FileFormVO form, @RequestParam("tags") String tags,
 			@PathVariable("articleNo") int articleNo,
 			HttpServletRequest request)
 			throws IOException {
 		log.info("update접근");
-		// create
-		String[] tagList = tags.split(",");
-		for (String s : tagList) {
-			log.info("==========");
-			log.info("S: {}",s);
-			log.info("==========");
+
+		ModelAndView mv = new ModelAndView();
+		if (result.hasErrors()){
+			List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+			mv.addObject("categoryBoardList", categoryList);
+			List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(1);
+			// view
+			mv.addObject("boardList", boardList);
+			mv.addObject("HomeContent", "/view/board/updateArticleForm");
+			mv.setViewName("view/home/viewHomeTemplate");
+			return mv;
 		}
-		article.setTagList(tagList);
-		RedirectView redirectView = new RedirectView();
+
+		// create
+		if(!tags.equals("")){ //입력된 tag가 있는 경우
+			log.info("tag null if문 입장");
+			String[] tagList = tags.split(","); // tag들
+			article.setTagList(tagList);
+		}
+
 		// 파일 첨부 지정 폴더에 Upload도 동시에 실행
 		FileVO attacheFile = fileManager.uploadFile(form.getImportAttacheFile()); // 첨부 파일
 		List<FileVO> imageFiles = fileManager.uploadFiles(form.getImageFiles()); // 이미지 파일
@@ -219,14 +257,16 @@ public class ArticleController {
 			fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
 		}
 		// bind
-		ArticleVO.updateArticle(article, articleNo, articleForm,attacheFile,imageFiles);
+		ArticleVO.updateArticle(article, articleNo, articleForm, attacheFile,imageFiles);
 		this.articleService.modifyArticle(article);
 //		int articleNo = article.getNo();
 		log.info("**********************: " + article.toString());
 		log.info("**********************: " + articleNo);
 		// view
+		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/articles/" + articleNo);
-		return redirectView;
+		mv.setView(redirectView);
+		return mv;
 	}
 	
 
@@ -282,18 +322,20 @@ public class ArticleController {
 		return findTags;
 	}
 
-	// 전체 검색
+
+	/**
+	 *  전체 검색
+	 * view 연결만 하면 됨
+	 * 값은 있음
+	 */
 	@GetMapping("/board/search")
 	public List<ArticleVO> searchByBoard(@RequestParam("keyword") String keyword
 			, @RequestParam("content") String content, Model model){
-		HashMap<String, String> searchMap = new HashMap<>();
+		HashMap<String, Object> searchMap = new HashMap<>();
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
 		List<ArticleVO> results = articleService.search(searchMap);
 		model.addAttribute("articles", results);
 		return results;
 	}
-
-
-
 }

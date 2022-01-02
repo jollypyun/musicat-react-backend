@@ -58,7 +58,9 @@ public class ArticleServiceImpl implements ArticleService {
 		this.memberMapper.plusMemberDocs(article.getMemberNo());
 		this.articleDao.insertArticle(article); // 게시글 추가
 		this.fileService.uploadFile(article);
-		this.articleDao.insertTags(article.getNo(), article.getTagList());
+		if (article.getTagList() != null) { // 입력태그가 있을 때만 동작
+			this.articleDao.insertTags(article.getNo(), article.getTagList());	
+		}
 	}
 
 	@Override
@@ -66,7 +68,9 @@ public class ArticleServiceImpl implements ArticleService {
 	public void modifyArticle(ArticleVO article) {
 		this.articleDao.updateArticle(article);
 		this.fileService.uploadFile(article);
-		this.articleDao.insertTags(article.getNo(), article.getTagList());
+		if (article.getTagList() != null) { // 입력태그가 있을 때만 동작
+			this.articleDao.insertTags(article.getNo(), article.getTagList());
+		}
 	}
 
 	@Override
@@ -125,9 +129,9 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleVO> search(Map<String, String> map) {
-		String keyword = map.get("keyword");
-		String content = map.get("content");
+	public List<ArticleVO> search(Map<String, Object> map) {
+		String keyword = (String) map.get("keyword");
+		String content = (String) map.get("content");
 		if ("subject".equals(keyword)) {
 			map.put("subject", content);
 		}

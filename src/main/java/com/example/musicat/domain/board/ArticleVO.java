@@ -35,7 +35,7 @@ public class ArticleVO {
 
 
     //==생성 메소드==//
-    public static ArticleVO createArticle(int memberNo, String nickname, ArticleForm form, FileVO attacheFile, List<FileVO> imageFiles, String[] tagList) {
+    public static ArticleVO createArticle(int memberNo, String nickname, ArticleForm form, FileVO attacheFile, List<FileVO> imageFiles) {
         ArticleVO articleVO = new ArticleVO();
         articleVO.memberNo = memberNo;
         articleVO.boardNo = form.getBoardNo();
@@ -44,7 +44,6 @@ public class ArticleVO {
         articleVO.content = form.getContent();
         articleVO.attacheFile = attacheFile;
         articleVO.fileList = imageFiles;
-        articleVO.tagList = tagList;
         return articleVO;
     }
 

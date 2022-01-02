@@ -166,6 +166,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="tagname != null and !tagname.equals('')">
 				AND a.article_no IN ( SELECT t.article_no FROM tag AS t WHERE t.tagname LIKE CONCAT('%',#{tagname},'%'))
 			</if>
+			<if test="boardNo != null and !boardNo.equals('')">
+				AND a.board_no = #{boardNo}
+			</if>
 		</where>
 		ORDER BY writedate DESC
 	</select>

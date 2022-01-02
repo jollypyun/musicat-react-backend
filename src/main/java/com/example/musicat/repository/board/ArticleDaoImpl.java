@@ -109,7 +109,7 @@ public class ArticleDaoImpl implements ArticleDao {
 	}
 
 	@Override
-	public List<ArticleVO> search(Map<String, String> map) {
+	public List<ArticleVO> search(Map<String, Object> map) {
 		return this.articleMapper.search(map);
 	}
 }

@@ -268,6 +268,7 @@ public class BoardController {
 
 		int boardkind = bbgVO.getBoardVo().getBoardkind();
 
+		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("categoryVo", categoryVo);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
@@ -280,8 +281,10 @@ public class BoardController {
 	@GetMapping("/board/search")
 	@ResponseBody
 	public List<ArticleVO> searchByBoard(@RequestParam("keyword") String keyword
-			, @RequestParam("content") String content){
-		HashMap<String, String> searchMap = new HashMap<>();
+			, @RequestParam("content") String content
+			, @RequestParam("boardNo") Integer boardNo){
+		HashMap<String, Object> searchMap = new HashMap<>();
+		searchMap.put("boardNo", boardNo);
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
 		List<ArticleVO> results = articleService.search(searchMap);
