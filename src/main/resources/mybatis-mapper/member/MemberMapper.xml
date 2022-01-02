@@ -5,6 +5,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.musicat.mapper.member.MemberMapper">
 
+
+	<!-- 양 ~ -->
+	<resultMap id="selectMemberByEmailResultMap" type="memberVo">
+		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER"/>
+		<result property="email" javaType="string" column="email" jdbcType="VARCHAR"/>
+		<result property="password" javaType="string" column="password" jdbcType="VARCHAR"/>
+		<result property="grade" javaType="string" column="auth" jdbcType="VARCHAR"/>
+		<result property="gradeNo" javaType="int" column="grade_no" jdbcType="INTEGER"/>
+
+	</resultMap>
+	<!-- email로 회원 정보 불러오기 (session에 담을 정보)	-->
+	<select id="selectMemberByEmail" resultType="memberVo" resultMap="selectMemberByEmailResultMap">
+		select member_no, email, password,
+			   (select auth from grade where grade_no =
+											 (select grade_no from membergrade where member_no =
+																					 (select member_no from member where email = #{email}))) as auth,
+			   (select grade_no from membergrade where member_no =
+													   (select member_no from member where email = #{email})) as grade_no
+		from member
+		where email = #{email}
+	</select>
+
+	<!-- ~ 양 -->
+
+
+
 	<resultMap type="memberVo" id="detailInfoByManager">
 		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER"/>
 		<result property="email" javaType="string" column="email" jdbcType="VARCHAR"/>
@@ -42,7 +68,12 @@
 		<result property="visits" javaType="int" column="visits" jdbcType="INTEGER"/>
 		<result property="ban" javaType="string" column="ban" jdbcType="VARCHAR"/>
 	</resultMap>
-	
+
+
+
+
+
+
 	<select id="selectMemberList" parameterType="criteria" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT member_no,email, name, regdate, visits, ban
 		FROM member M RIGHT JOIN grade G
@@ -119,6 +150,9 @@
 		ON M.grade_no = G.grade_no
         WHERE email=#{email} AND password=#{password}
     </select>
+
+
+
     
     <update id = "updateLastDdate" parameterType = "int">
 	    UPDATE member
@@ -127,22 +161,22 @@
     </update>
   
   <!-- 회원가입 -->
-	<insert id="insertMemberNo"  parameterType="HashMap">
-	<!-- ㄴ설명: insert 명령을 만들건데, 이름은 insertMemberNo이고 (내가 지은거),  파라미터값은 HashMap(자바에 원래 있는 타입)이다.-->
-		INSERT INTO memberno VALUES()
-			<!-- ㄴ설명: MemberNo가 Auto Incremental로 설정 되어있어서 VALUES()에 아무값도 안 넣으면 자동으로 값이 들어감(원래는 VALUES() 괄호 안에 값을 넣어야 함 -->
-		<selectKey resultType="int"  keyProperty="no" order="AFTER"> 
-		<!-- ㄴ설명:  resultType는 MemberNo의 가져오는 자바타입(이쪽으로 넘어왔을 때),  keyProperty는 "no" : "쿼리문결과" 이런 형태를 가지겠다는 의미. -->
-		<!-- ㄴ order="AFTER" 설명 :  (위에 있는) INSERT INTO MemberNo VALUES()을 먼저 실행 후, (아래에 있는) SELECT LAST_INSERT_ID()을 실행해라 -->
-			SELECT LAST_INSERT_ID()
-			<!-- ㄴ설명: 마지막에 insert 된 값을 선택-->
-		</selectKey>
-	</insert>
+<!--	<insert id="insertMemberNo"  parameterType="HashMap">-->
+<!--	&lt;!&ndash; ㄴ설명: insert 명령을 만들건데, 이름은 insertMemberNo이고 (내가 지은거),  파라미터값은 HashMap(자바에 원래 있는 타입)이다.&ndash;&gt;-->
+<!--		INSERT INTO memberno VALUES()-->
+<!--			&lt;!&ndash; ㄴ설명: MemberNo가 Auto Incremental로 설정 되어있어서 VALUES()에 아무값도 안 넣으면 자동으로 값이 들어감(원래는 VALUES() 괄호 안에 값을 넣어야 함 &ndash;&gt;-->
+<!--		<selectKey resultType="int"  keyProperty="no" order="AFTER"> -->
+<!--		&lt;!&ndash; ㄴ설명:  resultType는 MemberNo의 가져오는 자바타입(이쪽으로 넘어왔을 때),  keyProperty는 "no" : "쿼리문결과" 이런 형태를 가지겠다는 의미. &ndash;&gt;-->
+<!--		&lt;!&ndash; ㄴ order="AFTER" 설명 :  (위에 있는) INSERT INTO MemberNo VALUES()을 먼저 실행 후, (아래에 있는) SELECT LAST_INSERT_ID()을 실행해라 &ndash;&gt;-->
+<!--			SELECT LAST_INSERT_ID()-->
+<!--			&lt;!&ndash; ㄴ설명: 마지막에 insert 된 값을 선택&ndash;&gt;-->
+<!--		</selectKey>-->
+<!--	</insert>-->
 
 	<insert id="insertMember"  parameterType="memberVo">   <!-- parameterType(경로)의 괄호 안에 들어간 건 MemberVO에 있는 @Alias("memberVO")과 이름이 
 			일치해야 함 -->
-		INSERT INTO member(member_no, email, password, nickname)
-		VALUES (#{no}, #{email}, #{password}, #{nickname}) 
+		INSERT INTO member(email, password, nickname)
+		VALUES (#{email}, #{password}, #{nickname})
 		<!-- #{}안에는 MemberVO에서 선언한 변수명과 일치해야 함 -->
 	</insert>
 	

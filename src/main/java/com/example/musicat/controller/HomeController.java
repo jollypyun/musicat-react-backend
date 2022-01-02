@@ -8,7 +8,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.example.musicat.security.MemberContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,26 +35,28 @@ import lombok.extern.java.Log;
 @Log
 public class HomeController {
 
-//	user security 기본 id : user / password : 콘솔 Using generated security password: ex)75f93c5c-c13c-4bcf-aa11-b9c47b0f899a
-
-	@Autowired
-	private BCryptPasswordEncoder bCryptPwdEncoder;
 
 	@Autowired
 	private MemberService memberService;
 	
 	@Autowired
 	private CategoryService categoryService;
-	
 
 	@Autowired
 	private ArticleService articleService;
 	
 
-	@GetMapping("/petopialogin")
+	@GetMapping("/musicatlogin")
 	public String index() {
-		log.info("--------------------------------------------------");
+		log.info("/musicatlogin------------------------------------");
 		return "view/member/login";
+	}
+
+
+	@GetMapping("/accessDenied")
+	public void accessDenied() {
+		log.info("/accessDenied------------------------------------");
+		//접근권한 없다는 안내 페이지 return
 	}
 	
 
@@ -117,28 +122,36 @@ public class HomeController {
 //	}
 	
 	@GetMapping("/main")
-	public String petopiaMain(Model model, HttpSession session) {
+	public String petopiaMain(Model model, HttpSession session) { //, HttpSession session
 		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
 		model.addAttribute("articleList", allArticleList);
 		model.addAttribute("HomeContent","fragments/viewMainContent");
+
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 		CategoryVO categoryVo = new CategoryVO();
 		model.addAttribute("categoryVo", categoryVo);
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
-		if(member == null)
+
+		MemberVO memberSession = (MemberVO) session.getAttribute("loginUser");
+
+		if (memberSession == null) {
 			model.addAttribute("isLogin", 0);
-		else
+		}
+		else {
 			model.addAttribute("isLogin", 1);
+		}
+
+
 		return "view/home/viewHomeTemplate";
 	}
+
 	
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		
-		return "redirect:main";
-	}
+//	@GetMapping("/logout")
+//	public String logout(HttpSession session) {
+//		session.invalidate();
+//
+//		return "redirect:main";
+//	}
 	
 	@GetMapping("/join1")
 	public String join(Model model) {
