@@ -1,6 +1,7 @@
 package com.example.musicat.service.board;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -148,7 +149,21 @@ public class ArticleServiceImpl implements ArticleService {
 		map.remove("keyword");
 		map.remove("content");
 
+		Iterator<String> keys = map.keySet().iterator();
+		while( keys.hasNext() ){
+			String key = keys.next();
+			String value = String.valueOf(map.get(key));
+			System.out.println("키 : "+key+", 값 : "+value);
+			System.out.println("key.getClass().getName() = " + key.getClass().getName());
+			System.out.println("value.getClass().getName() = " + value.getClass().getName());
+		}
+		log.info("dao search 전");
 		List<ArticleVO> result = this.articleDao.search(map);
+		log.info("dao search 후");
+		for (ArticleVO articleVO : result) {
+			log.info("dao");
+			log.info(articleVO.toString());
+		}
 		return result;
 	}
 

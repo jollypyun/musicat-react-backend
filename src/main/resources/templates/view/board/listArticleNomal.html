@@ -11,7 +11,8 @@
 					</div>
 					<div class="articleVOS card-body">
 						<input type="hidden" id="boardNo" th:value="${boardNo}">
-
+						<input type="hidden" id="allSearchKeyword" th:value="${keyword}">
+						<input type="hidden" id="allSearchContent" th:value="${content}">
 						<div class="dataTable-top"></div>
 						<div class="dataTable-container">
 							<table class="dataTable-table">
@@ -27,7 +28,7 @@
 								</thead>
 
 								<tbody id="article_list" >
-								<div th:if ="${articles == null}">
+								<div th:if ="${articles.toArray().length == 0}">
 									<tr>
 										<td rowspan="6">등록된 게시글이 없습니다.</td>
 									</tr>
@@ -59,12 +60,12 @@
 					</div>
 					<div id="search_area">
 <!--						<form id="search_form" action="/board/search" method="get">-->
-							<select id="keyword" name="keyword">
+							<select id="board_keyword" name="board_keyword">
 								<option value="subject">제목</option>
 								<option value="nickname">작성자</option>
 								<option value="tagname">태그</option>
 							</select>
-							<input type="text" id="search_content" name="content" placeholder="검색어를 입력해 주세요.">
+							<input type="text" id="board_search_content" name="board_content" placeholder="검색어를 입력해 주세요.">
 							<input type="button" id="search_by_board_btn" value="검색">
 <!--						</form>-->
 					</div>
@@ -76,63 +77,77 @@
 <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
 <script>
 
-	$('#search_by_board_btn').on('click', function (){
-		const keyword = $('#keyword').val();
-		const content = $('#search_content').val();
-		const boardNo = $('#boardNo').val();
-		console.log('boardNo', boardNo);
-		console.log('keyword', keyword);
-		console.log('content',content);
-		$.ajax({
-			url: '/board/search',
-			method: 'GET',
-			dataType: 'json',
-			data: {
-				boardNo: boardNo,
-				keyword: keyword,
-				content: content
-			},
-			success: function (data) {
-				results = data;
-				htmlStr = "";
-				$('#article_list').html(""); //view창 비우기
-				for (let i = 0; i < results.length; i++) {
-					htmlStr += "<tr>";
-					htmlStr += "<td>" + results[i].no + "</td>";
-					htmlStr += "<td>";
-					htmlStr += "<a href='/articles/"+results[i].no + "'>" + results[i].subject + "</a>";
-					htmlStr += "</td>";
-					htmlStr += "<td>";
-					htmlStr += "<a id = " + results[i].memberNo + " onclick=openNote(this)>" + results[i].nickname + "</a>";
-					htmlStr += "</td>";
-					htmlStr += "<td>" + results[i].writeDate + "</td>";
-					htmlStr += "<td>" + results[i].viewcount + "</td>";
-					htmlStr += "<td>" + results[i].likecount + "</td>";
-					htmlStr += "</tr>";
-				}
-				console.log(htmlStr);
-				$('#article_list').html(htmlStr);
-			},
-			error: function (e) {
-				console.trace();
-				reject(e);
+	$(document).ready(function () {
+		console.log('뭐지');
+
+		$('#search_by_board_btn').on('click', function () {
+			const keyword = $('#board_keyword').val();
+			const content = $('#board_search_content').val();
+			const boardNo = $('#boardNo').val();
+			let allKeyword = null;
+			let allContent = null;
+			if($('#allSearchKeyword') != null){
+				allKeyword = $('#allSearchKeyword').val();
 			}
+			if($('#allSearchContent') != null){
+				allContent = $('#allSearchContent').val();
+			}
+			console.log('boardNo', boardNo);
+			console.log('keyword', keyword);
+			console.log('content', content);
+			$.ajax({
+				url: '/board/search',
+				method: 'GET',
+				dataType: 'json',
+				data: {
+					boardNo: boardNo,
+					keyword: keyword,
+					content: content,
+					aKeyword: allKeyword,
+					aContent: allContent
+				},
+				success: function (data) {
+					results = data;
+					console.log(1004,results.length);
+					htmlStr = "";
+					$('#article_list').html(""); //view창 비우기
+					if(results.length == 0){
+						htmlStr += "<tr><td rowspan='6'>등록된 게시글이 없습니다.</td></tr>";
+					} else{
+						for (let i = 0; i < results.length; i++) {
+							htmlStr += "<tr>";
+							htmlStr += "<td>" + results[i].no + "</td>";
+							htmlStr += "<td>";
+							htmlStr += "<a href='/articles/" + results[i].no + "'>" + results[i].subject + "</a>";
+							htmlStr += "</td>";
+							htmlStr += "<td>";
+							htmlStr += "<a id = " + results[i].memberNo + " onclick=openNote(this)>" + results[i].nickname + "</a>";
+							htmlStr += "</td>";
+							htmlStr += "<td>" + results[i].writeDate + "</td>";
+							htmlStr += "<td>" + results[i].viewcount + "</td>";
+							htmlStr += "<td>" + results[i].likecount + "</td>";
+							htmlStr += "</tr>";
+						}
+					}
+					console.log(htmlStr);
+					$('#article_list').html(htmlStr);
+				},
+				error: function (e) {
+					console.trace();
+					reject(e);
+				}
+			});
+
 		});
-
 	});
-	article_list
 
 
-
-
-
-	function writeForm(){
-		location.href="/articles/insert";
-	}
 /* 	function openNote(e) {
 			const memberNo = e.id;
 			console.log(1, memberNo);
 			window.open('writenote?memberNo=' + memberNo, '쪽지작성창', 'width=500px', 'height=500px');
 	} */
+
+
 </script>
 </html>

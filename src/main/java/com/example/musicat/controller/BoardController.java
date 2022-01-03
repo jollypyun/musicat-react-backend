@@ -2,6 +2,7 @@ package com.example.musicat.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -280,12 +281,22 @@ public class BoardController {
 	@GetMapping("/board/search")
 	@ResponseBody
 	public List<ArticleVO> searchByBoard(@RequestParam("keyword") String keyword
-			, @RequestParam("content") String content
-			, @RequestParam("boardNo") Integer boardNo){
+			,@RequestParam("content") String content
+			,@RequestParam("boardNo") Integer boardNo
+			,@RequestParam("aKeyword") String aKeyword
+			,@RequestParam("aContent") String aContent){
 		HashMap<String, Object> searchMap = new HashMap<>();
-		searchMap.put("boardNo", boardNo);
+		if(aKeyword != null){
+			if(!aKeyword.equals(keyword)){ // keyword가 같다면 생략
+				searchMap.put(aKeyword, aContent);
+			}
+		}
+		if(boardNo > 0){
+			searchMap.put("boardNo", boardNo);
+		}
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
+
 		List<ArticleVO> results = articleService.search(searchMap);
 		return results;
 	}

@@ -330,24 +330,19 @@ public class ArticleController {
 	 */
 	@GetMapping("/board/search")
 	public String searchByBoard(@RequestParam("keyword") String keyword
-			, @RequestParam("content") String content, Model model){
-		log.info("전체 검색 접근");
-		log.info("keyword: {}", keyword);
-		log.info("content: {}", content);
+			,@RequestParam("content") String content, Model model){
+
 		HashMap<String, Object> searchMap = new HashMap<>();
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
 		List<ArticleVO> articles = articleService.search(searchMap);
-		for (ArticleVO result : articles) {
-			log.info("=======================");
-			log.info(result.toString());
-			log.info("=======================");
-		}
 		model.addAttribute("articles", articles);
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 
+		model.addAttribute("keyword",keyword); // 전체 검색 후 세부 검색을 위한 keyword
+		model.addAttribute("content",content); // 전체 검색 후 세부 검색을 위한 content
 		model.addAttribute("boardNo",0);
 		model.addAttribute("boardName", "전체 검색");
 		model.addAttribute("boardkind", 0);
