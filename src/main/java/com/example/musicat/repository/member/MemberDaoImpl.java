@@ -31,7 +31,7 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 	@Override
 	public MemberVO selectMemberByEmail(String email) {
 		MemberVO memberVo = this.mapper.selectMemberByEmail(email);
-		log.info("Email, password, auth(grade) : " + memberVo.getEmail() + " " + memberVo.getPassword() + " " +  memberVo.getGrade());
+		//log.info("Email, password, auth(grade) : " + memberVo.getEmail() + " " + memberVo.getPassword() + " " +  memberVo.getGrade());
 		return memberVo;
 	}
 

@@ -21,7 +21,6 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
     @Autowired
     private BCryptPasswordEncoder bCryptPwd;
 
-
     //인증
     //authentication : AuthenticationManager로부터 전달받은 인증객체로, username, password가 담겨 있음
     @Override
@@ -35,7 +34,6 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         MemberContext memberContext = (MemberContext) userDetailsService.loadUserByUsername(email);
 
         // 인코딩 된 password 일치 여부 검증
-        // 입력 정보와 DB 정보가 일치하지 않은 경우
         if(!bCryptPwd.matches(password, memberContext.getMemberVo().getPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
         }
@@ -48,7 +46,7 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
     }
 
     //파라미터로 들어오는 authentication의 타입과 CustomAutheticationProvider 토큰의 타입이 일치할 때 CustomAutheticationProvider 클래스가 인증을 처리하도록 함
-    //UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication)가 false이면 로그인 실패처리 됨
+    //false이면 로그인 실패처리 됨
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);

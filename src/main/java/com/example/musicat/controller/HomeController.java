@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.example.musicat.security.MemberContext;
@@ -13,12 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 //import com.example.musicat.config.SessionConfig;
 import com.example.musicat.service.board.ArticleService;
@@ -46,31 +47,36 @@ public class HomeController {
 	private ArticleService articleService;
 	
 
-	@GetMapping("/musicatlogin")
-	public String index() {
+	@RequestMapping("/musicatlogin")
+	public String index(Model model, HttpServletRequest request) {
 		log.info("/musicatlogin------------------------------------");
+
+		if(request.getParameter("email") != null ) {
+			log.info("로그인 실패 - 이전에 입력한 이메일 : " + request.getParameter("email"));
+			model.addAttribute(request.getParameter("email"));
+		}
 		return "view/member/login";
 	}
 
 
-	@GetMapping("/accessDenied")
-	public void accessDenied() {
-		log.info("/accessDenied------------------------------------");
-		//접근권한 없다는 안내 페이지 return
+	@GetMapping("/accessDenideGrade")
+	public String accessDenied() {
+		log.info("/accessDenideGrade------------------------------------");
+		return "view/security/accessDenideGrade";
 	}
 	
 
-	@GetMapping("/ga")
-	public String iid() {
-		return "vlew/home/asdmsadpo";
-	}
-	
+//	@GetMapping("/ga")
+//	public String iid() {
+//		return "vlew/home/asdmsadpo";
+//	}
+//
 //	@PostMapping("/")
 //	public String selfOut(@RequestParam("memberNo") int no, @RequestParam("password") String password) {
 //		this.memberService.modifyMember(no, password);
 //		return "redirect:/login";
 //	}
-	
+//
 //	@ResponseBody
 //	@PostMapping("/login")
 //	public Map<String, String> login(MemberVO user, HttpSession session) {
@@ -122,7 +128,8 @@ public class HomeController {
 //	}
 	
 	@GetMapping("/main")
-	public String petopiaMain(Model model, HttpSession session) { //, HttpSession session
+	public String petopiaMain(Model model, HttpSession session) {
+
 		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
 		model.addAttribute("articleList", allArticleList);
 		model.addAttribute("HomeContent","fragments/viewMainContent");
@@ -133,7 +140,6 @@ public class HomeController {
 		model.addAttribute("categoryVo", categoryVo);
 
 		MemberVO memberSession = (MemberVO) session.getAttribute("loginUser");
-
 		if (memberSession == null) {
 			model.addAttribute("isLogin", 0);
 		}
@@ -141,11 +147,10 @@ public class HomeController {
 			model.addAttribute("isLogin", 1);
 		}
 
-
 		return "view/home/viewHomeTemplate";
 	}
 
-	
+
 //	@GetMapping("/logout")
 //	public String logout(HttpSession session) {
 //		session.invalidate();
@@ -160,9 +165,9 @@ public class HomeController {
 		return "view/member/register"; // "view/member/register" 이 주소로 보낸다.
 	}
 	
-	
 	@GetMapping("/ChangePwd")
 	public String changepwd() {
 		return "view/member/passwordChange";
 	}
+
 }

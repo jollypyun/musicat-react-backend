@@ -17,7 +17,7 @@ public class MemberContext extends User {
 
         //회원의 권한을 authorites에 받아서 memberVo에 추가
         super(memberVo.getEmail(), memberVo.getPassword(), authorities);
-        log.info(memberVo.getEmail() + " " + memberVo.getPassword() + " " + authorities);
+        log.info("회원의 권한을 authorites에 받아서 memberVo에 추가 : " + authorities);
         this.memberVo = memberVo;
     }
 
