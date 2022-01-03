@@ -48,12 +48,6 @@ public class HomeController {
 	@Autowired
 	private CategoryService categoryService;
 
-    @Autowired
-    private MemberService memberService;
-
-    @Autowired
-    private CategoryService categoryService;
-
 
     @Autowired
     private ArticleService articleService;
