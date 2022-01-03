@@ -15,8 +15,8 @@
     </ul>
    -->
 <div id="layoutSidenav_nav">
-	<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-		<div class="sb-sidenav-menu">
+	<nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+		<div class="sb-sidenav-menu section">
 			<div class="nav">
 				<div class="sb-sidenav-menu-heading">게시판</div>
 				<!-- 카테고리 시작 -->
@@ -26,7 +26,7 @@
 						<th:block th:each="category : ${categoryBoardList}">
 							<tr th:id="${category.getCategoryNo()}">
 
-								<td class="nav-link category-articleVO-header">
+								<td class="nav-link category-articleVO-header fw-bold">
 
 									<div class="sb-nav-link-icon">
 										<i class="fas fa-columns"></i>
@@ -46,12 +46,12 @@
 											<div th:if="${board.boardkind == 0}">
 												<span> <i class="far fa-list-alt"></i>
 												</span> <a th:text="${board.boardName}"
-													th:href="@{/nListArticlereq/{boardNo}/{boardkind}(boardNo = ${board.boardNo}, boardkind = ${board.boardkind})}"></a>
+													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
 											</div>
 											<div th:unless="${board.boardkind == 0}">
 												<span> <i class="far fa-image"></i>
 												</span> <a th:text="${board.boardName}"
-													th:href="@{/nListArticlereq/{boardNo}/{boardkind}(boardNo = ${board.boardNo}, boardkind = ${board.boardkind})}"></a>
+													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
 											</div>
 
 										

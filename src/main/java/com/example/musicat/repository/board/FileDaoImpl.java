@@ -47,5 +47,9 @@ public class FileDaoImpl implements FileDao {
 		this.fileMapper.allDelete(articleNo);
 		
 	}
-	
+
+	@Override
+	public List<FileVO> selectArticleFiles(int articleNo) {
+		return this.fileMapper.selectArticleFiles(articleNo);
+	}
 }

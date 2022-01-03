@@ -1,34 +1,30 @@
 //package com.example.musicat.service.board;
 //
-//import com.example.musicat.domain.board.Article;
-//import com.example.musicat.repository.BaseRepository;
-//import com.example.musicat.service.BaseService;
-//import lombok.RequiredArgsConstructor;
+//import com.example.musicat.domain.board.ArticleVO;
 //import lombok.extern.slf4j.Slf4j;
+//import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Qualifier;
 //import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.annotation.Rollback;
-//import org.springframework.transaction.annotation.Transactional;
+//
+//import static org.junit.jupiter.api.Assertions.*;
 //
 //@SpringBootTest
 //@Slf4j
 //class ArticleServiceImplTest {
 //
-//    @Autowired
-//    @Qualifier("articleService")
-//    private BaseService articleService;
+//    @Autowired ArticleServiceImpl articleService;
 //
 //    @Test
-//    @Transactional
-//    public void 게시글_등록() throws Exception {
-//        //given ~가 주어졌을 때
-//        Article article = Article.createArticle(1, 3, "팩토", "리", "테스트");
+//    public void retrieveArticle() throws Exception{
+//        //given
+//        int articleNo = 50;
 //
-//        //when 이것을 실행하면
-//        articleService.save(article);
+//        //when
+//        ArticleVO fa = articleService.retrieveArticle(articleNo);
 //
-//        //then 결과가 이렇게 나와야 한다.
+//        //then
+//        log.info(fa.toString());
+//        Assertions.assertEquals(articleNo, fa.getNo());
 //    }
 //}

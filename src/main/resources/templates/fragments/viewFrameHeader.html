@@ -3,9 +3,9 @@
 	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-header-color">
 	<!-- Navbar Brand-->
-	<a class="navbar-brand ps-3" href="/main">Petopia</a>
+	<a class="navbar-brand ps-4 fw-bold " href="/main">Musicat</a>
 
 	<!-- Sidebar Toggle-->
 	<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
@@ -14,16 +14,26 @@
 	</button>
 
 	<!-- Navbar Search-->
-	<form
-		class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-		<div class="input-group">
-			<input class="form-control" type="text" placeholder="Search for..."
-				aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-			<button class="btn btn-primary" id="btnNavbarSearch" type="button">
-				<i class="fas fa-search"></i>
-			</button>
-		</div>
-	</form>
+<!--	<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">-->
+		<form action="/articles/board/search" method="get">
+			<div id="search_area">
+				<select id="keyword" name="keyword">
+					<option value="subject">제목</option>
+					<option value="nickname">작성자</option>
+					<option value="tagname">태그</option>
+				</select>
+				<input type="text" id="search_content" name="content" placeholder="검색어를 입력해 주세요.">
+				<button type="submit" id="search_by_board_btn" value="검색"></button>
+			</div>
+		</form>
+<!--		<div class="input-group">-->
+<!--			<input class="form-control" type="text" placeholder="Search for..."-->
+<!--				aria-label="Search for..." aria-describedby="btnNavbarSearch" />-->
+<!--			<button class="btn btn-primary" id="btnNavbarSearch" type="button">-->
+<!--				<i class="fas fa-search"></i>-->
+<!--			</button>-->
+<!--		</div>-->
+<!--	</form>-->
 
 	<!-- admin Toggle-->
 	<button
@@ -49,13 +59,15 @@
 				<!-- <li><a class="dropdown-item" href="#!">가가가</a></li>
 				<li><a class="dropdown-item" href="#!">신입집사</a></li>
 				<li><hr class="dropdown-divider" /></li> -->
-				<li><a class="dropdown-item" href="#!">Profile</a></li>
+				<li><a class="dropdown-item" href="/myPage/Playlist">Profile</a></li>
 
 				<li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+
 				<li><hr class="dropdown-divider" /></li>
 
 				<li th:if ="${isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>
 				<li th:if ="${isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>
+    
 				<li><hr class="dropdown-divider" /></li>
 				<li><a class="dropdown-item" href="/ChangePwd">비밀번호 변경</a></li>
 				<li><a class="dropdown-item" href="/outForm">회원 탈퇴</a></li>

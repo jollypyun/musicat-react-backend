@@ -20,12 +20,20 @@ import lombok.extern.slf4j.Slf4j;
 @Service("fiileService")
 public class FileServicleImpl implements FileService {
 
+	public FileServicleImpl() {
+	}
+
 	@Autowired
 	private FileDao fileDao;
 	@Autowired
 	private FileManager fileManager;
 	@Value("${file.dir}")
 	private String dirPath;
+
+
+	public FileVO selectOneFile(int fileNo){
+		return fileDao.selectFile(fileNo);
+	}
 
 	// 파일 업로드
 	@Override
@@ -113,6 +121,10 @@ public class FileServicleImpl implements FileService {
 	@Override
 	public void allDelete(int articleNo) {
 		this.fileDao.allDelete(articleNo);
-		
+	}
+
+	@Override
+	public List<FileVO> selectArticleFiles(int articleNo) {
+		return this.fileDao.selectArticleFiles(articleNo);
 	}
 }

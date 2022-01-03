@@ -9,7 +9,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+
 import com.example.musicat.security.MemberContext;
+
+import com.example.musicat.domain.board.BestArticleVO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,15 +41,29 @@ import lombok.extern.java.Log;
 public class HomeController {
 
 
+
 	@Autowired
 	private MemberService memberService;
 	
 	@Autowired
 	private CategoryService categoryService;
 
-	@Autowired
-	private ArticleService articleService;
-	
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+
+    @Autowired
+    private ArticleService articleService;
+
+
+    @GetMapping("/petopialogin")
+    public String index() {
+        return "view/member/login";
+    }
+
 
 	@RequestMapping("/musicatlogin")
 	public String index(Model model, HttpServletRequest request) {
@@ -71,11 +89,13 @@ public class HomeController {
 //		return "vlew/home/asdmsadpo";
 //	}
 //
+  
 //	@PostMapping("/")
 //	public String selfOut(@RequestParam("memberNo") int no, @RequestParam("password") String password) {
 //		this.memberService.modifyMember(no, password);
 //		return "redirect:/login";
 //	}
+
 //
 //	@ResponseBody
 //	@PostMapping("/login")
@@ -169,5 +189,77 @@ public class HomeController {
 	public String changepwd() {
 		return "view/member/passwordChange";
 	}
+
+    @GetMapping("/myPage/Playlist")
+    public String myPage(Model model) {
+
+        List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+        model.addAttribute("categoryBoardList", categoryList);
+
+        CategoryVO categoryVo = new CategoryVO();
+        model.addAttribute("categoryVo", categoryVo);
+
+        model.addAttribute("HomeContent", "fragments/viewMyPagePlaylist");
+        return "view/home/viewHomeTemplate";
+
+    }
+
+    @GetMapping("/myPage/Playlist/{playlistNo}")
+    public String myPagePlaylistDetail(Model model, @PathVariable String playlistNo) {
+
+        List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+        model.addAttribute("categoryBoardList", categoryList);
+
+        CategoryVO categoryVo = new CategoryVO();
+        model.addAttribute("categoryVo", categoryVo);
+
+        model.addAttribute("HomeContent", "fragments/viewMyPagePlaylistDetail");
+        return "view/home/viewHomeTemplate";
+
+    }
+
+    @GetMapping("/myPage/Board")
+    public String myPageBoard(Model model) {
+
+        List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+        model.addAttribute("categoryBoardList", categoryList);
+
+        CategoryVO categoryVo = new CategoryVO();
+        model.addAttribute("categoryVo", categoryVo);
+
+        model.addAttribute("HomeContent", "fragments/viewMyPageBoard");
+        return "view/home/viewHomeTemplate";
+
+    }
+
+    @GetMapping("/myPage/Reply")
+    public String myPageReply(Model model) {
+
+        List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+        model.addAttribute("categoryBoardList", categoryList);
+
+        CategoryVO categoryVo = new CategoryVO();
+        model.addAttribute("categoryVo", categoryVo);
+
+        model.addAttribute("HomeContent", "fragments/viewMyPageReply");
+        return "view/home/viewHomeTemplate";
+
+    }
+
+    @GetMapping("/myPage/Like")
+    public String myPageLike(Model model) {
+
+        List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+        model.addAttribute("categoryBoardList", categoryList);
+
+        CategoryVO categoryVo = new CategoryVO();
+        model.addAttribute("categoryVo", categoryVo);
+
+        model.addAttribute("HomeContent", "fragments/viewMyPageLike");
+        return "view/home/viewHomeTemplate";
+
+    }
+
+	
 
 }
