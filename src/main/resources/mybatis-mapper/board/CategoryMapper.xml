@@ -85,7 +85,9 @@
 		FROM category
 		WHERE categoryname = #{categoryName};
 	</select>
-	
+
+
+
 
 	
 </mapper>

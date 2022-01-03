@@ -53,55 +53,14 @@
                         <div class="content-top-right-table">
                             <table>
                                 <tbody>
-                                    <tr>
+                                    <tr th:each="bestArticle : ${bestArticles}">
                                         <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>1</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>2</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>3</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>4</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>5</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>6</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>7</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>8</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>9</td>
-                                        <td>Name</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td>10</td>
-                                        <td>Name</td>
+                                        <td th:text="${bestArticle.rank}"></td>
+                                        <td style="display: inline-block">
+                                            <a th:text="${bestArticle.subject}"
+                                               th:href="|/articles/${bestArticle.articleNo}|"></a>
+                                        </td>
+<!--                                        <td th:text="${bestArticle.likecount}"></td>-->
                                     </tr>
                                 </tbody>
                             </table>
@@ -138,16 +97,16 @@
                         </tr>
                         </tfoot>
                         <tbody>
-                        <tr th:each="articleVO : ${articleList}">
-                            <td th:text="${articleVO.no}"></td>
+                        <tr th:each="article : ${articleList}">
+                            <td th:text="${article.no}"></td>
                             <td>
-                                <a th:text="${articleVO.subject}"
-                                   th:href="|/detailArticle/${articleVO.no}|"></a>
+                                <a th:text="${article.subject}"
+                                   th:href="|/articles/${article.no}|"></a>
                             </td>
-                            <td th:text="${articleVO.nickname}"></td>
-                            <td th:text="${articleVO.writeDate}"></td>
-                            <td th:text="${articleVO.viewcount}"></td>
-                            <td th:text="${articleVO.likecount}"></td>
+                            <td th:text="${article.nickname}"></td>
+                            <td th:text="${article.writeDate}"></td>
+                            <td th:text="${article.viewcount}"></td>
+                            <td th:text="${article.likecount}"></td>
                         </tr>
                         </tbody>
                     </table>

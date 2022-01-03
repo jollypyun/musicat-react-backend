@@ -9,10 +9,12 @@ import com.example.musicat.domain.paging.Criteria;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.member.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service("memberService") // 얘는 서비스다
@@ -21,17 +23,22 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	private MemberDao memberdao;// memberDao랑 연결해주겠다
 
+	@Qualifier("memberMapper")
 	@Autowired
 	private MemberMapper memberMapper;
-	
-	
+
+	//email로 회원 정보 조회
+	@Override
+	public MemberVO retrieveMemberByEmail(String email) {
+		MemberVO memberVo = memberdao.selectMemberByEmail(email);
+		return memberVo;
+	}
+
+	@Transactional
 	@Override // 회원가입
 	public void registerMember(MemberVO mVo) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		this.memberdao.insertMemberNo(map);
-		System.out.println(map.get("no"));
-		mVo.setNo((int)map.get("no"));
-		System.out.println((int)map.get("no"));
+		log.info("회원가입 - map.toString()" + map.toString());
 		this.memberdao.insertMember(mVo); //this를 적어주는 이유는 @Autowired 연결 선언해준 memberDao랑 같은 애라는걸 알려주려고 적는 거임 (얘가 얘다)
 		
 	}
@@ -48,20 +55,22 @@ public class MemberServiceImpl implements MemberService {
 
 	}
 	
-	@Override
-	public MemberVO login(String email, String password) throws Exception {
-		MemberVO member = memberdao.selectMember(email, password);
-
-		if (member != null)
-			memberdao.updateLastDdate(member.getNo());
-
-		return member;
-	}
+//	@Override
+//	public MemberVO login(String email, String password) throws Exception {
+//		MemberVO member = memberdao.selectMember(email, password);
+//
+//		if (member != null)
+//			memberdao.updateLastDdate(member.getNo());
+//
+//		return member;
+//	}
 
 	@Override
 	public void test() {
 
 	}
+
+
 
 	@Override // 회원 목록 조회
 	public ArrayList<MemberVO> retrieveMemberList(Criteria crt) throws Exception {
@@ -77,6 +86,8 @@ public class MemberServiceImpl implements MemberService {
 	public MemberVO retrieveMemberByManager(int no) {
 		return this.memberMapper.selectMemberByManager(no);
 	}
+
+
 
 	@Override // 회원 검색 조회
 	public ArrayList<MemberVO> retrieveSearchMember(String keyfield, String keyword) {

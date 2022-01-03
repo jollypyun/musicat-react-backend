@@ -24,10 +24,15 @@
 			</div>
 		</div>
 		<div class="write_article_btn">
-			<button id="writeForm_btn" th:onclick="|location.href='@{/writeArticleForm}'|" type="button">글쓰기</button>
+			<button id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
 		</div>
 </div>
 </main>
 </div>
+<script>
+	function writeForm(){
+		location.href="/articles/insert";
+	}
+</script>
 
 </html>

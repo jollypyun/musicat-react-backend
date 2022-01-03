@@ -1,9 +1,11 @@
 package com.example.musicat.domain.board;
 
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 //@Getter
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 @Alias("replyVo")
 public class ReplyVO {
 

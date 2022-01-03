@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.musicat.service.board.FileService;
+import com.example.musicat.service.board.FileServicleImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,7 @@ import net.coobird.thumbnailator.Thumbnails;
 @Slf4j
 @Component
 public class FileManager {
+	
 
 	 @Value("${file.dir}")
 	 //"D:/SpringBootHome/petopia2/src/main/resources/static/upload/"
@@ -73,6 +77,14 @@ public class FileManager {
 			Thumbnails.of(image).size(190, 150).outputFormat("png").toFile(thumbnail);
 		}
 //		return null;
+	}
+	
+	// Upload Folder에서 삭제
+	public void deleteUploadFile(FileVO fileVO){
+		File file = new File(getFullPath(fileVO.getSystemFileName()));
+		if(file.exists()){
+			file.delete();
+		}
 	}
 
 
