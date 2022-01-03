@@ -75,10 +75,14 @@
 //    void insertLike() {
 //        Map<String, Object> map = new HashMap<>();
 ////        map.put("boardNo", 3);
-//        map.put("tagname", "태");
+////        map.put("keyword", "subject");
+////        map.put("content", "ㄱㄱ");
+//        map.put("subject", "ㄱㄱ");
 //        List<ArticleVO> search = articleMapper.search(map);
 //        for (ArticleVO articleVO : search) {
+//            log.info("search============================");
 //            log.info(articleVO.toString());
+//            log.info("search============================");
 //        }
 //    }
 //

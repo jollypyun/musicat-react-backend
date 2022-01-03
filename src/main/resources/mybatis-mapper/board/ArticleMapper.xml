@@ -173,6 +173,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY writedate DESC
 	</select>
 
+	<!--베스트 글-->
+	<select id="selectBestArticle"  statementType="CALLABLE" resultMap="searchArticleMap">
+		{CALL sp_select_best_article() }
+	</select>
 
+	<delete id="deleteAllBestArticle">
+		DELETE FROM bestarticle
+	</delete>
+
+	<insert id="insertBestArticle" parameterType="hashMap">
+		INSERT INTO bestarticle (article_no, subject, likecount) VALUES (#{articleNo}, #{subject}, #{likecount})
+	</insert>
+
+	<!--베스트글 업데이트-->
+	<select id="selectUpdateBestArticle" parameterType="int" statementType="CALLABLE" resultMap="searchArticleMap">
+		{ CALL sp_update_bestarticles(#{now}) }
+	</select>
 	
+	<select id="selectNowDate" resultType="int">
+		SELECT WEEKDAY(NOW())
+	</select>
+
+	<!--bestarticle table에 존재하는지 여부 체크 -->
+	<select id="checkBestArticle" parameterType="int" statementType="CALLABLE" resultType="boolean">
+		{ CALL sp_check_bestarticle(#{articleNo}) }
+	</select>
+
+
+	<resultMap id="bestArticleMap" type="bestArticleVo">
+		<result property="no" javaType="int" column="bestarticle_no" jdbcType="INTEGER"/>
+		<result property="articleNo" javaType="int" column="article_no" jdbcType="INTEGER"/>
+		<result property="subject" javaType="String" column="subject" jdbcType="VARCHAR"/>
+		<result property="likecount" javaType="int" column="likecount" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<!-- 메인 page 출력 용 -->
+	<select id="selectAllBestArticle" statementType="CALLABLE" resultMap="bestArticleMap">
+		{ CALL sp_select_all_bestarticle() }
+	</select>
+
+
 </mapper>

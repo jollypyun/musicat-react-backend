@@ -270,7 +270,6 @@ public class BoardController {
 
 		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("categoryBoardList", categoryList);
-		model.addAttribute("categoryVo", categoryVo);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
 		model.addAttribute("articles", articles); // 게시글 정보 전송
 		model.addAttribute("boardkind", boardkind); // 게시글 유형

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.musicat.domain.board.ArticleVO;
+import com.example.musicat.domain.board.BestArticleVO;
 import com.example.musicat.domain.board.SelectArticleVO;
 import com.example.musicat.domain.board.TagVO;
 import com.example.musicat.mapper.board.ArticleMapper;
@@ -111,5 +112,41 @@ public class ArticleDaoImpl implements ArticleDao {
 	@Override
 	public List<ArticleVO> search(Map<String, Object> map) {
 		return this.articleMapper.search(map);
+	}
+
+	@Override
+	public List<ArticleVO> selectBestArticle() {
+		return this.articleMapper.selectBestArticle();
+	}
+
+	@Override
+	public void deleteAllBestArticle() {
+		this.articleMapper.deleteAllBestArticle();
+	}
+
+	@Override
+	public void insertBestArticle(Map<String, Object> map) {
+		this.articleMapper.insertBestArticle(map);
+	}
+
+
+	@Override
+	public int selectNowDate() {
+		return this.articleMapper.selectNowDate();
+	}
+
+	@Override
+	public List<ArticleVO> selectUpdateBestArticle(int now) {
+		return this.articleMapper.selectUpdateBestArticle(now);
+	}
+
+	@Override
+	public boolean checkBestArticle(int articleNo) {
+		return this.articleMapper.checkBestArticle(articleNo);
+	}
+
+	@Override
+	public List<BestArticleVO> selectAllBestArticle() {
+		return this.articleMapper.selectAllBestArticle();
 	}
 }

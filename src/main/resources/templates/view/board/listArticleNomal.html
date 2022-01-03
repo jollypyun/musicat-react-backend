@@ -27,6 +27,12 @@
 								</thead>
 
 								<tbody id="article_list" >
+								<div th:if ="${articles == null}">
+									<tr>
+										<td rowspan="6">등록된 게시글이 없습니다.</td>
+									</tr>
+								</div>
+								<div th:unless ="${articles == null}">
 									<tr th:each="article : ${articles}">
 										<td th:text="${article.no}"></td>
 										<td>
@@ -40,6 +46,7 @@
 										<td th:text="${article.viewcount}"></td>
 										<td th:text="${article.likecount}"></td>
 									</tr>
+								</div>
 								</tbody>
 							</table>
 						</div>

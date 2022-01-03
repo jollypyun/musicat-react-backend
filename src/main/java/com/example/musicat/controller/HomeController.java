@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import com.example.musicat.domain.board.BestArticleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,11 +47,6 @@ public class HomeController {
         return "view/member/login";
     }
 
-
-    @GetMapping("/ga")
-    public String iid() {
-        return "vlew/home/asdmsadpo";
-    }
 
 //	@PostMapping("/")
 //	public String selfOut(@RequestParam("memberNo") int no, @RequestParam("password") String password) {
@@ -112,6 +108,8 @@ public class HomeController {
     public String petopiaMain(Model model, HttpSession session) {
         List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
         model.addAttribute("articleList", allArticleList);
+        List<BestArticleVO> bestArticles = this.articleService.selectAllBestArticle();
+        model.addAttribute("bestArticles", bestArticles);
         model.addAttribute("HomeContent", "fragments/viewMainContent");
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);

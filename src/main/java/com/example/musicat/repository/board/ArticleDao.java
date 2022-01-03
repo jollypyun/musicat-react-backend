@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.musicat.domain.board.ArticleVO;
+import com.example.musicat.domain.board.BestArticleVO;
 import com.example.musicat.domain.board.SelectArticleVO;
 import com.example.musicat.domain.board.TagVO;
 
@@ -42,4 +43,18 @@ public interface ArticleDao {
 	void deleteTag(int tagNo);
 
 	List<ArticleVO> search(Map<String, Object> map);
+
+	List<ArticleVO> selectBestArticle(); // 베스트글 조회
+
+	void deleteAllBestArticle();
+
+	void insertBestArticle(Map<String, Object> map);
+
+	int selectNowDate(); // 현재 날짜 조회
+
+	List<ArticleVO> selectUpdateBestArticle(int now); // 새로운 best글 뽑기
+
+	boolean checkBestArticle(int articleNo);
+
+	List<BestArticleVO> selectAllBestArticle();
 }
