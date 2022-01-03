@@ -7,14 +7,22 @@
 
 
 	<!-- 양 ~ -->
+	<!-- 로그인 예외처리에서 필요한 정보 가져옴 : 닉네임, docs, comms, visits, regDate 없음-->
 	<resultMap id="selectMemberByEmailResultMap" type="memberVo">
 		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER"/>
 		<result property="email" javaType="string" column="email" jdbcType="VARCHAR"/>
 		<result property="password" javaType="string" column="password" jdbcType="VARCHAR"/>
 		<result property="grade" javaType="string" column="auth" jdbcType="VARCHAR"/>
 		<result property="gradeNo" javaType="int" column="grade_no" jdbcType="INTEGER"/>
+		<!--	휴면계정	-->
+		<result property="lastDate" javaType="string" column="lastdate" jdbcType="VARCHAR"/>
+		<!--	활동정지계정	-->
+		<result property="ban" javaType="string" column="ban" jdbcType="VARCHAR"/>
+		<!--	탈퇴처리된 계정	-->
+		<result property="isMember" javaType="int" column="ismember" jdbcType="INTEGER"/>
 
 	</resultMap>
+
 	<!-- email로 회원 정보 불러오기 (session에 담을 정보)	-->
 	<select id="selectMemberByEmail" resultType="memberVo" resultMap="selectMemberByEmailResultMap">
 		select member_no, email, password,
@@ -22,7 +30,8 @@
 											 (select grade_no from membergrade where member_no =
 																					 (select member_no from member where email = #{email}))) as auth,
 			   (select grade_no from membergrade where member_no =
-													   (select member_no from member where email = #{email})) as grade_no
+													   (select member_no from member where email = #{email})) as grade_no,
+			   lastdate, ban, ismember
 		from member
 		where email = #{email}
 	</select>

@@ -2,9 +2,7 @@ package com.example.musicat.security;
 
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,6 +35,28 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         if(!bCryptPwd.matches(password, memberContext.getMemberVo().getPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
         }
+
+//        //활동정지 회원 여부 (DisabledException : 계정 비활성화)
+//        if(memberContext.getMemberVo().getBan() != null) {
+//            log.info("ban : " + memberContext.getMemberVo().getBan());
+//            throw new DisabledException("DisabledException");
+//        }
+//
+//        //탈퇴 회원 여부 (AccountExpiredException : 계정만료)
+//        if(memberContext.getMemberVo().getIsMember() != 0) {
+//            System.out.println("ismember : " + memberContext.getMemberVo().getIsMember());
+//            throw new AccountExpiredException("AccountExpiredException");
+//        }
+
+//        //휴면 회원 여부
+//        if(memberContext.getMemberVo().getLastDate() 2년이 지났나용? ) {
+//            log.info("lastdate : " + memberContext.getMemberVo().getLastDate());
+//            throw new LockedException("LockedException");
+//        }
+
+
+
+
         
         //인증 모두 완료될 경우 토큰 생성
         //인증 성공 시 authenticationToken에 회원 정보(비밀번호 제외한 회원 정보)를 담아 AuthenticationProvider를 호출한 AuthenticationManager에 전달

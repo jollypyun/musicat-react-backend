@@ -5,8 +5,10 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -113,12 +115,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         log.info("exception(로그인실패) : " + exception.getMessage());
 
                         if (exception instanceof UsernameNotFoundException) { //DB에 일치하는 email이 없는 경우
-                            request.setAttribute("loginFailMessage", "아이디 또는 비밀번호가 잘못 입력되었습니다.");
+                            request.setAttribute("loginFailMessage", "아이디 또는 비밀번호를 잘못 입력하였습니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
                         } else if (exception instanceof BadCredentialsException) { //비밀번호가 틀린 경우
-                            request.setAttribute("loginFailMessage", "아이디 또는 비밀번호가 잘못 입력되었습니다.");
+                            request.setAttribute("loginFailMessage", "아이디 또는 비밀번호를 잘못 입력하였습니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
                         }
+//                        } else if (exception instanceof DisabledException) {
+//                            request.setAttribute("loginFailMessage", "활동정지 된 계정입니다.");
+//                        } else if (exception instanceof AccountExpiredException) {
+//                            request.setAttribute("loginFailMessage", "탈퇴처리 된 계정입니다.");
+//                        }
+
+
 
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/musicatlogin");
                         dispatcher.forward(request, response);
