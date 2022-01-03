@@ -2,9 +2,12 @@ spring:
   datasource:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://13.124.245.202:3306/musicat_temp
+      #jdbc-url: jdbc:mysql://13.124.245.202:3306/musicat_temp
+      #username: scott
+      #password: Tiger_1234
+      jdbc-url: jdbc:mysql://localhost:3306/musicat
       username: scott
-      password: Tiger_1234
+      password: tiger
       connection-timeout: 20000
       minimum-idle: 5
       maximum-pool-size: 20
