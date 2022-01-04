@@ -2,6 +2,7 @@ package com.example.musicat.controller;
 
 import com.example.musicat.service.music.MusicApiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,5 +31,9 @@ public class MusicController {
         return musicApiService.registerMusic(file, imagefile, title, memberNo, articleNo);
     }
 
+    @DeleteMapping("musicdelete/{articleNo}")
+    public void deleteMusic(@PathVariable("articleNo") int articleNo) {
+        musicApiService.deleteMusic(articleNo);
+    }
 
 }

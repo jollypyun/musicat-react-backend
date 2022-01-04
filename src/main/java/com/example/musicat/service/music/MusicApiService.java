@@ -99,4 +99,9 @@ public class MusicApiService {
         return response.getBody();
     }
 
+    public void deleteMusic(int articleNo) {
+        Map<String, Integer> params = new HashMap<String, Integer>();
+        params.put("articleNo", articleNo);
+        restTemplate.delete("http://localhost:20000/api/musics/{articleNo}", params);
+    }
 }
