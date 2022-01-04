@@ -94,7 +94,7 @@
         </dependency>
 
 
-localhost:10000/api/musics/1
+
         <!--		시큐리티-->
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
