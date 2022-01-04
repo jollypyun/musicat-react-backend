@@ -118,7 +118,6 @@ public class ArticleController {
 	@GetMapping("/insert")
 	public String writeForm(HttpServletRequest req, Model model) {
 		// create
-//		ArticleVO articleVO = new ArticleVO(); // WriteForm에서 값들을 담을 객체
 		ArticleForm form = new ArticleForm(); // 변경
 
 		HttpSession session = req.getSession();
