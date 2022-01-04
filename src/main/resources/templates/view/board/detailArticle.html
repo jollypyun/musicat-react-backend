@@ -25,7 +25,7 @@
 							<input type="hidden" id="article_no" th:value="${article.no}">
 							<input type="hidden" id="board_no" th:value="${article.boardNo}">
 						</h1>
-						<form id="detailContent" th:object="${article}" name="article">
+						<form id="detailContent" class="detail-content-style" th:object="${article}" name="article">
 							<table width=100%>
 								<colgroup>
 									<col width="15%">
@@ -99,7 +99,7 @@
 
 												<!--Tag 출력 부분-->
 												<div id="tag_area" class="detailArticle-tag-style">
-													<ul id="tag-list" >
+													<ul id="tag-list" class="tag-ul" >
 														<div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
 															<li class='tag-item'  th:text="${tag.name}"></li>
 														</div>
