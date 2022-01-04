@@ -48,6 +48,7 @@ import lombok.extern.java.Log;
 @Log
 public class HomeController {
 
+
     @Autowired
     private GradeService gradeService;
 
@@ -57,13 +58,17 @@ public class HomeController {
 	@Autowired
 	private CategoryService categoryService;
 
-
     @Autowired
     private ArticleService articleService;
 
 
-	@RequestMapping("/musicatlogin")
-	public String index(Model model, HttpServletRequest request) {
+    @GetMapping("/")
+    public String mainPage(){
+        return "redirect:/main";
+    }
+
+    @RequestMapping("/musicatlogin")
+  	public String index(Model model, HttpServletRequest request) {
 		log.info("/musicatlogin------------------------------------");
 
 		if(request.getParameter("email") != null ) {
@@ -79,7 +84,7 @@ public class HomeController {
 		log.info("/accessDenideGrade------------------------------------");
 		return "view/security/accessDenideGrade";
 	}
-	
+
 
 //	@PostMapping("/")
 //	public String selfOut(@RequestParam("memberNo") int no, @RequestParam("password") String password) {
@@ -87,13 +92,15 @@ public class HomeController {
 //		return "redirect:/musicatlogin";
 //	}
 
-	
-	@GetMapping("/main")
+  @GetMapping("/main")
 	public String petopiaMain(Model model, HttpSession session) {
 
 		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
 		model.addAttribute("articleList", allArticleList);
-		model.addAttribute("HomeContent","fragments/viewMainContent");
+        List<BestArticleVO> bestArticles = articleService.selectAllBestArticle();
+        model.addAttribute("bestArticles", bestArticles);
+
+        model.addAttribute("HomeContent","fragments/viewMainContent");
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);

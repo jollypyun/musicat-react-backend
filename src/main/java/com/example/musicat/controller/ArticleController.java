@@ -125,7 +125,6 @@ public class ArticleController {
 	@GetMapping("/insert")
 	public String writeForm(HttpServletRequest req, Model model) {
 		// create
-//		ArticleVO articleVO = new ArticleVO(); // WriteForm에서 값들을 담을 객체
 		ArticleForm form = new ArticleForm(); // 변경
 
 		HttpSession session = req.getSession();
@@ -137,7 +136,9 @@ public class ArticleController {
 		int gradeNo = member.getGradeNo();
 		log.info("writeForm get No::::" + gradeNo);
 		// bind
+		log.info("insert form 이동 권한 조회 전");
 		List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(gradeNo);
+		log.info("insert form 이동 권한 조회 후");
 		// view
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("form", form);
@@ -337,24 +338,19 @@ public class ArticleController {
 	 */
 	@GetMapping("/board/search")
 	public String searchByBoard(@RequestParam("keyword") String keyword
-			, @RequestParam("content") String content, Model model){
-		log.info("전체 검색 접근");
-		log.info("keyword: {}", keyword);
-		log.info("content: {}", content);
+			,@RequestParam("content") String content, Model model){
+
 		HashMap<String, Object> searchMap = new HashMap<>();
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
 		List<ArticleVO> articles = articleService.search(searchMap);
-		for (ArticleVO result : articles) {
-			log.info("=======================");
-			log.info(result.toString());
-			log.info("=======================");
-		}
 		model.addAttribute("articles", articles);
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 
+		model.addAttribute("keyword",keyword); // 전체 검색 후 세부 검색을 위한 keyword
+		model.addAttribute("content",content); // 전체 검색 후 세부 검색을 위한 content
 		model.addAttribute("boardNo",0);
 		model.addAttribute("boardName", "전체 검색");
 		model.addAttribute("boardkind", 0);
