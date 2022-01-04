@@ -80,5 +80,15 @@
 	<update id="standGrade" statementType="CALLABLE">
 		{ CALL sp_sort_grade() }
 	</update>
+
+<!-- 양 ~	-->
+	<resultMap type="int" id="selectGradeNoResultMap" >
+		<result property="gradeNo" javaType="int" column="grade_no" jdbcType="SMALLINT"/>
+	</resultMap>
+
+	<select id="selectGradeNo" parameterType="String" resultMap="selectGradeNoResultMap">
+		SELECT grade_no FROM  grade WHERE auth = #{auth}
+	</select>
+<!-- ~ 양	-->
 	
 </mapper>

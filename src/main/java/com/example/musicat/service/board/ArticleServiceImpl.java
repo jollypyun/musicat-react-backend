@@ -35,6 +35,8 @@ public class ArticleServiceImpl implements ArticleService {
 		ArticleVO article = results.get(0).getArticle(); // 게시글 정보 출력
 		article.setSelectTags(tags);
 
+
+
 		List<FileVO> fileList = new ArrayList<>();
 			if(results.get(0).getFile() != null) { // 파일이 있을 때
 				for (SelectArticleVO result : results) {
@@ -43,6 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
 			} else { // 첨부된 파일이 없을 때
 				fileList=null;
 			}
+
 		return this.fileService.fileList(article, fileList);
 	}
 

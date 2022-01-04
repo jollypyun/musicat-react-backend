@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-header-color">
@@ -36,7 +36,7 @@
 <!--	</form>-->
 
 	<!-- admin Toggle-->
-	<button
+	<button sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
 		class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
 		id="adminToggle" th:onclick="|location.href='@{/members}'|">
 		<i class="fas fa-cog fa-lg"></i>
@@ -50,7 +50,7 @@
 	</button>
 
 	<!-- Navbar-->
-	<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4" th:fragment="viewFrameHeader (isLogin)"> <!-- 양 : th:fragment="viewFrameHeader (isLogin) -->
+	<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4" > <!-- 양 : th:fragment="viewFrameHeader (isLogin)" -->
 		<li class="nav-item dropdown"><a class="nav-link dropdown-toggle"
 			id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
 			aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
@@ -65,9 +65,17 @@
 
 				<li><hr class="dropdown-divider" /></li>
 
-				<li th:if ="${isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>
-				<li th:if ="${isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>
-    
+<!--				<li th:if ="${isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>-->
+<!--				<li th:if ="${isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>-->
+
+<!--				<li th:if ="${session.isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>-->
+<!--				<li th:if ="${session.isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>-->
+
+<!--				로그인한 사용자 -->
+				<li th:if="${#authorization.expr('isAuthenticated()')}"><a class="dropdown-item" href="/logout">Logout</a></li>
+<!--				로그인하지 않은 사용자-->
+				<li th:if="${#authorization.expr('isAnonymous()')}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>
+
 				<li><hr class="dropdown-divider" /></li>
 				<li><a class="dropdown-item" href="/ChangePwd">비밀번호 변경</a></li>
 				<li><a class="dropdown-item" href="/outForm">회원 탈퇴</a></li>

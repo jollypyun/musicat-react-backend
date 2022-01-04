@@ -28,6 +28,4 @@ public class GradeVO {
 		this.docs = docs;
 		this.comms = comms;
 	}
-	
-	
 }

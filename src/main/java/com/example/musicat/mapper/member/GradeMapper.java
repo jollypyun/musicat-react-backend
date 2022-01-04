@@ -40,4 +40,7 @@ public interface GradeMapper {
 	
 	// 등급 번호 재정렬
 	void fillEmptyNum() throws Exception;
+	
+	// 양 - 특정 등급의 등급 번호 조회
+	Integer selectGradeNo(String auth);
 }

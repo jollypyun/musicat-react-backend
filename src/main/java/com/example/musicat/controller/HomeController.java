@@ -2,6 +2,7 @@ package com.example.musicat.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
+import com.example.musicat.domain.member.GradeVO;
+import com.example.musicat.mapper.member.GradeMapper;
 import com.example.musicat.security.MemberContext;
 
 import com.example.musicat.domain.board.BestArticleVO;
 
+import com.example.musicat.service.member.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -40,7 +48,8 @@ import lombok.extern.java.Log;
 @Log
 public class HomeController {
 
-
+    @Autowired
+    private GradeService gradeService;
 
 	@Autowired
 	private MemberService memberService;
@@ -51,12 +60,6 @@ public class HomeController {
 
     @Autowired
     private ArticleService articleService;
-
-
-    @GetMapping("/petopialogin")
-    public String index() {
-        return "view/member/login";
-    }
 
 
 	@RequestMapping("/musicatlogin")
@@ -78,68 +81,12 @@ public class HomeController {
 	}
 	
 
-//	@GetMapping("/ga")
-//	public String iid() {
-//		return "vlew/home/asdmsadpo";
-//	}
-//
-  
 //	@PostMapping("/")
 //	public String selfOut(@RequestParam("memberNo") int no, @RequestParam("password") String password) {
 //		this.memberService.modifyMember(no, password);
-//		return "redirect:/login";
+//		return "redirect:/musicatlogin";
 //	}
 
-//
-//	@ResponseBody
-//	@PostMapping("/login")
-//	public Map<String, String> login(MemberVO user, HttpSession session) {
-//		log.info("login email : " + user.getEmail());
-//		Map<String, String> map = new HashMap<String, String>();
-//
-//		try {
-//			user = memberService.login(user.getEmail(), user.getPassword());
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		int resultType = 0;
-//		String failText = "";
-//		if( user == null ) {
-//			log.info("로그인 실패");
-//			resultType = 0;
-//			failText = "아이디 또는 비밀번호가 잘못 입력 되었습니다.";
-//		} else if( user.getBan().length() > 0 &&
-//				!(LocalDateTime.now().isAfter(
-//						LocalDateTime.parse(user.getBan(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))))
-//				){
-//			resultType = 2;
-//			failText = (user.getBan() + "까지 활동 정지 당한 회원입니다.");
-//		} else if( user.getIsMember() == 1) {
-//			resultType = 3;
-//			failText = "탈퇴한 회원입니다.";
-//		}  else if( user.getIsMember() == 2) {
-//			resultType = 4;
-//			failText = "강제 탈퇴 당한 회원입니다.";
-//		}
-//		else {
-//			resultType = 1;
-//			failText = "로그인에 성공했습니다.";
-//
-//			//HttpSession session = request.getSession();
-//			//System.out.println(session);
-//			SessionConfig.getSessionidCheck("loginUser", Integer.toString(user.getNo()));
-//
-//			session.setAttribute("loginUser", user);
-//			session.setMaxInactiveInterval(60*60); // 세션 유지 시간 1시간으로 설정
-//		}
-//
-//		map.put("resultType", Integer.toString(resultType));
-//		map.put("failText", failText);
-//		map.put("url", "/main");
-//
-//		return map;
-//	}
 	
 	@GetMapping("/main")
 	public String petopiaMain(Model model, HttpSession session) {
@@ -153,24 +100,28 @@ public class HomeController {
 		CategoryVO categoryVo = new CategoryVO();
 		model.addAttribute("categoryVo", categoryVo);
 
-		MemberVO memberSession = (MemberVO) session.getAttribute("loginUser");
-		if (memberSession == null) {
-			model.addAttribute("isLogin", 0);
-		}
-		else {
-			model.addAttribute("isLogin", 1);
-		}
+
+        //로그인하지 않은 사용자일 경우 ( 로그인한 사용자 정보 처리는 SecurityConfig.java에서 )
+        String auth = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
+		if (auth.equals("[ROLE_ANONYMOUS]")) {
+
+            //익명 사용자에게 gradeNo 부여 ( 게시판 접근 시 필요 )
+            int gradeNo = gradeService.retrieveGradeNo(auth);
+            log.info("auth : " + auth + " gradeNo : " + gradeNo);
+
+            MemberVO member = new MemberVO();
+            member.setGrade(auth);
+            member.setGradeNo(gradeNo);
+
+            session.setAttribute("loginUser", member);
+            log.info("익명 사용자 - grade : " + member.getGrade() + " gradeNo : " + member.getGradeNo());
+
+        }
 
 		return "view/home/viewHomeTemplate";
-	}
 
+    }
 
-//	@GetMapping("/logout")
-//	public String logout(HttpSession session) {
-//		session.invalidate();
-//
-//		return "redirect:main";
-//	}
 	
 	@GetMapping("/join1")
 	public String join(Model model) {
