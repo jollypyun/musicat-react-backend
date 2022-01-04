@@ -1,29 +1,30 @@
 package com.example.musicat.service.board;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.example.musicat.domain.board.ArticleVO;
-import com.example.musicat.domain.board.FileVO;
-import com.example.musicat.domain.board.SelectArticleVO;
-import com.example.musicat.domain.board.TagVO;
+import com.example.musicat.domain.board.*;
 import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.board.ArticleDao;
+import com.example.musicat.util.BestArticle;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Slf4j
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
 
-	@Autowired ArticleMapper articleMapper;
+	@Autowired private ArticleMapper articleMapper;
 	@Autowired private ArticleDao articleDao;
 	@Autowired private FileService fileService;
 	@Autowired private ReplyService replyService;
 	@Autowired private MemberMapper memberMapper;
+	@Autowired private BestArticle bestArticleUtil;
 
 	@Override
 	@Transactional
@@ -58,7 +59,9 @@ public class ArticleServiceImpl implements ArticleService {
 		this.memberMapper.plusMemberDocs(article.getMemberNo());
 		this.articleDao.insertArticle(article); // 게시글 추가
 		this.fileService.uploadFile(article);
-		this.articleDao.insertTags(article.getNo(), article.getTagList());
+		if (article.getTagList() != null) { // 입력태그가 있을 때만 동작
+			this.articleDao.insertTags(article.getNo(), article.getTagList());	
+		}
 	}
 
 	@Override
@@ -66,7 +69,9 @@ public class ArticleServiceImpl implements ArticleService {
 	public void modifyArticle(ArticleVO article) {
 		this.articleDao.updateArticle(article);
 		this.fileService.uploadFile(article);
-		this.articleDao.insertTags(article.getNo(), article.getTagList());
+		if (article.getTagList() != null) { // 입력태그가 있을 때만 동작
+			this.articleDao.insertTags(article.getNo(), article.getTagList());
+		}
 	}
 
 	@Override
@@ -74,7 +79,11 @@ public class ArticleServiceImpl implements ArticleService {
 	public int removeArticle(int articleNo, int memberNo) {
 		this.memberMapper.minusMemberDocs(memberNo);
 		int boardNo = this.articleDao.selectArticle(articleNo).get(0).getArticle().getBoardNo();
+		boolean check = this.articleDao.checkBestArticle(articleNo);
 		this.articleDao.deleteArticle(articleNo);
+		if(check){ // 만약 지우는 게시글이 best글이였다면 bestarticle table 갱신
+			updateBestArticle();			
+		}
 		return boardNo;
 	}
 
@@ -125,9 +134,9 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleVO> search(Map<String, String> map) {
-		String keyword = map.get("keyword");
-		String content = map.get("content");
+	public List<ArticleVO> search(Map<String, Object> map) {
+		String keyword = (String) map.get("keyword");
+		String content = (String) map.get("content");
 		if ("subject".equals(keyword)) {
 			map.put("subject", content);
 		}
@@ -140,7 +149,43 @@ public class ArticleServiceImpl implements ArticleService {
 		map.remove("keyword");
 		map.remove("content");
 
+		Iterator<String> keys = map.keySet().iterator();
+		while( keys.hasNext() ){
+			String key = keys.next();
+			String value = String.valueOf(map.get(key));
+			System.out.println("키 : "+key+", 값 : "+value);
+			System.out.println("key.getClass().getName() = " + key.getClass().getName());
+			System.out.println("value.getClass().getName() = " + value.getClass().getName());
+		}
+		log.info("dao search 전");
 		List<ArticleVO> result = this.articleDao.search(map);
+		log.info("dao search 후");
+		for (ArticleVO articleVO : result) {
+			log.info("dao");
+			log.info(articleVO.toString());
+		}
 		return result;
+	}
+
+	//베스트글 삭제시 조회
+	private void updateBestArticle(){
+		int now = this.articleDao.selectNowDate(); // 현재 날짜 구하기
+		log.info("now = {}", now);
+		List<ArticleVO> findBestArticles = this.articleDao.selectUpdateBestArticle(now); // 조회
+		// best table 날리기
+		this.articleDao.deleteAllBestArticle();
+		// find articles insert
+		bestArticleUtil.insertBestArticle(findBestArticles);
+	}
+
+	@Override
+	public List<BestArticleVO> selectAllBestArticle() {
+		List<BestArticleVO> bestArticles = this.articleDao.selectAllBestArticle();
+		int rank = 1;
+		for (BestArticleVO bestArticle : bestArticles) {
+			bestArticle.setRank(rank);
+			rank++;
+		}
+		return bestArticles;
 	}
 }

@@ -2,6 +2,7 @@ package com.example.musicat.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -268,8 +269,8 @@ public class BoardController {
 
 		int boardkind = bbgVO.getBoardVo().getBoardkind();
 
+		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("categoryBoardList", categoryList);
-		model.addAttribute("categoryVo", categoryVo);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
 		model.addAttribute("articles", articles); // 게시글 정보 전송
 		model.addAttribute("boardkind", boardkind); // 게시글 유형
@@ -280,10 +281,22 @@ public class BoardController {
 	@GetMapping("/board/search")
 	@ResponseBody
 	public List<ArticleVO> searchByBoard(@RequestParam("keyword") String keyword
-			, @RequestParam("content") String content){
-		HashMap<String, String> searchMap = new HashMap<>();
+			,@RequestParam("content") String content
+			,@RequestParam("boardNo") Integer boardNo
+			,@RequestParam("aKeyword") String aKeyword
+			,@RequestParam("aContent") String aContent){
+		HashMap<String, Object> searchMap = new HashMap<>();
+		if(aKeyword != null){
+			if(!aKeyword.equals(keyword)){ // keyword가 같다면 생략
+				searchMap.put(aKeyword, aContent);
+			}
+		}
+		if(boardNo > 0){
+			searchMap.put("boardNo", boardNo);
+		}
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
+
 		List<ArticleVO> results = articleService.search(searchMap);
 		return results;
 	}

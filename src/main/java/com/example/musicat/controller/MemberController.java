@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class MemberController {
+
+	// 양
+	@Autowired
+	private BCryptPasswordEncoder encodePwd;
+
 	@Autowired
 	private MemberService memberService;
 	@Autowired
@@ -39,8 +45,11 @@ public class MemberController {
 //	회원가입
 	@PostMapping("/join") // 이걸 실행하는 값의 주소
 	public String joinMember(MemberVO mVo) {
+		log.info("비밀번호 : " + mVo.getPassword() + " 이메일 : " + mVo.getEmail() + " 닉네임 : " + mVo.getNickname());
+		mVo.setPassword(encodePwd.encode(mVo.getPassword())); //비밀번호 암호화
+		log.info("비밀번호(암호화) : " + mVo.getPassword());
 		this.memberService.registerMember(mVo);
-		return "redirect:/petopialogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
+		return "redirect:/musicatlogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
 								// html 파일명 쓰기)
 	}
 

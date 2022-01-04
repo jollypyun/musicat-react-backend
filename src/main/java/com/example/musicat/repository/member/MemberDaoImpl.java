@@ -7,6 +7,7 @@ import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.mapper.member.MemberMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 
@@ -20,9 +21,19 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 	private SqlSession sqlSession; // @Autowired 밑에 선언 된 mybatis //mybatis는 db 명령문을 자동으로 입력해주는 다른 사람이 만들어놓은
 									// 프로그램?명령문? 이라고 보면 된다.
 
+	@Qualifier("memberMapper")
 	@Autowired
 	private MemberMapper mapper;
 //기본 세팅 끝
+
+	// 양
+	// 로그인 - email을 통해 session에 담을 정보를 조회하고 memberVo에 담음
+	@Override
+	public MemberVO selectMemberByEmail(String email) {
+		MemberVO memberVo = this.mapper.selectMemberByEmail(email);
+		//log.info("Email, password, auth(grade) : " + memberVo.getEmail() + " " + memberVo.getPassword() + " " +  memberVo.getGrade());
+		return memberVo;
+	}
 
 	// 회원가입
 	@Override
@@ -95,11 +106,7 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 	}
 		
 
-	@Override
-	public void insertMemberNo(HashMap<String, Object> mVo) {
-		// TODO Auto-generated method stub
-		this.mapper.insertMemberNo(mVo);
-	}
+
 
 	@Override
 	public void updatePassword(MemberVO memberVo) {

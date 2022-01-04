@@ -1,6 +1,7 @@
 package com.example.musicat.service.board;
 
 import com.example.musicat.domain.board.ArticleVO;
+import com.example.musicat.domain.board.BestArticleVO;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,5 +34,7 @@ public interface ArticleService {
 
 	void deleteTag(int tagNo);
 
-	List<ArticleVO> search(Map<String, String> map);
+	List<ArticleVO> search(Map<String, Object> map);
+
+	List<BestArticleVO> selectAllBestArticle();
 }

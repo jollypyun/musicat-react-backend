@@ -145,3 +145,7 @@ ul li.tag-item {
 	margin-left: 8px;
 }
 
+/*댓글 등록 시 내용을 입력하지 않았을 때*/
+.changeplaceholder::placeholder{
+	color: red;
+}

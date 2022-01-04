@@ -1,6 +1,7 @@
 package com.example.musicat.controller.form;
 
 
+import com.example.musicat.controller.ValidationGroups;
 import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.board.BoardVO;
 import com.example.musicat.domain.board.FileVO;
@@ -8,8 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+import javax.validation.groups.Default;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +21,15 @@ import java.util.List;
 //@NoArgsConstructor
 public class ArticleForm {
 
-    @NotNull(message = "게시판을 선택해 주세요")
+    @Min(value = 1,message = "게시판을 선택해 주세요", groups = {Default.class})
     private int boardNo;
-    @NotBlank(message = "제목을 입력해 주세요")
+
+    @NotBlank(message = "제목을 입력해 주세요, 최대 16글자까지 가능합니다.", groups = {Default.class, ValidationGroups.NotBlankGroup.class})
+    @Size(min = 0, max = 16, message = "입력은 최대 16글자까지 가능합니다.", groups = {Default.class, ValidationGroups.NotBlankGroup.class,ValidationGroups.SizeCheckGroup.class})
     private String subject;
-    @NotBlank(message = "내용을 입력해 주세요")
+
+    @NotBlank(message = "내용을 입력해 주세요, 최대 666글자까지 가능합니다.", groups = {Default.class,ValidationGroups.NotBlankGroup.class})
+    @Size(min = 0, max = 666, message = "입력은 최대 666글자까지 가능합니다.", groups = {Default.class, ValidationGroups.NotBlankGroup.class,ValidationGroups.SizeCheckGroup.class})
     private String content;
 
     private List<BoardVO> boardList = new ArrayList<>(); //작성 게시글 목록
