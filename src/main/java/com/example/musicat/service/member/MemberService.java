@@ -9,8 +9,11 @@ import java.util.ArrayList;
 public interface MemberService {
 	public void test();
 
-	public MemberVO login(String email, String password) throws Exception;
+	//public MemberVO login(String email, String password) throws Exception;
 
+    // session에 담을 회원 정보 조회
+    public MemberVO retrieveMemberByEmail(String email);
+    
 	// 회원의 리스트 조회
     ArrayList<MemberVO> retrieveMemberList(Criteria crt) throws Exception;
     // 회원 총 수

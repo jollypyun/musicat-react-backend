@@ -1,9 +1,12 @@
 package com.example.musicat.repository.board;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.musicat.domain.board.ArticleVO;
+import com.example.musicat.domain.board.BestArticleVO;
 import com.example.musicat.domain.board.SelectArticleVO;
+import com.example.musicat.domain.board.TagVO;
 import com.example.musicat.mapper.board.ArticleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -87,5 +90,63 @@ public class ArticleDaoImpl implements ArticleDao {
 	public void downLikecount(int articleNo) {
 		this.articleMapper.downLikecount(articleNo);
 	}
-	
+
+	@Override
+	public void insertTags(int articleNo, String[] tagList) {
+		for (int i = 0; i < tagList.length; i++) {
+			TagVO tagVO = new TagVO(articleNo, tagList[i].substring(0, tagList[i].length()-1));
+			this.articleMapper.insertTag(tagVO);
+		}
+	}
+
+	@Override
+	public List<TagVO> selectArticleTags(int articleNo) {
+		return articleMapper.selectArticleTags(articleNo);
+	}
+
+	@Override
+	public void deleteTag(int tagNo) {
+		this.articleMapper.deleteTag(tagNo);
+	}
+
+	@Override
+	public List<ArticleVO> search(Map<String, Object> map) {
+		return this.articleMapper.search(map);
+	}
+
+	@Override
+	public List<ArticleVO> selectBestArticle() {
+		return this.articleMapper.selectBestArticle();
+	}
+
+	@Override
+	public void deleteAllBestArticle() {
+		this.articleMapper.deleteAllBestArticle();
+	}
+
+	@Override
+	public void insertBestArticle(Map<String, Object> map) {
+		this.articleMapper.insertBestArticle(map);
+	}
+
+
+	@Override
+	public int selectNowDate() {
+		return this.articleMapper.selectNowDate();
+	}
+
+	@Override
+	public List<ArticleVO> selectUpdateBestArticle(int now) {
+		return this.articleMapper.selectUpdateBestArticle(now);
+	}
+
+	@Override
+	public boolean checkBestArticle(int articleNo) {
+		return this.articleMapper.checkBestArticle(articleNo);
+	}
+
+	@Override
+	public List<BestArticleVO> selectAllBestArticle() {
+		return this.articleMapper.selectAllBestArticle();
+	}
 }

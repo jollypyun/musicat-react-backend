@@ -13,6 +13,10 @@ import org.springframework.stereotype.Repository;
 @Repository("memberMapper")
 @Mapper
 public interface MemberMapper {
+
+	// 양 : Session에 담을 회원 정보
+	public MemberVO selectMemberByEmail(String email);
+
 	public MemberVO selectMember_byIDPwd(String email, String password) throws Exception;
 
 	public void updateLastDdate(int no) throws Exception;
@@ -22,7 +26,7 @@ public interface MemberMapper {
 	// 연주 ----------------------------------------
 	// 회원 가입
 	void insertMember(MemberVO mVo);
-	void insertMemberNo(HashMap<String, Object> mVo);
+
 
 	// 회원가입 시 이메일 중복체크
 	String selectEmail(String email);
@@ -35,6 +39,8 @@ public interface MemberMapper {
 	// 비밀번호 재설정
 	void updatePassword(int memNo, String newPassword);
 	// 끝 -----------------------------------------------
+
+
 
 	// 회원 목록 조회
 	ArrayList<MemberVO> selectMemberList(Criteria crt) throws Exception;
