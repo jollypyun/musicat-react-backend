@@ -43,7 +43,6 @@ public class CategoryServiceImpl implements CategoryService {
 		this.categoryDao.deleteCategory(categoryNo);
 	}
 
-	@Override
 	public ArrayList<CategoryVO> retrieveCategoryList() {
 		ArrayList<CategoryVO> categoryList = this.categoryDao.selectCategoryList();
 		log.info("Service ----------------------------------------" + categoryList.toString());
@@ -73,7 +72,6 @@ public class CategoryServiceImpl implements CategoryService {
 			if (temp.getBoardVo().getBoardName() != null)
 				category.addBoardList(new BoardVO(temp.getBoardVo().getBoardNo(), temp.getBoardVo().getBoardName(), temp.getBoardVo().getBoardkind()));
 		}
-
 		return categoryList;
 
 	}
