@@ -27,12 +27,12 @@ public class GradeServiceImpl implements GradeService{
 		return gradeNo;
 	}
 
-	// ~ 양
-	
 	@Override
 	public ArrayList<GradeVO> retrieveGradeList() throws Exception {
 		return this.gradeMapper.selectGradeList();
 	}
+
+	// ~ 양
 
 	@Override
 	public void modifyGrade(GradeVO grade) throws Exception {

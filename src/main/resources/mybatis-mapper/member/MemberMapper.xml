@@ -25,7 +25,7 @@
 
 	<!-- email로 회원 정보 불러오기 (session에 담을 정보)	-->
 	<select id="selectMemberByEmail" resultType="memberVo" resultMap="selectMemberByEmailResultMap">
-		select member_no, email, password,
+		select member_no, email, password, nickname,
 			   (select auth from grade where grade_no =
 											 (select grade_no from membergrade where member_no =
 																					 (select member_no from member where email = #{email}))) as auth,

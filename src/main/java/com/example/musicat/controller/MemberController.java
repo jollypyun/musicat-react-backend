@@ -115,18 +115,18 @@ public class MemberController {
 		return "redirect:/members";
 	}
 
-	@GetMapping("/grades")
-	public String viewGradeList(Model model) {
-		ArrayList<GradeVO> grades = null;
-		try {
-			grades = this.gradeService.retrieveGradeList();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		model.addAttribute("grades", grades);
-		model.addAttribute("managerContent", "view/member/gradeList");
-		return "view/home/viewManagerTemplate";
-	}
+//	@GetMapping("/grades")
+//	public String viewGradeList(Model model) {
+//		ArrayList<GradeVO> grades = null;
+//		try {
+//			grades = this.gradeService.retrieveGradeList();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		model.addAttribute("grades", grades);
+//		model.addAttribute("managerContent", "view/member/gradeList");
+//		return "view/home/viewManagerTemplate";
+//	}
 	
 //	회원 자진 탈퇴 화면으로 이동
 	@GetMapping("/outForm")  //이걸 실행하는 값의 주소
@@ -160,42 +160,42 @@ public class MemberController {
 //		return "view/member/detailMemberByManager";
 //	}
 	
-	@PostMapping("/grades")
-	public String modifyGrade(Model model, HttpServletRequest req) {
-		String[] stringNo = req.getParameterValues("gradeNo");
-		String[] stringDocs = req.getParameterValues("docs");
-		String[] stringComms = req.getParameterValues("comms");
-		String[] names = req.getParameterValues("name");
-
-		int[] docs = Arrays.stream(stringDocs).mapToInt(Integer::parseInt).toArray();
-		int[] comms = Arrays.stream(stringComms).mapToInt(Integer::parseInt).toArray();
-		int[] gradeNo = Arrays.stream(stringNo).mapToInt(Integer::parseInt).toArray();
-
-		try {
-			int oldGradeSize = this.gradeService.retrieveGradeList().size();
-			int newGradeSize = gradeNo.length;
-			for (int i = 0; i < newGradeSize; i++) {
-				gradeNo[i] = i + 1;
-				GradeVO grade = new GradeVO();
-				grade.setGradeNo(gradeNo[i]);
-				grade.setName(names[i]);
-				grade.setDocs(docs[i]);
-				grade.setComms(comms[i]);
-				this.gradeService.modifyGrade(grade);
-			}
-
-			if (oldGradeSize > newGradeSize) {
-				for (int i = newGradeSize; i < oldGradeSize; i++) {
-					this.gradeService.removeGrade(i + 1);
-				}
-			}
-
-			this.gradeService.sortGrade();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "redirect:/grades";
-	}
+//	@PostMapping("/grades")
+//	public String modifyGrade(Model model, HttpServletRequest req) {
+//		String[] stringNo = req.getParameterValues("gradeNo");
+//		String[] stringDocs = req.getParameterValues("docs");
+//		String[] stringComms = req.getParameterValues("comms");
+//		String[] names = req.getParameterValues("name");
+//
+//		int[] docs = Arrays.stream(stringDocs).mapToInt(Integer::parseInt).toArray();
+//		int[] comms = Arrays.stream(stringComms).mapToInt(Integer::parseInt).toArray();
+//		int[] gradeNo = Arrays.stream(stringNo).mapToInt(Integer::parseInt).toArray();
+//
+//		try {
+//			int oldGradeSize = this.gradeService.retrieveGradeList().size();
+//			int newGradeSize = gradeNo.length;
+//			for (int i = 0; i < newGradeSize; i++) {
+//				gradeNo[i] = i + 1;
+//				GradeVO grade = new GradeVO();
+//				grade.setGradeNo(gradeNo[i]);
+//				grade.setName(names[i]);
+//				grade.setDocs(docs[i]);
+//				grade.setComms(comms[i]);
+//				this.gradeService.modifyGrade(grade);
+//			}
+//
+//			if (oldGradeSize > newGradeSize) {
+//				for (int i = newGradeSize; i < oldGradeSize; i++) {
+//					this.gradeService.removeGrade(i + 1);
+//				}
+//			}
+//
+//			this.gradeService.sortGrade();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return "redirect:/grades";
+//	}
 
 	@GetMapping("/grades/{gradeNo}")
 	public void viewOpenBoardByGrade(Model model, @PathVariable int gradeNo) {
