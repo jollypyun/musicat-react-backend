@@ -19,7 +19,9 @@ window.addEventListener('DOMContentLoaded', event => {
         sidebarToggle.addEventListener('click', event => {
             event.preventDefault();
             document.body.classList.toggle('sb-sidenav-toggled');
+            document.getElementById('footerPlayList').classList.toggle('sb-sidenav-toggled-footer');
             localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+            localStorage.setItem('sb|sidebar-toggle', document.getElementById('footerPlayList').classList.contains('sb-sidenav-toggled-footer'));
         });
     }
 
