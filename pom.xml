@@ -11,7 +11,9 @@
     <groupId>com.example</groupId>
     <artifactId>musicat</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>musicat</name>
+
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
