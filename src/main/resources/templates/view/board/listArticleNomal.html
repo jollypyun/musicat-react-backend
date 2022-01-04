@@ -54,9 +54,8 @@
 						<div class="dataTable-bottom"></div>
 					</div>
 					<div class="write_article_btn">
-						<!-- <button id="writeForm_btn" th:onclick="|location.href='@{/articles/insert}'|" -->
-							<button id="writeForm_btn" onclick="writeForm()"
-							type="button">글쓰기</button>
+						 <button id="writeForm_btn" th:onclick="|location.href='@{/articles/insert}'|"
+								 type="button">글쓰기</button>
 					</div>
 					<div id="search_area">
 <!--						<form id="search_form" action="/board/search" method="get">-->
@@ -80,9 +79,14 @@
 	$(document).ready(function () {
 		console.log('뭐지');
 
+
 		$('#search_by_board_btn').on('click', function () {
-			const keyword = $('#board_keyword').val();
 			const content = $('#board_search_content').val();
+			if(content == null || content === ""){
+				alert('검색어를 입력하세요.');
+				return false;
+			}
+			const keyword = $('#board_keyword').val();
 			const boardNo = $('#boardNo').val();
 			let allKeyword = null;
 			let allContent = null;

@@ -15,7 +15,7 @@
 
 	<!-- Navbar Search-->
 <!--	<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">-->
-		<form action="/articles/board/search" method="get">
+		<form id="all_search_form" action="/articles/board/search" method="get">
 			<div id="search_area">
 				<select id="keyword" name="keyword">
 					<option value="subject">제목</option>
@@ -23,7 +23,7 @@
 					<option value="tagname">태그</option>
 				</select>
 				<input type="text" id="search_content" name="content" placeholder="검색어를 입력해 주세요.">
-				<button type="submit" id="search_btn" value="검색"></button>
+				<button id="search_btn">검색</button>
 			</div>
 		</form>
 <!--		<div class="input-group">-->
@@ -74,4 +74,21 @@
 			</ul></li>
 	</ul>
 </nav>
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script>
+	$(document).ready(function (){
+
+		$(document).on('click', '#search_btn', function (){
+			const content = $('#search_content').val();
+			console.log(1, content);
+			if (content == null || content === ""){
+				alert('검색어를 입력하세요.');
+				return false;
+			}
+			$('#all_search_form').submit();
+		});
+	});
+
+</script>
+
 </html>

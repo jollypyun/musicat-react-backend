@@ -130,7 +130,9 @@ public class ArticleController {
 		int gradeNo = member.getGradeNo();
 		log.info("writeForm get No::::" + gradeNo);
 		// bind
+		log.info("insert form 이동 권한 조회 전");
 		List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(gradeNo);
+		log.info("insert form 이동 권한 조회 후");
 		// view
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("form", form);
