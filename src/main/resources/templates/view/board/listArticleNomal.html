@@ -30,7 +30,7 @@
 								<tbody id="article_list" >
 								<div th:if ="${articles.toArray().length == 0}">
 									<tr>
-										<td rowspan="6">등록된 게시글이 없습니다.</td>
+										<td colspan="6" valign="center" align="center">등록된 게시글이 없습니다.</td>
 									</tr>
 								</div>
 								<div th:unless ="${articles == null}">
@@ -116,7 +116,7 @@
 					htmlStr = "";
 					$('#article_list').html(""); //view창 비우기
 					if(results.length == 0){
-						htmlStr += "<tr><td rowspan='6'>등록된 게시글이 없습니다.</td></tr>";
+						htmlStr += "<tr><td colspan='6'>등록된 게시글이 없습니다.</td></tr>";
 					} else{
 						for (let i = 0; i < results.length; i++) {
 							htmlStr += "<tr>";

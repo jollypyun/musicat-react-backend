@@ -80,7 +80,10 @@ public class HomeController {
 
 		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
 		model.addAttribute("articleList", allArticleList);
-		model.addAttribute("HomeContent","fragments/viewMainContent");
+        List<BestArticleVO> bestArticles = articleService.selectAllBestArticle();
+        model.addAttribute("bestArticles", bestArticles);
+
+        model.addAttribute("HomeContent","fragments/viewMainContent");
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
