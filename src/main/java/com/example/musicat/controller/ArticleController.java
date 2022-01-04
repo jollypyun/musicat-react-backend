@@ -353,4 +353,9 @@ public class ArticleController {
 		model.addAttribute("boardkind", 0);
 		return "/view/home/viewBoardTemplate";
 	}
+
+	@GetMapping("/musicRegister")
+	public String musicRegister() {
+		return "/view/board/musicRegister";
+	}
 }
