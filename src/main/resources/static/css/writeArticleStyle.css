@@ -105,22 +105,22 @@
 /*	list-style: none;*/
 /*}*/
 
-ul {
+.content ul {
 	padding: 16px 0;
 }
 
-ul li {
+.content ul li {
 	display: inline-block;
 	margin: 0 5px;
 	font-size: 14px;
 	letter-spacing: -.5px;
 }
 
-form {
+.write-board-style form {
 	padding-top: 16px;
 }
 
-ul li.tag-item {
+.content ul li.tag-item {
 	padding: 4px 8px;
 	background-color: #777;
 	color: #000;
