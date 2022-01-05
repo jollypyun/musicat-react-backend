@@ -1,12 +1,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://thymeleaf.org">
 
 <body>
     <form method="POST" enctype="multipart/form-data" th:action="@{'/profile/' + ${profile.no}}">
         <table>
             <tr class="first">
                 <td id="preview_image">미리보기</br>타입 : .gif, .jpg, .png</br>크기 : 3MB이하</td>
-                <td><img id="im" th:src="|/profileImage/${profile.getSystemFileName()}|" alt ="" style="width: 200; height: 200;"></td>
+                <td><img id="im" th:src="|/profileTempImage/${profile.getSystemFileName()}|" alt ="" style="width: 200; height: 200;"></td>
             </tr>
             <tr class="second">
                 <td><button type="button" id="resetBtn" onclick="resetImage()">기본 이미지</button></td>
@@ -53,7 +53,7 @@
         flag.vlaue = "false";
     }
     function resetImage() {
-        $("#im").attr('src', "/profileImage/Seoul.JPG");
+        $("#im").attr('src', "/profileTempImage/Seoul.JPG");
         $("#chooseFile").val("");
         flag.value = "true";
     }
