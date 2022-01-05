@@ -22,8 +22,7 @@
 				</div>
 
 				<!-- 카테고리 + 게시판 리스트 -->
-				<!-- https://github.com/Fidget278/petopia/blob/develop/WebContent/viewDetailArticleContent.jsp
-				342 -->
+
 				<div class="categoryList-content-style">
 					<div id="categoryBoardList" class="categoryList-list-style">
 						<table>
@@ -220,6 +219,7 @@
 							addBoardForm += "<td><select name='boardkind'>";
 							addBoardForm += "<option value=0>기본 게시판</option>"
 							addBoardForm += "<option value=1>썸네일 게시판</option>"
+							addBoardForm += "<option value=2>오디오 게시판</option>"
 							addBoardForm += "</select></td>";
 							addBoardForm += "</tr>";
 							addBoardForm += "</tbody>";
@@ -267,9 +267,6 @@
 							console.log(list.bbg.boardVo.categoryNo);
 							for (let i = 0; i < list.categoryList.length; i++) {
 								console.log(list.categoryList[i]);
-								//if(list.bbg.boardVo.categoryNo == list.categoryList[i].categoryNo ){
-								//	modifyBoardForm += "<option value=" + list.categoryList[i].categoryNo +" selected>" + list.categoryList[i].categoryName + "</option>";	
-								//}
 								modifyBoardForm += "<option value="
 										+ list.categoryList[i].categoryNo;
 								if (list.bbg.boardVo.categoryNo == list.categoryList[i].categoryNo) {
@@ -343,6 +340,8 @@
 
 							modifyBoardForm += "<option value=0>기본 게시판</option>"
 							modifyBoardForm += "<option value=1>썸네일 게시판</option>"
+							modifyBoardForm += "<option value=2>오디오 게시판</option>"
+
 
 							modifyBoardForm += "</select></td>";
 							modifyBoardForm += "</tr>";

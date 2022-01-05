@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.example.musicat.domain.etc.DailyStatisticsVO;
 import com.example.musicat.repository.etc.DailyStatisticsDao;
+import com.example.musicat.repository.etc.DailyStatisticsDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class DailyStatisticsServiceImpl implements DailyStatisticsService {
 
 	@Autowired
-	private DailyStatisticsDao dailyDao;
+	private DailyStatisticsDaoImpl dailyDao;
 	
 	@Override
 	public DailyStatisticsVO retrieve() {

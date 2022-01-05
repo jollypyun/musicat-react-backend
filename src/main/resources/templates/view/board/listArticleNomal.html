@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8"/>
 <div id="layoutSidenav_content">
 	<main>
@@ -54,7 +54,7 @@
 						<div class="dataTable-bottom"></div>
 					</div>
 					<div class="write_article_btn">
-						 <button id="writeForm_btn" th:onclick="|location.href='@{/articles/insert}'|"
+						 <button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn" th:onclick="|location.href='@{/articles/insert}'|"
 								 type="button">글쓰기</button>
 					</div>
 					<div id="search_area">

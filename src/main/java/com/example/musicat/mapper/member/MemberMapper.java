@@ -85,10 +85,10 @@ public interface MemberMapper {
 	// boolean selectNickname(String nickname);
 
 	// 이메일 검색에 해당된 회원 조회
-	ArrayList<MemberVO> selectSearchMemberByEmail(String keyword);
+	ArrayList<MemberVO> selectSearchMemberByEmail(Map<String, Object> map);
 
 	// 이메일 검색에 해당된 회원 조회
-	ArrayList<MemberVO> selectSearchMemberByGrade(String keyword);
+	ArrayList<MemberVO> selectSearchMemberByGrade(Map<String, Object> map);
 
 	// 이메일 검색에 해당된 회원의 총 수
 	int selectTotalSearchMemberByEmail(String keyword);
@@ -97,4 +97,5 @@ public interface MemberMapper {
 	int selectTotalSearchMemberByGrade(String keyword);
 	
 	void updatePassword(MemberVO memberVo);
+
 }
