@@ -1,5 +1,6 @@
 package com.example.musicat.service.music;
 
+import com.example.musicat.domain.music.Music;
 import com.example.musicat.exception.RestErrorHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.core.pattern.MdcPatternConverter;
@@ -51,7 +52,7 @@ public class MusicApiService {
         System.out.println("fileName : " + fileName);
     }
 
-    public String registerMusic(MultipartFile file, MultipartFile imagefile, String title, int memberNo, int articleNo) {
+    public Music registerMusic(MultipartFile file, MultipartFile imagefile, String title, int memberNo, int articleNo) {
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -94,7 +95,8 @@ public class MusicApiService {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(URI_MUSICS_UPLOAD, requestEntity, String.class);
+        ResponseEntity<Music> response = restTemplate.postForEntity(URI_MUSICS_UPLOAD, requestEntity, Music.class);
+
 
         return response.getBody();
     }

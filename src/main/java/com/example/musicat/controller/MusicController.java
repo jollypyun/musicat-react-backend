@@ -1,5 +1,6 @@
 package com.example.musicat.controller;
 
+import com.example.musicat.domain.music.Music;
 import com.example.musicat.service.music.MusicApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +26,9 @@ public class MusicController {
     }
 
     @PostMapping("musicpost")
-    public String upload(@RequestParam(value = "audio") MultipartFile file, @RequestParam(value = "image") MultipartFile imagefile,
-                       @RequestParam(value = "title") String title, @RequestParam(value = "memberNo") int memberNo,
-                       @RequestParam(value = "articleNo") int articleNo) {
+    public Music upload(@RequestParam(value = "audio") MultipartFile file, @RequestParam(value = "image") MultipartFile imagefile,
+                        @RequestParam(value = "title") String title, @RequestParam(value = "memberNo") int memberNo,
+                        @RequestParam(value = "articleNo") int articleNo) {
         return musicApiService.registerMusic(file, imagefile, title, memberNo, articleNo);
     }
 
