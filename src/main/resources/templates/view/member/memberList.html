@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 
 <link th:href="@{../css/memberListStyle.css}" rel="stylesheet" />
 
@@ -13,7 +13,7 @@
 					<select name="" id="keyfield">
 						<option value="email">ID</option>
 						<option value="name">등급</option>
-					</select> <input type="text" id="keyword">
+					</select> <input type="text" id="keyword1">
 					<button type="button" id="searchBtn" onclick="sendData(1)">검색</button>
 
 				</div>
@@ -67,15 +67,14 @@
 		</div>
 	</main>
 </div>
-
-<!--<script th:src="@{/js/jquery-3.6.0.min.js}"></script>-->
 <script th:src="@{../js/jquery-3.6.0.min.js}"></script>
 <script>
 	function sendData(currentPageNo) {
 
 		const keyfield = $("#keyfield option:selected").val();
-		const keyword = $("#keyword").val();
-		if (keyword.trim() == "") {
+		const keyword1 = $("#keyword1").val();
+		console.log(keyword1);
+		if (keyword1.trim() == "") {
 			alert("검색어를 입력해주세요.");
 			return;
 		}
@@ -87,7 +86,7 @@
 			data: {
 				number: currentPageNo,
 				keyfield: keyfield,
-				keyword: keyword
+				keyword: keyword1
 			},
 			success: function(data) {
 				const page = data.paging;
@@ -127,7 +126,7 @@
 			},
 			error: function(err) {
 				console.log(keyfield);
-				console.log(keyword);
+				console.log(keyword1);
 				console.trace(err);
 			}
 		});
