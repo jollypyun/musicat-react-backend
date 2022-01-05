@@ -23,8 +23,8 @@ public class DailyStatisticsDaoImpl implements DailyStatisticsDao {
 	@Override
 	public DailyStatisticsVO selectDaily() {
 		dailyVo = dailyMapper.selectDaily();
-		System.out.println("여기");
-//		dailyVo.setDailyDate((dailyVo.getDailyDate().split(" ")[0]));
+		dailyVo.setDailyDate((dailyVo.getDailyDate().split(" ")[0]));
+
 		return dailyVo;
 	}
 

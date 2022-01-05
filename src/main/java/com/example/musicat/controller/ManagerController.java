@@ -7,6 +7,7 @@ import com.example.musicat.domain.etc.DailyStatisticsVO;
 import com.example.musicat.domain.etc.TotalStatisticsVO;
 import com.example.musicat.service.etc.DailyStatisticsServiceImpl;
 import com.example.musicat.service.etc.TotalStatisticsServiceImpl;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +25,13 @@ public class ManagerController {
 	@Autowired
 	TotalStatisticsServiceImpl totalServiceImpl;
 
-	@GetMapping("/petopia-manager")
+	@GetMapping("/manager")
 	public String manager(Model model) {
 		model.addAttribute("managerContent", "fragments/MemberContent");
 		return "view/home/viewManagerTemplate";
 	}
 
-	@GetMapping("/petopia-manager/daily")
+	@GetMapping("/manager/daily")
 	public String managerDaily(Model model) {
 
 		dailyServiceImpl.registerAndmodifyDaily();
@@ -74,7 +75,7 @@ public class ManagerController {
 		return "view/home/viewManagerTemplate";
 	}
 
-	@GetMapping("/petopia-manager/total")
+	@GetMapping("/manager/total")
 	public String managerTotal(Model model) {
 
 		totalServiceImpl.registerAndmodifyTotal();
