@@ -78,17 +78,13 @@
 		<result property="ban" javaType="string" column="ban" jdbcType="VARCHAR"/>
 	</resultMap>
 
-
-
-
-
-
 	<select id="selectMemberList" parameterType="criteria" resultType="memberVo" resultMap="briefMemberInfo">
-		SELECT member_no,email, name, regdate, visits, ban
-		FROM member M RIGHT JOIN grade G
-		ON M.grade_no = G.grade_no
-		WHERE member_no > 0
-		ORDER BY member_no ASC, ismember ASC
+		SELECT M.member_no, M.email, G.name , M.regdate, M.visits, M.ban
+		FROM member M LEFT JOIN membergrade MG
+		ON M.member_no = MG.member_no
+		LEFT JOIN grade G
+		ON G.grade_no = MG.grade_no
+		WHERE M.member_no > 0
 		LIMIT #{pageStart}, #{dataPerPage}
 	</select>
 	
@@ -98,10 +94,12 @@
 	</select>
 	
 	<select id="selectMemberByManager" parameterType="int" resultType="memberVo" resultMap="detailInfoByManager">
-		SELECT member_no, email, name, nickname, regdate, lastdate, M.docs, M.comms, visits, ban, ismember
-		FROM member M RIGHT JOIN grade G
-		ON M.grade_no = G.grade_no
-		WHERE member_no = #{no}
+		SELECT M.member_no, M.email, G.name, M.nickname, M.regdate, M.lastdate, M.docs, M.comms, M.visits, M.ban, M.ismember
+		FROM member M LEFT JOIN membergrade MG
+		ON M.member_no = MG.member_no
+	 	LEFT JOIN grade G
+		ON G.grade_no = MG.grade_no
+		WHERE M.member_no = #{no}
 	</select>
 	
 	<update id="updateBan7days" parameterType="int">
@@ -195,30 +193,30 @@
 		FROM member
 		WHERE email = #{email}
 	</select>
-	
-	<parameterMap type="Map" id="map">
-		<parameter property="keyword" javaType="string" jdbcType="VARCHAR"/>
-		<parameter property="dataPerPage" javaType="int" jdbcType="INTEGER"/>
-		<parameter property="pageStart" javaType="int" jdbcType="INTEGER"/>
-	</parameterMap>
 
-	<select id="selectSearchMemberByEmail" parameterType="string" resultType="memberVo" resultMap="briefMemberInfo">
-		SELECT member_no,email, name, regdate, visits, ban
-		FROM member M RIGHT JOIN grade G
-		ON M.grade_no = G.grade_no
-		WHERE email LIKE CONCAT('%', #{keyword}, '%')
-		ORDER BY member_no ASC, ismember ASC
+	<select id="selectSearchMemberByEmail" parameterType="Map" resultType="memberVo" resultMap="briefMemberInfo">
+		SELECT M.member_no, M.email, G.name, M.regdate, M.visits, M.ban
+		FROM member M LEFT JOIN membergrade MG
+		ON M.member_no = MG.member_no
+	  	LEFT JOIN grade G
+		ON G.grade_no = MG.grade_no
+		WHERE M.email LIKE CONCAT('%', #{keyword}, '%')
+		ORDER BY M.member_no ASC, M.ismember ASC
+		LIMIT #{crt.pageStart}, #{crt.dataPerPage}
 	</select>
 	
-	<select id="selectSearchMemberByGrade" parameterType="string" resultType="memberVo" resultMap="briefMemberInfo">
-		SELECT member_no,email, name, regdate, visits, ban
-		FROM member M RIGHT JOIN grade G
-		ON M.grade_no = G.grade_no
-		WHERE M.grade_no =
-		ANY(SELECT grade_no
+	<select id="selectSearchMemberByGrade" parameterType="Map" resultType="memberVo" resultMap="briefMemberInfo">
+		SELECT M.member_no, M.email, G.name, M.regdate, M.visits, M.ban
+		FROM member M LEFT JOIN membergrade MG
+		ON M.member_no = MG.member_no
+	  	LEFT JOIN grade G
+		ON G.grade_no = MG.grade_no
+		WHERE MG.grade_no =
+		ANY(SELECT G.grade_no
 		FROM grade G
-		WHERE name LIKE CONCAT('%', #{keyword}, '%'))
-		ORDER BY member_no ASC, ismember ASC
+		WHERE G.name LIKE CONCAT('%', #{keyword}, '%'))
+		ORDER BY M.member_no ASC, M.ismember ASC
+		LIMIT #{crt.pageStart}, #{crt.dataPerPage}
 	</select>
 	
 	<select id="selectTotalSearchMemberByEmail" parameterType="string" resultType="int">
@@ -228,12 +226,15 @@
 	</select>
 	
 	<select id="selectTotalSearchMemberByGrade" parameterType="string" resultType="int">
-		SELECT COUNT(member_no)
-		FROM member
-		WHERE grade_no =
-		ANY(SELECT grade_no
-		FROM grade
-		WHERE name LIKE CONCAT('%', #{keyword}, '%'))
+		SELECT COUNT(M.member_no)
+		FROM member M LEFT JOIN membergrade MG
+		ON M.member_no = MG.member_no
+	    LEFT JOIN grade G
+		ON G.grade_no = MG.grade_no
+		WHERE MG.grade_no =
+		ANY(SELECT G.grade_no
+		FROM grade G
+		WHERE G.name LIKE CONCAT('%', #{keyword}, '%'))
 	</select>
 	
 		<!-- 회원 자진 탈퇴-->
@@ -262,4 +263,5 @@
 		WHERE member_no = #{no}
 		<!-- #{}안에는	MemberVO에서 선언한 변수명과 일치해야 함 -->
 	</insert>
+
 </mapper>
