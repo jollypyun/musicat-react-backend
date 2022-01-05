@@ -66,7 +66,6 @@ public class ManagerController {
 			dailyList.add(new DailyStatisticsVO(3,chkDate,2,0));
 
 		}
-		System.out.println(dailyList);
 
 		model.addAttribute("managerContent", "fragments/StatisticsDailyContent");
 
