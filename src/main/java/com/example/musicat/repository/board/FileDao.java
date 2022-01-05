@@ -1,5 +1,6 @@
 package com.example.musicat.repository.board;
 
+import java.io.File;
 import java.util.List;
 
 import com.example.musicat.domain.board.FileVO;
@@ -16,4 +17,6 @@ public interface FileDao {
 	void deleteFile(int FileNo); // 삭제
 	
 	void allDelete(int articleNo);
+
+	List<FileVO> selectArticleFiles(int articleNo);
 }

@@ -1,9 +1,11 @@
 package com.example.musicat.service.board;
 
 import com.example.musicat.domain.board.ArticleVO;
+import com.example.musicat.domain.board.BestArticleVO;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 public interface ArticleService {
@@ -16,7 +18,7 @@ public interface ArticleService {
 	
 	void modifyArticle(ArticleVO article); // 수정
 	
-	void removeArticle(int articleNo,int memberNo); // 삭제
+	int removeArticle(int articleNo,int memberNo); // 삭제
 	
 	List<ArticleVO> retrieveAllArticle(); // 전체글 조회
 	
@@ -29,4 +31,10 @@ public interface ArticleService {
 	void recDelete(ArticleVO aritcleVO);
 	
 	int likeCheck(int memberNo, int ArticleNo);
+
+	void deleteTag(int tagNo);
+
+	List<ArticleVO> search(Map<String, Object> map);
+
+	List<BestArticleVO> selectAllBestArticle();
 }

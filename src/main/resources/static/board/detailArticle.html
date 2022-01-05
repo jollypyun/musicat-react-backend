@@ -1,14 +1,17 @@
 <html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
 <div class="row mt-3 mb-5">
     <div class="detailArticle-content-style">
         <h3>게시글 세부 조회</h3>
         <div class="detailArticle-table-style">
             <h1>
                 <input type="hidden" id="login_no" th:value="${loginMemberNo}">
-                <input type="hidden" id="member_no"
-                       th:value="${articleVO.memberNo}"> <input type="hidden"
-                                                              id="article_no" th:value="${articleVO.no}"> <input
-                    type="hidden" id="board_no" th:value="${articleVO.boardNo}">
+                <input type="hidden" id="member_no" th:value="${articleVO.memberNo}"> <input type="hidden"
+                                                                                             id="article_no"
+                                                                                             th:value="${articleVO.no}">
+                <input type="hidden" id="board_no"
+                       th:value="${articleVO.boardNo}">
             </h1>
             <form id="detailContent" th:object="${articleVO}" name="articleVO">
                 <table width=100%>
@@ -51,8 +54,8 @@
 
                         <td>
                             <!--이미지 파일들--> <img th:each="imageFile : ${articleVO.fileList}"
-                                                th:src="|/images/${imageFile.getSystemFileName()}|"
-                                                width="200" height="200"/>
+                                                th:src="|/images/${imageFile.getSystemFileName()}|" width="200"
+                                                height="200"/>
                         </td>
                     </tr>
                     <tr>
@@ -60,8 +63,7 @@
                         <td colspan="2">
                             <div class="detailArticle-btn-style">
                                 <div class="detailArticle-function-style">
-                                    <input type="button"
-                                           th:onclick="|location.href='@{/writeArticleForm}'|"
+                                    <input type="button" th:onclick="|location.href='@{/writeArticleForm}'|"
                                            value="글쓰기"/> <input type="button"
                                                                 th:onclick="|location.href='@{/nListArticle/{boardNo}(boardNo=${articleVO.boardNo})}'|"
                                                                 value="목록"/>
@@ -82,84 +84,78 @@
                                         <strong th:text="${articleVO.likecount}"></strong>
                                     </div>
                                 </div>
+                            </div>
                         </td>
+                    </tr>
+
+
+                    <!--본인만 가능-->
+                    <div class="detail-userCheck-style" th:if="${loginMemberNo == articleVO.memberNo}"
+                         style="float: right;">
+                        <td>
+                            <div class="detail-userBtn-style">
+                                <input type="button"
+                                       th:onclick="|location.href='@{/updateArticleForm/{articleNo}(articleNo=${articleVO.no})}'|"
+                                       value="수정"/> <input type="button" id="remove_article_btn" value="삭제"/>
+                            </div>
+                        </td>
+                    </div>
+
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!-- 댓글 -->
+
+
+        <div id="writeReplyForm" class="detailArticle-replyVO-style">
+            <textarea id="write_content" name="write_content" rwos="10" cols="75" placeholder="댓글을 입력해주세요."></textarea>
+
+            <button type="button" id="write_reply_btn">등록</button>
         </div>
 
-        <!--본인만 가능-->
-        <div class="detail-userCheck-style"
-             th:if="${loginMemberNo == articleVO.memberNo}"
-             style="float: right;">
-            <td>
-                <div class="detail-userBtn-style">
-                    <input type="button"
-                           th:onclick="|location.href='@{/updateArticleForm/{articleNo}(articleNo=${articleVO.no})}'|"
-                           value="수정"/> <input type="button"
-                                               id="remove_article_btn" value="삭제"/>
-                </div>
-            </td>
+        <div id="replys">
+            <div class="reply_list" th:each="replyVO : ${articleVO.getReplyList()}">
+                <table th:id="${replyVO.getNo()}">
+                    <colgroup>
+                        <col width="15%">
+                        <col width="35%">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th>내용</th>
+                        <td class="Content" th:text="${replyVO.content}"></td>
+                    </tr>
+                    <tr>
+                        <th>닉네임</th>
+                        <td th:text="${replyVO.nickname}"></td>
+                    </tr>
+                    <tr>
+                        <th>작성 날짜</th>
+                        <td th:text="${replyVO.writeDate}"></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+
+                    <tr th:if="${loginMemberNo == replyVO.memberNo}">
+                        <td colspan="2"><input type="button" class="modify_Reply_Form_Btn" value="수정"/> <input
+                                type="button" class="remove_Reply_Btn" value="삭제"/></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- 수정 폼 -->
+        <div id="modify_reply_form" style="display: none;" class="detailArticle-replyModify-style">
+            <div id="updateReplyForm">
+                <input type="hidden" id="no"/>
+                <textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
+                <button class="modify_cancle">취소</button>
+                <button class="modify_reply_btn">수정</button>
+            </div>
         </div>
 
-        </tr>
-
-        </tbody>
-        </table>
-        </form>
     </div>
-    <!-- 댓글 -->
-
-
-    <div id="writeReplyForm" class="detailArticle-replyVO-style">
-						<textarea id="write_content" name="write_content" rwos="10"
-                                  cols="75" placeholder="댓글을 입력해주세요."></textarea>
-
-        <button type="button" id="write_reply_btn">등록</button>
-    </div>
-
-    <div id="replys">
-        <div class="reply_list"
-             th:each="replyVO : ${articleVO.getReplyList()}">
-            <table th:id="${replyVO.getNo()}">
-                <colgroup>
-                    <col width="15%">
-                    <col width="35%">
-                </colgroup>
-                <tbody>
-                <tr>
-                    <th>내용</th>
-                    <td class="Content" th:text="${replyVO.content}"></td>
-                </tr>
-                <tr>
-                    <th>닉네임</th>
-                    <td th:text="${replyVO.nickname}"></td>
-                </tr>
-                <tr>
-                    <th>작성 날짜</th>
-                    <td th:text="${replyVO.writeDate}"></td>
-                </tr>
-                </tbody>
-                <tfoot>
-
-                <tr th:if="${loginMemberNo == replyVO.memberNo}">
-                    <td colspan="2"><input type="button"
-                                           class="modify_Reply_Form_Btn" value="수정"/> <input
-                            type="button" class="remove_Reply_Btn" value="삭제"/></td>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-    <!-- 수정 폼 -->
-    <div id="modify_reply_form" style="display: none;"
-         class="detailArticle-replyModify-style">
-        <div id="writeReplyForm">
-            <input type="hidden" id="no"/>
-            <textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
-            <button class="modify_cancle">취소</button>
-            <button class="modify_reply_btn">수정</button>
-        </div>
-    </div>
-
-</div>
 </div>
 </div>
 </main>
@@ -328,7 +324,7 @@
 
         $(document).on('click', '#add_like_btn', function () {
             $.ajax({
-                url: '/addLike',
+                url: '/articles/addLike',
                 method: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -355,7 +351,7 @@
 
         $(document).on('click', '#del_like_btn', function () {
             $.ajax({
-                url: "/delLike",
+                url: "/articles/delLike",
                 method: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
@@ -379,5 +375,8 @@
 
 
     });
+
+
 </script>
+
 </html>

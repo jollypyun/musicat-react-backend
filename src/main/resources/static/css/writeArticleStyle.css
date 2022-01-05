@@ -84,3 +84,56 @@
 .write-btn-style input{
 	margin-right: 5px;
 }
+
+
+.preview-de {
+	border: none;
+	background-color: transparent;
+	position: relative;
+	top: -375px;
+	right: 40px;
+}
+
+
+/*이미지 미리보기 & 태그 */
+.fas {
+	color: #fd9d00;
+}
+/** {*/
+/*	margin: 0;*/
+/*	padding: 0;*/
+/*	list-style: none;*/
+/*}*/
+
+ul {
+	padding: 16px 0;
+}
+
+ul li {
+	display: inline-block;
+	margin: 0 5px;
+	font-size: 14px;
+	letter-spacing: -.5px;
+}
+
+form {
+	padding-top: 16px;
+}
+
+ul li.tag-item {
+	padding: 4px 8px;
+	background-color: #777;
+	color: #000;
+}
+
+.tag-item:hover {
+	background-color: #262626;
+	color: #fff;
+}
+
+.del-btn {
+	font-size: 12px;
+	font-weight: bold;
+	cursor: pointer;
+	margin-left: 8px;
+}
