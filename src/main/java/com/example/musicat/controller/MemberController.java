@@ -84,6 +84,7 @@ public class MemberController {
 	@ResponseBody
 	public Map<String, Object> viewSearchList(@RequestParam("keyword") String keyword, @RequestParam("keyfield") String keyfield,
 			@RequestParam("number") int cur, Criteria crt) {
+		log.info("keyword : " + keyword);
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<MemberVO> lst = null;
 		Paging paging = new Paging();
@@ -92,6 +93,7 @@ public class MemberController {
 			int total = this.memberService.retrieveTotalSearchMember(keyfield, keyword);
 			paging.setCrt(crt);
 			paging.setTotal(total);
+			log.info("keyword : " + keyword);
 			lst = this.memberService.retrieveSearchMember(keyfield, keyword, crt);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -100,6 +102,7 @@ public class MemberController {
 		map.put("keyword", keyword);
 		map.put("paging", paging);
 		map.put("lst", lst);
+		log.info("map : " + map);
 		return map;
 	}
 
