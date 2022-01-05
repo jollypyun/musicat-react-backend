@@ -10,6 +10,7 @@ import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.board.ArticleDao;
 import com.example.musicat.util.BestArticle;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,17 +19,17 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service("articleService")
 @Transactional(readOnly = true)
 public class ArticleServiceImpl implements ArticleService {
 
-	@Autowired private ArticleMapper articleMapper;
-	@Autowired private ArticleDao articleDao;
-	@Autowired private FileService fileService;
-	@Autowired private ReplyService replyService;
-	@Autowired private MemberMapper memberMapper;
-	@Autowired private BestArticle bestArticleUtil;
-
+	private final ArticleMapper articleMapper;
+	private final ArticleDao articleDao;
+	private final FileService fileService;
+	private final MemberMapper memberMapper;
+	private final BestArticle bestArticleUtil;
+	
 
 	@Override
 	@Transactional
@@ -59,7 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	// 게시글 추가
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void registerArticle(ArticleVO article) {
 		this.memberMapper.plusMemberDocs(article.getMemberNo());
 		this.articleDao.insertArticle(article); // 게시글 추가
@@ -70,7 +71,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void modifyArticle(ArticleVO article) {
 		this.articleDao.updateArticle(article);
 		this.fileService.uploadFile(article);
@@ -80,7 +81,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public int removeArticle(int articleNo, int memberNo) {
 		this.memberMapper.minusMemberDocs(memberNo);
 		int boardNo = this.articleDao.selectArticle(articleNo).get(0).getArticle().getBoardNo();
@@ -104,13 +105,13 @@ public class ArticleServiceImpl implements ArticleService {
 
 	// 추천
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void recUpdate(int memberNo, int articleNo) {
-		ArticleVO articleVO = new ArticleVO();
-		articleVO.setMemberNo(memberNo);
-		articleVO.setNo(articleNo);
+		ArticleVO article = new ArticleVO();
+		article.setMemberNo(memberNo);
+		article.setNo(articleNo);
 		this.articleDao.upLikecount(articleNo);
-		this.articleDao.insertLike(articleVO);	
+		this.articleDao.insertLike(article);
 	}
 
 	@Override
@@ -119,7 +120,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 	
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void recDelete(ArticleVO articleVO) {
 		this.articleDao.downLikecount(articleVO.getNo());
 		this.articleDao.deleteLike(articleVO);

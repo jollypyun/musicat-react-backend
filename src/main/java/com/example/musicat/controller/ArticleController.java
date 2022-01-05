@@ -14,6 +14,7 @@ import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.repository.board.ArticleDao;
 import com.example.musicat.util.FileManager;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -36,27 +37,18 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("articles")
 public class ArticleController {
 
-	private ArticleService articleService;
-	private FileManager fileManager;
-	private FileService fileService;
-	private ReplyService replyService;
-	private BoardService boardService;
-	private CategoryService categoryService;
-	private ArticleDao articleDao;
+	private final ArticleService articleService;
+	private final FileManager fileManager;
+	private final FileService fileService;
+	private final ReplyService replyService;
+	private final BoardService boardService;
+	private final CategoryService categoryService;
+	private final ArticleDao articleDao;
 
-	@Autowired
-	public ArticleController(ArticleService articleService, FileManager fileManager, FileService fileService, ReplyService replyService, BoardService boardService, CategoryService categoryService, ArticleDao articleDao) {
-		this.articleService = articleService;
-		this.fileManager = fileManager;
-		this.fileService = fileService;
-		this.replyService = replyService;
-		this.boardService = boardService;
-		this.categoryService = categoryService;
-		this.articleDao = articleDao;
-	}
 
 
 	/**

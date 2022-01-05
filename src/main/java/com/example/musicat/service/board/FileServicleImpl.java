@@ -9,6 +9,7 @@ import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.board.FileVO;
 import com.example.musicat.repository.board.FileDao;
 import com.example.musicat.util.FileManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,17 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service("fiileService")
 public class FileServicleImpl implements FileService {
 
-	@Autowired private FileDao fileDao;
-	@Autowired private FileManager fileManager;
 	@Value("${file.dir}")
 	private String dirPath;
+	private final FileManager fileManager;
+	private final FileDao fileDao;
 
 	// 파일 1개 조회
+	@Override
 	public FileVO selectOneFile(int fileNo){
 		return fileDao.selectFile(fileNo);
 	}
@@ -56,6 +59,7 @@ public class FileServicleImpl implements FileService {
 	}
 
 	// 썸네일 생성
+	@Override
 	public void createThumbnail(FileVO thumbFile) throws IOException {
 		String thumPath = this.dirPath + "thumbnail";
 		if (fileCheck(thumPath, thumbFile.getSystemFileName())) {
@@ -64,6 +68,7 @@ public class FileServicleImpl implements FileService {
 	}
 
 	// file 꺼내서 추출, retirveArticle에서 사용됨
+	@Override
 	public ArticleVO fileList(ArticleVO article, List<FileVO> files) {
 		if (files == null) {
 			return article;

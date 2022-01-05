@@ -5,16 +5,18 @@ import java.util.List;
 import com.example.musicat.domain.board.ReplyVO;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.board.ReplyDao;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
 @Service("replyService")
+@RequiredArgsConstructor
 public class ReplyServiceImpl implements ReplyService {
 
-	@Autowired private ReplyDao replyDao;
-	@Autowired private MemberMapper memberMapper;
+	private final ReplyDao replyDao;
+	private final MemberMapper memberMapper;
 
 
 	@Override
