@@ -152,22 +152,17 @@
 		FROM member
 		WHERE email = #{email}
 	</select>
-	
-	<parameterMap type="Map" id="map">
-		<parameter property="keyword" javaType="string" jdbcType="VARCHAR"/>
-		<parameter property="dataPerPage" javaType="int" jdbcType="INTEGER"/>
-		<parameter property="pageStart" javaType="int" jdbcType="INTEGER"/>
-	</parameterMap>
 
-	<select id="selectSearchMemberByEmail" parameterType="string" resultType="memberVo" resultMap="briefMemberInfo">
+	<select id="selectSearchMemberByEmail" parameterType="Map" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT member_no,email, name, regdate, visits, ban
 		FROM member M RIGHT JOIN grade G
 		ON M.grade_no = G.grade_no
 		WHERE email LIKE CONCAT('%', #{keyword}, '%')
 		ORDER BY member_no ASC, ismember ASC
+		LIMIT #{crt.pageStart}, #{crt.dataPerPage}
 	</select>
 	
-	<select id="selectSearchMemberByGrade" parameterType="string" resultType="memberVo" resultMap="briefMemberInfo">
+	<select id="selectSearchMemberByGrade" parameterType="Map" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT member_no,email, name, regdate, visits, ban
 		FROM member M RIGHT JOIN grade G
 		ON M.grade_no = G.grade_no
@@ -176,6 +171,7 @@
 		FROM grade G
 		WHERE name LIKE CONCAT('%', #{keyword}, '%'))
 		ORDER BY member_no ASC, ismember ASC
+		LIMIT #{crt.pageStart}, #{crt.dataPerPage}
 	</select>
 	
 	<select id="selectTotalSearchMemberByEmail" parameterType="string" resultType="int">
@@ -219,4 +215,5 @@
 		WHERE member_no = #{no}
 		<!-- #{}안에는	MemberVO에서 선언한 변수명과 일치해야 함 -->
 	</insert>
+
 </mapper>

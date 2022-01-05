@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 
 public interface MemberService {
-	public void test();
 
 	public MemberVO login(String email, String password) throws Exception;
 
@@ -16,15 +15,15 @@ public interface MemberService {
     // 회원 총 수
     int retrieveTotalMember() throws Exception;
     // 해당 회원의 상세 조회
-    MemberVO retrieveMemberByManager(int no);
+    MemberVO retrieveMemberByManager(int no)throws Exception;
     // 검색에 해당된 회원 조회
-    ArrayList<MemberVO> retrieveSearchMember(String keyfield, String keyword);
+    ArrayList<MemberVO> retrieveSearchMember(String keyfield, String keyword, Criteria crt) throws Exception;
     // 검색에 해당된 회원의 총 수
-    int retrieveTotalSearchMember(String keyfield, String keyword);
+    int retrieveTotalSearchMember(String keyfield, String keyword) throws Exception;
     // 정지 기간 업데이트
-    void modifyBan(String banSelect, int no);
+    void modifyBan(String banSelect, int no) throws Exception;
     // 회원의 강제 탈퇴
-    void modifyMemberByForce(int no);
+    void modifyMemberByForce(int no) throws Exception;
     // 게시글 등록 시 회원의 게시글 수 변동
     void upMemberDocs(int no);
     // 게시글 삭제 시 회원의 게시글 수 변동
@@ -34,17 +33,14 @@ public interface MemberService {
     // 댓글 삭제 시 회원의 댓글 수 변동
     void downMemberComms(int no);
 
-	ArrayList<MemberVO> retrieveMemberList(int startRow, int memberPerPage);
-
-	
 	// 회원가입
 	MemberVO retreiveMemberProfile(int member_no);
 
 	//회원 자진 탈퇴
 	void modifyMember(int memberNo, String password);
-	
+
 	//비밀번호 재설정
-	void modifyPassword(int memNo, String newPassword);
+	void modifyPassword(int memNo, String newPassword) throws Exception;
 
 	void registerMember(MemberVO mVo);
 
@@ -54,6 +50,6 @@ public interface MemberService {
 
 	boolean retrieveEmail(String email);
 
-
 	int updateTempPassword(MemberVO mVo);
+
 }
