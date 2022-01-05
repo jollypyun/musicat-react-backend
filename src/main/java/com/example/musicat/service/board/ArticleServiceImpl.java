@@ -16,12 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service("articleService")
-@Transactional(readOnly = true)
+@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class ArticleServiceImpl implements ArticleService {
 
 	private final ArticleMapper articleMapper;
@@ -32,7 +33,6 @@ public class ArticleServiceImpl implements ArticleService {
 	
 
 	@Override
-	@Transactional
 	public ArticleVO retrieveArticle(int articleNo) {
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
 		List<TagVO> tags = articleMapper.selectArticleTags(articleNo);
@@ -60,7 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	// 게시글 추가
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void registerArticle(ArticleVO article) {
 		this.memberMapper.plusMemberDocs(article.getMemberNo());
 		this.articleDao.insertArticle(article); // 게시글 추가
@@ -71,7 +71,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void modifyArticle(ArticleVO article) {
 		this.articleDao.updateArticle(article);
 		this.fileService.uploadFile(article);
@@ -81,7 +81,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public int removeArticle(int articleNo, int memberNo) {
 		this.memberMapper.minusMemberDocs(memberNo);
 		int boardNo = this.articleDao.selectArticle(articleNo).get(0).getArticle().getBoardNo();
@@ -105,7 +105,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	// 추천
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void recUpdate(int memberNo, int articleNo) {
 		ArticleVO article = new ArticleVO();
 		article.setMemberNo(memberNo);
@@ -120,7 +120,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 	
 	@Override
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void recDelete(ArticleVO articleVO) {
 		this.articleDao.downLikecount(articleVO.getNo());
 		this.articleDao.deleteLike(articleVO);
@@ -135,7 +135,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional()
 	public void deleteTag(int tagNo) {
 		this.articleDao.deleteTag(tagNo);
 	}
