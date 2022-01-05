@@ -37,9 +37,14 @@
 
 	<!-- admin Toggle-->
 	<button
-		class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
-		id="adminToggle" th:onclick="|location.href='@{/members}'|">
+			class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
+			id="adminToggle" th:onclick="|location.href='@{/members}'|">
 		<i class="fas fa-cog fa-lg"></i>
+	</button>
+	<button
+			class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
+			id="chatToggle" th:onclick="|location.href='#'|">
+		<i class="fas fa-comments fa-lg"></i>
 	</button>
 
 	<!-- alarm Toggle-->
