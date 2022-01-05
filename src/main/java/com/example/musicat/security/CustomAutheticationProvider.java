@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
 @Log
 //인증에 대한 커스텀은 여기서 함
@@ -36,17 +37,18 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("BadCredentialsException");
         }
 
-//        //활동정지 회원 여부 (DisabledException : 계정 비활성화)
-//        if(memberContext.getMemberVo().getBan() != null) {
-//            log.info("ban : " + memberContext.getMemberVo().getBan());
-//            throw new DisabledException("DisabledException");
-//        }
-//
-//        //탈퇴 회원 여부 (AccountExpiredException : 계정만료)
-//        if(memberContext.getMemberVo().getIsMember() != 0) {
-//            System.out.println("ismember : " + memberContext.getMemberVo().getIsMember());
-//            throw new AccountExpiredException("AccountExpiredException");
-//        }
+        //활동정지 회원 여부 (DisabledException : 계정 비활성화)
+        log.info("ban : " + memberContext.getMemberVo().getBan());
+        if(!memberContext.getMemberVo().getBan().equals("")) {
+            log.info("ban : " + memberContext.getMemberVo().getBan());
+            throw new DisabledException("DisabledException");
+        }
+
+        //탈퇴 회원 여부 (AccountExpiredException : 계정만료)
+        if(memberContext.getMemberVo().getIsMember() != 0) {
+            System.out.println("ismember : " + memberContext.getMemberVo().getIsMember());
+            throw new AccountExpiredException("AccountExpiredException");
+        }
 
 //        //휴면 회원 여부
 //        if(memberContext.getMemberVo().getLastDate() 2년이 지났나용? ) {

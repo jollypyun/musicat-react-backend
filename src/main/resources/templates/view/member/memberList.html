@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://thymeleaf.org">
 
 <link th:href="@{../css/memberListStyle.css}" rel="stylesheet" />
 
@@ -14,7 +14,7 @@
 						<option value="email">ID</option>
 						<option value="name">등급</option>
 					</select> <input type="text" id="keyword">
-					<button type="button" id="searchBtn">검색</button>
+					<button type="button" id="searchBtn" onclick="sendData(1)">검색</button>
 
 				</div>
 
@@ -34,7 +34,7 @@
 						<tbody th:each="member : ${lst}" id="memberBody">
 							<tr th:object="${member}">
 								<td th:text="*{no}"></td>
-								<td><a th:href="@{/members/{no}(no=${member.no})}"
+								<td><a th:href="@{/member/{no}(no=${member.no})}"
 									th:text="*{email}"></a></td>
 								<td th:text="*{grade}"></td>
 								<td th:text="*{regDate}"></td>
@@ -43,6 +43,8 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+				<div id="resetSearch">
 				</div>
 				<div class="memberList-paging-style">
 					<div id="paging" th:object="${paging}">
@@ -66,62 +68,72 @@
 	</main>
 </div>
 
-<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<!--<script th:src="@{/js/jquery-3.6.0.min.js}"></script>-->
+<script th:src="@{../js/jquery-3.6.0.min.js}"></script>
 <script>
-	$(document).ready(function() {
-		$('#searchBtn').on('click', function sendData() {
-			const keyfield = $("#keyfield option:selected").val();
-			const keyword = $("#keyword").val();
-			const url = "/members";
-			if (keyword.trim() == "") {
-				alert("검색어를 입력해주세요.");
-				return;
-			}
+	function sendData(currentPageNo) {
 
-			$.ajax({
-				url : url,
-				method : "POST",
-				dataType : "json",
-				data : {
-					keyfield : keyfield,
-					keyword : keyword
-				},
-			success : function(data) {
-				console.log(data.paging);
-				var page = data.paging;
+		const keyfield = $("#keyfield option:selected").val();
+		const keyword = $("#keyword").val();
+		if (keyword.trim() == "") {
+			alert("검색어를 입력해주세요.");
+			return;
+		}
+
+		$.ajax({
+			url: "/members",
+			method: "POST",
+			dataType: "json",
+			data: {
+				number: currentPageNo,
+				keyfield: keyfield,
+				keyword: keyword
+			},
+			success: function(data) {
+				const page = data.paging;
 				$("#memberBody tr").remove();
-				$("#paging").remove();
 				var htmlStr = [];
-				for(let list of data.lst) {
-					htmlStr.push('<tr id=">'+ list.no +'">');
-					htmlStr.push('<td>'+ list.no +'</td>');
-					htmlStr.push('<td><a href=/members/'+ list.no + '>' + list.email +'</a></td>');
-					htmlStr.push('<td>'+ list.grade +'</td>');
-					htmlStr.push('<td>'+ list.regDate +'</td>');
-					htmlStr.push('<td>'+ list.visits +'</td>');
-					htmlStr.push('<td>'+ list.ban +'</td>');
+				for (let list of data.lst) {
+					htmlStr.push('<tr id=">' + list.no + '">');
+					htmlStr.push('<td>' + list.no + '</td>');
+					htmlStr.push('<td><a href=/member/' + list.no + '>' + list.email + '</a></td>');
+					htmlStr.push('<td>' + list.grade + '</td>');
+					htmlStr.push('<td>' + list.regDate + '</td>');
+					htmlStr.push('<td>' + list.visits + '</td>');
+					htmlStr.push('<td>' + list.ban + '</td>');
 					htmlStr.push('</tr>');
 				}
-				console.log(data.paging);
+				console.log(data.lst);
+				console.log(page);
 
 				$('#memberBody').html(htmlStr.join(""));
 
-				
-				htmlStr = [];
-				htmlStr.push('<button type="button" id="replay">원래대로</button>');
-				$('#pageContent').html(htmlStr.join(""));
-				
+				a = '<button type="button" onclick="sendBack()">원래대로</button>';
+				$('#resetSearch').html(a);
+
+				b = '';
+				if(page.prev == true) {
+					b += '<span><a href="#" onclick="sendData(1)">&laquo;</a></span>';
+					b += '<span><a href="#" onclick="sendData(' + (page.startPage - 1) + ')">&lt;</a></span>';
+				}
+				for (var num = page.startPage; num <= page.endPage; num++){
+					b += '<span><a href="#" onclick="sendData(' + num + ')">' + num + '</a></span>';
+				}
+				if(page.next == true) {
+					b += '<span><a href="#" onclick="sendData(' + (page.endPage + 1) + ')">&gt;</a></span>';
+					b += '<span><a href="#" onclick="sendData(' + page.endNumber + ')">&raquo;</a></span>';
+				}
+				$('#paging').html(b);
 			},
-			error : function(err) {
-				console.log(err);
+			error: function(err) {
+				console.log(keyfield);
+				console.log(keyword);
+				console.trace(err);
 			}
 		});
 	}
-	)
-	$(document).on('click', '#replay', function(){
-		location.href = "/members";
-	});
-	
-});
+	function sendBack() {
+		location.href="members";
+	}
 </script>
 </html>

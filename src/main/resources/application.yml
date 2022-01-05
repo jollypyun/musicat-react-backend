@@ -1,7 +1,7 @@
 spring:
   datasource:
     hikari:
-#      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: com.mysql.cj.jdbc.Driver
       jdbc-url: jdbc:mysql://13.124.245.202:3306/musicat
       username: scott
       password: Tiger_1234
@@ -48,6 +48,7 @@ server.error:
 
 file:
   dir: D:/SpringBootHome/petopia2/src/main/resources/static/upload/
+  dir2: C:/Users/MZC/git/musicat/src/main/resources/static/upload/
 
 # hibernate가 생성하는 SQL이 모두 보인다.
 logging:

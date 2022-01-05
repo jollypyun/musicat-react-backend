@@ -8,6 +8,7 @@
         <div class="playListBar">
             <div class="playListBar-inner">
 
+                <!-- 오디오 재생 관련 버튼 -->
                 <div class="playListBar-inner-play-btn">
                     <button id="playlist-prev"><span class="material-icons">skip_previous</span></button>
                     <button id="playlist-pause" style="display: none"><span class="material-icons">pause</span></button>
@@ -15,25 +16,28 @@
                     <button id="playlist-next"><span class="material-icons">skip_next</span></button>
                 </div>
 
+                <!-- 오디오 시간 관련 -->
                 <div class="playListBar-inner-time">
-                    <span class="playListBar-time-current">0:00</span>
-                    <input type="range" value="0" max="100" id="time-progress" class="time-progress"/>
+                    <span class="playListBar-time-current">00:00</span>
+                    <input type="range" value="0" id="time-progress" class="time-progress"/>
                     <span class="playListBar-time-duration">-:--</span>
                 </div>
                 <!-- .time -->
 
+                <!-- 오디오 볼륨 관련 -->
                 <div class="playListBar-inner-volume">
                     <button class="volume-mute-btn" id="volume-mute">
-                        <span class="material-icons">volume_up</span>
-                        <span class="material-icons" style="display: none">volume_off</span>
+                        <span class="material-icons" id="volume-mute-off">volume_up</span>
+                        <span class="material-icons" id="volume-mute-on" style="display: none">volume_off</span>
                     </button>
                     <input
                             type="range"
                             value="100"
                             max="100"
+                            step="1"
                             id="volume-progress"
                             class="volume-progress"
-                            style="display: none"
+
                     />
                 </div>
                 <!-- .volume -->
@@ -51,13 +55,51 @@
 
                 <div class="playListBar-inner-func-btn">
                     <button id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>
-                    <button id="playlist-heart" style="display: none"><span class="material-icons">favorite</span></button>
-                    <button id="playlist-psersonAdd"><span class="material-icons">person_add</span></button>
-                    <button id="playlist-songList"><span class="material-icons">queue_music</span></button>
+                    <button id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>
+                    </button>
+                    <button id="playlist-personAdd"><span class="material-icons">person_add</span></button>
+                    <div class="playlist-dropUp">
+                        <button id="playlist-songList" class="playlist-dropUp-btn"><span class="material-icons">queue_music</span>
+                        </button>
+                        <div id="playlist-dropUp-content" class="playlist-dropUp-content">
+                            <div class="dropUp-inner-title">
+                                <h4>playList</h4>
+                                <div>
+                                    <button><span class="material-icons">delete</span></button>
+                                    <button id="playlist-close"><span class="material-icons">close</span></button>
+                                </div>
+                            </div>
+                            <ul>
+
+                                <li>
+                                    <div class="playlist-dropUp-content-inner">
+                                        <div class="dropUp-inner-info">
+                                            <img src="images/main-4.jpg"/>
+                                            <button><span class="material-icons">play_circle</span></button>
+                                            <div class="dropUp-inner-info-text">
+                                                <span>90sFlaasadadadadadsdadasdaday</span>
+                                                <span>Callassdasdasdasdadsaadsdassdame</span>
+                                            </div>
+                                        </div>
+                                        <div class="dropUp-inner-time">
+                                            <span>2:06</span>
+                                            <button id="song-addInfo"><span class="material-icons">dehaze</span></button>
+                                            <div id="songInfo-dropbox">
+                                                <button >삭제</button>
+                                                <button >플레이리스트 추가</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
 
-                <audio src="" id="audio"></audio>
+                <audio style="display: none" id="audio" controls>
+                    <source src="https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" type="audio/mp3">
+                </audio>
             </div>
         </div>
     </div>

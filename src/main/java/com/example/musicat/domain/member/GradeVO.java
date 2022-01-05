@@ -17,6 +17,7 @@ import lombok.ToString;
 public class GradeVO {
 	private int gradeNo;
 	private String name;
+	private String grade; //양
 	private int docs;
 	private int comms;
 	private int person;
@@ -28,6 +29,4 @@ public class GradeVO {
 		this.docs = docs;
 		this.comms = comms;
 	}
-	
-	
 }

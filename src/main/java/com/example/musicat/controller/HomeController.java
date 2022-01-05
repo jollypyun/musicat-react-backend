@@ -2,6 +2,7 @@ package com.example.musicat.controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
+import com.example.musicat.domain.member.GradeVO;
+import com.example.musicat.mapper.member.GradeMapper;
 import com.example.musicat.security.MemberContext;
 
 import com.example.musicat.domain.board.BestArticleVO;
 
+import com.example.musicat.service.member.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -40,6 +48,10 @@ import lombok.extern.java.Log;
 @Log
 public class HomeController {
 
+
+    @Autowired
+    private GradeService gradeService;
+
 	@Autowired
 	private MemberService memberService;
 	
@@ -55,9 +67,8 @@ public class HomeController {
         return "redirect:/main";
     }
 
-
     @RequestMapping("/musicatlogin")
-	public String index(Model model, HttpServletRequest request) {
+  	public String index(Model model, HttpServletRequest request) {
 		log.info("/musicatlogin------------------------------------");
 
 		if(request.getParameter("email") != null ) {
@@ -75,7 +86,13 @@ public class HomeController {
 	}
 
 
-	@GetMapping("/main")
+//	@PostMapping("/")
+//	public String selfOut(@RequestParam("memberNo") int no, @RequestParam("password") String password) {
+//		this.memberService.modifyMember(no, password);
+//		return "redirect:/musicatlogin";
+//	}
+
+  @GetMapping("/main")
 	public String petopiaMain(Model model, HttpSession session) {
 
 		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
@@ -90,17 +107,27 @@ public class HomeController {
 		CategoryVO categoryVo = new CategoryVO();
 		model.addAttribute("categoryVo", categoryVo);
 
-		MemberVO memberSession = (MemberVO) session.getAttribute("loginUser");
-		if (memberSession == null) {
-			model.addAttribute("isLogin", 0);
-		}
-		else {
-			model.addAttribute("isLogin", 1);
-		}
+
+        //로그인하지 않은 사용자일 경우 ( 로그인한 사용자 정보 처리는 SecurityConfig.java에서 )
+        String auth = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
+		if (auth.equals("[ROLE_ANONYMOUS]")) {
+
+            //익명 사용자에게 gradeNo 부여 ( 게시판 접근 시 필요 )
+            int gradeNo = gradeService.retrieveGradeNo(auth);
+            log.info("auth : " + auth + " gradeNo : " + gradeNo);
+
+            MemberVO member = new MemberVO();
+            member.setGrade(auth);
+            member.setGradeNo(gradeNo);
+
+            session.setAttribute("loginUser", member);
+            log.info("익명 사용자 - grade : " + member.getGrade() + " gradeNo : " + member.getGradeNo());
+
+        }
 
 		return "view/home/viewHomeTemplate";
-	}
 
+    }
 
 	
 	@GetMapping("/join1")
