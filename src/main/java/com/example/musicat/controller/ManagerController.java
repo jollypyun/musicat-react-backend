@@ -1,6 +1,7 @@
 package com.example.musicat.controller;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.example.musicat.domain.etc.DailyStatisticsVO;
 import com.example.musicat.domain.etc.TotalStatisticsVO;
@@ -32,14 +33,42 @@ public class ManagerController {
 	@GetMapping("/petopia-manager/daily")
 	public String managerDaily(Model model) {
 
-		DailyStatisticsVO dailyVo = dailyServiceImpl.retrieve();
-		ArrayList<DailyStatisticsVO> dailyList = dailyServiceImpl.retrieveList();
-		
 		dailyServiceImpl.registerAndmodifyDaily();
-		
+
+		ArrayList<DailyStatisticsVO> dailyList = dailyServiceImpl.retrieveList();
+
+		Calendar calendar = new GregorianCalendar();
+		SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
+
+		String chkDate = SDF.format(calendar.getTime());
+
+
+
+
+
+		if (dailyList.size()==1){
+			calendar.add(Calendar.DATE, -1);
+			chkDate = SDF.format(calendar.getTime());
+
+			dailyList.add(new DailyStatisticsVO(2,chkDate,1,0));
+
+			calendar.add(Calendar.DATE, -1);
+			chkDate = SDF.format(calendar.getTime());
+
+			dailyList.add(new DailyStatisticsVO(3,chkDate,2,0));
+
+
+		}else if (dailyList.size()==2){
+			calendar.add(Calendar.DATE, -1);
+			chkDate = SDF.format(calendar.getTime());
+
+			dailyList.add(new DailyStatisticsVO(3,chkDate,2,0));
+
+		}
+		System.out.println(dailyList);
+
 		model.addAttribute("managerContent", "fragments/StatisticsDailyContent");
 
-		model.addAttribute("dailyOne", dailyVo);
 		model.addAttribute("dailyList", dailyList);
 
 		return "view/home/viewManagerTemplate";
