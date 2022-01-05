@@ -28,7 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void modifyCategory(int categoryNo, String categoryName) {
-		System.out.println("Secireg ---------------- " + categoryNo + " " + categoryName);
 		this.categoryDao.updateCategory(categoryNo, categoryName);
 	}
 
@@ -45,7 +44,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	public ArrayList<CategoryVO> retrieveCategoryList() {
 		ArrayList<CategoryVO> categoryList = this.categoryDao.selectCategoryList();
-		log.info("Service ----------------------------------------" + categoryList.toString());
 		return categoryList;
 	}
 

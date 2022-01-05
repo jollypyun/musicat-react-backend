@@ -27,13 +27,17 @@ public class BoardGradeVO {
 	private int readwrite;
 	private int gradeNo;
 	private String gradeName;
-	//ArrayList<BoardGradeVO> baordGradeList = new ArrayList<>();
+
+
+
+
+	//ArrayList<BoardGradeVO> boardGradeList = new ArrayList<>();
 	
-//	public BoardGradeVO(int readGrade, int writeGrade) {
-//		this.readGrade = readGrade;
-//		this.writeGrade = writeGrade;
-//	}
-//	
+	public BoardGradeVO(int readGrade, int writeGrade) {
+		this.readGrade = readGrade;
+		this.writeGrade = writeGrade;
+	}
+
 	
 	
 	
