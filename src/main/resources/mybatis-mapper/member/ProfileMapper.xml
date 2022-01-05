@@ -14,12 +14,12 @@
 
     <select id="selectProfile" parameterType="int" resultType="profileVo" resultMap="profileAll">
         SELECT member_no, originalfilename, systemfilename, filesize, bio
-        FROM profilePhoto
+        FROM profilephoto
         WHERE member_no = #{no}
     </select>
 
     <update id="updateProfile" parameterType="Map">
-        UPDATE profilePhoto
+        UPDATE profilephoto
         SET originalfilename = #{profile.originalFileName},
             systemfilename = #{profile.systemFileName},
             filesize = #{profile.fileSize}
