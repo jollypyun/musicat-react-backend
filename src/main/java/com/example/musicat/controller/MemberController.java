@@ -62,6 +62,7 @@ public class MemberController {
 								// html 파일명 쓰기)
 	}
 
+	// 회원 목록 조회
 	@GetMapping("/members")
 	public String viewMemberList(Model model, Criteria crt) {
 		List<MemberVO> lst = null;
@@ -80,6 +81,7 @@ public class MemberController {
 		return "view/home/viewManagerTemplate";
 	}
 
+	// 회원 검색
 	@PostMapping("/members")
 	@ResponseBody
 	public Map<String, Object> viewSearchList(@RequestParam("keyword") String keyword, @RequestParam("keyfield") String keyfield,
@@ -106,6 +108,7 @@ public class MemberController {
 		return map;
 	}
 
+	// 회원 상세 조회
 	@GetMapping("/member/{no}")
 	public String viewMemberDetail(Model model, @PathVariable int no) throws Exception{
 		try {
@@ -121,6 +124,7 @@ public class MemberController {
 		}
 	}
 
+	// 회원 활동 정지
 	@PostMapping("/memberBan/{no}")
 	public String updateBanDate(@PathVariable int no, @RequestParam String banSelect) throws Exception{
 		try {
@@ -132,6 +136,7 @@ public class MemberController {
 		}
 	}
 
+	// 회원 강제 탈퇴
 	@PostMapping("/memberOut/{no}")
 	public String updateOutByManager(@PathVariable int no) throws Exception{
 		try {

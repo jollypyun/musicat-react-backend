@@ -47,11 +47,25 @@ public class ProfileController {
         }
     }
 
-    // 프로필 이미지 출력
+    // 프로필 미리보기 출력
     @ResponseBody
-    @GetMapping("/profileImage/{filename}")
-    public Resource showProfileImage(@PathVariable String filename) throws MalformedURLException {
+    @GetMapping("/profileTempImage/{filename}")
+    public Resource showProfileTempImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + this.dir2 + "profile/" + filename);
+    }
+
+    // 프로필 이미지
+    @ResponseBody
+    @GetMapping("/profileImage/{no}")
+    public Resource showProfileImage(@PathVariable int no) throws MalformedURLException {
+        try{
+            ProfileVO profile = profileService.retrieveProfile(no);
+            String filename = profile.getSystemFileName();
+            return new UrlResource("file:" + this.dir2 + "profile/" + filename);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // 프로필 수정
