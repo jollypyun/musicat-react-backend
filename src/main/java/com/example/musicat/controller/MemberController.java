@@ -49,11 +49,15 @@ public class MemberController {
 //	회원가입
 	@PostMapping("/join") // 이걸 실행하는 값의 주소
 	public String joinMember(MemberVO mVo) {
+		try{
+			this.memberService.registerMember(mVo);
+			this.profileService.addProfile(mVo.getNo());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		log.info("비밀번호 : " + mVo.getPassword() + " 이메일 : " + mVo.getEmail() + " 닉네임 : " + mVo.getNickname());
 		mVo.setPassword(encodePwd.encode(mVo.getPassword())); //비밀번호 암호화
 		log.info("비밀번호(암호화) : " + mVo.getPassword());
-		this.memberService.registerMember(mVo);
-    profileService.addProfile(mVo.getNo());
 		return "redirect:/musicatlogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
 								// html 파일명 쓰기)
 	}
