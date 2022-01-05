@@ -9,5 +9,6 @@ public class ChatVO {
     private String roomId;
     private String writer;
     private String message;
+    private boolean isSystem = false;
 
 }
