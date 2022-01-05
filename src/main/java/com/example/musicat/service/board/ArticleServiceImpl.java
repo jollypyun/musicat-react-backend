@@ -32,7 +32,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional
-	public ArticleVO retrieveArticle(int articleNo) { // 세부 조회
+	public ArticleVO retrieveArticle(int articleNo) {
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
 		List<TagVO> tags = articleMapper.selectArticleTags(articleNo);
 		System.out.println("ArticleServiceImpl.retrieveArticle: results : " + results.size());
@@ -112,7 +112,7 @@ public class ArticleServiceImpl implements ArticleService {
 		this.articleDao.upLikecount(articleNo);
 		this.articleDao.insertLike(articleVO);	
 	}
-//	
+
 	@Override
 	public int totalRecCount(int articleNo) {
 		return this.articleDao.totalRecCount(articleNo);
@@ -125,7 +125,6 @@ public class ArticleServiceImpl implements ArticleService {
 		this.articleDao.deleteLike(articleVO);
 	}
 
-	// 추천 여부 체크
 	@Override
 	public int likeCheck(int memberNo, int ArticleNo) {
 		ArticleVO art = new ArticleVO();
