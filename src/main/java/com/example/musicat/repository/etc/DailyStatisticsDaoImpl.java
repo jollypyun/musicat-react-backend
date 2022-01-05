@@ -25,6 +25,7 @@ public class DailyStatisticsDaoImpl implements DailyStatisticsDao {
 		dailyVo = dailyMapper.selectDaily();
 		dailyVo.setDailyDate((dailyVo.getDailyDate().split(" ")[0]));
 		System.out.println("dailyVo Dao : "+dailyVo);
+
 		return dailyVo;
 	}
 
