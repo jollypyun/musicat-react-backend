@@ -24,12 +24,14 @@ public class DailyStatisticsDaoImpl implements DailyStatisticsDao {
 	public DailyStatisticsVO selectDaily() {
 		dailyVo = dailyMapper.selectDaily();
 		dailyVo.setDailyDate((dailyVo.getDailyDate().split(" ")[0]));
+		System.out.println("dailyVo Dao : "+dailyVo);
 		return dailyVo;
 	}
 
 	@Override
 	public ArrayList<DailyStatisticsVO> selectList() {
 		ArrayList<DailyStatisticsVO> dailyVo = dailyMapper.selectList();
+		System.out.println("dailyList Dao : "+dailyVo);
 		for (DailyStatisticsVO dailyStatisticsVO : dailyVo) {
 			dailyStatisticsVO.setDailyDate((dailyStatisticsVO.getDailyDate().split(" ")[0]));
 

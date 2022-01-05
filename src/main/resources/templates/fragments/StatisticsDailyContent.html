@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
-<link th:href="@{../css/StatisticsStyle.css}" rel="stylesheet" />
+<link th:href="@{/css/StatisticsStyle.css}" rel="stylesheet" />
 <!-- 차트 링크 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
@@ -17,8 +17,8 @@
 
 						<tr>
 							<!-- <td th:onclick="|location.href='@{/manager/daily}'|"> -->
-							<td th:onclick="|location.href='@{/petopia-manager/daily}'|">일일 통계</td>
-							<td th:onclick="|location.href='@{/petopia-manager/total}'|">총 통계</td>
+							<td th:onclick="|location.href='@{/manager/daily}'|">일일 통계</td>
+							<td th:onclick="|location.href='@{/manager/total}'|">총 통계</td>
 						</tr>
 					</table>
 				</div>
@@ -70,21 +70,21 @@
 	var chBar = document.getElementById("myChart");
 	var chartData = {
 		labels : [ "[[ ${dailyList[2].dailyDate} ]]",
-				"[[ ${dailyList[1].dailyDate} ]]",
-				"[[ ${dailyList[0].dailyDate} ]]", ],
+			"[[ ${dailyList[1].dailyDate} ]]",
+			"[[ ${dailyList[0].dailyDate} ]]", ],
 		datasets : [
-				{
-					data : [ "[[ ${dailyList[2].dailyArticle} ]]",
-							"[[ ${dailyList[1].dailyArticle} ]]",
-							"[[ ${dailyList[0].dailyArticle} ]]", ],
-					backgroundColor : colors[0],
-				},
-				{
-					data : [ "[[ ${dailyList[2].dailyVisits} ]]",
-							"[[ ${dailyList[1].dailyVisits} ]]",
-							"[[ ${dailyList[0].dailyVisits} ]]", ],
-					backgroundColor : colors[1],
-				}, ],
+			{
+				data : [ "[[ ${dailyList[2].dailyArticle} ]]",
+					"[[ ${dailyList[1].dailyArticle} ]]",
+					"[[ ${dailyList[0].dailyArticle} ]]", ],
+				backgroundColor : colors[0],
+			},
+			{
+				data : [ "[[ ${dailyList[2].dailyVisits} ]]",
+					"[[ ${dailyList[1].dailyVisits} ]]",
+					"[[ ${dailyList[0].dailyVisits} ]]", ],
+				backgroundColor : colors[1],
+			}, ],
 	};
 	var myChart = new Chart(chBar, {
 		// 챠트 종류를 선택
