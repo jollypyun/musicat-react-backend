@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8"/>
 
 <!--<script th:src="@{../js/detailArticle.js}"></script>-->
@@ -75,7 +76,7 @@
 										<td colspan="2">
 											<div class="detailArticle-btn-style">
 												<div class="detailArticle-function-style">
-													<button id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
+													<button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
 													 <input type="button"
 														th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"
 														value="목록" />

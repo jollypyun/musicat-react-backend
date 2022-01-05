@@ -42,7 +42,7 @@ public class FileController {
 	@ResponseBody
 	@GetMapping("/thumbnailImages/{filename}")
 	public Resource downLoadThumbnailImage(@PathVariable String filename) throws MalformedURLException{
-		String thumPath = "thumbnail /thumb" + filename;
+		String thumPath = "thumbnail/thumb" + filename;
 		log.info("thumbPath:" +thumPath);
 		log.info("GetPufsflasthumbPath:" + fileManager.getFullPath(thumPath));
 		return new UrlResource("file:" + fileManager.getFullPath(thumPath));
