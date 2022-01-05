@@ -61,6 +61,7 @@
 				<li><hr class="dropdown-divider" /></li> -->
 <!--				<li><a class="dropdown-item" href="/myPage/Playlist">Profile</a></li>-->
 <!--				<li>Profile</a></li>-->
+
 				<li th:if="${#authorization.expr('isAuthenticated()')}">
 					<a class="dropdown-item" href="/myPage/Playlist">
 					<span th:text="${session.loginUser.email}"></span>
@@ -79,7 +80,7 @@
 
 <!--				로그인한 사용자 -->
 				<li th:if="${#authorization.expr('isAuthenticated()')}"><a class="dropdown-item" href="/logout">Logout</a></li>
-<!--				로그인하지 않은 사용자-->
+<!--&lt;!&ndash;				로그인하지 않은 사용자&ndash;&gt;-->
 				<li th:if="${#authorization.expr('isAnonymous()')}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>
 
 				<li><hr class="dropdown-divider" /></li>

@@ -108,8 +108,8 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
-	@Override // 회원의 정지기간 업데이트
 	@Transactional
+	@Override // 회원의 정지기간 업데이트
 	public void modifyBan(String banSelect, int no) throws Exception{
 		if (banSelect.equals("7d")) {
 			this.memberMapper.updateBan7days(no);
@@ -171,7 +171,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-
 	public void updatePassword(MemberVO memberVo) {
 		// TODO Auto-generated method stub
 		this.memberdao.updatePassword(memberVo);

@@ -16,9 +16,7 @@ public interface FileMapper {
 
 	List<FileVO> selectThumbFile(FileVO fileVo);
 	
-	 void deleteFile(int FileNo); // 삭제
-	 
-	 void allDelete(int articleNo);
+	void deleteFile(int FileNo); // 삭제
 
-	 List<FileVO> selectArticleFiles(int articleNo);
+	List<FileVO> selectArticleFiles(int articleNo);
 }

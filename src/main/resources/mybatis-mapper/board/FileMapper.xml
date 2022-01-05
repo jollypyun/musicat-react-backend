@@ -49,9 +49,5 @@
 		DELETE FROM file WHERE file_no = #{no}
 	</delete>
 	
-	<delete id="allDelete" parameterType="int">
-		DELETE FROM file WHERE article_no = #{articleNo}
-	</delete>
-	
-	
+
 </mapper>

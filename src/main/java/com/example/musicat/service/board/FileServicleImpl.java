@@ -20,17 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service("fiileService")
 public class FileServicleImpl implements FileService {
 
-	public FileServicleImpl() {
-	}
-
-	@Autowired
-	private FileDao fileDao;
-	@Autowired
-	private FileManager fileManager;
+	@Autowired private FileDao fileDao;
+	@Autowired private FileManager fileManager;
 	@Value("${file.dir}")
 	private String dirPath;
 
-
+	// 파일 1개 조회
 	public FileVO selectOneFile(int fileNo){
 		return fileDao.selectFile(fileNo);
 	}
@@ -90,7 +85,7 @@ public class FileServicleImpl implements FileService {
 		File files[] = dir.listFiles();
 		int pos = path.length();
 		for (File file : files) {
-			log.info("files:" + file.toString());
+			log.info("FileServiceImpl.fileCheck: files:" + file.toString());
 			String fileName = file.toString().substring(pos + 1);
 			if (fileName.equals(systemFileName)) { // 첨부파일 중복검사
 				return false;
@@ -118,11 +113,6 @@ public class FileServicleImpl implements FileService {
 		this.fileDao.deleteFile(fileNo);
 	}
 	
-	@Override
-	public void allDelete(int articleNo) {
-		this.fileDao.allDelete(articleNo);
-	}
-
 	@Override
 	public List<FileVO> selectArticleFiles(int articleNo) {
 		return this.fileDao.selectArticleFiles(articleNo);
