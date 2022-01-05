@@ -2,6 +2,7 @@ package com.example.musicat.mapper.member;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.example.musicat.domain.member.GradeVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface GradeMapper {
 	// 등급 조회
-	ArrayList<GradeVO> selectGradeList();
+	// ArrayList<GradeVO> selectGradeList();
 
 	// 등급 수정
 	void updateGrade(GradeVO grade) throws Exception;
@@ -40,4 +41,10 @@ public interface GradeMapper {
 	
 	// 등급 번호 재정렬
 	void fillEmptyNum() throws Exception;
+	
+	// 양 - 특정 등급의 등급 번호 조회
+	Integer selectGradeNo(String auth);
+
+	// 등급 목록 조회
+	ArrayList<GradeVO> selectGradeList();
 }

@@ -15,9 +15,11 @@ import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.repository.board.ArticleDao;
 import com.example.musicat.util.FileManager;
+import org.apache.catalina.session.StandardSession;
 import org.apache.commons.text.StringEscapeUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,18 +75,23 @@ public class ArticleController {
 	@GetMapping("/{articleNo}")
 	public String detailArticle(@PathVariable("articleNo") int articleNo,HttpServletRequest request,HttpServletResponse response, Model model) {
 		// create
+		log.info("authAnon = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+
 		HttpSession session = request.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+
 		ArticleVO article = this.articleService.retrieveArticle(articleNo);
+		log.info("-------" + article.toString());
 		int boardNo = article.getBoardNo();
 		int gradeNo = member.getGradeNo();
 		boolean grade = this.boardService.retrieveAllReadBoard(boardNo, gradeNo);
-
+		//boolean grade = true;
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 
 		// side bar -------------
 		if (grade) {
+			log.info("sidebar");
 			int memberNo = member.getNo();
 			model.addAttribute("loginMemberNo", memberNo);
 			this.articleService.upViewcount(articleNo); // 조회수 증가
@@ -104,7 +111,7 @@ public class ArticleController {
 			
 			// side bar -------------
 			model.addAttribute("article", result);
-			log.info("detail 넘기는 aritcle: {}", article.toString());
+			//log.info("detail 넘기는 aritcle: {}", article.toString());
 			model.addAttribute("HomeContent", "/view/board/detailArticle");
 		} else {
 			model.addAttribute("HomeContent", "/view/board/accessDenied");

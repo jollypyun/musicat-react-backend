@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service("memberService") // 얘는 서비스다
+@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
 
 	@Autowired
@@ -50,9 +51,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override //비밀번호 재설정
-	public void modifyPassword(int memNo, String newPassword) {
+	@Transactional
+	public void modifyPassword(int memNo, String newPassword) throws Exception{
 		memberdao.updatePassword(memNo, newPassword);
-
 	}
 	
 //	@Override
@@ -65,46 +66,40 @@ public class MemberServiceImpl implements MemberService {
 //		return member;
 //	}
 
-	@Override
-	public void test() {
-
-	}
-
-
-
 	@Override // 회원 목록 조회
 	public ArrayList<MemberVO> retrieveMemberList(Criteria crt) throws Exception {
 		return this.memberMapper.selectMemberList(crt);
 	}
 
-	@Override
+	@Override // 회원의 총 수
 	public int retrieveTotalMember() throws Exception {
 		return this.memberMapper.selectTotalMember();
 	}
 
 	@Override // 회원 상세 조회
-	public MemberVO retrieveMemberByManager(int no) {
+	public MemberVO retrieveMemberByManager(int no) throws Exception {
 		return this.memberMapper.selectMemberByManager(no);
 	}
 
 
 
 	@Override // 회원 검색 조회
-	public ArrayList<MemberVO> retrieveSearchMember(String keyfield, String keyword) {
+	public ArrayList<MemberVO> retrieveSearchMember(String keyfield, String keyword, Criteria crt) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 	
 		map.put("keyword", keyword);
+		map.put("crt", crt);
 
 
 		if (keyfield.equals("email")) {
-			return this.memberMapper.selectSearchMemberByEmail(keyword);
+			return this.memberMapper.selectSearchMemberByEmail(map);
 		} else {
-			return this.memberMapper.selectSearchMemberByGrade(keyword);
+			return this.memberMapper.selectSearchMemberByGrade(map);
 		}
 	}
 
 	@Override // 회원 검색 총 수
-	public int retrieveTotalSearchMember(String keyfield, String keyword) {
+	public int retrieveTotalSearchMember(String keyfield, String keyword) throws Exception{
 		if(keyfield.equals("email")) {
 			return this.memberMapper.selectTotalSearchMemberByEmail(keyword);
 		}
@@ -114,7 +109,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override // 회원의 정지기간 업데이트
-	public void modifyBan(String banSelect, int no) {
+	@Transactional
+	public void modifyBan(String banSelect, int no) throws Exception{
 		if (banSelect.equals("7d")) {
 			this.memberMapper.updateBan7days(no);
 		} else if (banSelect.equals("1d")) {
@@ -125,7 +121,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override // 회원의 강제 탈퇴
-	public void modifyMemberByForce(int no) {
+	@Transactional
+	public void modifyMemberByForce(int no)throws Exception {
 		this.memberMapper.updateMemberByForce(no);
 	}
 
@@ -174,12 +171,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public ArrayList<MemberVO> retrieveMemberList(int startRow, int memberPerPage) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 
 	public void updatePassword(MemberVO memberVo) {
 		// TODO Auto-generated method stub
@@ -198,4 +189,5 @@ public class MemberServiceImpl implements MemberService {
 		}
 		return result;
 	}
+
 }
