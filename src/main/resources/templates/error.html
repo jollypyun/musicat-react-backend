@@ -1,18 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Error</title>
+    <title>잘못된 요청입니다.</title>
 </head>
 <body>
-
-Error : <br>
-[[${exception.getMessage()}]] <br>
-
-<ul>
-    <th:block th:each="stack : ${exception.getStackTrace()}">
-        <li th:text="${stack}"></li>
-    </th:block>
-</ul>
+    <h3 th:text="${msg}"></h3>
+    <p th:text="${exception}"></p>
+    <p th:text="${exception.stackTrace}"></p>
 </body>
 </html>

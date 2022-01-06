@@ -1,3 +1,4 @@
+
 package com.example.musicat.config;
 
 import java.util.Properties;
@@ -15,6 +16,7 @@ import com.example.musicat.filter.LoginFilter;
 @Configuration
 public class FilterConfig {
 
+
 //	@Bean
 //	public FilterRegistrationBean<Filter> loginFilter() {
 //		FilterRegistrationBean<Filter> filterbean = new FilterRegistrationBean<Filter>();
@@ -24,5 +26,8 @@ public class FilterConfig {
 //
 //		return filterbean;
 //	}
+
+//}
+
 
 }

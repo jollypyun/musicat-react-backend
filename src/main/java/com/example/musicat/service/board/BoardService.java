@@ -12,7 +12,7 @@ public interface BoardService {
 	
 	public void registerBoard(BoardVO boardVo, BoardGradeVO boardGradeVo);
 	
-	public ArrayList<BoardVO> retrieveBoardkind(); 
+	public ArrayList<BoardVO> retrieveBoardkind();
 	
 	public int retrieveConnectArticle(int boardNo);
 	

@@ -7,18 +7,32 @@ import java.util.Map;
 
 import com.example.musicat.domain.member.GradeVO;
 import com.example.musicat.mapper.member.GradeMapper;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+@Log
 @Service("gradeService")
 public class GradeServiceImpl implements GradeService{
 	@Autowired private GradeMapper gradeMapper;
-	
+
+	// 양 ~
+
+	@Override
+	public Integer retrieveGradeNo(String auth) {
+		auth = auth.replace("[", "");
+		auth = auth.replace("]", "");
+		int gradeNo = this.gradeMapper.selectGradeNo(auth);
+		log.info("auth : " + auth + " gradeNo : " + gradeNo);
+		return gradeNo;
+	}
+
 	@Override
 	public ArrayList<GradeVO> retrieveGradeList() throws Exception {
 		return this.gradeMapper.selectGradeList();
 	}
+
+	// ~ 양
 
 	@Override
 	public void modifyGrade(GradeVO grade) throws Exception {

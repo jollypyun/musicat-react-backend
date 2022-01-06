@@ -10,9 +10,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 
-@Repository("memberMapper")
 @Mapper
 public interface MemberMapper {
+
+	// 양 : Session에 담을 회원 정보
+	public MemberVO selectMemberByEmail(String email);
+
 	public MemberVO selectMember_byIDPwd(String email, String password) throws Exception;
 
 	public void updateLastDdate(int no) throws Exception;
@@ -22,7 +25,7 @@ public interface MemberMapper {
 	// 연주 ----------------------------------------
 	// 회원 가입
 	void insertMember(MemberVO mVo);
-	void insertMemberNo(HashMap<String, Object> mVo);
+
 
 	// 회원가입 시 이메일 중복체크
 	String selectEmail(String email);
@@ -32,9 +35,11 @@ public interface MemberMapper {
 	void updateMember(MemberVO memberVO);
 	//void updateMember(int no);
 
-	// 비밀번호 재설정
+	// 비밀번호 변경
 	void updatePassword(int memNo, String newPassword);
 	// 끝 -----------------------------------------------
+
+
 
 	// 회원 목록 조회
 	ArrayList<MemberVO> selectMemberList(Criteria crt) throws Exception;
@@ -79,10 +84,10 @@ public interface MemberMapper {
 	// boolean selectNickname(String nickname);
 
 	// 이메일 검색에 해당된 회원 조회
-	ArrayList<MemberVO> selectSearchMemberByEmail(String keyword);
+	ArrayList<MemberVO> selectSearchMemberByEmail(Map<String, Object> map);
 
 	// 이메일 검색에 해당된 회원 조회
-	ArrayList<MemberVO> selectSearchMemberByGrade(String keyword);
+	ArrayList<MemberVO> selectSearchMemberByGrade(Map<String, Object> map);
 
 	// 이메일 검색에 해당된 회원의 총 수
 	int selectTotalSearchMemberByEmail(String keyword);
@@ -91,4 +96,5 @@ public interface MemberMapper {
 	int selectTotalSearchMemberByGrade(String keyword);
 	
 	void updatePassword(MemberVO memberVo);
+
 }

@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface MemberDao {
+
+	// 양 ~
+	public MemberVO selectMemberByEmail(String email);
+
+	// ~ 양
+
 	public void test();
 
 	public MemberVO selectMember(int no);
@@ -17,7 +23,7 @@ public interface MemberDao {
 
 	// 회원 가입
 	void insertMember(MemberVO mVo);
-	void insertMemberNo(HashMap<String, Object> mVo);
+
 
 	// 회원가입 시 이메일 중복확인
 	String selectEmail(String email);
@@ -35,6 +41,7 @@ public interface MemberDao {
 
 	boolean selectNickname(String nickname);
 
+	//비밀번호 변경
 	void updatePassword(MemberVO memberVo);
 
 

@@ -2,15 +2,24 @@ spring:
   datasource:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
+
       jdbc-url: jdbc:mysql://127.0.0.1:3306/petopia
       username: root
       password: mymysql
+
       connection-timeout: 20000
       minimum-idle: 5
       maximum-pool-size: 20
       idle-timeout: 300000
       max-lifetime: 1200000
       auto-commit: true
+  thymeleaf:
+    cache: false
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      location: d:\\temp\\spring_uploaded_files
 
   mail:
     default-encoding: UTF-8
@@ -30,13 +39,35 @@ spring:
           ssl:
             enable: true
             trust: smtp.naver.com
+#  servlet:
+#    multipart:
+#      max-file-size: 10MB
+#      max-request-size: 10MB
+
+
+
+server.error:
+  include-exception: true
+  include-stacktrace: always
 
 file:
-  dir: D:/SpringBootHome/petopia2/src/main/resources/static/upload/
+  dir: /upload
+#  dir: D:/SpringBootHome/musicat/src/main/resources/static/upload/
+#  dir2: D:/SpringBootHome/musicat/src/main/resources/static/upload/
+#  dir2: C:/Users/MZC/git/musicat/src/main/resources/static/upload/
 
 # hibernate가 생성하는 SQL이 모두 보인다.
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+#      jdbc-url: jdbc:mysql://13.124.245.202:3306/musicat_temp
+#      username: scott
+#      password: Tiger_1234
+#      jdbc-url: jdbc:mysql://localhost:3306/musicat
+#      username: root
+#      password: mymysql
+
+
 

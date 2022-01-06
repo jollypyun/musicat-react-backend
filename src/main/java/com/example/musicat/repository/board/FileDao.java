@@ -1,19 +1,27 @@
 package com.example.musicat.repository.board;
 
+import java.io.File;
 import java.util.List;
 
 import com.example.musicat.domain.board.FileVO;
 
 public interface FileDao {
+
+	//파일 1개 조회
 	FileVO selectFile(int fileNo);
 
-	List<FileVO> selectFileList(int articleNo); // 해당 게시글의 파일들 다 불러와
+	//게시글의 모든 파일 조회
+	List<FileVO> selectFileList(int articleNo);
 
-	List<FileVO> selectThumbFile(FileVO file); // 썸네일 추출을 위해 위랑은 조건문이 다르다
+	//썸네일 추출 FileType Collumn을 가지고 조회
+	List<FileVO> selectThumbFile(FileVO file);
 
-	void insertFile(FileVO fileVO); // 추가
+	//파일 등록
+	void insertFile(FileVO fileVO);
 
-	void deleteFile(int FileNo); // 삭제
+	//파일 삭제
+	void deleteFile(int FileNo);
 	
-	void allDelete(int articleNo);
+	//게시글의 모든 파일 조회회
+	List<FileVO> selectArticleFiles(int articleNo);
 }

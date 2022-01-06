@@ -28,6 +28,8 @@
 
 .detailArticle-btn-style{
 	display: flex;
+	align-items: center;
+
 }
 
 .detailArticle-function-style{
@@ -104,4 +106,48 @@
 	margin-right: 10px;
 }
 
+
+/** {*/
+/*	margin: 0;*/
+/*	padding: 0;*/
+/*	list-style: none;*/
+/*}*/
+
+.tag-ul li {
+	display: inline-block;
+	margin: 0 5px;
+	font-size: 14px;
+	letter-spacing: -.5px;
+}
+
+
+.detail-content-style {
+	padding-top: 16px;
+}
+
+.tag-ul li.tag-item {
+	padding: 4px 8px;
+	background-color: #cbffb4;
+	color: #000;
+	border-radius: 10px;
+	margin-bottom: 4px;
+}
+
+.tag-item:hover {
+	background-color: #262626;
+	color: #fff;
+}
+
+.del-btn {
+	font-size: 12px;
+	font-weight: bold;
+	cursor: pointer;
+	margin-left: 8px;
+}
+
+
+/*댓글 등록 시 내용을 입력하지 않았을 때*/
+.changeplaceholder::placeholder{
+	color: red;
+}
 
