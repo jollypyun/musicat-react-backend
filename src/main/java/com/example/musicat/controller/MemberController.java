@@ -120,8 +120,9 @@ public class MemberController {
 			System.out.println(model);
 			return "view/home/viewManagerTemplate";
 		} catch (Exception e) {
-			e.printStackTrace();
-			return "/error";
+//			e.printStackTrace();
+//			return "/error";
+			return null;
 		}
 	}
 
@@ -145,7 +146,8 @@ public class MemberController {
 			return "redirect:/members";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "/error";
+//			return "/error";
+			return null;
 		}
 	}
 
