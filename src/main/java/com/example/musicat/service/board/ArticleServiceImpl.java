@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 @Service("articleService")
-//@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class ArticleServiceImpl implements ArticleService {
 
 	private final ArticleMapper articleMapper;
@@ -31,8 +30,9 @@ public class ArticleServiceImpl implements ArticleService {
 	private final MemberMapper memberMapper;
 	private final BestArticle bestArticleUtil;
 	
-//webhookTest용
+
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public ArticleVO retrieveArticle(int articleNo) {
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
 		List<TagVO> tags = articleMapper.selectArticleTags(articleNo);
