@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('git Pull') {
             steps {
-                git branch: 'develop', changelog: false, poll: false, credentialsId:'musicat-access-token-2', url: 'https://github.com/jhk1231/musicat.git'
+                git branch: 'main', changelog: false, poll: false, credentialsId:'musicat-access-token-2', url: 'https://github.com/jhk1231/musicat.git'
             }
         }
         
