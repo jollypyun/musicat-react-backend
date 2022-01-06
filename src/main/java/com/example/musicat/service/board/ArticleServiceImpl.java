@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 @Service("articleService")
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+//@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class ArticleServiceImpl implements ArticleService {
 
 	private final ArticleMapper articleMapper;

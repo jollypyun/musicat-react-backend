@@ -23,6 +23,10 @@
 							<img th:src="|/thumbnailImages/${article.getThumbnail().getSystemFileName()}|" alt="" style="width:190px;height: 150px;">
 							<span class="thumb"><a th:href="|/${article.no}|">
 									<strong th:text="${article.subject}"></strong></a></span>
+							<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
+							<a th:text="${article.nickname}"></a>
+							<a th:href="|/myPage/Playlist/${article.memberNo}|">myPage</a>
+							<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
 							<p th:text="${article.writeDate}"></p>
 						</li>
 					</ui>

@@ -96,6 +96,7 @@ public class ArticleController {
 //			article.setContent(escapeContent);
 
 			model.addAttribute("article", result);
+			log.info("detailArticle: {}", result.toString());
 			model.addAttribute("HomeContent", "/view/board/detailArticle");
 		} else {
 			model.addAttribute("HomeContent", "/view/board/accessDenied");
