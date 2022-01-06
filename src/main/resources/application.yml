@@ -52,7 +52,8 @@ server.error:
   include-stacktrace: always
 
 file:
-  dir: D:/SpringBootHome/musicat/src/main/resources/static/upload/
+  dir: /upload
+#  dir: D:/SpringBootHome/musicat/src/main/resources/static/upload/
 #  dir2: D:/SpringBootHome/musicat/src/main/resources/static/upload/
 #  dir2: C:/Users/MZC/git/musicat/src/main/resources/static/upload/
 
