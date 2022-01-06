@@ -35,11 +35,7 @@ public class ReplyDaoImpl implements ReplyDao {
 		this.replyMapper.deleteReply(replyNo);
 	}
 	
-	@Override
-	public void allDelete(int articleNo) {
-		this.replyMapper.allDelete(articleNo);
-	};
-	
+
 	
 
 }

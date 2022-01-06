@@ -97,7 +97,7 @@ public class HomeController {
 
 		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
 		model.addAttribute("articleList", allArticleList);
-        List<BestArticleVO> bestArticles = articleService.selectAllBestArticle();
+        List<BestArticleVO> bestArticles = this.articleService.selectAllBestArticle();
         model.addAttribute("bestArticles", bestArticles);
 
         model.addAttribute("HomeContent","fragments/viewMainContent");

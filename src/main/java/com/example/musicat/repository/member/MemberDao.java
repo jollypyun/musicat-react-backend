@@ -41,6 +41,7 @@ public interface MemberDao {
 
 	boolean selectNickname(String nickname);
 
+	//비밀번호 변경
 	void updatePassword(MemberVO memberVo);
 
 
