@@ -16,11 +16,11 @@ spring:
       auto-commit: true
   thymeleaf:
     cache: false
-  servlet:
-    multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
-      location: d:\\temp\\spring_uploaded_files
+#  servlet:
+#    multipart:
+#      max-file-size: 50MB
+#      max-request-size: 50MB
+#      location: d:\\temp\\spring_uploaded_files
 
   mail:
     default-encoding: UTF-8
