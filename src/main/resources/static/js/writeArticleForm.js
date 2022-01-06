@@ -40,7 +40,7 @@ $(document).ready(function (){
                     // 태그 중복 검사
                     if (result.length == 0) {
                         $("#tag-list")
-                            .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+                            .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>X</span></li>");
                         addTag(tagValue);
                         self.val("");
                     } else {
