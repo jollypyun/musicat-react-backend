@@ -1,109 +1,149 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <nav class="sb-topnav navbar navbar-expand navbar-dark bg-header-color">
+    <!-- Navbar Brand-->
+    <a class="navbar-brand ps-4 fw-bold" href="/main">Musicat</a>
 
+    <!-- Sidebar Toggle-->
+    <button
+      class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
+      id="sidebarToggle"
+      href="#!"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
 
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-header-color">
-	<!-- Navbar Brand-->
-	<a class="navbar-brand ps-4 fw-bold " href="/main">Musicat</a>
+    <!-- Navbar Search-->
+    <!--	<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">-->
+    <form
+      id="all_search_form"
+      action="/articles/board/search"
+      method="get"
+      class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"
+    >
+      <div id="search_area" class="input-group">
+        <select id="keyword" name="keyword" class="btn btn-primary">
+          <option value="subject">제목</option>
+          <option value="nickname">작성자</option>
+          <option value="tagname">태그</option>
+        </select>
+        <input
+          type="text"
+          id="search_content"
+          name="content"
+          class="form-control"
+          placeholder="검색어를 입력해 주세요."
+        />
+        <button id="search_btn" class="btn btn-primary">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
+    <!--		<div class="input-group">-->
+    <!--			<input class="form-control" type="text" placeholder="Search for..."-->
+    <!--				aria-label="Search for..." aria-describedby="btnNavbarSearch" />-->
+    <!--			<button class="btn btn-primary" id="btnNavbarSearch" type="button">-->
+    <!--				<i class="fas fa-search"></i>-->
+    <!--			</button>-->
+    <!--		</div>-->
+    <!--	</form>-->
 
-	<!-- Sidebar Toggle-->
-	<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
-		id="sidebarToggle" href="#!">
-		<i class="fas fa-bars"></i>
-	</button>
+    <!-- admin Toggle-->
 
-	<!-- Navbar Search-->
-<!--	<form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">-->
-		<form id="all_search_form" action="/articles/board/search" method="get" class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-			<div id="search_area" class="input-group">
-				<select id="keyword" name="keyword" class="btn btn-primary">
-					<option value="subject">제목</option>
-					<option value="nickname">작성자</option>
-					<option value="tagname">태그</option>
-				</select>
-				<input type="text" id="search_content" name="content"  class="form-control" placeholder="검색어를 입력해 주세요.">
-				<button id="search_btn" class="btn btn-primary" ><i class="fas fa-search"></i></button>
-			</div>
-		</form>
-<!--		<div class="input-group">-->
-<!--			<input class="form-control" type="text" placeholder="Search for..."-->
-<!--				aria-label="Search for..." aria-describedby="btnNavbarSearch" />-->
-<!--			<button class="btn btn-primary" id="btnNavbarSearch" type="button">-->
-<!--				<i class="fas fa-search"></i>-->
-<!--			</button>-->
-<!--		</div>-->
-<!--	</form>-->
+    <button
+      sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
+      class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
+      id="adminToggle"
+      th:onclick="|location.href='@{/members}'|"
+    >
+      <i class="fas fa-cog fa-lg"></i>
+    </button>
+    <button
+      class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
+      id="chatToggle"
+      th:onclick="|location.href='#'|"
+    >
+      <i class="fas fa-comments fa-lg"></i>
+    </button>
 
-	<!-- admin Toggle-->
-	<button sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
-		class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
-		id="adminToggle" th:onclick="|location.href='@{/members}'|">
-		<i class="fas fa-cog fa-lg"></i>
-	</button>
+    <!-- alarm Toggle-->
+    <button
+      class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
+      id="alramToggle"
+      href="#!"
+    >
+      <i class="fas fa-bell fa-lg"></i>
+    </button>
 
-	<!-- alarm Toggle-->
-	<button
-		class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
-		id="alramToggle" href="#!">
-		<i class="fas fa-bell fa-lg"></i>
-	</button>
-
-	<!-- Navbar-->
-	<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4" > <!-- 양 : th:fragment="viewFrameHeader (isLogin)" -->
-		<li class="nav-item dropdown"><a class="nav-link dropdown-toggle"
-			id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-			aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-			<ul class="dropdown-menu dropdown-menu-end"
-				aria-labelledby="navbarDropdown">
-				<!-- <li><a class="dropdown-item" href="#!">가가가</a></li>
+    <!-- Navbar-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+      <!-- 양 : th:fragment="viewFrameHeader (isLogin)" -->
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          id="navbarDropdown"
+          href="#"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          ><i class="fas fa-user fa-fw"></i
+        ></a>
+        <ul
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="navbarDropdown"
+        >
+          <!-- <li><a class="dropdown-item" href="#!">가가가</a></li>
 				<li><a class="dropdown-item" href="#!">신입집사</a></li>
 				<li><hr class="dropdown-divider" /></li> -->
-<!--				<li><a class="dropdown-item" href="/myPage/Playlist">Profile</a></li>-->
-<!--				<li>Profile</a></li>-->
+          <!--				<li><a class="dropdown-item" href="/myPage/Playlist">Profile</a></li>-->
+          <!--				<li>Profile</a></li>-->
+          <li th:if="${#authorization.expr('isAuthenticated()')}">
+            <a class="dropdown-item" href="/myPage/Playlist/1">
+              <span th:text="${session.loginUser.email}"></span>
+            </a>
+          </li>
 
-				<li th:if="${#authorization.expr('isAuthenticated()')}">
-					<a class="dropdown-item" href="/myPage/Playlist">
-					<span th:text="${session.loginUser.email}"></span>
-				</a>
-				</li>
+          <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
 
-				<li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+          <li><hr class="dropdown-divider" /></li>
 
-				<li><hr class="dropdown-divider" /></li>
+          <!--				<li th:if ="${isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>-->
+          <!--				<li th:if ="${isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>-->
 
-<!--				<li th:if ="${isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>-->
-<!--				<li th:if ="${isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>-->
+          <!--				<li th:if ="${session.isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>-->
+          <!--				<li th:if ="${session.isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>-->
 
-<!--				<li th:if ="${session.isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>-->
-<!--				<li th:if ="${session.isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>-->
+          <!--				로그인한 사용자 -->
+          <li th:if="${#authorization.expr('isAuthenticated()')}">
+            <a class="dropdown-item" href="/logout">Logout</a>
+          </li>
+          <!--				로그인하지 않은 사용자-->
+          <li th:if="${#authorization.expr('isAnonymous()')}">
+            <a class="dropdown-item" href="/musicatlogin">Login</a>
+          </li>
 
-<!--				로그인한 사용자 -->
-				<li th:if="${#authorization.expr('isAuthenticated()')}"><a class="dropdown-item" href="/logout">Logout</a></li>
-<!--&lt;!&ndash;				로그인하지 않은 사용자&ndash;&gt;-->
-				<li th:if="${#authorization.expr('isAnonymous()')}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>
-
-				<li><hr class="dropdown-divider" /></li>
-				<li><a class="dropdown-item" href="/ChangePwd">비밀번호 변경</a></li>
-				<li><a class="dropdown-item" href="/outForm">회원 탈퇴</a></li>
-			</ul></li>
-	</ul>
-</nav>
-<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
-<script>
-	$(document).ready(function (){
-
-		$(document).on('click', '#search_btn', function (){
-			const content = $('#search_content').val();
-			console.log(1, content);
-			if (content == null || content === ""){
-				alert('검색어를 입력하세요.');
-				return false;
-			}
-			$('#all_search_form').submit();
-		});
-	});
-
-</script>
-
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="/ChangePwd">비밀번호 변경</a></li>
+          <li><a class="dropdown-item" href="/outForm">회원 탈퇴</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+  <script>
+    $(document).ready(function () {
+      $(document).on("click", "#search_btn", function () {
+        const content = $("#search_content").val();
+        console.log(1, content);
+        if (content == null || content === "") {
+          alert("검색어를 입력하세요.");
+          return false;
+        }
+        $("#all_search_form").submit();
+      });
+    });
+  </script>
 </html>
