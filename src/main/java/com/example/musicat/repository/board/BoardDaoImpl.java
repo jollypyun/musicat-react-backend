@@ -77,7 +77,6 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public ArrayList<BoardBoardGradeVO> selectAllBoard() {
 		ArrayList<BoardBoardGradeVO> boardAndGradeList = this.boardMapper.selectAllBoard();
-		System.out.println("Dao------------------------" + boardAndGradeList.get(5));
 		return boardAndGradeList;
 	}
 
@@ -105,7 +104,6 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public ArrayList<BoardVO> selectFavoriteBoardList(int no) {
 		ArrayList<BoardVO> favoriteList = this.boardMapper.selectFavoriteBoardList(no);
-		//System.out.println("Dao-------------------" + favoriteList);
 		return favoriteList;
 	}
 

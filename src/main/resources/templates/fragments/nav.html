@@ -24,7 +24,7 @@
 
 					<table>
 						<th:block th:each="category : ${categoryBoardList}">
-							<tr th:id="${category.getCategoryNo()}">
+							<tr th:id="c + ${category.getCategoryNo()}">
 
 								<td class="nav-link category-articleVO-header fw-bold">
 
