@@ -11,17 +11,17 @@
                 <div class="myPage-top">
                     <div class="myPage-top-image">
                         <!--                        플레이리스트 이미지 넣기-->
-                        <img src="/images/main-1.png">
+                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>
                     </div>
                     <div class="myPage-top-profile">
                         <span>PlayList Name</span>
                     </div>
                 </div>
                 <div class="mt-4 mb-4 myPage-nav">
-                    <a href="/myPage/Playlist">Playlist</a>
-                    <a href="/myPage/Board">글</a>
-                    <a href="/myPage/Reply">댓글</a>
-                    <a href="/myPage/Like">좋아요</a>
+                    <a href="/myPage/Playlist/1">Playlist</a>
+                    <a href="/myPage/Board/1">글</a>
+                    <a href="/myPage/Reply/1">댓글</a>
+                    <a href="/myPage/Like/1">좋아요</a>
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">

@@ -129,7 +129,7 @@ function setThumbnail(event) {
         reader.onload = function (event) {
             //image preview
             var $div = $('<div id=image' + index + ' class="preview-div">');
-            var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="400" height="400">');
+            var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="100" height="100">');
             // var $input = $('<button id=' + index + ' class="preview-de"></button>');
             // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
 
@@ -151,3 +151,11 @@ function setThumbnail(event) {
 $(document).on('click', '#write-imagefile-upload', function (){
     $('#image_container').html("");
 })
+
+$("#write-attachefile-upload").on('change',function(){
+    let fileName = $("#write-attachefile-upload").val();
+    let splitfileName = fileName.split("\\");
+    let spliieLength = splitfileName.length;
+
+    $("#file-upload-filename").text(splitfileName[spliieLength-1]);
+});

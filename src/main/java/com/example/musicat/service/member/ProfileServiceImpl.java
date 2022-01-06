@@ -5,7 +5,6 @@ import com.example.musicat.mapper.member.ProfileMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +19,8 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class ProfileServiceImpl implements ProfileService{
     @Autowired private ProfileMapper profileMapper;
-    @Value("${file.dir2}") private String fileDir; // 프로필 이미지 로컬 저장 경로
+    //dir2인데 임시로 dir로 수정함
+    @Value("${file.dir}") private String dir2; // 프로필 이미지 로컬 저장 경로
     private static final String initOriginImg = "Seoul.JPG"; // 기본 이미지 original name
     private static final String initSysImg = "Seoul.JPG"; // 기본 이미지 system name
 
@@ -30,7 +30,7 @@ public class ProfileServiceImpl implements ProfileService{
     public void addProfile(int no) throws Exception{
         String originalFileName = initOriginImg;
         String systemFileName = initSysImg;
-        String location = fileDir + "profile/" + systemFileName;
+        String location = dir2 + "profile/" + systemFileName;
         File file = new File(location);
         long fileSize = file.length();
         log.info("no : " + no);
@@ -64,7 +64,7 @@ public class ProfileServiceImpl implements ProfileService{
         String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
         String systemFileName = UUID.randomUUID().toString() + "." + extension;
         long fileSize = multipartFile.getSize();
-        String location = fileDir + "profile/" + systemFileName;
+        String location = dir2 + "profile/" + systemFileName;
 
         log.info("Original : " + originalFileName);
         log.info("System : " + systemFileName);
@@ -79,7 +79,7 @@ public class ProfileServiceImpl implements ProfileService{
     // 프로필 이미지 업데이트 시 기존 프로필 이미지 삭제
     @Override
     public void deleteProfilePhoto(ProfileVO profile) throws Exception {
-        String location = fileDir + "profile/" + profile.getSystemFileName();
+        String location = dir2 + "profile/" + profile.getSystemFileName();
         log.info("loc : " + location);
         File file = new File(location);
         if(file.exists()) {
@@ -97,9 +97,9 @@ public class ProfileServiceImpl implements ProfileService{
         String originalFileName = initOriginImg;
         String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
         String systemFileName = UUID.randomUUID().toString() + "." + extension;
-        String location = fileDir + "profile/" + originalFileName;
+        String location = dir2 + "profile/" + originalFileName;
         long fileSize = location.length();
-        String newLocation = fileDir + "profile/" + systemFileName;
+        String newLocation = dir2 + "profile/" + systemFileName;
 
         // 원본 이미지 복사 후 새로운 system이름으로 저장
         final int N = 1024;

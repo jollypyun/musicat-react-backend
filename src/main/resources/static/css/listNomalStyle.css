@@ -1,0 +1,23 @@
+@charset "utf-8";
+
+.nomalList-func{
+    width: 100%;
+}
+.write_article_btn{
+    width: 10%;
+}
+.nomalList-func{
+    display: flex;
+    margin-top: 20px;
+}
+
+.search_area-style{
+    display: flex;
+    width: 90%;
+    justify-content: center;
+
+}
+
+.nomalList-search{
+    margin: 0 7px;
+}

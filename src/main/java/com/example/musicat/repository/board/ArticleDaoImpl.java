@@ -38,7 +38,6 @@ public class ArticleDaoImpl implements ArticleDao {
 		this.articleMapper.insertArticle(article);
 	}
 
-	
 	@Override
 	public void updateArticle(ArticleVO article) {
 		this.articleMapper.updateArticle(article);
@@ -47,7 +46,6 @@ public class ArticleDaoImpl implements ArticleDao {
 	@Override
 	public void deleteArticle(int articleNo) {
 		this.articleMapper.deleteArticle(articleNo);
-
 	}
 	
 	@Override
@@ -60,18 +58,16 @@ public class ArticleDaoImpl implements ArticleDao {
 		return this.articleMapper.selectAllArticle();
 	}
 
-	// 추천
 	@Override
 	public void insertLike(ArticleVO articleVO) {
 		this.articleMapper.insertLike(articleVO);
 	}
-//	
-//	// 추천 취소
+
 	@Override
 	public void deleteLike(ArticleVO articleVO) {
 		this.articleMapper.deleteLike(articleVO);
 	}
-//	
+
 	@Override
 	public int totalRecCount(int articleNo) {
 		return this.articleMapper.totalLikeCount(articleNo);
@@ -128,7 +124,6 @@ public class ArticleDaoImpl implements ArticleDao {
 	public void insertBestArticle(Map<String, Object> map) {
 		this.articleMapper.insertBestArticle(map);
 	}
-
 
 	@Override
 	public int selectNowDate() {

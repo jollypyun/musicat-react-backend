@@ -97,7 +97,7 @@ public class HomeController {
 
 		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
 		model.addAttribute("articleList", allArticleList);
-        List<BestArticleVO> bestArticles = articleService.selectAllBestArticle();
+        List<BestArticleVO> bestArticles = this.articleService.selectAllBestArticle();
         model.addAttribute("bestArticles", bestArticles);
 
         model.addAttribute("HomeContent","fragments/viewMainContent");
@@ -142,8 +142,8 @@ public class HomeController {
 		return "view/member/passwordChange";
 	}
 
-    @GetMapping("/myPage/Playlist")
-    public String myPage(Model model) {
+    @GetMapping("/myPage/Playlist/{userNo}")
+    public String myPage(Model model, @PathVariable String userNo) {
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
@@ -156,8 +156,8 @@ public class HomeController {
 
     }
 
-    @GetMapping("/myPage/Playlist/{playlistNo}")
-    public String myPagePlaylistDetail(Model model, @PathVariable String playlistNo) {
+    @GetMapping("/myPage/Playlist/{userNo}/{playlistNo}")
+    public String myPagePlaylistDetail(Model model, @PathVariable String playlistNo, @PathVariable String userNo) {
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
@@ -170,8 +170,8 @@ public class HomeController {
 
     }
 
-    @GetMapping("/myPage/Board")
-    public String myPageBoard(Model model) {
+    @GetMapping("/myPage/Board/{userNo}")
+    public String myPageBoard(Model model, @PathVariable String userNo) {
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
@@ -184,8 +184,8 @@ public class HomeController {
 
     }
 
-    @GetMapping("/myPage/Reply")
-    public String myPageReply(Model model) {
+    @GetMapping("/myPage/Reply/{userNo}")
+    public String myPageReply(Model model, @PathVariable String userNo) {
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
@@ -198,8 +198,8 @@ public class HomeController {
 
     }
 
-    @GetMapping("/myPage/Like")
-    public String myPageLike(Model model) {
+    @GetMapping("/myPage/Like/{userNo}")
+    public String myPageLike(Model model, @PathVariable String userNo) {
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);

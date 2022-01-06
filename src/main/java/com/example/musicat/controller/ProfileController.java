@@ -26,14 +26,15 @@ import java.net.MalformedURLException;
 public class ProfileController {
     @Autowired private ProfileService profileService;
     @Autowired private MemberService memberService;
-    @Value("${file.dir}") private String fileDir;
+//    @Value("${file.dir2}") private String dir2;
+    @Value("${file.dir}") private String dir2;
 
     // 프로필 페이지 이동, session 정보를 가져와서 이동할 예정. 기능 구현을 위해서 임시 처리
     @GetMapping("/profile")
     public String chooseProfile(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception{
         HttpSession session = request.getSession();
-        // MemberVO member = (MemberVO) session.getAttribute("loginUser");
-        MemberVO member = memberService.retrieveMemberByManager(2);
+        MemberVO member = (MemberVO) session.getAttribute("loginUser");
+        //MemberVO member = memberService.retrieveMemberByManager(2);
         log.info("member : " + member);
         try {
             ProfileVO profile = profileService.retrieveProfile(member.getNo());
@@ -47,11 +48,25 @@ public class ProfileController {
         }
     }
 
-    // 프로필 이미지 출력
+    // 프로필 미리보기 출력
     @ResponseBody
-    @GetMapping("/profileImage/{filename}")
-    public Resource showProfileImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + this.fileDir + "profile/" + filename);
+    @GetMapping("/profileTempImage/{filename}")
+    public Resource showProfileTempImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + this.dir2 + "profile/" + filename);
+    }
+
+    // 프로필 이미지
+    @ResponseBody
+    @GetMapping("/profileImage/{no}")
+    public Resource showProfileImage(@PathVariable int no) throws MalformedURLException {
+        try{
+            ProfileVO profile = profileService.retrieveProfile(no);
+            String filename = profile.getSystemFileName();
+            return new UrlResource("file:" + this.dir2 + "profile/" + filename);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // 프로필 수정
@@ -60,7 +75,7 @@ public class ProfileController {
         log.info("update 시작");
         log.info("flag : " + flag);
         log.info("null : " + importAttachFile.getOriginalFilename().isEmpty());
-        // MemberVO member = (MemberVO) req.getSession().getAttribute("loginUser");
+        MemberVO member = (MemberVO) req.getSession().getAttribute("loginUser");
         log.info("mul : " + importAttachFile.getOriginalFilename());
         try {
             if(!importAttachFile.getOriginalFilename().isEmpty()){

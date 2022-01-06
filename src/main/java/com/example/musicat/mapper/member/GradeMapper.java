@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 
-@Repository("gradeMapper")
+
 @Mapper
 public interface GradeMapper {
 	// 등급 조회
