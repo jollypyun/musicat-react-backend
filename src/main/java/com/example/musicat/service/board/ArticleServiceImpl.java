@@ -31,7 +31,7 @@ public class ArticleServiceImpl implements ArticleService {
 	private final MemberMapper memberMapper;
 	private final BestArticle bestArticleUtil;
 	
-
+//webhookTest용
 	@Override
 	public ArticleVO retrieveArticle(int articleNo) {
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
