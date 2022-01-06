@@ -6,14 +6,17 @@ import java.util.List;
 
 
 public interface ReplyService {
+
+	//댓글 세부 조회
+	List<ReplyVO> retrieveAllReply(int articleNo);
+
+	//댓글 작성
+	void registerReply(ReplyVO reply);
+
+	//댓글 수정
+	void modifyReply(ReplyVO reply);
+
+	//댓글 삭제
+	void removeReply(int replyNo, int memberNo);
 	
-	List<ReplyVO> retrieveAllReply(int articleNo); //세부 조회
-	
-	void registerReply(ReplyVO reply); // 추가
-	
-	void modifyReply(ReplyVO reply); // 수정
-	
-	void removeReply(int replyNo, int memberNo); // 삭제
-	
-	void allDelete(int articleNo);
 }

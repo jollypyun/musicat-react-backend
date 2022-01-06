@@ -10,33 +10,36 @@ import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.board.ArticleDao;
 import com.example.musicat.util.BestArticle;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service("articleService")
+//@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class ArticleServiceImpl implements ArticleService {
 
-	@Autowired private ArticleMapper articleMapper;
-	@Autowired private ArticleDao articleDao;
-	@Autowired private FileService fileService;
-	@Autowired private ReplyService replyService;
-	@Autowired private MemberMapper memberMapper;
-	@Autowired private BestArticle bestArticleUtil;
+	private final ArticleMapper articleMapper;
+	private final ArticleDao articleDao;
+	private final FileService fileService;
+	private final MemberMapper memberMapper;
+	private final BestArticle bestArticleUtil;
+	
 
 	@Override
-	@Transactional
-	public ArticleVO retrieveArticle(int articleNo) { // 세부 조회
+	public ArticleVO retrieveArticle(int articleNo) {
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
 		List<TagVO> tags = articleMapper.selectArticleTags(articleNo);
-		System.out.println("results : " + results.size());
+		System.out.println("ArticleServiceImpl.retrieveArticle: results : " + results.size());
 
 		ArticleVO article = results.get(0).getArticle(); // 게시글 정보 출력
 		article.setSelectTags(tags);
-
-
 
 		List<FileVO> fileList = new ArrayList<>();
 			if(results.get(0).getFile() != null) { // 파일이 있을 때
@@ -57,7 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 	// 게시글 추가
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void registerArticle(ArticleVO article) {
 		this.memberMapper.plusMemberDocs(article.getMemberNo());
 		this.articleDao.insertArticle(article); // 게시글 추가
@@ -68,7 +71,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void modifyArticle(ArticleVO article) {
 		this.articleDao.updateArticle(article);
 		this.fileService.uploadFile(article);
@@ -78,7 +81,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public int removeArticle(int articleNo, int memberNo) {
 		this.memberMapper.minusMemberDocs(memberNo);
 		int boardNo = this.articleDao.selectArticle(articleNo).get(0).getArticle().getBoardNo();
@@ -99,30 +102,30 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<ArticleVO> retrieveAllArticle() {
 		return this.articleDao.selectAllArticle();
 	}
-	
-	
+
 	// 추천
 	@Override
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void recUpdate(int memberNo, int articleNo) {
-		ArticleVO articleVO = new ArticleVO();
-		articleVO.setMemberNo(memberNo);
-		articleVO.setNo(articleNo);
+		ArticleVO article = new ArticleVO();
+		article.setMemberNo(memberNo);
+		article.setNo(articleNo);
 		this.articleDao.upLikecount(articleNo);
-		this.articleDao.insertLike(articleVO);	
+		this.articleDao.insertLike(article);
 	}
-//	
+
 	@Override
 	public int totalRecCount(int articleNo) {
 		return this.articleDao.totalRecCount(articleNo);
 	}
 	
 	@Override
+	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public void recDelete(ArticleVO articleVO) {
 		this.articleDao.downLikecount(articleVO.getNo());
 		this.articleDao.deleteLike(articleVO);
 	}
 
-	// 추천 여부 체크
 	@Override
 	public int likeCheck(int memberNo, int ArticleNo) {
 		ArticleVO art = new ArticleVO();
@@ -132,6 +135,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	@Transactional()
 	public void deleteTag(int tagNo) {
 		this.articleDao.deleteTag(tagNo);
 	}
@@ -152,33 +156,8 @@ public class ArticleServiceImpl implements ArticleService {
 		map.remove("keyword");
 		map.remove("content");
 
-		Iterator<String> keys = map.keySet().iterator();
-		while( keys.hasNext() ){
-			String key = keys.next();
-			String value = String.valueOf(map.get(key));
-			System.out.println("키 : "+key+", 값 : "+value);
-			System.out.println("key.getClass().getName() = " + key.getClass().getName());
-			System.out.println("value.getClass().getName() = " + value.getClass().getName());
-		}
-		log.info("dao search 전");
 		List<ArticleVO> result = this.articleDao.search(map);
-		log.info("dao search 후");
-		for (ArticleVO articleVO : result) {
-			log.info("dao");
-			log.info(articleVO.toString());
-		}
 		return result;
-	}
-
-	//베스트글 삭제시 조회
-	private void updateBestArticle(){
-		int now = this.articleDao.selectNowDate(); // 현재 날짜 구하기
-		log.info("now = {}", now);
-		List<ArticleVO> findBestArticles = this.articleDao.selectUpdateBestArticle(now); // 조회
-		// best table 날리기
-		this.articleDao.deleteAllBestArticle();
-		// find articles insert
-		bestArticleUtil.insertBestArticle(findBestArticles);
 	}
 
 	@Override
@@ -190,5 +169,17 @@ public class ArticleServiceImpl implements ArticleService {
 			rank++;
 		}
 		return bestArticles;
+	}
+
+	//==검색 비즈니스 메서드==//
+	//베스트글 삭제시 조회
+	private void updateBestArticle(){
+		int now = this.articleDao.selectNowDate(); // 현재 날짜 구하기
+		log.info("ArticleServiceImpl.updateBestArticle: now = {}", now);
+		List<ArticleVO> findBestArticles = this.articleDao.selectUpdateBestArticle(now); // 조회
+		// best table 날리기
+		this.articleDao.deleteAllBestArticle();
+		// find articles insert
+		bestArticleUtil.insertBestArticle(findBestArticles);
 	}
 }

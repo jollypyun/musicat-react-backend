@@ -18,6 +18,7 @@
                         <input type="hidden" id="allSearchKeyword" th:value="${keyword}">
                         <input type="hidden" id="allSearchContent" th:value="${content}">
 
+
                         <table id="datatablesSimple">
                             <thead>
                             <tr>
@@ -44,10 +45,16 @@
                                         <a th:text="${article.subject}"
                                            th:href="|/articles/${article.no}|"></a>
                                     </td>
-                                    <td>
-                                        <a th:id="${article.memberNo}" onclick=openNote(this)
-                                           th:text="${article.nickname}"></a>
-                                    </td>
+                                   										<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
+										<td >
+										<a th:id = "${article.memberNo}" class="dropbtn" onclick="myFunction()" th:text="${article.nickname}">
+<!--											<div id="myDropdown" class="dropdown-content">-->
+<!--												<a href="#home">쪽지 창</a>-->
+<!--												<a th:href="|/myPage/Playlist/${article.memberNo}|">myPage</a>-->
+<!--											</div>-->
+										</a>
+										</td>
+										<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
                                     <td th:text="${article.writeDate}"></td>
                                     <td th:text="${article.viewcount}"></td>
                                     <td th:text="${article.likecount}"></td>
@@ -152,9 +159,27 @@
                 }
             });
 
-        });
-    });
+		});
 
+		function myFunction() {
+			document.getElementById("myDropdown").classList.toggle("show");
+		}
+
+	});
+
+
+	window.onclick = function(event) {
+		if (!event.target.matches('.dropbtn')) {
+			var dropdowns = document.getElementsByClassName("dropdown-content");
+			var i;
+			for (i = 0; i < dropdowns.length; i++) {
+				var openDropdown = dropdowns[i];
+				if (openDropdown.classList.contains('show')) {
+					openDropdown.classList.remove('show');
+				}
+			}
+		}
+	}
 
     /* 	function openNote(e) {
                 const memberNo = e.id;

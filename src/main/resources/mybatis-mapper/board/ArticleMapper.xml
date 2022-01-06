@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<resultMap type="articleVo" id="articleVOResult">
 		<result property="no" javaType="int" column="article_no"  jdbcType="INTEGER"/>
+		<result	property="memberNo" javaType="int" column="member_no" jdbcType="INTEGER"/>
 		<result property="subject" javaType="String" column="subject"  jdbcType="VARCHAR"/>
 		<result property="nickname" javaType="String" column="nickname"  jdbcType="VARCHAR"/>
 		<result property="writeDate" javaType="String" column="writedate" jdbcType="VARCHAR"/>

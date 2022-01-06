@@ -254,7 +254,7 @@
 	</update>
 
 		<!-- 비밀번호 재설정-->
-			<insert id="updatePassword"  parameterType="memberVo">   
+	<update id="updatePassword"  parameterType="memberVo">
 			<!-- id는  MemberDao의 메소드 명과 일치해야 함 -->
 			<!-- parameterType(경로)의 괄호 안에 들어간 건 MemberVO에 있는 @Alias("memberVo")과 이름이 일치해야 함 -->
 				
@@ -262,6 +262,6 @@
 		SET member.password = #{password}
 		WHERE member_no = #{no}
 		<!-- #{}안에는	MemberVO에서 선언한 변수명과 일치해야 함 -->
-	</insert>
+	</update>
 
 </mapper>

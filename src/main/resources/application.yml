@@ -53,7 +53,8 @@ server.error:
 
 file:
   dir: D:/SpringBootHome/petopia2/src/main/resources/static/upload/
-  dir2: C:/Users/MZC/git/musicat/src/main/resources/static/upload/
+  dir2: D:/SpringBootHome/petopia2/src/main/resources/static/upload/
+#  dir2: C:/Users/MZC/git/musicat/src/main/resources/static/upload/
 
 # hibernate가 생성하는 SQL이 모두 보인다.
 logging:
