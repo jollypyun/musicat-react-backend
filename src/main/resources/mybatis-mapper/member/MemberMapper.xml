@@ -7,7 +7,7 @@
 
 
 	<!-- 양 ~ -->
-	<!-- 로그인 예외처리에서 필요한 정보 가져옴 : 닉네임, docs, comms, visits, regDate 없음-->
+	<!-- 로그인 예외처리에서 필요한 정보 가져옴 : docs, comms, visits, regDate 없음-->
 	<resultMap id="selectMemberByEmailResultMap" type="memberVo">
 		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER"/>
 		<result property="email" javaType="string" column="email" jdbcType="VARCHAR"/>
