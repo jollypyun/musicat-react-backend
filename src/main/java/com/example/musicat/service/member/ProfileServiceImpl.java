@@ -19,7 +19,8 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class ProfileServiceImpl implements ProfileService{
     @Autowired private ProfileMapper profileMapper;
-    @Value("${file.dir2}") private String dir2; // 프로필 이미지 로컬 저장 경로
+    //dir2인데 임시로 dir로 수정함
+    @Value("${file.dir}") private String dir2; // 프로필 이미지 로컬 저장 경로
     private static final String initOriginImg = "Seoul.JPG"; // 기본 이미지 original name
     private static final String initSysImg = "Seoul.JPG"; // 기본 이미지 system name
 
