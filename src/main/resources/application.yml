@@ -20,7 +20,7 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-      location: d:\\temp\\spring_uploaded_files
+#      location: d:\\temp\\spring_uploaded_files
 
   mail:
     default-encoding: UTF-8
