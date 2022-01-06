@@ -60,7 +60,7 @@ public class ManagerController {
 
 
 		}else if (dailyList.size()==2){
-			calendar.add(Calendar.DATE, -1);
+			calendar.add(Calendar.DATE, -2);
 			chkDate = SDF.format(calendar.getTime());
 
 			dailyList.add(new DailyStatisticsVO(3,chkDate,2,0));
