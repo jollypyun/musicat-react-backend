@@ -10,7 +10,7 @@
 .board-form-style{
 	width: 70%;
 	border: 1px solid #666666;
-	padding-left: 20px;
+	padding: 0 20px;
 
 }
 .select-board-style {
@@ -62,6 +62,16 @@
 	margin-right: 30px;
 }
 
+.write-content-style,
+.write-subject-style{
+	width: 80%;
+}
+
+.write-content-style textarea,
+.write-subject-style textarea{
+	width: 100%;
+}
+
 .write-content-style{
 	display: inline-block;
 	margin-top: 10px;
@@ -72,6 +82,7 @@
 	height: 100px;
 	padding-left: 10px;
 	padding-top: 10px;
+	width: 100%;
 }
 
 .write-content-style textarea:focus{
@@ -110,12 +121,12 @@
 /*	list-style: none;*/
 /*}*/
 
-.content-tag-style ul {
-	padding: 16px 0;
+.tag-list-style {
+	padding: 5px 0;
 	margin-bottom: 5px;
 }
 
-.content-tag-style ul li {
+.tag-list-style li {
 	display: inline-block;
 	margin: 5px;
 	font-size: 14px;
@@ -125,8 +136,7 @@
 .write-board-style form {
 	padding-top: 16px;
 }
-
-.content-tag-style ul li.tag-item {
+.tag-list-style li.tag-item {
 	padding: 4px 8px;
 	background-color: #9f9f9f;
 	color: #000000;
@@ -134,10 +144,19 @@
 	border-radius: 10px;
 
 }
+.tag-list-style div{
+	padding: 2px 8px;
+	background-color: #cfffc5;
+	color: #000000;
 
+	border-radius: 10px;
+}
+.origin_tag_delete_btn:hover{
+	cursor: pointer;
+}
 .tag-item:hover {
 	background-color: #262626;
-	color: #fff;
+	color: #000000;
 }
 
 .del-btn {
