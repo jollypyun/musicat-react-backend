@@ -52,6 +52,7 @@
     <form class="song-register-content" th:action="@{/musicpost}" method="post" enctype="multipart/form-data">
       <div class="song-title">
         <input type="text" id = "title" name = "title"/>
+        <p th:text="${errorMsg}"></p>
         <input type="text" id = "memberNo" name = "memberNo"/>
         <input type="text" id = "articleNo" name = "articleNo"/>
       </div>
