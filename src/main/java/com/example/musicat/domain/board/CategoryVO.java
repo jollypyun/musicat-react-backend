@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,6 +22,8 @@ import lombok.ToString;
 @ToString
 public class CategoryVO {
     private int categoryNo;
+
+    //@Size(min=1, max = 20, message = "카테고리 이름은 공백일 수 없습니다. (1 ~ 20자)")
     private String categoryName;
 
     private List<CategoryVO> categoryList = new ArrayList<>();

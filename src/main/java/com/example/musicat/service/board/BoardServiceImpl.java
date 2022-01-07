@@ -73,6 +73,13 @@ public class BoardServiceImpl implements BoardService {
 		return boardAndGradeList;
 	}
 
+	//게시판 이름 중복 여부 조회
+	@Override
+	public Integer retrieveDuplicatedBoard(String boardName) {
+		Integer duplicatedBoard = this.boardDao.selectDuplicatedBoard(boardName);
+		return duplicatedBoard;
+	}
+
 	@Override
 	public List<BoardVO> retrieveAllWriteBoard(int gradeNo) {
 		ArrayList<BoardBoardGradeVO> boardAndGradeList = this.boardDao.selectAllBoard();
