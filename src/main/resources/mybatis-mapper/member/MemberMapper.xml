@@ -78,6 +78,11 @@
 		<result property="ban" javaType="string" column="ban" jdbcType="VARCHAR"/>
 	</resultMap>
 
+	<resultMap id="memberFollow" type="memberVo">
+		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER" />
+		<result property="nickname" javaType="string" column="nickname" jdbcType="VARCHAR" />
+	</resultMap>
+
 	<select id="selectMemberList" parameterType="criteria" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT M.member_no, M.email, G.name , M.regdate, M.visits, M.ban
 		FROM member M LEFT JOIN membergrade MG
@@ -264,4 +269,25 @@
 		<!-- #{}안에는	MemberVO에서 선언한 변수명과 일치해야 함 -->
 	</insert>
 
+	<select id="selectFollowingList" parameterType="int" resultMap="memberFollow">
+		SELECT nickname, member_no
+		FROM member M
+		WHERE M.member_no = ANY
+			  (
+				  SELECT followed
+				  FROM follow
+				  WHERE following = #{no}
+			  )
+	</select>
+
+	<select id="selectFollowedList" parameterType="int" resultMap="memberFollow">
+		SELECT nickname, member_no
+		FROM member M
+		WHERE M.member_no = ANY
+			(
+			SELECT following
+			FROM follow
+			WHERE followed = #{no}
+			)
+	</select>
 </mapper>
