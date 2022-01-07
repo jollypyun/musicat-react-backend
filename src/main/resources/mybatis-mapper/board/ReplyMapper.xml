@@ -32,9 +32,5 @@
 	<delete id="deleteReply" statementType="CALLABLE" parameterType="int">
 		{ CALL sp_delete_reply( #{no} ) }
 	</delete>
-	
-	<delete id="allDelete" parameterType="int">
-		DELETE FROM reply WHERE article_no = #{articleNo}
-	</delete>
-	
+
 </mapper>

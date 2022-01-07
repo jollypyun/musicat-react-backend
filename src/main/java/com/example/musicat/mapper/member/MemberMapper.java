@@ -36,7 +36,7 @@ public interface MemberMapper {
 	void updateMember(MemberVO memberVO);
 	//void updateMember(int no);
 
-	// 비밀번호 재설정
+	// 비밀번호 변경
 	void updatePassword(int memNo, String newPassword);
 	// 끝 -----------------------------------------------
 

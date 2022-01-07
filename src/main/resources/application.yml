@@ -5,9 +5,7 @@ spring:
       jdbc-url: jdbc:mysql://13.124.245.202:3306/musicat
       username: scott
       password: Tiger_1234
-#      jdbc-url: jdbc:mysql://localhost:3306/musicat
-#      username: scott
-#      password: tiger
+
       connection-timeout: 20000
       minimum-idle: 5
       maximum-pool-size: 20
@@ -20,7 +18,7 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-      location: d:\\temp\\spring_uploaded_files
+#      location: d:\\temp\\spring_uploaded_files
 
   mail:
     default-encoding: UTF-8
@@ -52,8 +50,10 @@ server.error:
   include-stacktrace: always
 
 file:
-  dir: D:/SpringBootHome/petopia2/src/main/resources/static/upload/
-  dir2: C:/Users/MZC/git/musicat/src/main/resources/static/upload/
+  dir: /upload/
+#  dir: D:/SpringBootHome/musicat/src/main/resources/static/upload/
+#  dir2: D:/SpringBootHome/musicat/src/main/resources/static/upload/
+#  dir2: C:/Users/MZC/git/musicat/src/main/resources/static/upload/
 
 # hibernate가 생성하는 SQL이 모두 보인다.
 logging:
@@ -67,6 +67,5 @@ logging:
 #      jdbc-url: jdbc:mysql://localhost:3306/musicat
 #      username: root
 #      password: mymysql
-
 
 

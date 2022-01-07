@@ -28,6 +28,8 @@
 
 .detailArticle-btn-style{
 	display: flex;
+	align-items: center;
+
 }
 
 .detailArticle-function-style{
@@ -111,10 +113,6 @@
 /*	list-style: none;*/
 /*}*/
 
-.tag-ul {
-	padding: 16px 0;
-}
-
 .tag-ul li {
 	display: inline-block;
 	margin: 0 5px;
@@ -129,8 +127,10 @@
 
 .tag-ul li.tag-item {
 	padding: 4px 8px;
-	background-color: #777;
+	background-color: #cbffb4;
 	color: #000;
+	border-radius: 10px;
+	margin-bottom: 4px;
 }
 
 .tag-item:hover {
@@ -145,7 +145,9 @@
 	margin-left: 8px;
 }
 
+
 /*댓글 등록 시 내용을 입력하지 않았을 때*/
 .changeplaceholder::placeholder{
 	color: red;
 }
+

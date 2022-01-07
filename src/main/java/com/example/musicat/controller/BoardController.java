@@ -1,11 +1,6 @@
 package com.example.musicat.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 import com.example.musicat.domain.board.*;
 import com.example.musicat.service.board.ArticleService;
@@ -14,6 +9,8 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.musicat.service.board.BoardService;
 import com.example.musicat.service.board.CategoryService;
@@ -30,8 +26,14 @@ import com.example.musicat.domain.member.GradeVO;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.naming.Binding;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 @Slf4j
 @Controller
+@Validated
 public class BoardController {
 
 	@Autowired
@@ -81,18 +83,30 @@ public class BoardController {
 		this.categoryService.registerCategory(categoryVo.getCategoryName());
 		return "redirect:boardManager"; //이  페이지 안에서만 움직일 거기 때문에 리턴 페이지 변경 안 해도 된다고
 	}
-	
+
+	//카테고리 수정 페이지
+	@ResponseBody
+	@PostMapping("/selectOneCategory")
+	public CategoryVO selectOneCategory(@RequestBody HashMap<String, Object> map) throws Exception {
+
+		CategoryVO cVO = new CategoryVO();
+
+		int categoryNo = Integer.parseInt((String) map.get("categoryNo"));
+		String categoryName = this.categoryService.retrieveOneCategory(categoryNo).getCategoryName();
+
+		cVO.setCategoryName(categoryName);
+		return cVO;
+	}
 
 	//카테고리 수정
 	@PostMapping("/modifyCategory")
 	public String modifyCategory(@ModelAttribute("categoryVo") CategoryVO categoryVo) {
-		log.info("-----------------------------------------------" + categoryVo.toString());
 		int categoryNo = categoryVo.getCategoryNo();
 		String categoryName = categoryVo.getCategoryName();
-		System.out.println(categoryNo + " " + categoryName);
 		this.categoryService.modifyCategory(categoryNo, categoryName);
 		return "redirect:boardManager";
 	}
+
 	
 	//카테고리 삭제
 	@PostMapping("/deleteCategory")
@@ -103,6 +117,7 @@ public class BoardController {
 	}
 	
 
+	//게시판 추가 페이지 드롭박스 목록
 	@ResponseBody
 	@PostMapping("/selectListAdd")
 	public CreateBoardVO selectListAdd() throws Exception {
@@ -111,50 +126,50 @@ public class BoardController {
 		ArrayList<CategoryVO> categoryList = this.categoryService.retrieveCategoryList();
 		//등급 목록
 		ArrayList<GradeVO> gradeList = this.gradeService.retrieveGradeList();
-		
-		//ArrayList<BoardVO> boardkindList = this.boardService.retrieveBoardkind();
-		
-		//cbVO.setBoardkindList(boardkindList);
+		//게시판 종류 목록
+		ArrayList<BoardVO> boardkindList = this.boardService.retrieveBoardkind();
+
 		cbVO.setCategoryList(categoryList);
 		cbVO.setGradeList(gradeList);
+		cbVO.setBoardkindList(boardkindList);
+
+		log.info("/selectListAdd");
+
 		return cbVO;
 	}
-	
-	
-	//게시판 수정 - 카테고리, 등급, 게시판 종류 조회
-	@ResponseBody
-	@PostMapping("/selectListModify")
-	public CreateBoardVO selectListModify(@RequestBody HashMap<String, Object> map ) throws Exception {
-		CreateBoardVO cbVO = new CreateBoardVO();
-		//카테고리 목록
-		ArrayList<CategoryVO> categoryList = this.categoryService.retrieveCategoryList();
-		//등급 목록
-		ArrayList<GradeVO> gradeList = this.gradeService.retrieveGradeList();
-		
-		int boardNo = Integer.parseInt((String) map.get("boardNo"));
-		
-		BoardBoardGradeVO bbg = this.boardService.retrieveOneBoard(boardNo);
-		
-		
-		cbVO.setBbg(bbg);
-		cbVO.setCategoryList(categoryList);
-		cbVO.setGradeList(gradeList);
-		
-		log.info("------------------asdfaf : " + cbVO.toString());
-		return cbVO;
-	}
-	
 	
 	
 	//게시판 추가 - 저장
+//	@PostMapping("/writeBoard")
+//	public String writeBoard(
+//			@RequestParam("category") int categoryNo,
+//			@RequestParam("boardName") @Size(min=1, max = 1) String boardName,
+//			@RequestParam("boardkind") int boardkind,
+//			@RequestParam("readGrade") int readGrade,
+//			@RequestParam("writeGrade") int writeGrade) {
+//
+//
+//		BoardVO boardVo = new BoardVO();
+//		BoardGradeVO boardGradeVo = new BoardGradeVO();
+//		//게시판 저장 목록
+//		boardVo.setCategoryNo(categoryNo);
+//		boardVo.setBoardName(boardName);
+//		boardVo.setBoardkind(boardkind);
+//		boardGradeVo.setReadGrade(readGrade);
+//		boardGradeVo.setWriteGrade(writeGrade);
+//		this.boardService.registerBoard(boardVo, boardGradeVo);
+//		return "redirect:boardManager";
+//	}
+
 	@PostMapping("/writeBoard")
-	public String writeBoard(	
+	public String writeBoard(
 			@RequestParam("category") int categoryNo,
-			@RequestParam("boardName") String boardName,
+			@RequestParam("boardName") @Size(min=1, max = 1) String boardName,
 			@RequestParam("boardkind") int boardkind,
 			@RequestParam("readGrade") int readGrade,
 			@RequestParam("writeGrade") int writeGrade) {
-		
+
+
 		BoardVO boardVo = new BoardVO();
 		BoardGradeVO boardGradeVo = new BoardGradeVO();
 		//게시판 저장 목록
@@ -166,26 +181,31 @@ public class BoardController {
 		this.boardService.registerBoard(boardVo, boardGradeVo);
 		return "redirect:boardManager";
 	}
-	
-	//게시판 수정 - 선택된 게시판 정보 조회
+
+	//게시판 수정 페이지
 	@ResponseBody
-	@PostMapping("/selectOneBoard")
-	public CreateBoardVO selectOneBoard(@ModelAttribute("boardVo") BoardVO boardVo) throws Exception {
-		
-		this.boardService.retrieveOneBoard(boardVo.getBoardNo());
-		
+	@PostMapping("/selectListModify")
+	public CreateBoardVO selectListModify(@RequestBody HashMap<String, Object> map ) throws Exception {
 		CreateBoardVO cbVO = new CreateBoardVO();
 		//카테고리 목록
 		ArrayList<CategoryVO> categoryList = this.categoryService.retrieveCategoryList();
 		//등급 목록
 		ArrayList<GradeVO> gradeList = this.gradeService.retrieveGradeList();
-		
+		//게시판 종류 목록
+		ArrayList<BoardVO> boardkindList = this.boardService.retrieveBoardkind();
+
+		//해당 게시판의 정보
+		int boardNo = Integer.parseInt((String) map.get("boardNo"));
+		BoardBoardGradeVO bbg = this.boardService.retrieveOneBoard(boardNo);
+
+		cbVO.setBbg(bbg);
 		cbVO.setCategoryList(categoryList);
 		cbVO.setGradeList(gradeList);
+		cbVO.setBoardkindList(boardkindList);
+
 		return cbVO;
 	}
-	
-	
+
 	// 게시판 수정
 	@PostMapping("/modifyBoard")
 	public String modifyBoard(
@@ -198,20 +218,20 @@ public class BoardController {
 		
 		BoardVO boardVo = new BoardVO();
 		BoardGradeVO boardGradeVo = new BoardGradeVO();
+
 		//게시판 저장 목록
-		
 		boardVo.setBoardNo(boardNo);
 		boardVo.setCategoryNo(categoryNo);
 		boardVo.setBoardName(boardName);
 		boardVo.setBoardkind(boardkind);
 		boardGradeVo.setReadGrade(readGrade);
 		boardGradeVo.setWriteGrade(writeGrade);
-		
-		System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz : " + readGrade);
-		System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz : " + writeGrade);
+
 		this.boardService.modifyBoard(boardVo, boardGradeVo);
 		return "redirect:boardManager";
 	}
+
+
 	
 	//게시판 삭제
 	@PostMapping("/deleteBoard")

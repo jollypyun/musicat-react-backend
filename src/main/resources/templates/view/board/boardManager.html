@@ -14,10 +14,10 @@
 				<div class="btns boardManager-btn-style">
 					<div>
 						<!-- <input value="카테고리추가" type="button" onclick="addCategory()" id="addCategory"> -->
-						<button type="button" onclick="addCategory()" id="addCategoryBtn">카테고리</button>
+						<button type="button" onclick="addCategory()" id="addCategoryBtn">카테고리 추가</button>
 					</div>
 					<div>
-						<button type="button" onclick="addBoard()" id="addBoardBtn">게시판</button>
+						<button type="button" onclick="addBoard()" id="addBoardBtn">게시판 추가</button>
 					</div>
 				</div>
 
@@ -58,28 +58,29 @@
 
 						<!-- 카테고리 추가 -->
 						<div id="writeCategory" style="display: none;">
-							<form th:action="@{/writeCategory}" th:object="${categoryVo}"
-								method="post">
-								<input type="text" th:field="*{categoryName}"
-									placeholder="카테고리 이름">
-								<div>
-									<button type="reset">취소</button>
-									<button type="submit">저장</button>
-								</div>
+							<form th:action="@{/writeCategory}" th:object="${categoryVo}" method="post">
+								<table>
+									<tbody>
+										<tr>
+											<td>카테고리 이름:</td>
+											<td><input type="text" th:field="*{categoryName}" placeholder="카테고리 이름"> </td>
+										</tr>
+									</tbody>
+								</table>
+								<button type="reset">취소</button>
+								<button type="submit">저장</button>
 							</form>
 						</div>
 
 						<!-- 카테고리 수정 -->
 						<div id="modifyCategory" style="display: none;">
-							<form th:action="@{/modifyCategory}" th:object="${categoryVo}"
-								method="post">
-								<input id="categoryName" type="text" th:field="*{categoryName}"
-									placeholder="수정할 카테고리 이름"> <input id="categoryNo"
-									type="hidden" th:field="*{categoryNo}">
+							<form th:action="@{/modifyCategory}" th:object="${categoryVo}" method="post">
+								<div id="modifyCategoryForm"></div>
+
 								<div>
 									<!-- <button type="button" id="removeCategoryBtn" onclick="removeCategory()"> 삭제 </button> -->
 									<button type="button" id="removeCategoryBtn"
-										onclick="removeCategory(this.form)">삭제</button>
+											onclick="removeCategory(this.form)">삭제</button>
 									<button type="reset">취소</button>
 									<button type="submit">저장</button>
 								</div>
@@ -102,7 +103,6 @@
 						<div id="modifyBoard" style="display: none;">
 							<form th:action="@{/modifyBoard}" method="post">
 								<div id="modifyBoardForm"></div>
-
 
 								<div>
 									<button type="button" id="removeBoardBtn"
@@ -144,8 +144,37 @@
 			$('#modifyCategory').appendTo('#Blank');
 			$('#modifyCategory').show();
 
-			$('#categoryNo').val($(e).closest("tr").attr("id"));
+			$
+					.ajax({
+						url: "/selectOneCategory",
+						method: "POST",
+						dataType: 'json',
+						contentType: 'application/json',
+						data: JSON.stringify({
+							"categoryNo": $(e).closest("tr").attr("id")
+						}),
+						success: function (data) {
+							let category = null;
+							category = data;
+							console.log(category);
+							let modifyCategoryForm = "";
+							let categoryNo = $(e).closest("tr").attr("id");
+
+							modifyCategoryForm += "<input id='categoryNo' name='categoryNo' type='hidden' value=" + categoryNo + ">";
+							modifyCategoryForm += "<table><tbody>";
+							modifyCategoryForm += "<tr>";
+							modifyCategoryForm += "<td>카테고리 이름:</td>";
+							modifyCategoryForm += "<td><input id='categoryName' name='categoryName' type='text' value=" + category.categoryName + "></td>";
+							modifyCategoryForm += "</tr>";
+							modifyCategoryForm += "</tbody></table>";
+
+							$('#modifyCategoryForm').html(modifyCategoryForm);
+						},
+						error : function (e) {
+						}
+					})
 		}
+
 
 		//카테고리 삭제
 		function removeCategory(f) {
@@ -182,34 +211,37 @@
 										+ list.categoryList[i].categoryName
 										+ "</option>";
 							}
-
 							addBoardForm += "</select></td>";
 							addBoardForm += "</tr>";
-							addBoardForm += "<tr>";
-							addBoardForm += "<td>게시판명:</td>	<td><input type='text' name='boardName'/></td></tr>";
 
+							addBoardForm += "<tr>";
+							addBoardForm += "<td>게시판명:</td>	<td><input type='text' name='boardName'/></td>";
 							addBoardForm += "</tr>";
+
 							addBoardForm += "<tr>";
 							addBoardForm += "<td>게시글 쓰기등급:</td>";
 							addBoardForm += "<td><select name='writeGrade'>";
 							for (let i = 0; i < list.gradeList.length; i++) {
-
-								addBoardForm += "<option value=" + list.gradeList[i].gradeNo +">"
-										+ list.gradeList[i].name + "</option>";
-
+								addBoardForm += "<option value=" + list.gradeList[i].gradeNo;
+								if (list.gradeList[i].name === 'USER') {
+									addBoardForm += " selected>"
+											+ list.gradeList[i].name
+											+ "</option>";
+								} else {
+									addBoardForm += ">"
+											+ list.gradeList[i].name
+											+ "</option>";
+								}
 							}
 							addBoardForm += "</select></td>";
 							addBoardForm += "</tr>";
 
-							addBoardForm += "</tr>";
 							addBoardForm += "<tr>";
 							addBoardForm += "<td>게시글 읽기등급:</td>";
 							addBoardForm += "<td><select name='readGrade'>";
 							for (let i = 0; i < list.gradeList.length; i++) {
-
 								addBoardForm += "<option value=" + list.gradeList[i].gradeNo +">"
 										+ list.gradeList[i].name + "</option>";
-
 							}
 							addBoardForm += "</select></td>";
 							addBoardForm += "</tr>";
@@ -217,14 +249,15 @@
 							addBoardForm += "<tr>";
 							addBoardForm += "<td>게시판 종류:</td>";
 							addBoardForm += "<td><select name='boardkind'>";
-							addBoardForm += "<option value=0>기본 게시판</option>"
-							addBoardForm += "<option value=1>썸네일 게시판</option>"
-							addBoardForm += "<option value=2>오디오 게시판</option>"
+							for (let i = 0; i < list.boardkindList.length; i++) {
+								addBoardForm += "<option value=" + list.boardkindList[i].boardkind +">"
+										+ list.boardkindList[i].boardkindName
+										+ "</option>";
+							}
 							addBoardForm += "</select></td>";
 							addBoardForm += "</tr>";
 							addBoardForm += "</tbody>";
 							addBoardForm += "</table>";
-							console.log(addBoardForm);
 							$('#addBoardForm').html(addBoardForm);
 						},
 						error : function(e) {
@@ -264,9 +297,7 @@
 							modifyBoardForm += "<tr>";
 							modifyBoardForm += "<td>카테고리:</td>";
 							modifyBoardForm += "<td><select name='category'>";
-							console.log(list.bbg.boardVo.categoryNo);
 							for (let i = 0; i < list.categoryList.length; i++) {
-								console.log(list.categoryList[i]);
 								modifyBoardForm += "<option value="
 										+ list.categoryList[i].categoryNo;
 								if (list.bbg.boardVo.categoryNo == list.categoryList[i].categoryNo) {
@@ -278,20 +309,18 @@
 											+ list.categoryList[i].categoryName
 											+ "</option>";
 								}
-
 							}
-
 							modifyBoardForm += "</select></td>";
 							modifyBoardForm += "</tr>";
+
 							modifyBoardForm += "<tr>";
-							modifyBoardForm += "<td>게시판명:</td>	<td><input type='text' name='boardName'  placeholder=" + list.bbg.boardVo.boardName + " ></td></tr>";
+							modifyBoardForm += "<td>게시판명:</td>	<td><input type='text' name='boardName' value=" + list.bbg.boardVo.boardName + " ></td>";
 							modifyBoardForm += "</tr>";
+
 							modifyBoardForm += "<tr>";
 							modifyBoardForm += "<td>게시글 쓰기등급:</td>";
 							modifyBoardForm += "<td><select name='writeGrade'>";
-
 							for (let i = 0; i < list.gradeList.length; i++) {
-								console.log(list.categoryList[i]);
 								modifyBoardForm += "<option value="
 										+ list.gradeList[i].gradeNo;
 								if (list.bbg.boardGradeVo.writeGrade == list.gradeList[i].gradeNo) {
@@ -304,17 +333,13 @@
 											+ "</option>";
 								}
 							}
-
 							modifyBoardForm += "</select></td>";
 							modifyBoardForm += "</tr>";
 
-							modifyBoardForm += "</tr>";
 							modifyBoardForm += "<tr>";
 							modifyBoardForm += "<td>게시글 읽기등급:</td>";
 							modifyBoardForm += "<td><select name='readGrade'>";
-
 							for (let i = 0; i < list.gradeList.length; i++) {
-								console.log(list.categoryList[i]);
 								modifyBoardForm += "<option value="
 										+ list.gradeList[i].gradeNo;
 								if (list.bbg.boardGradeVo.readGrade == list.gradeList[i].gradeNo) {
@@ -327,33 +352,34 @@
 											+ "</option>";
 								}
 							}
-
 							modifyBoardForm += "</select></td>";
 							modifyBoardForm += "</tr>";
 
 							modifyBoardForm += "<tr>";
 							modifyBoardForm += "<td>게시판 종류:</td>";
 							modifyBoardForm += "<td><select name='boardkind'>";
-							// modifyBoardForm += "<option value=0>기본 게시판</option>"
-							// modifyBoardForm += "<option value=1>썸네일 게시판</option>"
-
-
-							modifyBoardForm += "<option value=0>기본 게시판</option>"
-							modifyBoardForm += "<option value=1>썸네일 게시판</option>"
-							modifyBoardForm += "<option value=2>오디오 게시판</option>"
-
-
+							for (let i = 0; i < list.boardkindList.length; i++) {
+								modifyBoardForm += "<option value="
+										+ list.boardkindList[i].boardkind;
+								if (list.bbg.boardVo.boardkind == list.boardkindList[i].boardkind) {
+									modifyBoardForm += " selected>"
+											+ list.boardkindList[i].boardkindName
+											+ "</option>";
+								} else {
+									modifyBoardForm += ">"
+											+ list.boardkindList[i].boardkindName
+											+ "</option>";
+								}
+							}
 							modifyBoardForm += "</select></td>";
 							modifyBoardForm += "</tr>";
 							modifyBoardForm += "</tbody>";
 							modifyBoardForm += "</table>";
-							console.log(modifyBoardForm);
 							$('#modifyBoardForm').html(modifyBoardForm);
 
 						},
 						error : function(e) {
 						}
-
 					})
 		}
 
@@ -362,17 +388,10 @@
 			f.action = "/deleteBoard";
 			f.method = 'post';
 			f.submit();
-
 		}
+
+
 	</script>
 
-
-
-
-
-
-
 </div>
-
-
 </html>

@@ -30,9 +30,9 @@ public class ReplyController {
 	
 	@ResponseBody
 	@PostMapping("/insertReply")
-	public List<ReplyVO> insertReply(@RequestParam("articleNo") int articleNo,
-										@RequestParam("content") String content,
-										HttpServletRequest req) {
+	public List<ReplyVO> insertReply(@RequestParam("articleNo") int articleNo
+			,@RequestParam("content") String content
+			,HttpServletRequest req) {
 		// create
 		HttpSession session = req.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
@@ -49,26 +49,22 @@ public class ReplyController {
 	
 	@ResponseBody
 	@PostMapping("/modifyReply")
-	public List<ReplyVO> updateReply(@RequestParam("no") int replyNo,
-														@RequestParam("articleNo") int articleNo,
-														@RequestParam("content") String content){
+	public List<ReplyVO> updateReply(@RequestParam("no") int replyNo
+			,@RequestParam("articleNo") int articleNo
+			,@RequestParam("content") String content){
 		ReplyVO reply = ReplyVO.updateReply(replyNo, content);
-		log.info("modifyReplyVO = {}", reply.toString());
 		// 댓글 수정
 		this.replyService.modifyReply(reply);
 		// 수정 완료된 댓글 List 받기
 		List<ReplyVO> replyList =this.replyService.retrieveAllReply(articleNo);
-		for (ReplyVO replyVO : replyList) {
-			log.info("replyList = {}", replyVO);
-		}
 		return replyList;
 	}
 	
 	@ResponseBody
 	@GetMapping("/removeReply")
-	public List<ReplyVO> deleteReply(@RequestParam("no") int replyNo,
-														@RequestParam("articleNo") int articleNo,
-														HttpServletRequest req){
+	public List<ReplyVO> deleteReply(@RequestParam("no") int replyNo
+			,@RequestParam("articleNo") int articleNo
+			,HttpServletRequest req){
 		HttpSession session = req.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
 		int memberNo = member.getNo();

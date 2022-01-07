@@ -12,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
@@ -58,6 +59,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+    //필요 없는 인증처리 방지를 위한 정적파일 ignoring 처리 : ignoring 처리하지 않으면 permitAll에 포함되므로 static에 있는 파일들도 인증처리를 거치게 됨
+    //정적파일 뿐만 아니라 인증이 필요 없는 url은 ignoring 처리 해주는 것이 좋음
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/static/**");
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -66,7 +74,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http    //DB resource 테이블 만들어서 처리하는 게 편할 거라고 하심(url 변경 되어도 따로 처리 안 해줘도 돼서)
                 //강사님께서 코드 짜보고 계시고 완성되면 주시겠다고...
-                // /** : 해당 url의 하위 url을 모두 포함
                 .authorizeRequests()
                 //인증된 사용자이면 접근 가능한 페이지
                 .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated()

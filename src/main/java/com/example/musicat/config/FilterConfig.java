@@ -1,20 +1,13 @@
-//package com.example.musicat.config;
-//
-//import java.util.Properties;
-//
-//import javax.servlet.Filter;
-//
-//import com.example.musicat.filter.LoginFilter;
-//import org.springframework.boot.web.servlet.FilterRegistrationBean;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.mail.javamail.JavaMailSenderImpl;
-//
-//import com.example.musicat.filter.LoginFilter;
-//
-//@Configuration
-//public class FilterConfig {
-//
+
+package com.example.musicat.config;
+
+import org.springframework.context.annotation.Configuration;
+
+
+@Configuration
+public class FilterConfig {
+
+
 //	@Bean
 //	public FilterRegistrationBean<Filter> loginFilter() {
 //		FilterRegistrationBean<Filter> filterbean = new FilterRegistrationBean<Filter>();
@@ -24,5 +17,8 @@
 //
 //		return filterbean;
 //	}
-//
+
 //}
+
+
+}

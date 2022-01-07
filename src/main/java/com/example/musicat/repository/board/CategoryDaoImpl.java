@@ -29,7 +29,6 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public void updateCategory(int categoryNo, String categoryName) {
-		System.out.println("Dao ---------------- " + categoryNo + " " + categoryName);
 		this.categoryMapper.updateCategory(categoryNo, categoryName);	
 	}
 	
@@ -47,8 +46,6 @@ public class CategoryDaoImpl implements CategoryDao {
 	@Override
 	public ArrayList<CategoryVO> selectCategoryList() {
 		ArrayList<CategoryVO> categoryList = this.categoryMapper.selectCategoryList();
-		log.info("Dao ----------------------------------------" + categoryList.toString());
-		
 		return categoryList;
 	}
 	
