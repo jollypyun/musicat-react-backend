@@ -6,8 +6,6 @@ import lombok.Getter;
 public enum PageEnum {
 
 
-    //WRITE_CATEGORY(9, "/writeCategory"),
-    WRITE_BOARD(10, "/wirteBoard"),
     MUSIC_POST(11, "/musicpost");
 
 

@@ -19,21 +19,6 @@ import java.util.List;
 @ControllerAdvice
 public class MusicatExceptionHandler {
 
-    //static private List<PageEnum> pages;
-
-//    MusicatExceptionHandler(){
-//        if(pages == null) {
-//            pages = new ArrayList<PageEnum>();
-//            pages.add(PageE)
-//        }
-//    }
-
-//    private CategoryService categoryService;
-//
-//    @Autowired
-//    MusicatExceptionHandler(CategoryService categoryService){
-//        this.categoryService = categoryService;
-//    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ModelAndView handleConstraintViolationException(HttpServletRequest req, ConstraintViolationException e) {
@@ -61,22 +46,11 @@ public class MusicatExceptionHandler {
                 viewPage = "/view/board/musicRegister"; // 포워드
                 //viewPage = "redirect:/articles/musicRegister"; // 리다이렉트 (리다이렉트 하면 addobject 값은 get 방식으로 넘어감..)
                 break;
-//            case WRITE_CATEGORY:
-//                viewPage = "view/home/viewManagerTemplate";
-//                setManagerTemplate(mv);
-//                break;
+
         }
 
         mv.addObject("errorMsg", e.getLocalizedMessage());
         mv.setViewName(viewPage);
     }
-//
-//    private void setManagerTemplate(ModelAndView mv){
-//        List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
-//        mv.addObject("categoryBoardList", categoryList);
-//        mv.addObject("managerContent", "/view/board/boardManager");
-//        //카테고리 추가
-//        CategoryVO categoryVo = new CategoryVO();
-//        mv.addObject("categoryVo", categoryVo);
-//    }
+
 }
