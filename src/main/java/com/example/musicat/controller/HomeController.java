@@ -143,13 +143,19 @@ public class HomeController {
 	}
 
     @GetMapping("/myPage/Playlist/{userNo}")
-    public String myPage(Model model, @PathVariable String userNo) {
-
+    public String myPage(Model model, @PathVariable int userNo) {
+        MemberVO member = new MemberVO();
+        try {
+            member = memberService.retrieveMemberByManager(userNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
+        model.addAttribute("member", member);
 
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylist");
         return "view/home/viewHomeTemplate";
