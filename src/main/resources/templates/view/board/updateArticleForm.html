@@ -65,6 +65,9 @@
 									placeholder="제목" maxlength="100" th:value="${article.subject}"
 									required></textarea>
 							</div>
+
+
+
 							<div id="in_content" class="write-content-style">
 								<textarea id="ucontent" th:field="*{content}"
 									th:value="${article.content}" placeholder="내용" required
@@ -79,15 +82,18 @@
 								<!-- 이미지 파일 첨부 -->
 								<label class="write-image-style" for="write-imagefile-upload">
 									<i class="far fa-file-image fa-2x"></i></label>
-								<input type="file" id="write-imagefile-upload" name="imageFiles" multiple="multiple" /><br />
+								<input type="file" id="write-imagefile-upload" name="imageFiles"
+									   onchange="setThumbnail(event)" multiple="multiple" /><br/>
 								<div id="viewImage">
-									<div th:each="imageFile : ${article.fileList}">
+									<div th:each="imageFile : ${article.fileList }">
 											<div th:id = "${imageFile.getNo()}">
 												<img th:src="|/images/${imageFile.getSystemFileName()}|" width="200"
 												height="200" />
 												<input type="button" class="remove_file_btn"  value="삭제" />
 											</div>
 									</div>
+								</div>
+								<div id="image_container">
 								</div>
 							</div>
 							<input type="button" value="취소" onclick="history.back(-1)">
@@ -102,7 +108,43 @@
 <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
 <script>
 
-	// $(document).ready(function () {
+	$(document).ready(function () {
+		// var grpl = $("li[class=ori-tag-item]").length;
+		// var grpl = $('.ori-tag-item').length;
+		// console.log(grpl);
+		// let index = 0;
+		// // let removeIndexArray = [];
+		//
+		//     function setThumbnail(event) {
+		//         for (var image of event.target.files) {
+		//
+		//             var reader = new FileReader();
+		//
+		//             reader.onload = function (event) {
+		//                 //image preview
+		//                 var $div = $('<div id=image' + index + ' class="preview-div">');
+		//                 var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="400" height="400">');
+		//                 // var $input = $('<button id=' + index + ' class="preview-de"></button>');
+		//                 // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
+		//
+		//                 // $input.append($i);
+		//                 $div.append($img);
+		//                 // $div.append($input);
+		//                 $('#image_container').append($div);
+		//
+		//                 index++;
+		//             };
+		//
+		//             // console.log(image);
+		//             // reader.readAsDataURL(event.target.files[0]);
+		//             reader.readAsDataURL(image);
+		//         }
+		//
+		//     }
+		//
+		// 	$(document).on('click', '#write-imagefile-upload', function (){
+		// 		$('#image_container').html("");
+		// 	});
 	//
 	//
 	// 	$(document).on('click','.origin_tag_delete_btn', function (){
@@ -230,7 +272,6 @@
 	// 								.filter(function (word) {
 	// 									return word === tagValue;
 	// 								})
-	//
 	// 						// 태그 중복 검사
 	// 						if (result.length == 0) {
 	// 							$("#tag-list")
@@ -258,7 +299,7 @@
 	// 			});
 	//
 	// 	// end tag
-	// });
+	});
 
 </script>
 <!--<style>-->
