@@ -151,3 +151,13 @@
 	color: red;
 }
 
+.dropdown-toggle::after{
+	display: none; !important;
+}
+.dropdown-toggle{
+	cursor: pointer;
+}
+.list-normal-table a{
+	text-decoration: none; !important;
+	color: black;
+}

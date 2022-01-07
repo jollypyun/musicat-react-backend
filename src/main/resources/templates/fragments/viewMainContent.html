@@ -53,15 +53,15 @@
                         <div class="content-top-right-table">
                             <table>
                                 <tbody>
-                                    <tr th:each="bestArticle : ${bestArticles}">
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td th:text="${bestArticle.rank}"></td>
-                                        <td style="display: inline-block">
-                                            <a th:text="${bestArticle.subject}"
-                                               th:href="|/articles/${bestArticle.articleNo}|"></a>
-                                        </td>
-<!--                                        <td th:text="${bestArticle.likecount}"></td>-->
-                                    </tr>
+                                <tr th:each="bestArticle : ${bestArticles}">
+                                    <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
+                                    <td th:text="${bestArticle.rank}"></td>
+                                    <td style="display: inline-block">
+                                        <a th:text="${bestArticle.subject}"
+                                           th:href="|/articles/${bestArticle.articleNo}|"></a>
+                                    </td>
+                                    <!--                                        <td th:text="${bestArticle.likecount}"></td>-->
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -74,7 +74,7 @@
                     <i class="fas fa-table me-1"></i><span> 전체 글 보기</span>
                 </div>
                 <div class="card-body">
-                    <table id="datatablesSimple">
+                    <table id="datatablesSimple" class="list-normal-table">
                         <thead>
                         <tr>
                             <th>No</th>
@@ -104,9 +104,16 @@
                                    th:href="|/articles/${article.no}|"></a>
                             </td>
                             <!-- DropBox-->
-                            <td th:text="${article.nickname}"></td>
-<!--                            <p>쪽지 창</p>-->
-<!--                            <a th:href="|/myPage/Playlist/${article.memberNo}|">myPage</a>-->
+                            <td class="dropdown">
+                                <a class="dropdown-toggle" data-bs-toggle="dropdown"
+                                   th:text="${article.nickname}">
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item"
+                                           th:href="|/myPage/Playlist/${article.memberNo}|">MyPage</a></li>
+                                    <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                </ul>
+                            </td>
                             <!-- DropBox-->
                             <td th:text="${article.writeDate}"></td>
                             <td th:text="${article.viewcount}"></td>
