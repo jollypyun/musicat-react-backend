@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8"/>
 
 <!--<script th:src="@{../js/detailArticle.js}"></script>-->
@@ -26,7 +27,7 @@
 							<input type="hidden" id="board_no" th:value="${article.boardNo}">
 						</h1>
 						<form id="detailContent" class="detail-content-style" th:object="${article}" name="article">
-							<table width=100%>
+							<table width=100% class="list-normal-tables">
 								<colgroup>
 									<col width="15%">
 									<col width="35%">
@@ -42,7 +43,20 @@
 									</tr>
 									<tr>
 										<th>작성자</th>
-										<td th:text="${article.nickname}" th:field="*{nickname}"></td>
+
+										<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
+										<td th:field="*{nickname}" class="dropdown">
+											<a th:id = "${article.memberNo}" class="dropdown-toggle" data-bs-toggle="dropdown" th:text="${article.nickname}">
+											</a>
+											<ul class="dropdown-menu">
+												<li><a class="dropdown-item" th:href="|/myPage/Playlist/${article.memberNo}|">MyPage</a></li>
+												<li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+											</ul>
+										</td>
+<!--										<p>쪽지 창</p>-->
+<!--										<a th:href="|/myPage/Playlist/${article.memberNo}|">myPage</a>-->
+										<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
+
 										<th>작성일</th>
 										<td th:text="${article.writeDate}"></td>
 									</tr>
@@ -72,10 +86,10 @@
 									</tr>
 									<tr>
 
-										<td colspan="2">
+										<td colspan="3">
 											<div class="detailArticle-btn-style">
 												<div class="detailArticle-function-style">
-													<button id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
+													<button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
 													 <input type="button"
 														th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"
 														value="목록" />

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service("memberService") // 얘는 서비스다
-@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
 
 	@Autowired
@@ -30,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
 	//email로 회원 정보 조회
 	@Override
+	@Transactional(readOnly = true)
 	public MemberVO retrieveMemberByEmail(String email) {
 		MemberVO memberVo = memberdao.selectMemberByEmail(email);
 		return memberVo;
@@ -67,16 +67,19 @@ public class MemberServiceImpl implements MemberService {
 //	}
 
 	@Override // 회원 목록 조회
+	@Transactional(readOnly = true)
 	public ArrayList<MemberVO> retrieveMemberList(Criteria crt) throws Exception {
 		return this.memberMapper.selectMemberList(crt);
 	}
 
 	@Override // 회원의 총 수
+	@Transactional(readOnly = true)
 	public int retrieveTotalMember() throws Exception {
 		return this.memberMapper.selectTotalMember();
 	}
 
 	@Override // 회원 상세 조회
+	@Transactional(readOnly = true)
 	public MemberVO retrieveMemberByManager(int no) throws Exception {
 		return this.memberMapper.selectMemberByManager(no);
 	}
@@ -84,12 +87,12 @@ public class MemberServiceImpl implements MemberService {
 
 
 	@Override // 회원 검색 조회
+	@Transactional(readOnly = true)
 	public ArrayList<MemberVO> retrieveSearchMember(String keyfield, String keyword, Criteria crt) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 	
 		map.put("keyword", keyword);
 		map.put("crt", crt);
-
 
 		if (keyfield.equals("email")) {
 			return this.memberMapper.selectSearchMemberByEmail(map);
@@ -99,6 +102,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override // 회원 검색 총 수
+	@Transactional(readOnly = true)
 	public int retrieveTotalSearchMember(String keyfield, String keyword) throws Exception{
 		if(keyfield.equals("email")) {
 			return this.memberMapper.selectTotalSearchMemberByEmail(keyword);
@@ -109,7 +113,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override // 회원의 정지기간 업데이트
-	@Transactional
+	@Transactional(readOnly = true)
 	public void modifyBan(String banSelect, int no) throws Exception{
 		if (banSelect.equals("7d")) {
 			this.memberMapper.updateBan7days(no);
@@ -171,7 +175,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-
 	public void updatePassword(MemberVO memberVo) {
 		// TODO Auto-generated method stub
 		this.memberdao.updatePassword(memberVo);

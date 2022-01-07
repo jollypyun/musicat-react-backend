@@ -42,13 +42,12 @@ public class FileController {
 	@ResponseBody
 	@GetMapping("/thumbnailImages/{filename}")
 	public Resource downLoadThumbnailImage(@PathVariable String filename) throws MalformedURLException{
-		String thumPath = "thumbnail /thumb" + filename;
+		String thumPath = "thumbnail/thumb" + filename;
+		log.info("fileController downLoadThumbnailImage");
 		log.info("thumbPath:" +thumPath);
 		log.info("GetPufsflasthumbPath:" + fileManager.getFullPath(thumPath));
 		return new UrlResource("file:" + fileManager.getFullPath(thumPath));
 	}
-	
-	
 
 	// 첨부파일 다운로드
 	@GetMapping("/attach/{fileNo}")
@@ -69,13 +68,13 @@ public class FileController {
 				.body(resource);
 	}
 
-
 	/**
-	 * ajax로 파일 업로드 하기
+	 * ajax로 파일 삭제
 	 */
 	@ResponseBody
 	@PostMapping("/removeFile")
-	public List<FileVO> fileDelete(@RequestParam("fileNo") int fileNo, @RequestParam("articleNo") int articleNo){
+	public List<FileVO> fileDelete(@RequestParam("fileNo") int fileNo
+			,@RequestParam("articleNo") int articleNo){
 		// fileNo로 파일삭제
 		FileVO findFile = fileService.selectOneFile(fileNo);
 		fileService.removeFile(fileNo); // DB삭제

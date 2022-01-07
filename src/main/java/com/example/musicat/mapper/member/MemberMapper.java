@@ -2,6 +2,7 @@ package com.example.musicat.mapper.member;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.example.musicat.domain.member.MemberVO;
@@ -10,7 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 
-@Repository("memberMapper")
 @Mapper
 public interface MemberMapper {
 
@@ -36,7 +36,7 @@ public interface MemberMapper {
 	void updateMember(MemberVO memberVO);
 	//void updateMember(int no);
 
-	// 비밀번호 재설정
+	// 비밀번호 변경
 	void updatePassword(int memNo, String newPassword);
 	// 끝 -----------------------------------------------
 
@@ -98,4 +98,9 @@ public interface MemberMapper {
 	
 	void updatePassword(MemberVO memberVo);
 
+	// 멤버의 팔로잉 리스트
+	List<MemberVO> selectFollowingList(int memberNo);
+
+	// 멤버의 파로우 리스트
+	List<MemberVO> selectFollowedList(int memberNo);
 }

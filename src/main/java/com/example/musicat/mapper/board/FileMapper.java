@@ -9,16 +9,18 @@ import com.example.musicat.domain.board.FileVO;
 @Mapper
 public interface FileMapper {
 	
+	//파일 1개 조회
 	FileVO selectFile(int fileNo);
-	List<FileVO> selectFileList(int articleNo);  // 해당 게시글의 파일들 다 불러와
-	void insertFile(FileVO fileVO);  // 추가
-	void updateFile(FileVO file); // 수정
 
+	//파일 등록
+	void insertFile(FileVO fileVO);
+
+	//썸네일 조회
 	List<FileVO> selectThumbFile(FileVO fileVo);
 	
-	 void deleteFile(int FileNo); // 삭제
-	 
-	 void allDelete(int articleNo);
+	//파일 삭제
+	void deleteFile(int FileNo);
 
-	 List<FileVO> selectArticleFiles(int articleNo);
+	//게시글에 속한 파일 모두 조회
+	List<FileVO> selectArticleFiles(int articleNo);
 }

@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://thymeleaf.org">
 
-<link th:href="@{../css/myPageStyle.css}" rel="stylesheet"/>
+<link th:href="@{/css/myPageStyle.css}" rel="stylesheet"/>
 
 <div id="layoutSidenav_content">
     <main>
@@ -9,18 +9,19 @@
             <div class="row mt-3 mb-5">
                 <div class="myPage-top">
                     <div class="myPage-top-image">
-                        <img src="/images/main-1.png">
+                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>
                     </div>
                     <div class="myPage-top-profile">
                         <span>NickName</span>
-                        <button onclick="location.href='/ChangePwd'">비밀번호 변경</button>
+                        <button onclick="location.href='/ChangePwd'" th:if = "${session.loginUser.gradeNo} != 4 and ${session.loginUser.no} == ${member.getNo()}">비밀번호 변경</button>
+                        <button onclick="" th:if = "${session.loginUser.gradeNo} != 4 and ${session.loginUser.no} != ${member.getNo()}">Follow</button>
                     </div>
                 </div>
                 <div class="mt-4 mb-4 myPage-nav">
-                    <a href="/myPage/Playlist">Playlist</a>
-                    <a href="/myPage/Board">글</a>
-                    <a href="/myPage/Reply">댓글</a>
-                    <a href="/myPage/Like">좋아요</a>
+                    <a href="/myPage/Playlist/1">Playlist</a>
+                    <a href="/myPage/Board/1">글</a>
+                    <a href="/myPage/Reply/1">댓글</a>
+                    <a href="/myPage/Like/1">좋아요</a>
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">
@@ -31,13 +32,13 @@
                             <table>
                                 <thead>
                                 <tr>
-                                    <th>Followers</th>
-                                    <th>Following</th>
+                                    <th><a th:href="|/followedList/${member.getNo()}|">Followers</a></th>
+                                    <th><a th:href="|/followingList/${member.getNo()}|">Following</a></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <td>1</td>
-                                <td>1</td>
+                                <td th:text = "${follow.followed}"></td>
+                                <td th:text = "${follow.following}"></td>
                                 </tbody>
                             </table>
                         </div>

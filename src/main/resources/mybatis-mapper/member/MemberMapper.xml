@@ -78,6 +78,11 @@
 		<result property="ban" javaType="string" column="ban" jdbcType="VARCHAR"/>
 	</resultMap>
 
+	<resultMap id="memberFollow" type="memberVo">
+		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER" />
+		<result property="nickname" javaType="string" column="nickname" jdbcType="VARCHAR" />
+	</resultMap>
+
 	<select id="selectMemberList" parameterType="criteria" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT M.member_no, M.email, G.name , M.regdate, M.visits, M.ban
 		FROM member M LEFT JOIN membergrade MG
@@ -254,7 +259,7 @@
 	</update>
 
 		<!-- 비밀번호 재설정-->
-			<insert id="updatePassword"  parameterType="memberVo">   
+	<update id="updatePassword"  parameterType="memberVo">
 			<!-- id는  MemberDao의 메소드 명과 일치해야 함 -->
 			<!-- parameterType(경로)의 괄호 안에 들어간 건 MemberVO에 있는 @Alias("memberVo")과 이름이 일치해야 함 -->
 				
@@ -262,6 +267,27 @@
 		SET member.password = #{password}
 		WHERE member_no = #{no}
 		<!-- #{}안에는	MemberVO에서 선언한 변수명과 일치해야 함 -->
-	</insert>
+	</update>
 
+	<select id="selectFollowingList" parameterType="int" resultMap="memberFollow">
+		SELECT nickname, member_no
+		FROM member M
+		WHERE M.member_no = ANY
+			  (
+				  SELECT followed
+				  FROM follow
+				  WHERE following = #{no}
+			  )
+	</select>
+
+	<select id="selectFollowedList" parameterType="int" resultMap="memberFollow">
+		SELECT nickname, member_no
+		FROM member M
+		WHERE M.member_no = ANY
+			(
+			SELECT following
+			FROM follow
+			WHERE followed = #{no}
+			)
+	</select>
 </mapper>

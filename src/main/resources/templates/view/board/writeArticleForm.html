@@ -13,7 +13,7 @@
 
 				<div id="write_board_page" class="write-board-style">
 					<form id="insertForm" enctype="multipart/form-data" th:object="${form}"
-						  th:action="@{/articles/insert}" method="post">
+						  th:action="@{/articles/insert}" method="post" class="board-form-style">
 
 						<input type="hidden" id="tags" name="tags" value="">
 
@@ -28,12 +28,12 @@
 							<p th:if="${#fields.hasErrors('boardNo')}"
 							   th:errors="*{boardNo}"></p>
 							<!--tag-->
-							<div style="margin-top:40px; margin-left:40px;" class="content">
-								<div style="display: flex;">
-									<h4 style="width: 150px; margin-right:30px;">태그 입력</h4>
-										<input type="text" id="tag" size="20" placeholder="태그입력" />
+							<div class="content-tag-style">
+								<div>
+									<h4>Tag</h4>
+									<input type="text" id="tag" size="20" placeholder="태그입력" />
 								</div>
-								<ul id="tag-list">
+								<ul id="tag-list" class="tag-list">
 								</ul>
 							</div>
 						</div>
@@ -69,7 +69,10 @@
 							<div id="import_bth" class="write-area-style">
 								<!-- &lt;!&ndash; 첨부파일 &ndash;&gt; -->
 								<label class="write-file-style" for="write-attachefile-upload">
-									<i class="fas fa-file-upload fa-2x"></i></label> 
+									<i class="fas fa-file-upload fa-2x"></i>
+									<span id="file-upload-filename"></span>
+								</label>
+
 								<input type="file" id="write-attachefile-upload" th:field="*{importAttacheFile}" />
 
 								<!-- &lt;!&ndash; 이미지 파일 첨부 &ndash;&gt; -->

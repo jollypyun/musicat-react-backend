@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<link th:href="@{../css/ThumbnailBoard.css}" rel="stylesheet" />
+<div id="layoutSidenav_content">
+	<main>
+		<div class="container-fluid px-4">
+
+			<div class="row mt-3 mb-5">
+				<h1 th:text="${boardName}"></h1>
+				<h2><span>오디오 게시판(임시)</span></h2>
+			</div>
+			<div class="fixed_img_col">
+				<ui style="list-style: none;">
+					<li th:each="article : ${articles}">
+						<!-- <div class="notEmpty" th:if="{articleVO.getThumbnail() == null}"></div> -->
+						<div class="card"></div>
+						<!-- /thumbnailImages/systemfilename -->
+						<img th:src="|/thumbnailImages/${article.getThumbnail().getSystemFileName()}|" alt="" style="width: 190px;height: 150px;">
+						<span class="thumb"><a th:href="|/${article.no}|">
+								<strong th:text="${article.subject}"></strong></a></span>
+						<p th:text="${article.writeDate}"></p>
+					</li>
+				</ui>
+			</div>
+		</div>
+		<div class="write_article_btn">
+			<button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
+		</div>
+</div>
+</main>
+</div>
+<script>
+	function writeForm(){
+		location.href="/articles/insert";
+	}
+</script>
+
+</html>

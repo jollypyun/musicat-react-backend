@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 
 @Mapper
-@Repository("profileMapper")
 public interface ProfileMapper {
     // profile 수정
     void updateProfile(Map<String, Object> map);

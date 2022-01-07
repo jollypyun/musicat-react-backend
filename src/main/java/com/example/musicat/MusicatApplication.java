@@ -17,7 +17,7 @@ public class MusicatApplication extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        // TODO Auto-generated method stub
+//         TODO Auto-generated method stub
         return builder.sources(MusicatApplication.class);
     }
 
