@@ -101,7 +101,7 @@
           <!--				<li><a class="dropdown-item" href="/myPage/Playlist">Profile</a></li>-->
           <!--				<li>Profile</a></li>-->
           <li th:if="${#authorization.expr('isAuthenticated()')}">
-            <a class="dropdown-item" href="/myPage/Playlist/1">
+            <a class="dropdown-item" th:href="@{'/myPage/Playlist/' + ${session.loginUser.no}}">
               <span th:text="${session.loginUser.email}"></span>
             </a>
           </li>
