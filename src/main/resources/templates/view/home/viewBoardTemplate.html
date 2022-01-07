@@ -32,21 +32,21 @@
 		
 		<!-- Content -->
 		<!-- NomalList -->
-		<div th:if="${boardkind == 0}"  style="width: 100%">
+		<div th:if="${boardkind == 0}" class="mb-5" style="width: 100%">
 		<th:block layout:fragment="viewMainContent"
 			th:include="@{/view/board/listArticleNomal}"></th:block>
 		</div>
 		
 		<!-- Content -->
 		<!-- ThumbnailList -->
-		<div th:if="${boardkind == 1}" style="width: 100%">
+		<div th:if="${boardkind == 1}" class="mb-5" style="width: 100%">
 		<th:block layout:fragment="viewMainContent"
 			th:include="@{/view/board/listArticleThumbnail}"></th:block>
 		</div>
 		
 		<!-- Content -->
 		<!-- audioList -->
-		<div th:if="${boardkind == 2}"  style="width: 100%">
+		<div th:if="${boardkind == 2}" class="mb-5" style="width: 100%">
 		<th:block layout:fragment="viewMainContent"
 			th:include="@{/view/board/listArticleMusic}"></th:block>
 		</div>
