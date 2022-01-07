@@ -1,14 +1,22 @@
 @charset "UTF-8";
-@Import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
-html, body{width:100%;heigth:100%}
-body,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,button,select{margin:0;padding:0}
-body,input,textarea,select,button,table{font-family: '돋움',Dotum,AppleGothic,sans-serif;font-size: 12px;}
-img.fieldset{border: 0;}
-ul,ol{list-style: none;}
-em,address{font-style: normal;}
-a{text-decoration: none;}
-a:hover,a:active,a:focus{text-decoration: underline;}
 
+
+.Thumbnail-style input,
+.Thumbnail-style textarea,
+.Thumbnail-style select,
+.Thumbnail-style button,
+.Thumbnail-style table{
+    font-family: '돋움',Dotum,AppleGothic,sans-serif;font-size: 12px;
+}
+
+.Thumbnail-style img.fieldset{border: 0;}
+
+.Thumbnail-style em,
+.Thumbnail-style address{font-style: normal;}
+.Thumbnail-style a{text-decoration: none;}
+.Thumbnail-style a:hover,
+.Thumbnail-style a:active,
+.Thumbnail-style a:focus{text-decoration: underline;}
 
 .wrap{
     width: 600px;
@@ -22,11 +30,12 @@ a:hover,a:active,a:focus{text-decoration: underline;}
 .fixed_img_col ul{
     border-bottom: 1px solid #aaa;
     *zoom: 1;
+
 }
 .fixed_img_col li{
     float: left;
-    width: 200px;
-    height: 250px;
+    width: 220px;
+    height: 285px;
     padding: 20px 15px;
     margin-bottom: -1px;
     border-bottom: 1px solid #aaa;
