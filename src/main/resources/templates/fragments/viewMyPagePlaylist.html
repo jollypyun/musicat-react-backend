@@ -10,7 +10,9 @@
             <div class="row mt-3 mb-5">
                 <div class="myPage-top">
                     <div class="myPage-top-image">
-                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>
+                        <!--                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>-->
+                        <button style="border: none; outline: none; background-color:transparent;" onclick="openProfile()"><img th:src="|/profileImage/${member.getNo()}|"></button>
+                        <div id="profileModalHolder"></div>
                     </div>
                     <div class="myPage-top-profile">
                         <span>NickName</span>
@@ -19,10 +21,10 @@
                     </div>
                 </div>
                 <div class="mt-4 mb-4 myPage-nav">
-                    <a href="/myPage/Playlist/1">Playlist</a>
-                    <a href="/myPage/Board/1">글</a>
-                    <a href="/myPage/Reply/1">댓글</a>
-                    <a href="/myPage/Like/1">좋아요</a>
+                    <a th:href="@{'/myPage/Playlist/' + ${session.loginUser.no}}">Playlist</a>
+                    <a th:href="@{'/myPage/Board/' + ${session.loginUser.no}}">글</a>
+                    <a th:href="@{'/myPage/Reply/' + ${session.loginUser.no}}">댓글</a>
+                    <a th:href="@{'/myPage/Like/' + ${session.loginUser.no}}">좋아요</a>
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">
@@ -164,6 +166,27 @@
         </div>
     </main>
 </div>
+
 </html>
 
-<script th:src="@{../js/jquery-3.6.0.min.js}"></script>
+<script>
+    $(function () {
+        $.ajax({
+            url: "/profile",
+            success:function (data) {
+                $("#profileModalHolder").html(data);
+            }
+
+        })
+    })
+    function openProfile() {
+        $.ajax({
+            url: "/profile",
+            success:function (data) {
+                $("#modal-profile").modal("show");
+            }
+
+        })
+    }
+
+</script>
