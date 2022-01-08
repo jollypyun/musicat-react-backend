@@ -148,6 +148,11 @@
 					<div id="replys">
 						<div class="reply_list"
 							th:each="reply : ${article.getReplyList()}">
+							<th:block th:if="${reply.hide == 1}" >
+								<p>삭제된 댓글 입니다.</p>
+							</th:block>
+							<th:block th:if="${reply.hide == 0}">
+							<p th:if="${reply.depth == 1}">ㄴ</p>
 							<table th:id="${reply.getNo()}">
 								<colgroup>
 									<col width="15%">
@@ -168,7 +173,7 @@
 									</tr>
 								</tbody>
 								<tfoot>
-
+									<tr><td><input type="button" class="depth_reply_btn" value="답글쓰기" /></td></tr>
 									<tr th:if="${loginMemberNo == reply.memberNo}">
 										<td colspan="2"><input type="button"
 											class="modify_Reply_Form_Btn" value="수정" /> <input
@@ -176,8 +181,20 @@
 									</tr>
 								</tfoot>
 							</table>
+							</th:block>
 						</div>
 					</div>
+					<!-- 답글 폼 -->
+					<div id="write_depth_reply_form" style="display: none">
+						<div id="writeDepthReplyForm" class="detailArticle-reply-style">
+							<textarea id="write_depth_content" name="write_content" rwos="10"
+									  cols="75" placeholder="댓글을 입력해주세요."></textarea>
+
+							<button type="button" id="write_depth_reply_btn">등록</button>
+							<button type="button" class="depth_reply_cancle_btn">취소</button>
+						</div>
+					</div>
+
 					<!-- 수정 폼 -->
 					<div id="modify_reply_form" style="display: none;"
 						class="detailArticle-replyModify-style">
