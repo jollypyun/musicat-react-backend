@@ -40,7 +40,7 @@ public interface BoardMapper {
 	public ArrayList<BoardBoardGradeVO> selectAllBoard();
 
 	//게시판이름 중복 검사
-	public int selectDuplicateBoard(String boardName);
+	public Integer selectDuplicatedBoard(String boardName);
 
 	//즐겨찾기 게시판 추가
 	public void insertFavoriteBoard(BoardVO boardVo);

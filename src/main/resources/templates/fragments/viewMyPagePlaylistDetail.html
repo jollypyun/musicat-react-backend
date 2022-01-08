@@ -239,13 +239,13 @@
                             <table>
                                 <thead>
                                 <tr>
-                                    <th>Followers</th>
-                                    <th>Following</th>
+                                    <th><a th:href="|/followedList/${member.getNo()}|">Followers</a></th>
+                                    <th><a th:href="|/followingList/${member.getNo()}|">Following</a></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <td>1</td>
-                                <td>1</td>
+                                <td th:text = "${follow.followed}"></td>
+                                <td th:text = "${follow.following}"></td>
                                 </tbody>
                             </table>
                         </div>

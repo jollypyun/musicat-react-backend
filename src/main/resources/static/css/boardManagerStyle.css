@@ -11,16 +11,16 @@
 
 .boardManager-btn-style div {
 	width: 30%;
-	
+
 }
 
 .boardManager-btn-style div button:hover {
 	border-color: #66afe9;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
-		rgba(102, 175, 233, .6);
+	rgba(102, 175, 233, .6);
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
-		rgba(102, 175, 233, .6);
-	
+	rgba(102, 175, 233, .6);
+
 }
 .boardManager-btn-style div button {
 	width: 100%;
@@ -60,18 +60,18 @@
 .list-category-style,
 .list-board-style{
 	border-radius: 10px;
-	
+
 }
 
 .list-category-style:hover,
 .list-board-style:hover{
 	cursor: pointer;
-	
+
 	border-color: #66afe9;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
-		rgba(102, 175, 233, .6);
+	rgba(102, 175, 233, .6);
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
-		rgba(102, 175, 233, .6);
+	rgba(102, 175, 233, .6);
 }
 
 
@@ -92,7 +92,7 @@
 .categoryList-input-style {
 	display: flex;
 	justify-content: center;
-	padding-top: 10px;
+	padding-top: 20px;
 	border: 1px solid #666666;
 }
 
@@ -101,7 +101,6 @@
 }
 
 .categoryList-input-style div form div{
-	margin-top: 10px;
 	display: flex;
 	justify-content: space-around;
 }
@@ -109,8 +108,17 @@
 	width: 30%;
 }
 
+.categoryList-blank-style{
+	width: 80%;
+}
+
+.categoryList-blank-style table{
+	width: 100%;
+}
+
 .categoryList-blank-style table td{
 	border: 1px solid #cccccc;
+
 }
 
 .categoryList-blank-style table tr td:first-child {
@@ -118,12 +126,23 @@
 	padding: 10px;
 	text-align: center;
 	vertical-align: middle;
+	width: 30%;
 }
 
 .categoryList-blank-style table tr td:last-child {
 	text-align: center;
+	width: 70%;
+
 }
 .categoryList-blank-style table tr td:last-child select{
 	width: 100%;
-	padding: 10px 0; 
+	padding: 10px 0;
+}
+
+.categoryList-blank-style table tr td:last-child input{
+	width: 100%;
+}
+
+.boardManager-func{
+	margin-top: 10px;
 }

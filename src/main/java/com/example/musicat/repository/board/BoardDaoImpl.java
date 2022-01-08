@@ -82,9 +82,9 @@ public class BoardDaoImpl implements BoardDao {
 
 	//게시판 이름 중복 검사
 	@Override
-	public int selectDuplicateBoard(String boardName) {
-		int count = this.boardMapper.selectDuplicateBoard(boardName);
-		return count;
+	public Integer selectDuplicatedBoard(String boardName) {
+		Integer duplicatedBoard = this.boardMapper.selectDuplicatedBoard(boardName);
+		return duplicatedBoard;
 	}
 	
 	//즐겨찾기 게시판 추가

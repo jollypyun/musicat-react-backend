@@ -1,5 +1,6 @@
 package com.example.musicat.controller;
 
+import java.lang.reflect.Member;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
@@ -11,12 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
+import com.example.musicat.domain.member.FollowVO;
 import com.example.musicat.domain.member.GradeVO;
 import com.example.musicat.mapper.member.GradeMapper;
 import com.example.musicat.security.MemberContext;
 
 import com.example.musicat.domain.board.BestArticleVO;
 
+import com.example.musicat.service.member.FollowService;
 import com.example.musicat.service.member.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -60,6 +63,9 @@ public class HomeController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private FollowService followService;
 
 
     @GetMapping("/")
@@ -143,13 +149,24 @@ public class HomeController {
 	}
 
     @GetMapping("/myPage/Playlist/{userNo}")
-    public String myPage(Model model, @PathVariable String userNo) {
+    public String myPage(Model model, @PathVariable int userNo) {
+        MemberVO member = new MemberVO();
+        FollowVO follow = new FollowVO();
 
+        try {
+            member = memberService.retrieveMemberByManager(userNo);
+            follow.setFollowing(followService.countFollowing(userNo));
+            follow.setFollowed(followService.countFollowed(userNo));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
+        model.addAttribute("member", member);
+        model.addAttribute("follow", follow);
 
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylist");
         return "view/home/viewHomeTemplate";
@@ -157,56 +174,80 @@ public class HomeController {
     }
 
     @GetMapping("/myPage/Playlist/{userNo}/{playlistNo}")
-    public String myPagePlaylistDetail(Model model, @PathVariable String playlistNo, @PathVariable String userNo) {
+    public String myPagePlaylistDetail(Model model, @PathVariable String playlistNo, @PathVariable int userNo) {
+        MemberVO member = new MemberVO();
+        try {
+            member = memberService.retrieveMemberByManager(userNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
-
+        model.addAttribute("member", member);
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylistDetail");
         return "view/home/viewHomeTemplate";
 
     }
 
     @GetMapping("/myPage/Board/{userNo}")
-    public String myPageBoard(Model model, @PathVariable String userNo) {
+    public String myPageBoard(Model model, @PathVariable int userNo) {
+        MemberVO member = new MemberVO();
+        try {
+            member = memberService.retrieveMemberByManager(userNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
-
+        model.addAttribute("member", member);
         model.addAttribute("HomeContent", "fragments/viewMyPageBoard");
         return "view/home/viewHomeTemplate";
 
     }
 
     @GetMapping("/myPage/Reply/{userNo}")
-    public String myPageReply(Model model, @PathVariable String userNo) {
+    public String myPageReply(Model model, @PathVariable int userNo) {
+        MemberVO member = new MemberVO();
+        try {
+            member = memberService.retrieveMemberByManager(userNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
-
+        model.addAttribute("member", member);
         model.addAttribute("HomeContent", "fragments/viewMyPageReply");
         return "view/home/viewHomeTemplate";
 
     }
 
     @GetMapping("/myPage/Like/{userNo}")
-    public String myPageLike(Model model, @PathVariable String userNo) {
+    public String myPageLike(Model model, @PathVariable int userNo) {
+        MemberVO member = new MemberVO();
+        try {
+            member = memberService.retrieveMemberByManager(userNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
-
+        model.addAttribute("member", member);
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";
 

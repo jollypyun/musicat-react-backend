@@ -69,4 +69,9 @@ public class MemberVO {
 		this.nickname = nickname;
 	}
 
+	// 팔로우 필요 정보
+	public MemberVO(int no, String nickname) {
+		this.no = no;
+		this.nickname = nickname;
+	}
 }

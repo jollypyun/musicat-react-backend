@@ -23,12 +23,12 @@
 	</insert>
 
 
-
+	<!-- 게시판 종류 조회 -->
 	<resultMap id="selectBoardkindResultMap" type="boardVO">
 		<result property="boardkind" javaType="int" column="boardkind" jdbcType="INTEGER"/>
 		<result property="boardkindName" javaType="String" column="boardkind_name" jdbcType="VARCHAR"/>
 	</resultMap>
-	<!-- 게시판 종류 조회 -->
+
 	<select id="selectBoardkind" resultMap="selectBoardkindResultMap"  resultType="boardVO">
 		SELECT boardkind, boardkind_name FROM boardkind;
 	</select>
@@ -86,8 +86,8 @@
 	
 	
 	<!-- 게시판 중복 조회 -->
-	<select id="selectDuplicateBoard" resultType="int">
-		SELECT count(*) FROM board WHERE boardname = #{boardName};
+	<select id="selectDuplicatedBoard" resultType="INTEGER">
+		SELECT board_no FROM board WHERE boardname = #{boardName};
 	</select>
 	
 	<!-- 즐겨찾기 게시판 추가 -->
