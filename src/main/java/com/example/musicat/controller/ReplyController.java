@@ -4,11 +4,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,18 +28,25 @@ public class ReplyController {
 	
 	@ResponseBody
 	@PostMapping("/insertReply")
-	public List<ReplyVO> insertReply(@RequestParam("articleNo") int articleNo
+	public List<ReplyVO> insertReply(@RequestParam("no") int grpNo
+			,@RequestParam("articleNo") int articleNo
 			,@RequestParam("content") String content
+			,@RequestParam("depth") int depth
 			,HttpServletRequest req) {
 		// create
 		HttpSession session = req.getSession();
 		MemberVO member = (MemberVO) session.getAttribute("loginUser");
 		int memberNo = member.getNo();
 		String nickname = member.getNickname();
-		ReplyVO reply = ReplyVO.createReply(articleNo, memberNo, nickname, content);
-		
+		if(depth == 0){ //원본글
+			ReplyVO reply = ReplyVO.createReply(articleNo, memberNo, nickname, content);
+			this.replyService.registerReply(reply); // DB insert
+		}else{ //답글
+			ReplyVO reply = ReplyVO.createDepthReply(articleNo, memberNo, nickname, content, depth, grpNo);
+			this.replyService.registerReply(reply); // DB insert
+		}
+
 		// bind
-		this.replyService.registerReply(reply); // DB insert
 		List<ReplyVO> replyList = this.replyService.retrieveAllReply(articleNo); // select Replys
 
 		return replyList;
