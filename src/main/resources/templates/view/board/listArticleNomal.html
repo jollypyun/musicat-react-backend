@@ -19,7 +19,7 @@
                         <input type="hidden" id="allSearchContent" th:value="${content}">
 
 			    
-                        <table id="datatablesSimple">
+                        <table id="datatablesSimple" class="list-normal-table">
                             <thead>
                             <tr>
                                 <th>No</th>
@@ -46,13 +46,13 @@
                                            th:href="|/articles/${article.no}|"></a>
                                     </td>
                                    										<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
-										<td >
-										<a th:id = "${article.memberNo}" class="dropbtn" onclick="myFunction()" th:text="${article.nickname}">
-<!--											<div id="myDropdown" class="dropdown-content">-->
-<!--												<a href="#home">쪽지 창</a>-->
-<!--												<a th:href="|/myPage/Playlist/${article.memberNo}|">myPage</a>-->
-<!--											</div>-->
+										<td class="dropdown">
+										<a th:id = "${article.memberNo}" class="dropdown-toggle" data-bs-toggle="dropdown" th:text="${article.nickname}">
 										</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" th:href="|/myPage/Playlist/${article.memberNo}|">MyPage</a></li>
+                                                <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                            </ul>
 										</td>
 										<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
                                     <td th:text="${article.writeDate}"></td>
@@ -161,25 +161,25 @@
 
 		});
 
-		function myFunction() {
-			document.getElementById("myDropdown").classList.toggle("show");
-		}
+		// function myFunction() {
+		// 	document.getElementById("myDropdown").classList.toggle("show");
+		// }
 
 	});
 
 
-	window.onclick = function(event) {
-		if (!event.target.matches('.dropbtn')) {
-			var dropdowns = document.getElementsByClassName("dropdown-content");
-			var i;
-			for (i = 0; i < dropdowns.length; i++) {
-				var openDropdown = dropdowns[i];
-				if (openDropdown.classList.contains('show')) {
-					openDropdown.classList.remove('show');
-				}
-			}
-		}
-	}
+	// window.onclick = function(event) {
+	// 	if (!event.target.matches('.dropbtn')) {
+	// 		var dropdowns = document.getElementsByClassName("dropdown-content");
+	// 		var i;
+	// 		for (i = 0; i < dropdowns.length; i++) {
+	// 			var openDropdown = dropdowns[i];
+	// 			if (openDropdown.classList.contains('show')) {
+	// 				openDropdown.classList.remove('show');
+	// 			}
+	// 		}
+	// 	}
+	// }
 
     /* 	function openNote(e) {
                 const memberNo = e.id;

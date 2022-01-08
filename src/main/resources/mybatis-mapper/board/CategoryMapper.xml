@@ -80,7 +80,7 @@
 	
 	
 	<!-- 카테고리 이름 중복 체크 -->
-	<select id="selectDuplicateCategory" resultType="int">
+	<select id="selectDuplicatedCategory" resultType="int">
 		SELECT count(*) 
 		FROM category
 		WHERE categoryname = #{categoryName};

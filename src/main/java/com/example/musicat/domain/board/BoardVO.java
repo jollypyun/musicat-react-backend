@@ -31,11 +31,14 @@ public class BoardVO {
     private int favoriteNo;
     private int no; //회원 넘버
 
-//    public BoardVO(int boardNo, String boardName) {
-//        super();
-//        this.boardNo = boardNo;
-//        this.boardName = boardName;
-//    }
+    //
+    public BoardVO(int categoryNo, int boardNo, String boardName, int boardkind) {
+        this.categoryNo = categoryNo;
+        this.boardNo = boardNo;
+        this.boardName = boardName;
+        this.boardkind = boardkind;
+    }
+    //
 
     public BoardVO(int boardNo, String boardName, int boardkind) {
         this.boardNo = boardNo;
@@ -47,9 +50,5 @@ public class BoardVO {
 
     private List<BoardVO> boardGradeList = new ArrayList<>();
 
-//    public BoardVO(int boardkind, String boardkindName) {
-//        this.boardkind = boardkind;
-//        this.boardkindName = boardkindName;
-//    }
 
 }
