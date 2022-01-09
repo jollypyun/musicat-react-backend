@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://thymeleaf.org">
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <link th:href="@{/css/myPageStyle.css}" rel="stylesheet"/>
 
@@ -17,28 +18,57 @@
                         <button onclick="" th:if = "${session.loginUser.gradeNo} != 4 and ${session.loginUser.no} != ${member.getNo()}">Follow</button>
                     </div>
                 </div>
+
                 <div class="mt-4 mb-4 myPage-nav">
-                    <a href="/myPage/Playlist/1">Playlist</a>
-                    <a href="/myPage/Board/1">글</a>
-                    <a href="/myPage/Reply/1">댓글</a>
-                    <a href="/myPage/Like/1">좋아요</a>
+                    <a th:href="@{'/myPage/Playlist/' + ${member.getNo()}}">Playlist</a>
+                    <a th:href="@{'/myPage/Board/' + ${member.getNo()}}">글</a>
+                    <a th:href="@{'/myPage/Reply/' + ${member.getNo()}}">댓글</a>
+                    <span th:if="${session.loginUser.no} == ${member.getNo()}"><a href="/myPage/Like/1">좋아요</a></span>
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">
-                        내 글 페이지
+                        <table id="datatablesSimple"  class="list-normal-table">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>제목</th>
+                                <th>날짜</th>
+                                <th>조회수</th>
+                                <th>추천</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="article : ${articles}">
+                                <td th:text="${article.no}"></td>
+                                <td>
+                                    <a th:text="${article.subject}"
+                                       th:href="|/articles/${article.no}|"></a>
+                                </td>
+                                <td th:text="${article.writeDate}"></td>
+                                <td th:text="${article.viewcount}"></td>
+                                <td th:text="${article.likecount}"></td>
+                                <th:block th:if="${session.authorize}"></th:block>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="myPage-content-right">
                         <div class="myPage-content-right-top">
                             <table>
                                 <thead>
                                 <tr>
-                                    <th><a th:href="|/followedList/${member.getNo()}|">Followers</a></th>
-                                    <th><a th:href="|/followingList/${member.getNo()}|">Following</a></th>
+                                    <th>
+<!--                                        <a th:href="|/followedList/${member.getNo()}|">Followers</a>-->
+                                    </th>
+                                    <th>
+<!--                                        <a th:href="|/followingList/${member.getNo()}|">Following</a>-->
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <td th:text = "${follow.followed}"></td>
-                                <td th:text = "${follow.following}"></td>
+<!--                                <td th:text = "${follow.followed}"></td>-->
+<!--                                <td th:text = "${follow.following}"></td>-->
                                 </tbody>
                             </table>
                         </div>

@@ -4,6 +4,7 @@ import com.example.musicat.domain.member.MemberVO;
 import lombok.extern.java.Log;
 import org.apache.catalina.session.StandardSessionFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -63,7 +64,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //정적파일 뿐만 아니라 인증이 필요 없는 url은 ignoring 처리 해주는 것이 좋음
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**");
+        //web.ignoring().antMatchers("/static/**");
+        //web.ignoring().mvcMatchers("/favicon.ico");
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Override
@@ -76,11 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //강사님께서 코드 짜보고 계시고 완성되면 주시겠다고...
                 .authorizeRequests()
                 //인증된 사용자이면 접근 가능한 페이지
-                .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated()
+                .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated() //
                 //매니저 + root(admin) 부터 접근 가능한 페이지
                 .antMatchers("/manager/**", "/members/**", "/boardManager/**").access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')" )
                 //root(admin)만 접근 개능한 페이지
-                .antMatchers("/admin/**", "/grades/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 //그 외 요청은 모두 허용 ex) /main, /musicatlogin 등
                 .anyRequest().permitAll();
 

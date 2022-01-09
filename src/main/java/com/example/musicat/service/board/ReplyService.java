@@ -18,5 +18,8 @@ public interface ReplyService {
 
 	//댓글 삭제
 	void removeReply(int replyNo, int memberNo);
-	
+
+	//내가 쓴 댓글
+	List<ReplyVO> retrieveReplyOneMember(int memberNo);
+
 }

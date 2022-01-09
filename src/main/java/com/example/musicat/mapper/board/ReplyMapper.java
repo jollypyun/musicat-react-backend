@@ -17,5 +17,8 @@ public interface ReplyMapper {
 
 	//댓글 삭제
 	void deleteReply(int replyNo);
+
+	//내가 쓴 댓글
+	List<ReplyVO> selectReplyOneMember(int memberNo);
 	
 }

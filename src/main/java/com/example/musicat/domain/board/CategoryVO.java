@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 //@RequiredArgsConstructor
-@Alias("categoryVO")
+@Alias("categoryVo")
 @ToString
 public class CategoryVO {
     private int categoryNo;

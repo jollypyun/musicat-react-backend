@@ -22,7 +22,7 @@ public interface CategoryDao {
 	
 	public CategoryVO selectOneCategory(int categoryNo);
 	
-	public int selectDuplicatedCategory(String categoryName);
+	public Integer selectDuplicatedCategory(String categoryName);
 	
 
 

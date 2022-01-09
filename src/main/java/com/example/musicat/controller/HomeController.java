@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
+import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.FollowVO;
 import com.example.musicat.domain.member.GradeVO;
 import com.example.musicat.mapper.member.GradeMapper;
 import com.example.musicat.security.MemberContext;
 
-import com.example.musicat.domain.board.BestArticleVO;
-
+import com.example.musicat.service.board.BoardService;
+import com.example.musicat.service.board.ReplyService;
 import com.example.musicat.service.member.FollowService;
 import com.example.musicat.service.member.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,6 @@ import org.springframework.web.bind.annotation.*;
 import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.member.MemberService;
-import com.example.musicat.domain.board.ArticleVO;
-import com.example.musicat.domain.board.CategoryVO;
 import com.example.musicat.domain.member.MemberVO;
 
 import lombok.extern.java.Log;
@@ -62,7 +61,13 @@ public class HomeController {
 	private CategoryService categoryService;
 
     @Autowired
+    private BoardService boardService;
+
+    @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private ReplyService replyService;
 
     @Autowired
     private FollowService followService;
@@ -75,7 +80,6 @@ public class HomeController {
 
     @RequestMapping("/musicatlogin")
   	public String index(Model model, HttpServletRequest request) {
-		log.info("/musicatlogin------------------------------------");
 
 		if(request.getParameter("email") != null ) {
 			log.info("로그인 실패 - 이전에 입력한 이메일 : " + request.getParameter("email"));
@@ -85,11 +89,7 @@ public class HomeController {
 	}
 
 
-	@GetMapping("/accessDenideGrade")
-	public String accessDenied() {
-		log.info("/accessDenideGrade------------------------------------");
-		return "view/security/accessDenideGrade";
-	}
+
 
 
 //	@PostMapping("/")
@@ -193,6 +193,8 @@ public class HomeController {
 
     }
 
+
+    //작성한 게시글 조회 ------------------- 게시글별 댓글 수 추가하면 좋겠다
     @GetMapping("/myPage/Board/{userNo}")
     public String myPageBoard(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
@@ -202,17 +204,22 @@ public class HomeController {
             e.printStackTrace();
         }
 
+        List<ArticleVO> articles = this.articleService.retrieveMyArticle(userNo);
+        model.addAttribute("articles", articles);
+
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
+
         model.addAttribute("member", member);
         model.addAttribute("HomeContent", "fragments/viewMyPageBoard");
         return "view/home/viewHomeTemplate";
 
     }
 
+    //작성한 댓글 조회--------------------- 작성자 이름에 링크, 게시글 제목 띄우기
     @GetMapping("/myPage/Reply/{userNo}")
     public String myPageReply(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
@@ -222,17 +229,27 @@ public class HomeController {
             e.printStackTrace();
         }
 
+        List<ReplyVO> replyListOneMember = this.replyService.retrieveReplyOneMember(userNo);
+        model.addAttribute("replyListOneMember", replyListOneMember);
+        log.info(replyListOneMember.toString());
+
+        List<BoardVO> boardNameList = this.boardService.retrieveBoardNameList();
+        model.addAttribute("boardNameList", boardNameList);
+        log.info(boardNameList.toString());
+
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
+
         model.addAttribute("member", member);
         model.addAttribute("HomeContent", "fragments/viewMyPageReply");
         return "view/home/viewHomeTemplate";
 
     }
 
+    //추천 누른 게시글 조회
     @GetMapping("/myPage/Like/{userNo}")
     public String myPageLike(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
@@ -242,11 +259,15 @@ public class HomeController {
             e.printStackTrace();
         }
 
+        List<ArticleVO> likeArticle = this.articleService.retrieveMyLikeArticle(userNo);
+        model.addAttribute("likeArticle", likeArticle);
+
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
+
         model.addAttribute("member", member);
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";

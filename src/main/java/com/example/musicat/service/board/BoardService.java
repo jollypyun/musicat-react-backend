@@ -29,6 +29,8 @@ public interface BoardService {
 	public boolean retrieveAllReadBoard(int boardNo, int gradeNo);
 	
 	public Integer retrieveDuplicatedBoard(String boardName);
+
+	public List<BoardVO> retrieveBoardNameList();
 //	
 //	public void registerFavoriteBoard(BoardVO boardVo);
 //	

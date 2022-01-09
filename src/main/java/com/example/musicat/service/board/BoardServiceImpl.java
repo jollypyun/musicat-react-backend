@@ -112,13 +112,12 @@ public class BoardServiceImpl implements BoardService {
 
 	}
 
-//	//게시판 중복 검사
-//	@Override
-//	public int retrieveDuplicateBoard(String boardName) {
-//		int count = this.boardDao.selectDuplicateBoard(boardName);
-//		return count;
-//	}
-//
+	@Override
+	public List<BoardVO> retrieveBoardNameList() {
+		return this.boardDao.selectBoardNameList();
+	}
+
+	//
 //	//즐겨찾기 게시판 추가
 //	@Override
 //	public void registerFavoriteBoard(BoardVO boardVo) {

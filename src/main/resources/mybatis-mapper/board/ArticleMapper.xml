@@ -215,4 +215,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 
+	<!-- 양 -->
+	<!-- MyPage 작성한 게시글 -->
+	<resultMap id="selectMyArticleMap" type="articleVo">
+		<result property="no" javaType="int" column="article_no"  jdbcType="INTEGER"/>
+		<result property="memberNo" javaType="int" column="member_no" jdbcType="INTEGER"/>
+		<result property="subject" javaType="String" column="subject"  jdbcType="VARCHAR"/>
+		<result property="writeDate" javaType="String" column="writedate" jdbcType="VARCHAR"/>
+		<result property="viewcount" javaType="int" column="viewcount" jdbcType="INTEGER"/>
+		<result property="likecount" javaType="int" column="likecount"  jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<select id="selectMyArticle" resultMap="selectMyArticleMap">
+		SELECT member_no, article_no, subject, writedate, viewcount, likecount
+		FROM article
+		WHERE member_no = #{memberNo};
+	</select>
+
+
+	<!-- 추천 누른 게시글 -->
+	<select id="selectMyLikeArticle" resultType="articleVo" resultMap="articleVOResult">
+		SELECT ac.member_no, ac.article_no, nickname, subject, writedate, viewcount, likecount
+		FROM articlerecommend ac JOIN article a ON ac.article_no = a.article_no
+		WHERE ac.member_no = #{memberNo}
+		ORDER BY recommend_no
+	</select>
+
 </mapper>

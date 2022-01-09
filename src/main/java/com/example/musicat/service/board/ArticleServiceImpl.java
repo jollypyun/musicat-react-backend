@@ -182,4 +182,16 @@ public class ArticleServiceImpl implements ArticleService {
 		// find articles insert
 		bestArticleUtil.insertBestArticle(findBestArticles);
 	}
+
+	//작성한 게시글 조회
+	@Override
+	public List<ArticleVO> retrieveMyArticle(int memberNo) {
+		return this.articleDao.selectMyArticle(memberNo);
+	}
+
+	//추천 누른 게시글 조회
+	@Override
+	public List<ArticleVO> retrieveMyLikeArticle(int memberNo) {
+		return this.articleDao.selectMyLikeArticle(memberNo);
+	}
 }

@@ -6,7 +6,7 @@
 <mapper namespace="com.example.musicat.mapper.board.BoardMapper">
 	
 	<!-- 게시판 추가 -->
-	<insert id="insertBoard" parameterType="boardVO">
+	<insert id="insertBoard" parameterType="boardVo">
 		INSERT INTO board (category_no, boardname, boardkind)
 		VALUE (#{categoryNo}, #{boardName}, #{boardkind});
 	</insert>
@@ -24,18 +24,21 @@
 
 
 	<!-- 게시판 종류 조회 -->
-	<resultMap id="selectBoardkindResultMap" type="boardVO">
+	<resultMap id="selectBoardkindResultMap" type="boardVo">
 		<result property="boardkind" javaType="int" column="boardkind" jdbcType="INTEGER"/>
 		<result property="boardkindName" javaType="String" column="boardkind_name" jdbcType="VARCHAR"/>
 	</resultMap>
 
-	<select id="selectBoardkind" resultMap="selectBoardkindResultMap"  resultType="boardVO">
-		SELECT boardkind, boardkind_name FROM boardkind;
+	<select id="selectBoardkind" resultMap="selectBoardkindResultMap"  resultType="boardVo">
+		SELECT boardkind, boardkind_name
+		FROM boardkind;
 	</select>
 
 	<!-- 게시판과 연결된 게시글 조회 -->
 	<select id="selectConnectArticle" resultType="int">
-		SELECT count(*) FROM article WHERE board_no = #{boardNo};
+		SELECT count(*)
+		FROM article
+		WHERE board_no = #{boardNo};
 	</select>
 	
 	<!-- 게시판 삭제 -->
@@ -51,14 +54,14 @@
 	</update>
 
 	<!-- 게시판 조회 -->
-	<resultMap type="boardVO" id="boardVOMap">
+	<resultMap type="boardVo" id="boardVoMap">
 		<result property="categoryNo" javaType="int" column="category_no" jdbcType="INTEGER"/>
 		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"/>
 		<result property="boardName" javaType="string" column="boardname" jdbcType="VARCHAR"/>
 		<result property="boardkind" javaType="int" column="boardkind" jdbcType="INTEGER"/>
 	</resultMap>
 	
-	<resultMap type="boardGradeVO" id="boardGradeVOMap">
+	<resultMap type="boardGradeVo" id="boardGradeVoMap">
 		<!-- selectOneBoard -->
 		<result property="readGrade" javaType="int" column="readgrade" jdbcType="INTEGER"/>
 		<result property="writeGrade" javaType="int" column="writegrade" jdbcType="INTEGER"/>
@@ -67,27 +70,37 @@
 		<result property="readwrite" javaType="int" column="readwrite" jdbcType="INTEGER"/>
 	</resultMap>
  
-	<resultMap type="boardBoardGradeVO" id="boardBoardGradeResultMap">
-		<collection property="boardVo" resultMap="boardVOMap"/>
-		<collection property="boardGradeVo" resultMap="boardGradeVOMap"/>
+	<resultMap type="boardBoardGradeVo" id="boardBoardGradeResultMap">
+		<collection property="boardVo" resultMap="boardVoMap"/>
+		<collection property="boardGradeVo" resultMap="boardGradeVoMap"/>
 	</resultMap>
 		
 	
-	<select id="selectOneBoard" resultType="boardBoardGradeVO" resultMap="boardBoardGradeResultMap">
+	<select id="selectOneBoard" resultType="boardBoardGradeVo" resultMap="boardBoardGradeResultMap">
 		{CALL sp_select_one_board(#{boardNo}) }	
 	</select>
 	
 	<!-- 게시판 조회 (전체 - 카테고리 이름 제외) -->
-	<select id="selectAllBoard" resultType="boardBoardGradeVO" resultMap="boardBoardGradeResultMap">
+	<select id="selectAllBoard" resultType="boardBoardGradeVo" resultMap="boardBoardGradeResultMap">
 		SELECT category_no, board_no, boardname, boardkind, grade_no, readwrite
 		FROM board_grade JOIN board USING (board_no);
 	</select>
 	
-	
-	
 	<!-- 게시판 중복 조회 -->
 	<select id="selectDuplicatedBoard" resultType="INTEGER">
-		SELECT board_no FROM board WHERE boardname = #{boardName};
+		SELECT board_no
+		FROM board
+		WHERE boardname = #{boardName};
+	</select>
+
+	<!-- 게시판 이름 목록 조회 (MyPage 내댓글 목록에 게시판 이름 띄울 예정 -->
+	<resultMap id="selectBoardNameListResultMap" type="boardVo">
+		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"></result>
+		<result property="boardName" javaType="String" column="boardname" jdbcType="VARCHAR"></result>
+	</resultMap>
+	<select id="selectBoardNameList" resultType="boardVo" resultMap="selectBoardNameListResultMap">
+		SELECT board_no, boardname
+		FROM board;
 	</select>
 	
 	<!-- 즐겨찾기 게시판 추가 -->
@@ -97,16 +110,18 @@
 
 	<!-- 즐겨찾기 게시판 삭제 -->
 	<delete id="deleteFavoriteBoard">
-		 DELETE FROM favorite WHERE member_no = #{no} AND board_no = #{boardNo};
+		 DELETE FROM favorite
+		 WHERE member_no = #{no}
+		   AND board_no = #{boardNo};
 	</delete>
 	
 	<!-- 즐겨찾기 게시판 조회 -->
-  	<resultMap type="boardVO" id="selectFavoriteBoardListResultMap">
+  	<resultMap type="boardVo" id="selectFavoriteBoardListResultMap">
 		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"/>
 		<result property="boardName" javaType="string" column="boardname" jdbcType="VARCHAR"/>
 	</resultMap> 
 	
-	<select id="selectFavoriteBoardList" resultType="boardVO" resultMap="selectFavoriteBoardListResultMap">
+	<select id="selectFavoriteBoardList" resultType="boardVo" resultMap="selectFavoriteBoardListResultMap">
 		SELECT f.board_no, boardname 
 		FROM favorite AS f JOIN board AS b ON f.board_no = b.board_no
 		WHERE member_no = #{no};

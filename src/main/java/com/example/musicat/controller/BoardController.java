@@ -59,12 +59,20 @@ public class BoardController {
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("managerContent", "/view/board/boardManager");
+
 		
 		log.info("boardManager--------" + categoryList.toString());
 		
 		//카테고리 추가
 		CategoryVO categoryVo = new CategoryVO();
 		model.addAttribute("categoryVo", categoryVo);
+		return "view/home/viewManagerTemplate";
+	}
+
+	@GetMapping("/accessDenideGrade")
+	public String accessDenied(Model model) {
+		log.info("/accessDenideGrade------------------------------------");
+		model.addAttribute("managerContent", "view/security/accessDenideGrade");
 		return "view/home/viewManagerTemplate";
 	}
 
@@ -77,19 +85,14 @@ public class BoardController {
 
 		String categoryName = categoryVo.getCategoryName();
 
-		int count = categoryService.retrieveDuplicatedCategory(categoryName);
+		Integer duplicatedCategory = categoryService.retrieveDuplicatedCategory(categoryName);
 
-		if (count != 0) {
-			int duplicatedCategory = 1;
-			map.put("result", duplicatedCategory);
-		} else {
-			int duplicatedCategory = 0;
-			map.put("result", duplicatedCategory);
+		if (duplicatedCategory == null) {
+			map.put("result", 0);
 			this.categoryService.registerCategory(categoryVo.getCategoryName());
+		} else {
+			map.put("result", 1);
 		}
-
-		log.info("/writeCategory------");
-
 		return map;
 	}
 
@@ -119,21 +122,35 @@ public class BoardController {
 		int categoryNo = categoryVo.getCategoryNo();
 		String categoryName = categoryVo.getCategoryName();
 
-		int count = this.categoryService.retrieveDuplicatedCategory(categoryName);
-
-		if (count != 0) {
-			//log.info("수정 불가");
-			//int duplicatedCategory = 1;
-			map.put("result", 1);
-		} else {
-			//log.info("수정 가능");
-			//int duplicatedCategory = 0;
+		//카테고리명 중복 검사
+		Integer duplicatedCategory = this.categoryService.retrieveDuplicatedCategory(categoryName);
+		if (duplicatedCategory == null) { //중복 x
 			map.put("result", 0);
 			this.categoryService.modifyCategory(categoryNo, categoryName);
-			//this.categoryService.registerCategory(categoryVo.getCategoryName());
+		} else { //중복 o
+			if(duplicatedCategory == categoryNo) {
+				map.put("result", 0); //해당 카테고리면 저장o
+			} else {
+				map.put("result", 1); //다른 카테고리면 저장x
+			}
 		}
-		log.info("/modifyCategory-----------------------");
+
 		return map;
+//
+//
+//		if (count != 0) {
+//			//log.info("수정 불가");
+//			//int duplicatedCategory = 1;
+//			map.put("result", 1);
+//		} else {
+//			//log.info("수정 가능");
+//			//int duplicatedCategory = 0;
+//			map.put("result", 0);
+//			this.categoryService.modifyCategory(categoryNo, categoryName);
+//			//this.categoryService.registerCategory(categoryVo.getCategoryName());
+//		}
+//		log.info("/modifyCategory-----------------------");
+//		return map;
 	}
 
 
