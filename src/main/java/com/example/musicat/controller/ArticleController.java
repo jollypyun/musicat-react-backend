@@ -267,8 +267,9 @@ public class ArticleController {
 		ArticleVO article = this.articleService.retrieveArticle(articleNo); // 게시글 정보 가져오기
 		ArticleForm form = ArticleForm.updateArticle(article);
 		// create
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int gradeNo = member.getGradeNo();
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -336,8 +337,9 @@ public class ArticleController {
 	public RedirectView removeArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req) {
 		RedirectView redirectView = new RedirectView();
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int memberNo = member.getNo();
 		int boardNo = this.articleService.removeArticle(articleNo, memberNo);
 		redirectView.setUrl("/board/" + boardNo + "/articles");
@@ -349,8 +351,9 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String, Object> recUpdate(@RequestBody HashMap<String, Object> map
 			,HttpServletRequest req) {
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int memberNo = member.getNo();
 		int articleNo = Integer.parseInt((String)map.get("articleNo"));
 
@@ -365,8 +368,9 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String, Object> recDelete(@RequestBody HashMap<String, Object> map
 			,HttpServletRequest req) {
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		ArticleVO article = new ArticleVO();
 		int articleNo = Integer.parseInt((String)map.get("articleNo"));
 		article.setNo(articleNo);
