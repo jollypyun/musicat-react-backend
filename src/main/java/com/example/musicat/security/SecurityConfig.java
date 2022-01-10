@@ -1,8 +1,9 @@
 package com.example.musicat.security;
 
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.websocket.manager.NotifyManager;
+import com.example.musicat.websocket.manager.StompHandler;
 import lombok.extern.java.Log;
-import org.apache.catalina.session.StandardSessionFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,6 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private NotifyManager notifyManager;
 
     //비밀번호 암호화
     @Bean
@@ -96,6 +99,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         //인증 성공 시 인증 결과를 담은 인증 객체를 파라미터로 받음 (인증 요청하지 않은 사용자의 정보는 HomController(/main)에서 처리해줌
                         MemberVO member = (MemberVO) authentication.getPrincipal();
+
+                        // 예나 - notify 임시 id set
+                        member.setNotifyId(member.getNo() + member.getEmail());
+                        notifyManager.addToNotifyList(member.getNo(), member.getNotifyId());
 
                         HttpSession session = request.getSession();
                         session.setAttribute("loginUser", member);

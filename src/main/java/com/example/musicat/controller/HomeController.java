@@ -211,7 +211,6 @@ public class HomeController {
         return "view/home/viewHomeTemplate";
 
     }
-
 	
 
 }

@@ -32,6 +32,8 @@ public class MemberVO {
 	private String ban = "";
 	private int isMember;
 
+	private String notifyId; // stomp id
+
 	public MemberVO(@NonNull String email, String password) {
 		super();
 		this.email = email;

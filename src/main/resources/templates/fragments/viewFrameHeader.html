@@ -7,6 +7,8 @@
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-4 fw-bold" href="/main">Musicat</a>
 
+    <!-- 예나 테스트 -->
+    <button id = "notifyTestBtn" type="button"></button>
     <!-- Sidebar Toggle-->
     <button
       class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
@@ -130,6 +132,22 @@
           <li><a class="dropdown-item" href="/outForm">회원 탈퇴</a></li>
         </ul>
       </li>
+      <li class="nav-item dropdown">
+        <a
+                class="nav-link dropdown-toggle"
+                id="navbarDropdown"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+        ><i class="fas fa-user fa-fw"></i
+        ></a>
+        <span id="noticeCount">0</span>
+        <ul id = "noticeList" class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdown">
+          <li>새로운 알림이 없습니다.</li>
+        </ul>
+      </li>
     </ul>
   </nav>
   <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
@@ -145,5 +163,58 @@
         $("#all_search_form").submit();
       });
     });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  <script th:inline="javascript">
+    $(document).ready(function() {
+      if( [[${#authorization.expr('isAuthenticated()')}]]) {
+        var sockJs = new SockJS("/stomp/topic");
+        var stomp = Stomp.over(sockJs);
+
+        stomp.connect({}, function() {
+          console.log("STOMP Connection");
+
+          var userInfo = [[${#authentication.principal}]];
+          var notifyId = userInfo.notifyId;
+          console.log(notifyId);
+
+          stomp.subscribe("/sub/topic/notify/" + notifyId, function (notify) {
+            var content = JSON.parse(notify.body);
+
+            //console.log("notify : " + notify);
+            //console.log("content : " + content);
+            //console.log(notify.body);
+
+            $('#noticeList').empty();
+            // $('#noticeList').append("<li><a href=" + "/main" + ">" + notify.body +"</a></li>");
+            var i;
+            for(i = 0; i < content.length; i++){
+              $('#noticeList').append("<li><a href=" + "/main" + ">" + content[i].content +"</a></li>");
+            }
+            $('#noticeCount').text(i);
+            //console.log("noticecount : " + i);
+          });
+
+          // 연결 확인 테스트용
+          //stomp.send('/pub/topic/notify/register', {}, JSON.stringify({notifyId: notifyId}));
+          stomp.send('/pub/topic/notify/register', {}, userInfo.no);
+        });
+      }
+
+
+      // $(document).on("click", "#notifyTestBtn", function () {
+      //   var userInfo = [[${#authentication.principal}]];
+      //   var notifyId = userInfo.notifyId;
+      //
+      //   console.log("click");
+      //
+      //   stomp.send("/sub/topic/notify/" + notifyId, {}, JSON.stringify({notifyId: notifyId}));
+      // });
+
+
+    });
+
+
   </script>
 </html>
