@@ -9,11 +9,11 @@ import java.util.Collection;
 
 @Log
 // User : Spring Security가 제공하는 UserDetails의 구현체
-public class MemberContext extends User {
+public class MemberAccount extends User {
 
-    private final MemberVO memberVo;
+    private MemberVO memberVo;
 
-    public MemberContext(MemberVO memberVo, Collection<? extends GrantedAuthority> authorities) {
+    public MemberAccount(MemberVO memberVo, Collection<? extends GrantedAuthority> authorities) {
 
         //회원의 권한을 authorites에 받아서 memberVo에 추가
         super(memberVo.getEmail(), memberVo.getPassword(), authorities);

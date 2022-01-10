@@ -39,8 +39,9 @@ public class ReplyDaoImpl implements ReplyDao {
 	public void deleteReply(int replyNo) {
 		this.replyMapper.deleteReply(replyNo);
 	}
-	
 
-	
-
+	@Override
+	public List<ReplyVO> selectReplyOneMember(int memberNo) {
+		return this.replyMapper.selectReplyOneMember(memberNo);
+	}
 }

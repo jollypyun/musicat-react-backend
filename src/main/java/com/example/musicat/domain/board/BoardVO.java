@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Alias("boardVO")
+@Alias("boardVo")
 public class BoardVO {
 
     private int categoryNo;

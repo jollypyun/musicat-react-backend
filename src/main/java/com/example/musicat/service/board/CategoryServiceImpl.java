@@ -82,8 +82,8 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public int retrieveDuplicatedCategory(String categoryName) {
-		int duplicatedCategory = this.categoryDao.selectDuplicatedCategory(categoryName);
+	public Integer retrieveDuplicatedCategory(String categoryName) {
+		Integer duplicatedCategory = this.categoryDao.selectDuplicatedCategory(categoryName);
 		return duplicatedCategory;
 	}
 //
