@@ -24,4 +24,5 @@ public class ChatRoomVO {
         room.name = name;
         return room;
     }
+
 }

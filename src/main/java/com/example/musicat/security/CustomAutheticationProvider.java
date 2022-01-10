@@ -30,23 +30,23 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials(); //Credentials : 비밀번호
 
         //loadUserByUsername : username(email) DB에 존재하는지 검증
-        MemberContext memberContext = (MemberContext) userDetailsService.loadUserByUsername(email);
+        MemberAccount memberAccount = (MemberAccount) userDetailsService.loadUserByUsername(email);
 
         // 인코딩 된 password 일치 여부 검증
-        if(!bCryptPwd.matches(password, memberContext.getMemberVo().getPassword())) {
+        if(!bCryptPwd.matches(password, memberAccount.getMemberVo().getPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
         }
 
         //활동정지 회원 여부 (DisabledException : 계정 비활성화)
-        log.info("ban : " + memberContext.getMemberVo().getBan());
-        if(!memberContext.getMemberVo().getBan().equals("")) {
-            log.info("ban : " + memberContext.getMemberVo().getBan());
+        log.info("ban : " + memberAccount.getMemberVo().getBan());
+        if(!memberAccount.getMemberVo().getBan().equals("")) {
+            log.info("ban : " + memberAccount.getMemberVo().getBan());
             throw new DisabledException("DisabledException");
         }
 
         //탈퇴 회원 여부 (AccountExpiredException : 계정만료)
-        if(memberContext.getMemberVo().getIsMember() != 0) {
-            System.out.println("ismember : " + memberContext.getMemberVo().getIsMember());
+        if(memberAccount.getMemberVo().getIsMember() != 0) {
+            System.out.println("ismember : " + memberAccount.getMemberVo().getIsMember());
             throw new AccountExpiredException("AccountExpiredException");
         }
 
@@ -62,7 +62,7 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         
         //인증 모두 완료될 경우 토큰 생성
         //인증 성공 시 authenticationToken에 회원 정보(비밀번호 제외한 회원 정보)를 담아 AuthenticationProvider를 호출한 AuthenticationManager에 전달
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberContext.getMemberVo(), null, memberContext.getAuthorities());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberAccount.getMemberVo(), null, memberAccount.getAuthorities());
         log.info("인증 성공 - authenticationToken에 정보 담아서 AuthenticationManager에 넘김 : " + authenticationToken.getName());
         return authenticationToken;
     }

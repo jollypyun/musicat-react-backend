@@ -80,4 +80,10 @@ public interface ArticleMapper {
 
 	//베스트글 모두 조회
 	List<BestArticleVO> selectAllBestArticle();
+
+	//작성한 게시글 조회
+	List<ArticleVO> selectMyArticle(int memberNo);
+
+	//추천 누른 게시글 조회
+	List<ArticleVO> selectMyLikeArticle(int memberNo);
 }

@@ -51,4 +51,10 @@ public interface ArticleService {
 
 	//베스트글 전체 조회
 	List<BestArticleVO> selectAllBestArticle();
+
+	//작성한 게시글 조회
+	List<ArticleVO> retrieveMyArticle(int memberNo);
+
+	//추천 누른 게시글 조회
+	List<ArticleVO> retrieveMyLikeArticle(int memberNo);
 }

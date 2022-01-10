@@ -72,15 +72,16 @@ public class FileManager {
 	public void createThumbnail(String systemFileName) throws IOException {
 		File image = new File(getFullPath(systemFileName));
 		File thumbnail = new File(getFullPath("thumbnail/thumb" + systemFileName));
-		int pos = systemFileName.lastIndexOf(".");
+
+		//systemFileName에서 확장자 추출
+		int pos = systemFileName.lastIndexOf("."); 
 		String ext = systemFileName.substring(pos + 1);
-			
-		if (image.exists()) {
-			Thumbnails.of(image).size(190, 150).outputFormat(ext).toFile(thumbnail);
-			//Thumbnails.of(image).size(190, 150).outputFormat("png").toFile(thumbnail);
+		// ext: 확장자
+		if (image.exists()) { //썸네일 생성
+				Thumbnails.of(image).size(190, 150).outputFormat(ext).toFile(thumbnail);
 		}
-//		return null;
 	}
+
 	
 	// Upload Folder에서 삭제
 	public void deleteUploadFile(FileVO fileVO){
@@ -89,9 +90,6 @@ public class FileManager {
 			file.delete();
 		}
 	}
-
-
-
 
 
 	// 서버에서 관리할 파일이름 추출

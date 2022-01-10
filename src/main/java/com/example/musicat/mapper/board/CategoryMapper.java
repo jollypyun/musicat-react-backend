@@ -26,7 +26,7 @@ public interface CategoryMapper {
 	public CategoryVO selectOneCategory(int categoryNo);
 	
 	//카테고리 중복 조회
-	public int selectDuplicatedCategory(String categoryName);
+	public Integer selectDuplicatedCategory(String categoryName);
 	
 	//카테고리 목록 조회
 	public ArrayList<CategoryVO> selectCategoryList();
