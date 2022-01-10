@@ -11,7 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @Alias("articleVo")
 public class ArticleVO {
 
@@ -68,12 +67,6 @@ public class ArticleVO {
     }
 
 
-    //조회수 증가
-    public void addViewcount(){
-        this.viewcount += 1;
-    }
-
-
     @Override
     public String toString() {
         return "Article{" +
@@ -96,7 +89,4 @@ public class ArticleVO {
     public ArticleVO() {
     }
 
-    public void setWritedate(String writedate) {
-        this.writeDate = writedate;
-    }
 }

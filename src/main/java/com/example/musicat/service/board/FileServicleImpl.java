@@ -50,6 +50,13 @@ public class FileServicleImpl implements FileService {
 			List<FileVO> fileList = article.getFileList();
 			for (FileVO file : fileList) {
 				if (fileCheck(this.dirPath, file.getSystemFileName())) {
+					int pos = file.getSystemFileName().indexOf(".");
+					String ext = file.getSystemFileName().substring(pos + 1);
+					if("mp4".equals(ext)){ // 동영상 저장
+						file.setArticleNo(articleNo);
+						file.setFileType(2);
+						this.fileDao.insertFile(file); // 이미지 파일들 저장
+					}
 					file.setArticleNo(articleNo);
 					file.setFileType(1);
 					this.fileDao.insertFile(file); // 이미지 파일들 저장

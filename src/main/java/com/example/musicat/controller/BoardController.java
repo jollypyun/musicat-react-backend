@@ -356,7 +356,6 @@ public class BoardController {
 
 
 		int boardkind = bbgVO.getBoardVo().getBoardkind();
-
 		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것

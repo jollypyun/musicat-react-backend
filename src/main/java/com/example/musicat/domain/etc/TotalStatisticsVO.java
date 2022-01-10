@@ -16,4 +16,5 @@ public class TotalStatisticsVO {
 	private int totalArticle;
 	private int totalView;
 	private int totalVisits;
+
 }

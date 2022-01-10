@@ -24,7 +24,8 @@ $(document).ready(function (){
             console.log("keypress");
 
             // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
-            if (e.key === "Enter" || e.keyCode == 32) {
+            // if (e.key === "Enter" || e.keyCode == 32) {
+            if (e.key === "Enter") {
 
                 var tagValue = self.val(); // 값 가져오기
 
@@ -127,18 +128,29 @@ function setThumbnail(event) {
         var reader = new FileReader();
 
         reader.onload = function (event) {
-            //image preview
-            var $div = $('<div id=image' + index + ' class="preview-div">');
-            var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="100" height="100">');
-            // var $input = $('<button id=' + index + ' class="preview-de"></button>');
-            // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
 
-            // $input.append($i);
-            $div.append($img);
-            // $div.append($input);
-            $('#image_container').append($div);
+            var pos = image.name.lastIndexOf(".");
+            var ext = image.name.substring(pos + 1).toLowerCase();
+            console.log(image.name);
 
-            index++;
+            if ($.inArray(ext, ['png', 'jpg', 'mp4']) == -1){
+                alert('이미지 첨부는 png, jpg만 가능합니다');
+                return false;
+            } else {
+
+                //image preview
+                var $div = $('<div id=image' + index + ' class="preview-div">');
+                var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="100" height="100">');
+                // var $input = $('<button id=' + index + ' class="preview-de"></button>');
+                // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
+
+                // $input.append($i);
+                $div.append($img);
+                // $div.append($input);
+                $('#image_container').append($div);
+
+                index++;
+            }
         };
 
         console.log(image);

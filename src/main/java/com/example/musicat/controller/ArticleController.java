@@ -227,8 +227,16 @@ public class ArticleController {
 		// 파일 첨부 지정 폴더에 Upload도 동시에 실행
 		FileVO attacheFile = fileManager.uploadFile(form.getImportAttacheFile()); // 첨부 파일
 		List<FileVO> imageFiles = fileManager.uploadFiles(form.getImageFiles()); // 이미지 파일
+		int pos = imageFiles.get(0).getSystemFileName().indexOf(".");
+		String ext = imageFiles.get(0).getSystemFileName().substring(pos + 1);
 		if (imageFiles.size() > 0) {
-			fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
+			if ("mp4".equals(ext)){
+				if (imageFiles.get(1) != null){
+					fileManager.createThumbnail(imageFiles.get(1).getSystemFileName()); // 썸네일 생성
+				}
+			} else {
+				fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
+			}
 		}
 		// bind
 		ArticleVO article = ArticleVO.createArticle(member.getNo(), member.getNickname(), articleForm, attacheFile, imageFiles);
@@ -324,7 +332,7 @@ public class ArticleController {
 		return mv;
 	}
 
-	@GetMapping("/remove/{articleNo}")
+	@PostMapping("/remove/{articleNo}")
 	public RedirectView removeArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req) {
 		RedirectView redirectView = new RedirectView();

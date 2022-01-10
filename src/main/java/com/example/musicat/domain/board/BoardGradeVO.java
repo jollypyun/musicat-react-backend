@@ -28,6 +28,7 @@ public class BoardGradeVO {
 	private int gradeNo;
 	private String gradeName;
 
+
 	//
 	public BoardGradeVO(int boardNo, int readGrade, int writeGrade) {
 		this.boardNo = boardNo;
