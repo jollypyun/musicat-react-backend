@@ -1,21 +1,20 @@
 package com.example.musicat.controller;
 
 import com.example.musicat.domain.etc.ChatVO;
-import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.domain.etc.NoteVO;
+import com.example.musicat.domain.etc.NotifyVO;
+import com.example.musicat.exception.customException.InvalidNotifyException;
 import com.example.musicat.websocket.manager.NotifyManager;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Controller
@@ -57,18 +56,24 @@ public class StompChatController {
         log.info("memberNo : {}", no);
 //        template.convertAndSend("/sub/topic/notify/" + member.getNotifyId(),
 //                "notify registered : " + member.getNotifyId());
-        notifyManager.SendNotify(no);
+        notifyManager.publishNotify(no);
     }
 
-    @GetMapping(value="/notifySend")
-    public String notifySend(){
-        log.info("notifySend");
+    @GetMapping(value="/notifyRead/{notify_no}")
+    public String notifyRead(@PathVariable int notify_no){
+        log.info("notifyRead");
 
-        return "forward:main";
-        //String notifyId = notifyManager.getNotifyId(memberNo);
-//        if(notifyId != null){
-//            template.convertAndSend("/sub/topic/notify/" + notifyId,
-//                    "stompCon : notifySend");
-//        }
+
+        NotifyVO notifyVO = notifyManager.selectNotifyOne(notify_no);
+        if(notifyVO == null) {
+            throw new InvalidNotifyException("해당 알림 메시지가 존재하지 않습니다.");
+        }
+
+        notifyManager.updateNotifyRead(notifyVO.getNotify_no());
+
+        String link = notifyVO.getLink();
+
+        log.info("notify redirect:"+ link);
+        return "redirect:/" + link;
     }
 }

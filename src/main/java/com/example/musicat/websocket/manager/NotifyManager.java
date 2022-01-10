@@ -1,7 +1,6 @@
 package com.example.musicat.websocket.manager;
 
 import com.example.musicat.domain.etc.NotifyVO;
-import com.example.musicat.repository.etc.NotifyDao;
 import com.example.musicat.service.etc.NotifyService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,10 +43,16 @@ public class NotifyManager {
     }
 
     public void addNotify(NotifyVO notifyVo) {
+        log.info("addNotify : " + notifyVo.toString());
         notifyService.insertNotify(notifyVo);
+        publishNotify(notifyVo.getMember_no());
+
+    }
+    public void updateNotifyRead(int notify_no) {
+        notifyService.updateNotifyRead(notify_no);
     }
 
-    public void SendNotify(int memberId) {
+    public void publishNotify(int memberId) {
 
         log.info("sendNotify entered : " + memberId);
         String notifyId = getNotifyId(memberId);
@@ -63,5 +67,9 @@ public class NotifyManager {
         List<NotifyVO> notifyList = notifyService.selectNotify(memberId);
 
         template.convertAndSend("/sub/topic/notify/" + notifyId, notifyList);
+    }
+
+    public NotifyVO selectNotifyOne(int notify_no) {
+        return notifyService.selectNotifyOne(notify_no);
     }
 }

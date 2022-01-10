@@ -16,7 +16,15 @@ public class NotifyDao {
         mapper.insertNotify(notifyVo);
     }
 
-    public List<NotifyVO> selectNotify(int memberNo) {
-        return mapper.selectNotify(memberNo);
+    public List<NotifyVO> selectNotify(int member_no) {
+        return mapper.selectNotify(member_no);
+    }
+
+    public void updateNotifyRead(int notify_no) {
+        mapper.updateNotifyRead(notify_no);
+    }
+
+    public NotifyVO selectNotifyOne(int notify_no){
+        return mapper.selectNotifyOne(notify_no);
     }
 }

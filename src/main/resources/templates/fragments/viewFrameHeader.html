@@ -72,13 +72,13 @@
     </button>
 
     <!-- alarm Toggle-->
-    <button
-      class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
-      id="alramToggle"
-      href="#!"
-    >
-      <i class="fas fa-bell fa-lg"></i>
-    </button>
+<!--    <button-->
+<!--      class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"-->
+<!--      id="alramToggle"-->
+<!--      href="#!"-->
+<!--    >-->
+<!--      <i class="fas fa-bell fa-lg"></i>-->
+<!--    </button>-->
 
     <!-- Navbar-->
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -134,15 +134,14 @@
       </li>
       <li class="nav-item dropdown">
         <a
-                class="nav-link dropdown-toggle"
-                id="navbarDropdown"
+                class="nav-link dropdown-toggle position-relative dropdown-alram"
+                id="alramToggle"
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
-        ><i class="fas fa-user fa-fw"></i
-        ></a>
-        <span id="noticeCount">0</span>
+        ><i class="fas fa-bell fa-lg"></i>
+        <span id="noticeCount" class="position-absolute top-0 end-0">0</span></a>
         <ul id = "noticeList" class="dropdown-menu dropdown-menu-end"
                 aria-labelledby="navbarDropdown">
           <li>새로운 알림이 없습니다.</li>
@@ -183,14 +182,32 @@
             var content = JSON.parse(notify.body);
 
             //console.log("notify : " + notify);
-            //console.log("content : " + content);
+            console.log("content : " + content);
             //console.log(notify.body);
 
             $('#noticeList').empty();
             // $('#noticeList').append("<li><a href=" + "/main" + ">" + notify.body +"</a></li>");
+
+
             var i;
             for(i = 0; i < content.length; i++){
-              $('#noticeList').append("<li><a href=" + "/main" + ">" + content[i].content +"</a></li>");
+              //$('#noticeList').append("<li><a href=" + "/main" + ">" + content[i].content +"</a></li>");
+              let li = document.createElement("li");
+              let a = document.createElement("a");
+              let nIcon = document.createElement("span");
+              nIcon.innerText = "n";
+
+              a.setAttribute("id", "notify" + content[i].notify_no);
+              a.setAttribute("href", "/notifyRead/" + content[i].notify_no);
+              a.innerText = content[i].content;
+              li.append(a);
+              console.log(content[i].content + " : " + content[i].readDate);
+              if(content[i].readDate == null) {
+                console.log(content[i].content + " : " + "n 아이콘 출력");
+                li.append(nIcon);
+              }
+
+              $('#noticeList').append(li);
             }
             $('#noticeCount').text(i);
             //console.log("noticecount : " + i);

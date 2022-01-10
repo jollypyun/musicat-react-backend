@@ -20,11 +20,11 @@ public class NotifyTests {
     void contextLoads() {
 		Assertions.assertNotNull(manager);
 
-//		NotifyVO notifyVO = new NotifyVO();
-//		notifyVO.setContent("테스트3");
-//		notifyVO.setMemberNo(1);
-//		notifyVO.setLink("localhost8080/hello3");
-//		manager.addNotify(notifyVO);
+		NotifyVO notifyVO = new NotifyVO();
+		notifyVO.setContent("알림링크테스트");
+		notifyVO.setMember_no(1);
+		notifyVO.setLink("articles/35");
+		manager.addNotify(notifyVO);
 
 
         /////////////////////////////////////
@@ -33,5 +33,7 @@ public class NotifyTests {
 		for(NotifyVO noti : list) {
 			System.out.println(noti.toString());
 		}
+
+        //manager.updateNotifyRead(1);
     }
 }

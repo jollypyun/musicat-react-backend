@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotBlank;
 
+import com.example.musicat.domain.etc.NotifyVO;
+import com.example.musicat.websocket.manager.NotifyManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,8 @@ public class ReplyController {
 	@Autowired
 	private ReplyService replyService;
 
+	@Autowired
+	private NotifyManager notifyManager;
 	
 	@ResponseBody
 	@PostMapping("/insertReply")
@@ -44,6 +48,8 @@ public class ReplyController {
 		this.replyService.registerReply(reply); // DB insert
 		List<ReplyVO> replyList = this.replyService.retrieveAllReply(articleNo); // select Replys
 
+		// 예나 - 실시간 알림 테스트
+		notifyManager.addNotify(new NotifyVO(1, "댓글 알림 테스트", "/main"));
 		return replyList;
 	}
 	

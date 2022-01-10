@@ -8,6 +8,7 @@ import java.util.List;
 @Mapper
 public interface NotifyMapper {
     public void insertNotify(NotifyVO notifyVo);
-    public List<NotifyVO> selectNotify(int memberNo);
-
+    public List<NotifyVO> selectNotify(int member_no);
+    public void updateNotifyRead(int notify_no);
+    public NotifyVO selectNotifyOne(int notify_no);
 }

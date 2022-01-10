@@ -6,12 +6,25 @@
 <mapper namespace="com.example.musicat.mapper.etc.NotifyMapper">
     <insert id = "insertNotify" parameterType="notifyVo">
         INSERT INTO notify(member_no, content, link)
-        VALUES(#{memberNo}, #{content}, #{link})
+        VALUES(#{member_no}, #{content}, #{link})
     </insert>
 
     <select id="selectNotify" parameterType="int" resultType="notifyVo">
         SELECT notify_no, notify.member_no, content, readdate, senddate, link
         FROM notify
-        where member_no = #{memberNo}
+        where member_no = #{member_no}
+        ORDER BY senddate DESC;
     </select>
+
+    <select id="selectNotifyOne" resultType="notifyVo">
+        SELECT notify_no, notify.member_no, content, readdate, senddate, link
+        FROM notify
+        WHERE notify_no = #{notify_no}
+    </select>
+
+    <update id="updateNotifyRead">
+        UPDATE notify
+        SET readdate = now()
+        WHERE notify_no = #{notify_no}
+    </update>
 </mapper>

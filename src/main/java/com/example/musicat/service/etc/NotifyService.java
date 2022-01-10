@@ -19,4 +19,12 @@ public class NotifyService {
     public List<NotifyVO> selectNotify(int memberNo){
         return notifyDao.selectNotify(memberNo);
     }
+
+    public void updateNotifyRead(int notify_no) {
+        notifyDao.updateNotifyRead(notify_no);
+    }
+
+    public NotifyVO selectNotifyOne(int notify_no){
+        return notifyDao.selectNotifyOne(notify_no);
+    }
 }
