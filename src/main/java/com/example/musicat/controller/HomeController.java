@@ -108,30 +108,18 @@ public class HomeController {
 //	}
 
 
-    public static int checkMemberNo(MemberVO member) {
-        int gradeNo = 0;
-        int memberNo = 0;
-        member = new MemberVO();
+    public static MemberVO checkMemberNo() {
+
+        MemberVO member = new MemberVO();
 
         String auth = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
-        //String auth = authentication.getAuthorities().toString();
         if(auth.equals("[ROLE_ANONYMOUS]")) {
             member.setGradeNo(4);
-            gradeNo = member.getGradeNo();
-            log.info("익명의 gradeNo : " + gradeNo);
             member.setNo(0);
-            memberNo = member.getNo();
-            log.info("익명의 memberNo  : " +  memberNo);
-
         } else {
-            //member = (MemberVO) authentication.getPrincipal();
             member = (MemberVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            gradeNo = member.getGradeNo();
-            log.info("회원  : " + gradeNo);
-            memberNo = member.getNo();
-            log.info("회원  : " +  memberNo);
         }
-        return gradeNo;
+        return member;
     }
 
   @GetMapping("/main")
@@ -167,9 +155,11 @@ public class HomeController {
 //            session.setAttribute("loginUser", member);
 //            log.info("익명 사용자 - grade : " + member.getGrade() + " gradeNo : " + member.getGradeNo());
 
-      MemberVO member = new MemberVO();
-      int memberNo = checkMemberNo(member);
-      List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(memberNo);
+      //MemberVO member = new MemberVO();
+      //MemberVO member = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      MemberVO member = checkMemberNo();
+
+      List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
       model.addAttribute("likeBoardList", likeBoardList);
 
 

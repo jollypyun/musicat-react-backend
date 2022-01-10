@@ -1,6 +1,7 @@
 package com.example.musicat.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,8 +121,8 @@ public class ArticleController {
 		// create
 		log.info("ArticleController.detailArticle: authAnon = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
 
-		MemberVO member = new MemberVO();
-		int gradeNo = HomeController.checkMemberNo(member);
+		MemberVO member = HomeController.checkMemberNo();
+		int gradeNo = member.getGradeNo();
 
 
 		ArticleVO article = this.articleService.retrieveArticle(articleNo);
@@ -171,8 +172,11 @@ public class ArticleController {
 		// create
 		ArticleForm form = new ArticleForm(); // 변경
 
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+
+		MemberVO member = HomeController.checkMemberNo();
+
 		// bind
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
@@ -215,8 +219,11 @@ public class ArticleController {
 			return mv;
 		}
 		// create
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+
+		MemberVO member = HomeController.checkMemberNo();
+
 		// 파일 첨부 지정 폴더에 Upload도 동시에 실행
 		FileVO attacheFile = fileManager.uploadFile(form.getImportAttacheFile()); // 첨부 파일
 		List<FileVO> imageFiles = fileManager.uploadFiles(form.getImageFiles()); // 이미지 파일
