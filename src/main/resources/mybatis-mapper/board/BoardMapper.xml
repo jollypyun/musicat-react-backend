@@ -104,27 +104,36 @@
 	</select>
 	
 	<!-- 즐겨찾기 게시판 추가 -->
-	<insert id="insertFavoriteBoard">
-		INSERT INTO favorite (member_no, board_no) VALUE (#{no}, #{boardNo});
+	<insert id="insertLikeBoard">
+		INSERT INTO likeboard (member_no, board_no) VALUE (#{memberNo}, #{boardNo});
 	</insert>
 
 	<!-- 즐겨찾기 게시판 삭제 -->
-	<delete id="deleteFavoriteBoard">
-		 DELETE FROM favorite
-		 WHERE member_no = #{no}
+	<delete id="deleteLikeBoard">
+		 DELETE FROM likeboard
+		 WHERE member_no = #{memberNo}
 		   AND board_no = #{boardNo};
 	</delete>
+
+	<!-- 즐겨찾기 게시판 여부 조회 -->
+	<select id="selectLikeBoard" resultType="int">
+		SELECT COUNT(*)
+		FROM likeboard
+		WHERE member_no = #{memberNo} AND board_no = #{boardNo};
+	</select>
 	
 	<!-- 즐겨찾기 게시판 조회 -->
-  	<resultMap type="boardVo" id="selectFavoriteBoardListResultMap">
+  	<resultMap type="boardVo" id="selectLikeBoardListResultMap">
 		<result property="boardNo" javaType="int" column="board_no" jdbcType="INTEGER"/>
 		<result property="boardName" javaType="string" column="boardname" jdbcType="VARCHAR"/>
 	</resultMap> 
 	
-	<select id="selectFavoriteBoardList" resultType="boardVo" resultMap="selectFavoriteBoardListResultMap">
-		SELECT f.board_no, boardname 
-		FROM favorite AS f JOIN board AS b ON f.board_no = b.board_no
-		WHERE member_no = #{no};
+	<select id="selectLikeBoardList" resultType="boardVo" resultMap="selectLikeBoardListResultMap">
+		SELECT board_no, boardname
+		FROM board
+		WHERE board_no IN (SELECT board_no
+						   FROM likeboard
+						   WHERE member_no = #{memberNo});
 	</select>
 	
 </mapper>

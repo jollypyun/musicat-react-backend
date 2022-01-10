@@ -3,6 +3,7 @@ package com.example.musicat.controller;
 import java.util.*;
 
 import com.example.musicat.domain.board.*;
+import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.board.FileService;
 import org.apache.commons.text.StringEscapeUtils;
@@ -60,7 +61,6 @@ public class BoardController {
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("managerContent", "/view/board/boardManager");
 
-		
 		log.info("boardManager--------" + categoryList.toString());
 		
 		//카테고리 추가
@@ -326,7 +326,7 @@ public class BoardController {
 
 	// 게시판 목록 조회
 	@GetMapping("/board/{boardNo}/articles")
-	public String selectAllNomalArticle(@PathVariable("boardNo") int boardNo,
+	public String selectAllNomalArticle(@PathVariable("boardNo") int boardNo, // @RequestParam("memberNo") int memberNo,
 										Model model) {
 		// create
 		List<ArticleVO> articles = this.articleService.retrieveBoard(boardNo);
@@ -362,6 +362,14 @@ public class BoardController {
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
 		model.addAttribute("articles", articles); // 게시글 정보 전송
 		model.addAttribute("boardkind", boardkind); // 게시글 유형
+
+		// 양 ~
+//		int memberNo = 2;
+//		int likeBoard = this.boardService.retrieveLikeBoard(memberNo, boardNo);
+//		log.info("목록조회하는 게시판의 즐찾 추가된 거 여부 : " + likeBoard);
+//		model.addAttribute("likeBorad", likeBoard);
+		// ~ 양
+
 		return "/view/home/viewBoardTemplate";
 	}
 
@@ -388,5 +396,32 @@ public class BoardController {
 		List<ArticleVO> results = articleService.search(searchMap);
 		return results;
 	}
-	
+
+	//즐겨찾기 게시판 추가
+	@ResponseBody
+	@PostMapping("/likeBoard")
+	public Map<String, Integer> likeBoard(@RequestParam("memberNo") int memberNo, @RequestParam("boardNo") int boardNo) {
+		log.info("memberNo : " + memberNo + " boardNo : " + boardNo);
+
+		Map<String, Integer> map = new HashMap<>();
+
+		//즐찾 한 게시판인지 여부
+		int likeboard = this.boardService.retrieveLikeBoard(memberNo, boardNo);
+		log.info("즐찾에 있나요? : ", likeboard);
+
+		if (likeboard == 0) { //즐찾 안된 게시판이면
+			log.info("즐찾에 저장 안 된 애 (0)");
+			map.put("result", 0);
+			this.boardService.registerLikeBoard(memberNo, boardNo);
+		} else { //즐찾게시판면
+			log.info("즐찾게시판에 저장된 애 (1)");
+			map.put("result", 1);
+			this.boardService.removeLikeBoard(memberNo, boardNo);
+		}
+
+		log.info("result {} : ", map.get("result").toString());
+
+		return map;
+	}
+
 }

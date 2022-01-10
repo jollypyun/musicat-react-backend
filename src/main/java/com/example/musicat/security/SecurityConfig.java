@@ -99,10 +99,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         //인증 성공 시 인증 결과를 담은 인증 객체를 파라미터로 받음 (인증 요청하지 않은 사용자의 정보는 HomController(/main)에서 처리해줌
                         MemberVO member = (MemberVO) authentication.getPrincipal();
+                        log.info("principal : " + member.toString());
 
-                        HttpSession session = request.getSession();
-                        session.setAttribute("loginUser", member);
-                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
+//                        HttpSession session = request.getSession();
+//                        session.setAttribute("loginUser", member);
+//                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
 
 
                         //사용자 요청페이지 저장

@@ -14,8 +14,10 @@
                     </div>
                     <div class="myPage-top-profile">
                         <span>NickName</span>
-                        <button onclick="location.href='/ChangePwd'" th:if = "${session.loginUser.gradeNo} != 4 and ${session.loginUser.no} == ${member.getNo()}">비밀번호 변경</button>
-                        <button onclick="" th:if = "${session.loginUser.gradeNo} != 4 and ${session.loginUser.no} != ${member.getNo()}">Follow</button>
+                        <th:block th:if = "${#authorization.expr('isAuthenticated()')}">
+                            <button onclick="location.href='/ChangePwd'" th:if = "${#authentication.principal.getNo()} == ${member.getNo()}">비밀번호 변경</button>
+                            <button onclick="" th:if = "${#authentication.principal.getNo()} != ${member.getNo()}">Follow</button>
+                        </th:block>
                     </div>
                 </div>
 
@@ -23,7 +25,10 @@
                     <a th:href="@{'/myPage/Playlist/' + ${member.getNo()}}">Playlist</a>
                     <a th:href="@{'/myPage/Board/' + ${member.getNo()}}">글</a>
                     <a th:href="@{'/myPage/Reply/' + ${member.getNo()}}">댓글</a>
-                    <span th:if="${session.loginUser.no} == ${member.getNo()}"><a href="/myPage/Like/1">좋아요</a></span>
+                    <th:block th:if="${#authorization.expr('isAuthenticated()')} != false">
+                        <span th:if="${#authentication.principal.getNo()} == ${member.getNo()}">
+                            <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">좋아요</a></span>
+                    </th:block>
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">
@@ -48,7 +53,7 @@
                                 <td th:text="${article.writeDate}"></td>
                                 <td th:text="${article.viewcount}"></td>
                                 <td th:text="${article.likecount}"></td>
-                                <th:block th:if="${session.authorize}"></th:block>
+
                             </tr>
                             </tbody>
                         </table>

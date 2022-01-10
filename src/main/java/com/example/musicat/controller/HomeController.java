@@ -1,12 +1,14 @@
 package com.example.musicat.controller;
 
 import java.lang.reflect.Member;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,10 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.FollowVO;
-import com.example.musicat.domain.member.GradeVO;
-import com.example.musicat.mapper.member.GradeMapper;
-import com.example.musicat.security.MemberContext;
 
+import com.example.musicat.security.MemberAccount;
 import com.example.musicat.service.board.BoardService;
 import com.example.musicat.service.board.ReplyService;
 import com.example.musicat.service.member.FollowService;
@@ -25,10 +25,15 @@ import com.example.musicat.service.member.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
@@ -72,6 +77,10 @@ public class HomeController {
     @Autowired
     private FollowService followService;
 
+    @Autowired
+    private static AuthenticationManager authenticationManager;
+
+
 
     @GetMapping("/")
     public String mainPage(){
@@ -98,8 +107,35 @@ public class HomeController {
 //		return "redirect:/musicatlogin";
 //	}
 
+
+    public static int checkMemberNo(MemberVO member) {
+        int gradeNo = 0;
+        int memberNo = 0;
+        member = new MemberVO();
+
+        String auth = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
+        //String auth = authentication.getAuthorities().toString();
+        if(auth.equals("[ROLE_ANONYMOUS]")) {
+            member.setGradeNo(4);
+            gradeNo = member.getGradeNo();
+            log.info("익명의 gradeNo : " + gradeNo);
+            member.setNo(0);
+            memberNo = member.getNo();
+            log.info("익명의 memberNo  : " +  memberNo);
+
+        } else {
+            //member = (MemberVO) authentication.getPrincipal();
+            member = (MemberVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            gradeNo = member.getGradeNo();
+            log.info("회원  : " + gradeNo);
+            memberNo = member.getNo();
+            log.info("회원  : " +  memberNo);
+        }
+        return gradeNo;
+    }
+
   @GetMapping("/main")
-	public String petopiaMain(Model model, HttpSession session) {
+	public String petopiaMain(Model model, HttpSession session, Authentication authentication) { // //@AuthenticationPrincipal Member member
 
 		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
 		model.addAttribute("articleList", allArticleList);
@@ -114,24 +150,30 @@ public class HomeController {
 		model.addAttribute("categoryVo", categoryVo);
 
 
+
+
         //로그인하지 않은 사용자일 경우 ( 로그인한 사용자 정보 처리는 SecurityConfig.java에서 )
-        String auth = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
-		if (auth.equals("[ROLE_ANONYMOUS]")) {
+//        String auth = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
+//		if (auth.equals("[ROLE_ANONYMOUS]")) {
+//
+//            //익명 사용자에게 gradeNo 부여 ( 게시판 접근 시 필요 )
+//            int gradeNo = gradeService.retrieveGradeNo(auth);
+//            log.info("auth : " + auth + " gradeNo : " + gradeNo);
+//
+//            MemberVO member = new MemberVO();
+//            member.setGrade(auth);
+//            member.setGradeNo(gradeNo);
+//
+//            session.setAttribute("loginUser", member);
+//            log.info("익명 사용자 - grade : " + member.getGrade() + " gradeNo : " + member.getGradeNo());
 
-            //익명 사용자에게 gradeNo 부여 ( 게시판 접근 시 필요 )
-            int gradeNo = gradeService.retrieveGradeNo(auth);
-            log.info("auth : " + auth + " gradeNo : " + gradeNo);
+      MemberVO member = new MemberVO();
+      int memberNo = checkMemberNo(member);
+      List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(memberNo);
+      model.addAttribute("likeBoardList", likeBoardList);
 
-            MemberVO member = new MemberVO();
-            member.setGrade(auth);
-            member.setGradeNo(gradeNo);
 
-            session.setAttribute("loginUser", member);
-            log.info("익명 사용자 - grade : " + member.getGrade() + " gradeNo : " + member.getGradeNo());
-
-        }
-
-		return "view/home/viewHomeTemplate";
+      return "view/home/viewHomeTemplate";
 
     }
 
@@ -214,6 +256,7 @@ public class HomeController {
         model.addAttribute("categoryVo", categoryVo);
 
         model.addAttribute("member", member);
+        log.info("대체 뭐가 문젠데 Board " + member.getNo());
         model.addAttribute("HomeContent", "fragments/viewMyPageBoard");
         return "view/home/viewHomeTemplate";
 
@@ -225,6 +268,7 @@ public class HomeController {
         MemberVO member = new MemberVO();
         try {
             member = memberService.retrieveMemberByManager(userNo);
+            log.info("대체 뭐가 문젠데 Reply " + member.getNo());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -244,6 +288,9 @@ public class HomeController {
         model.addAttribute("categoryVo", categoryVo);
 
         model.addAttribute("member", member);
+
+
+
         model.addAttribute("HomeContent", "fragments/viewMyPageReply");
         return "view/home/viewHomeTemplate";
 

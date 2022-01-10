@@ -1,6 +1,7 @@
 package com.example.musicat.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import com.example.musicat.controller.form.ArticleForm;
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.repository.board.ArticleDao;
 import com.example.musicat.util.FileManager;
 
@@ -58,6 +60,59 @@ public class ArticleController {
 	 * @param model
 	 * @return
 	 */
+//	@GetMapping("/{articleNo}")
+//	public String detailArticle(@PathVariable("articleNo") int articleNo
+//			,HttpServletRequest req
+//			,Model model) {
+//		// create
+//		log.info("ArticleController.detailArticle: authAnon = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+//
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//
+//
+//
+//		ArticleVO article = this.articleService.retrieveArticle(articleNo);
+//		log.info("Acontroller.detailArticle: -------" + article.toString());
+//		int boardNo = article.getBoardNo();
+//		int gradeNo = member.getGradeNo();
+//		boolean grade = this.boardService.retrieveAllReadBoard(boardNo, gradeNo);
+//		//boolean grade = true;
+//		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+//		model.addAttribute("categoryBoardList", categoryList);
+//
+//		if (grade) {
+//			log.info("sidebar");
+//			int memberNo = member.getNo();
+//			model.addAttribute("loginMemberNo", memberNo);
+//			this.articleService.upViewcount(articleNo); // 조회수 증가
+//			// bind
+//			List<ReplyVO> replys = this.replyService.retrieveAllReply(articleNo);
+//			int totalCount = this.articleService.totalRecCount(articleNo);
+//			int likeCheck = this.articleService.likeCheck(memberNo, articleNo);
+//
+//			ArticleVO result = ArticleVO.addReplyAndLike(article, likeCheck, replys, totalCount); //리팩토링
+//
+//			// xss 처리 Html tag로 변환
+////			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
+////			article.setSubject(escapeSubject);
+////			String escapeContent = StringEscapeUtils.unescapeHtml4(article.getContent());
+////			article.setContent(escapeContent);
+//
+//			model.addAttribute("article", result);
+//			log.info("detailArticle: {}", result.toString());
+//			model.addAttribute("HomeContent", "/view/board/detailArticle");
+//		} else {
+//			model.addAttribute("HomeContent", "/view/board/accessDenied");
+//		}
+//		return "view/home/viewHomeTemplate";
+//	}
+
+	//-------------------------------------------------------------------------------------------------------------
+
+
+
+
 	@GetMapping("/{articleNo}")
 	public String detailArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req
@@ -65,13 +120,14 @@ public class ArticleController {
 		// create
 		log.info("ArticleController.detailArticle: authAnon = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
 
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = new MemberVO();
+		int gradeNo = HomeController.checkMemberNo(member);
+
 
 		ArticleVO article = this.articleService.retrieveArticle(articleNo);
 		log.info("Acontroller.detailArticle: -------" + article.toString());
 		int boardNo = article.getBoardNo();
-		int gradeNo = member.getGradeNo();
+		//gradeNo = member.getGradeNo();
 		boolean grade = this.boardService.retrieveAllReadBoard(boardNo, gradeNo);
 		//boolean grade = true;
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -103,6 +159,8 @@ public class ArticleController {
 		}
 		return "view/home/viewHomeTemplate";
 	}
+
+	//-------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * 작성 폼 이동
@@ -344,4 +402,8 @@ public class ArticleController {
 	public String musicRegister() {
 		return "/view/board/musicRegister";
 	}
+
+
+
+
 }

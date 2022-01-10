@@ -46,13 +46,16 @@ public interface BoardMapper {
 	public List<BoardVO> selectBoardNameList();
 
 	//즐겨찾기 게시판 추가
-	public void insertFavoriteBoard(BoardVO boardVo);
+	public void insertLikeBoard(int memberNo, int boardNo);
 	
 	//즐겨찾기 게시판 삭제
-	public void deleteFavoriteBoard(BoardVO boardVo);
+	public void deleteLikeBoard(int memberNo, int boardNo);
+
+	//즐겨찾기 게시판 여부 조회
+	public int selectLikeBoard(int memberNo, int boardNo);
 	
 	//즐겨찾기 게시판 조회
-	public ArrayList<BoardVO> selectFavoriteBoardList(int no);
+	public ArrayList<BoardVO> selectLikeBoardList(int no);
 	
 	
 	

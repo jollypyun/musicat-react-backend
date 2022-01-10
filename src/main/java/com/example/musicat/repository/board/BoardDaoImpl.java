@@ -95,22 +95,27 @@ public class BoardDaoImpl implements BoardDao {
 
 	//즐겨찾기 게시판 추가
 	@Override
-	public void insertFavoriteBoard(BoardVO boardVo) {
-		this.boardMapper.insertFavoriteBoard(boardVo);
+	public void insertLikeBoard(int memberNo, int boardNo) {
+		this.boardMapper.insertLikeBoard(memberNo, boardNo);
 		
 	}
 	
 	//즐겨찾기 게시판 삭제
 	@Override
-	public void deleteFavoriteBoard(BoardVO boardVo) {
-		this.boardMapper.deleteFavoriteBoard(boardVo);		
+	public void deleteLikeBoard(int memberNo, int boardNo) {
+		this.boardMapper.deleteLikeBoard(memberNo, boardNo);
+	}
+
+	@Override
+	public int selectLikeBoard(int memberNo, int boardNo) {
+		return this.boardMapper.selectLikeBoard(memberNo, boardNo);
 	}
 
 	//즐겨찾기 게시판 조회
 	@Override
-	public ArrayList<BoardVO> selectFavoriteBoardList(int no) {
-		ArrayList<BoardVO> favoriteList = this.boardMapper.selectFavoriteBoardList(no);
-		return favoriteList;
+	public ArrayList<BoardVO> selectLikeBoardList(int no) {
+		ArrayList<BoardVO> likeBoardList = this.boardMapper.selectLikeBoardList(no);
+		return likeBoardList;
 	}
 
 
