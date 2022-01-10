@@ -72,9 +72,12 @@ public class FileManager {
 	public void createThumbnail(String systemFileName) throws IOException {
 		File image = new File(getFullPath(systemFileName));
 		File thumbnail = new File(getFullPath("thumbnail/thumb" + systemFileName));
-
+		int pos = systemFileName.lastIndexOf(".");
+		String ext = systemFileName.substring(pos + 1);
+			
 		if (image.exists()) {
-			Thumbnails.of(image).size(190, 150).outputFormat("png").toFile(thumbnail);
+			Thumbnails.of(image).size(190, 150).outputFormat(ext).toFile(thumbnail);
+			//Thumbnails.of(image).size(190, 150).outputFormat("png").toFile(thumbnail);
 		}
 //		return null;
 	}
