@@ -33,7 +33,8 @@ public class CategoryVO {
         this.boardList.add(board);
     }
 
-//    public void addCategoryList(CategoryVO categoryVo) {
+
+    //    public void addCategoryList(CategoryVO categoryVo) {
 //        this.categoryList.add(categoryVo);
 //    }
 }

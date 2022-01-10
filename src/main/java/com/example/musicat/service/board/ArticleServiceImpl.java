@@ -134,12 +134,18 @@ public class ArticleServiceImpl implements ArticleService {
 		return this.articleDao.likeCheck(art);
 	}
 
+	/**
+	 * tag
+	 */
 	@Override
 	@Transactional()
 	public void deleteTag(int tagNo) {
 		this.articleDao.deleteTag(tagNo);
 	}
 
+	/**
+	 * 검색 
+	 */
 	@Override
 	public List<ArticleVO> search(Map<String, Object> map) {
 		String keyword = (String) map.get("keyword");
@@ -160,6 +166,9 @@ public class ArticleServiceImpl implements ArticleService {
 		return result;
 	}
 
+	/**
+	 * 베스트글 조회 
+	 */
 	@Override
 	public List<BestArticleVO> selectAllBestArticle() {
 		List<BestArticleVO> bestArticles = this.articleDao.selectAllBestArticle();

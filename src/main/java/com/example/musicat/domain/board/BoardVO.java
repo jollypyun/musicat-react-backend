@@ -26,8 +26,6 @@ public class BoardVO {
     private String boardkindName;
 
 
-
-
     private int favoriteNo;
     private int no; //회원 넘버
 

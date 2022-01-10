@@ -13,4 +13,5 @@ import lombok.ToString;
 public class CategoryBoardVO {
 	private CategoryVO categoryVo;
 	private BoardVO boardVo;
+
 }

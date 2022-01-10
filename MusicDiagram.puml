@@ -1,0 +1,86 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' --- music ---
+class Link{
+- String rel
+- String href
+
++ Link()
++ Link(String rel, String href)
++ toString()
++ getRel(): String
++ setRel(String rel): void
++ getHref(): String
++ setHref(String href): void
+}
+
+class MetaFile{
+- Long id
+- String originalFileName
+- String systemFileName
+- Long fileSize
+- String fileType
+- Instant wirteDate
+
++ MetaFile()
++ MetaFile(String originalFileName, String systemFileName, String fileType, Long fileSize)
++ MetaFile(String originalFileName, String systemFileName, Long fileSize)
++ MetaFile(Long id, String originalFileName, String systemFileName, Long fileSize, String fileType, Instant wirteDate)
++ getId(): Long
++ setId(Long id): void
++ getOriginalFileName(): String
++ setOriginalFileName(String originalFileName): void
++ getSystemFileName(): String
++ setSystemFileName(String systemFileName): void
++ getFileSize(): Long
++ setFileSize(Long fileSize): void
++ getFileType(): String
++ setFileType(String fileType): void
++ getWirteDate(): Instant
++ setWirteDate(Instant wirteDate): void
+}
+
+class Music{
+- Long id
+- MetaFile file
+- Thumbnail thumbnail
+- String title
+- int memberNo
+- int articleNo
+- List<Link> links
+
++ Music()
++ Music(MetaFile file, Thumbnail thumbnail, String title, int memberNo, int articleNo)
++ Music(Long id, MetaFile file, Thumbnail thumbnail, String title, int memberNo, int articleNo, List<Link> links)
++ getId(): Long
++ setId(Long id): void
++ getFile(): MetaFile
++ setFile(MetaFile file): void
++ getThumbnail(): Thumbnail
++ setThumbnail(Thumbnail thumbnail): void
++ getTitle(): String
++ setTitle(String title): void
++ getMemberNo(): int
++ setMemberNo(int memberNo): void
++ getArticleNo(): int
++ setArticleNo(int articleNo): void
++ getLinks(): List<Link>
++ setLinks(List<Link> links): void
+}
+
+class Thumbnail{
+- Long id
+- MetaFile file
+
++ Thumbnail()
++ Thumbnail(MetaFile file)
++ Thumbnail(Long id, MetaFile file)
++ getId(): Long
++ setId(Long id): void
++ getFile(): MetaFile
++ setFile(MetaFile file): void
+}
+
+
+@enduml

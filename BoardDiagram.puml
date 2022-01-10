@@ -1,0 +1,294 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'구현
+' -------------- Dao -------------------
+ReplyDao <|.. ReplyDaoImpl
+BoardDao <|.. BoardDaoImpl
+CategoryDao <|.. CategoryDaoImpl
+' -------------- Service -------------------
+ReplySerivce <|.. ReplyServiceImpl
+BoardSerivce <|.. BoardServiceImpl
+CategorySerivce <|.. CategoryServiceImpl
+
+ReplyMapper <.. ReplyDao
+BoardMapper <.. BoardDao
+CategoryMapper <.. CategoryDao
+
+
+ReplyDao <.. ReplyService
+MemberMapper <.. ReplyService
+
+
+
+
+ReplyService <.. ReplyController
+
+interface MemberMapper{}
+
+
+
+
+
+interface BoardMapper{
++ insertBoard(BoardVO boardVo): void
++ selectLastInsertBoardNo(): int
++ insertBoardGrade(BoardGradeVO boardGradeVo): void
++ selectBoardkind(): ArrayList<BoardVO>
++ selectConnectArticle(int boardNo): int
++ deleteBoard(int boardNo): void
++ updateBoard(BoardVO boardVo, BoardGradeVO boardGradeVo): void
++ selectOneBoard(int boardNo): BoardBoardGradeVO
++ selectAllBoard(): ArrayList<BoardBoardGradeVO>
++ selectDuplicatedBoard(String boardName): Integer
++ insertFavoriteBoard(BoardVO boardVo): void
++ deleteFavoriteBoard(BoardVO boardVo): void
++ selectFavoriteBoardList(int no): ArrayList<BoardVO>
+}
+
+interface CategoryMapper{
++ insertCategory(String categoryName): void
++ updateCategory(int categoryNo, String categoryName): void
++ selectConnectBoard(int categoryNo): int
++ deleteCategory(int categoryNo): void
++ selectOneCategory(int categoryNo): CategoryVO
++ selectDuplicatedCategory(String categoryName): int
++ selectCategoryList(): ArrayList<CategoryVO>
++ selectCategoryBoardList(): ArrayList<CategoryBoardVO>
+}
+
+
+
+
+
+
+
+
+
+class BestArticleVO{
+- int no
+- int articleNo
+- String subject
+- int likecount
+- int rank
+
++ BestArticleVO()
++ BestArticleVO(int no, int articleNo, String subject, int likecount, int rank)
++ getNo(): int
++ setNo(int no): void
++ getArticleNo(): int
++ setArticleNo(int articleNo): void
++ getSubject(): String
++ setSubject(String subject): void
++ getLikecount(): int
++ setLikecount(int likecount): void
++ getRank(): int
++ setRank(int rank): void
+}
+
+class BoardBoardGradeVO{
+- BoardVO boardVo
+- BoardGradeVO boardGradeVo
+
++ BoardBoardGradeVO()
++ BoardBoardGradeVO(BoardVO boardVo, BoardGradeVO boardGradeVo)
++ toString()
++ getBoardVo(): BoardVO
++ setBoardVo(BoardVO boardVo): void
++ getBoardGradeVo(): BoardGradeVO
++ setBoardGradeVo(BoardGradeVO boardGradeVo): void
+}
+
+class BoardGradeVO{
+- int boardNo
+- int readGrade
+- int writeGrade
+- int readwrite
+- int gradeNo
+- String gradeName
+
++ BoardGradeVO()
++ BoardGradeVO(int readGrade, int writeGrade)
++ BoardGradeVO(int boardNo, int readGrade, int writeGrade)
++ BoardGradeVO(int boardNo, int readGrade, int writeGrade, int readwrite, int gradeNo, String gradeName)
++ toString()
++ getBoardNo(): int
++ setBoardNo(int boardNo): void
++ getReadGrade(): int
++ setReadGrade(int readGrade): void
++ getWriteGrade(): int
++ setWriteGrade(int writeGrade): void
++ getReadwrite(): int
++ setReadwrite(int readwrite): void
++ getGradeNo(): int
++ setGradeNo(int gradeNo): void
++ getGradeName(): String
++ setGradeName(String gradeName): void
+}
+
+class BoardVO{
+- int categoryNo
+- int boardNo
+- String boardName
+- int boardkind
+- String boardkindName
+- int favoriteNo
+- int no
+
++ BoardVO()
++ BoardVO(int boardNo, String boardName, int boardkind)
++ BoardVO(int categoryNo, int boardNo, String boardName, int boardkind)
++ BoardVO(int categoryNo, int boardNo, String boardName, int boardkind, String boardkindName, int favoriteNo, int no, List<BoardVO> boardGradeList)
++ toString()
++ getCategoryNo(): int
++ setCategoryNo(int categoryNo): void
++ getBoardNo(): int
++ setBoardNo(int boardNo): void
++ getBoardName(): String
++ setBoardName(String boardName): void
++ getBoardkind(): int
++ setBoardkind(int boardkind): void
++ getBoardkindName(): String
++ setBoardkindName(String boardkindName): void
++ getFavoriteNo(): int
++ setFavoriteNo(int favoriteNo): void
++ getNo(): int
++ setNo(int no): void
+}
+
+class CategoryBoardVO{
+- CategoryVO categoryVo
+- BoardVO boardVo
+
++ CategoryBoardVO()
++ CategoryBoardVO(CategoryVO categoryVo, BoardVO boardVo)
++ toString()
++ getCategoryVo(): CategoryVO
++ setCategoryVo(CategoryVO categoryVo): void
++ getBoardVo(): BoardVO
++ setBoardVo(BoardVO boardVo): void
+}
+
+class CategoryVO{
+- int categoryNo
+- String categoryName
+- List<CategoryVO> categoryList = new ArrayList<>
+- List<BoardVO> boardList = new ArrayList<>
+
++ CategoryVO()
++ CategoryVO(int categoryNo, String categoryName, List<CategoryVO> categoryList, List<BoardVO> boardList)
++ toString()
++ getCategoryNo(): int
++ setCategoryNo(int categoryNo): void
++ getCategoryName(): String
++ setCategoryName(String categoryName): void
++ getCategoryList(): ArrayList<CategoryVO>
++ setCategoryList(List<CategoryVO> categoryList): void
++ getBoardList(): ArrayList<BoardVO>
++ setBoardList(List<BoardVO> boardList): void
++ addBoardList(BoardVO board): void
+}
+
+class SelectArticleVO{
+- ArticleVO article
+- FileVO file
+
++ SelectArticleVO()
++ toString()
++ getArticle(): ArticleVO
++ setArticleVO(ArticleVO article): void
++ getFile(): FileVO
++ setFileVO(FileVO file): void
+}
+
+
+
+
+' ---------------- end Domain ----------------
+
+
+
+
+
+
+interface BoardDao{
+- BoardMapper boardMapper
+
++ insertBoard(BoardVO boardVo): void
++ selectLastInsertBoardNo(): int
++ insertBoardGrade(BoardGradeVO boardGradeVo): void
++ selectBoardkind(): ArrayList<BoardVO>
++ selectConnectArticle(int boardNo): int
++ deleteBoard(int boardNo): void
++ updateBoard(BoardVO boardVo, BoardGradeVO boardGradeVo): void
++ selectOneBoard(int boardNo): BoardBoardGradeVO
++ selectAllBoard(): ArrayList<BoardBoardGradeVO>
++ selectDuplicatedBoard(String boardName): Integer
++ insertFavoriteBoard(BoardVO boardVo): void
++ deleteFavoriteBoard(BoardVO boardVo): void
++ selectFavoriteBoardList(int no): ArrayList<BoardVO>
+}
+
+interface CategoryDao{
+- CategoryMapper categoryMapper
+
++ insertCategory(String categoryName): void
++ updateCategory(int categoryNo, String categoryName): void
++ selectConnectBoard(int categoryNo): int
++ deleteCategory(int categoryNo): void
++ selectCategoryList(): ArrayList<CategoryVO>
++ selectCategoryBoardList(): ArrayList<CategoryBoardVO>
++ selectOneCategory(int categoryNo): CategoryVO
++ selectDuplicatedCategory(String categoryName): int
+}
+
+
+
+class BoardDaoImpl
+class CategoryDaoImpl
+
+' --------------- DAO ---------------------------
+
+
+
+
+
+
+interface BoardService{
+- BoardDao boardDao
+
++ registerBoard(BoardVO boardVo, BoardGradeVO boardGradeVo): void
++ retrieveBoardkind(): ArrayList<BoardVO>
++ retrieveConnectArticle(int boardNo): int
++ removeBoard(int boardNo): void
++ modifyBoard(BoardVO boardVo, BoardGradeVO boardGradeVo): void
++ retrieveOneBoard(int boardNo): BoardBoardGradeVO
++ retrieveAllBoard(): ArrayList<BoardBoardGradeVO>
++ retrieveAllWriteBoard(int gradeNo): List<BoardVO>
++ retrieveAllReadBoard(int boardNo, int gradeNo): boolean
++ retrieveDuplicatedBoard(String boardName): Integer
+}
+
+interface CategoryService{
+- CategoryDao categoryDao
+
++ registerCategory(String categoryName): void
++ modifyCategory(int categoryNo, String categoryName): void
++ retrieveConnectBoard(int categoryNo): int
++ removeCategory(int categoryNo): void
++ retrieveCategoryList(): ArrayList<CategoryVO>
++ retrieveCategoryBoardList(): ArrayList<CategoryVO>
++ retrieveOneCategory(int categoryNo): CategoryVO
++ retrieveDuplicatedCategory(String categoryName): int
+}
+
+' Service 구현 Class
+
+
+
+class BoardServiceImpl
+class CategoryServiceImpl
+
+'--------------------Controller------------------------
+
+@enduml
