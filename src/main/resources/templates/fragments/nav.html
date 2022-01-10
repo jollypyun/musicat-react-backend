@@ -23,6 +23,25 @@
 				<div id="categoryBoardList" class="collapsed">
 
 					<table>
+<!--						양 -->
+
+						<tr>
+							<td class="nav-link category-articleVO-header fw-bold">
+								<div class="sb-nav-link-icon"> <i class="fas fa-columns"></i></div>
+							<span>즐겨찾기 게시판</span>
+							</td>
+						</tr>
+						<th:block th:if="${likeBoard} != null" th:each="likeBoard : ${likeBoardList}">
+							<tr th:id="b + ${likeBoard.boardNo}">
+								<td class="category-board-style">
+								<span> <i class="far fa-list-alt"></i></span>
+									<a th:text="${likeBoard.boardName}" th:href="@{/board/{boardNo}/articles(boardNo = ${likeBoard.boardNo})}"></a>
+								</td>
+							</tr>
+						</th:block>
+
+<!--						양 -->
+
 						<th:block th:each="category : ${categoryBoardList}">
 							<tr th:id="c + ${category.getCategoryNo()}">
 
@@ -44,8 +63,8 @@
 
 
 											<div th:if="${board.boardkind == 0}">
-												<span> <i class="far fa-list-alt"></i>
-												</span> <a th:text="${board.boardName}"
+												<span> <i class="far fa-list-alt"></i> </span>
+												 <a th:text="${board.boardName}"
 													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
 											</div>
 											<div th:unless="${board.boardkind == 0}">

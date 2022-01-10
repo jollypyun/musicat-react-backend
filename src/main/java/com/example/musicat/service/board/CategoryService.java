@@ -21,7 +21,7 @@ public interface CategoryService {
 	
 	public CategoryVO retrieveOneCategory(int categoryNo);
 
-	public int retrieveDuplicatedCategory(String categoryName);
+	public Integer retrieveDuplicatedCategory(String categoryName);
 	
 //	public ArrayList<CategoryVO> retrieveCategoryList();
 	

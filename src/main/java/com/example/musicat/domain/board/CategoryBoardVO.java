@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-@Alias("categoryBoardVO")
+@Alias("categoryBoardVo")
 public class CategoryBoardVO {
 	private CategoryVO categoryVo;
 	private BoardVO boardVo;

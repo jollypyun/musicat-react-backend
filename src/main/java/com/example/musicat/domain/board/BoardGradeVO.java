@@ -18,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @ToString
-@Repository("boardGradeVO")
+@Repository("boardGradeVo")
 public class BoardGradeVO {
 	
 	private int boardNo;

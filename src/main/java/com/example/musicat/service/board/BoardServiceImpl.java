@@ -112,29 +112,32 @@ public class BoardServiceImpl implements BoardService {
 
 	}
 
-//	//게시판 중복 검사
-//	@Override
-//	public int retrieveDuplicateBoard(String boardName) {
-//		int count = this.boardDao.selectDuplicateBoard(boardName);
-//		return count;
-//	}
-//
-//	//즐겨찾기 게시판 추가
-//	@Override
-//	public void registerFavoriteBoard(BoardVO boardVo) {
-//		this.boardDao.insertFavoriteBoard(boardVo);
-//	}
-//
-//	//즐겨찾기 게시판 삭제
-//	@Override
-//	public void removeFavoriteBoard(BoardVO boardVo) {
-//		this.boardDao.deleteFavoriteBoard(boardVo);
-//	}
-//
-//	//즐겨찾기 게시판 조회
-//	@Override
-//	public ArrayList<BoardVO> retrieveFavoriteBoardList(int no) {
-//		ArrayList<BoardVO> favoriteList = this.boardDao.selectFavoriteBoardList(no);
-//		return favoriteList;
-//	}
+	@Override
+	public List<BoardVO> retrieveBoardNameList() {
+		return this.boardDao.selectBoardNameList();
+	}
+
+	//즐겨찾기 게시판 추가
+	@Override
+	public void registerLikeBoard(int memberNo, int boardNo) {
+		this.boardDao.insertLikeBoard(memberNo, boardNo);
+	}
+
+	//즐겨찾기 게시판 삭제
+	@Override
+	public void removeLikeBoard(int memberNo, int boardNo) {
+		this.boardDao.deleteLikeBoard(memberNo, boardNo);
+	}
+
+	@Override
+	public int retrieveLikeBoard(int memberNo, int boardNo) {
+		return this.boardDao.selectLikeBoard(memberNo, boardNo);
+	}
+
+	//즐겨찾기 게시판 조회
+	@Override
+	public ArrayList<BoardVO> retrieveLikeBoardList(int memberNo) {
+		ArrayList<BoardVO> likeBoardList = this.boardDao.selectLikeBoardList(memberNo);
+		return likeBoardList;
+	}
 }
