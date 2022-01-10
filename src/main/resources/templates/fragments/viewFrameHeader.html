@@ -66,7 +66,7 @@
     <button
       class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
       id="chatToggle"
-      th:onclick="|location.href='#'|"
+      onclick="openChild()"
     >
       <i class="fas fa-comments fa-lg"></i>
     </button>
@@ -232,6 +232,13 @@
 
     });
 
+    function openChild() {
+      window.open(
+              "/chat/rooms",
+              "Chattings",
+              "width=570, height=350"
+      );
+    }
 
   </script>
 </html>
