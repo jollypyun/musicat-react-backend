@@ -32,7 +32,6 @@
     *zoom: 1;
     display: flex;
     flex-flow: row wrap;
-    margin-left: 300px;
 
 }
 .Thumbnail-li{
@@ -110,6 +109,4 @@
 
 .fixed_img_col{
     width: 900px;
-    display: flex;
-    justify-content: center;
 }
