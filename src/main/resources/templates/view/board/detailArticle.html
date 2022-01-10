@@ -229,6 +229,21 @@
                         </div>
                     </div>
 
+                    <div id="sub_article_area">
+                        <table th:each="subArticle : ${subArticles}">
+                            <tr>
+                                <td th:text="${subArticle.no}">번호</td>
+                                <td>
+                                    <a th:text="${subArticle.subject}"
+                                       th:href="|/articles/${subArticle.no}|"></a>
+                                </td>
+                                <td th:text="${subArticle.nickname}">닉네임</td>
+                                <td th:text="${subArticle.writeDate}">날짜</td>
+                                <td th:text="${subArticle.viewcount}">조회수</td>
+                                <td th:text="${subArticle.likecount}">추천</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

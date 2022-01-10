@@ -134,7 +134,7 @@ function setThumbnail(event) {
             console.log(image.name);
 
             if ($.inArray(ext, ['png', 'jpg', 'mp4']) == -1){
-                alert('이미지 첨부는 png, jpg만 가능합니다');
+                alert('이미지 첨부는 png, jpg, mp4만 가능합니다');
                 return false;
             } else {
 

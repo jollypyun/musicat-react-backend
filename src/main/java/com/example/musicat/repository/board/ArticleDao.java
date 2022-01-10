@@ -13,6 +13,9 @@ public interface ArticleDao {
 	//게시글 세부 조회
 	List<SelectArticleVO> selectArticle(int articleNo);
 
+	//앞 뒤 게시글 조회
+	List<ArticleVO> selectSubArticle(int articleNo);
+
 	//게시판 별 게시글 목록 조회
 	List<ArticleVO> selectBoard(int boardNo);
 

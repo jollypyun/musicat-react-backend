@@ -54,6 +54,11 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public List<ArticleVO> selectSubArticle(int articleNo) {
+		return this.articleDao.selectSubArticle(articleNo);
+	}
+
+	@Override
 	public List<ArticleVO> retrieveBoard(int boardNo) { // 게시판 목록 조회
 		return this.articleDao.selectBoard(boardNo);
 	}
