@@ -54,7 +54,7 @@ public class MusicApiService {
         System.out.println("fileName : " + fileName);
     }
 
-    public Music registerMusic(MultipartFile file, MultipartFile imagefile, String title, int memberNo, int articleNo) throws HttpClientErrorException {
+    public Music registerMusic(MultipartFile file, MultipartFile imagefile, String title, int memberNo) throws HttpClientErrorException {
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -93,8 +93,6 @@ public class MusicApiService {
         body.add("image", byteArray2);
         body.add("title", title);
         body.add("memberNo", memberNo);
-        body.add("articleNo", articleNo);
-
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         ResponseEntity<Music> response = restTemplate.postForEntity(URI_MUSICS_UPLOAD, requestEntity, Music.class);
