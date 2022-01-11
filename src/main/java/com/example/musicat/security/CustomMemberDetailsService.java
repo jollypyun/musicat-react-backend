@@ -27,6 +27,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
+        log.info("detailservice email : " + email);
         //view에서 받은 email을 사용해 사용자 정보가 있는지 조회하는 memberService 메소드
         MemberVO memberVo = memberService.retrieveMemberByEmail(email);
 

@@ -32,6 +32,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -117,28 +118,35 @@ public class HomeController {
             member.setGradeNo(4);
             member.setNo(0);
         } else {
-            member = (MemberVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         }
+
         return member;
     }
 
   @GetMapping("/main")
-	public String petopiaMain(Model model, HttpSession session, Authentication authentication) { // //@AuthenticationPrincipal Member member
+	public String petopiaMain(Model model) { // //@AuthenticationPrincipal Member member HttpSession session, Authentication authentication
 
-		List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
-		model.addAttribute("articleList", allArticleList);
-        List<BestArticleVO> bestArticles = this.articleService.selectAllBestArticle();
-        model.addAttribute("bestArticles", bestArticles);
+      List<ArticleVO> allArticleList = this.articleService.retrieveAllArticle();
+      model.addAttribute("articleList", allArticleList);
+      List<BestArticleVO> bestArticles = this.articleService.selectAllBestArticle();
+      model.addAttribute("bestArticles", bestArticles);
 
-        model.addAttribute("HomeContent","fragments/viewMainContent");
+      model.addAttribute("HomeContent", "fragments/viewMainContent");
 
-		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
-		model.addAttribute("categoryBoardList", categoryList);
-		CategoryVO categoryVo = new CategoryVO();
-		model.addAttribute("categoryVo", categoryVo);
+      List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
+      model.addAttribute("categoryBoardList", categoryList);
+      CategoryVO categoryVo = new CategoryVO();
+      model.addAttribute("categoryVo", categoryVo);
+
+      MemberVO member = checkMemberNo();
+      List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+      model.addAttribute("likeBoardList", likeBoardList);
 
 
+      return "view/home/viewHomeTemplate";
 
+  }
 
         //로그인하지 않은 사용자일 경우 ( 로그인한 사용자 정보 처리는 SecurityConfig.java에서 )
 //        String auth = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
@@ -155,19 +163,6 @@ public class HomeController {
 //            session.setAttribute("loginUser", member);
 //            log.info("익명 사용자 - grade : " + member.getGrade() + " gradeNo : " + member.getGradeNo());
 
-      //MemberVO member = new MemberVO();
-      //MemberVO member = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      MemberVO member = checkMemberNo();
-
-      List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
-      model.addAttribute("likeBoardList", likeBoardList);
-
-
-      return "view/home/viewHomeTemplate";
-
-    }
-
-	
 	@GetMapping("/join1")
 	public String join(Model model) {
 		MemberVO mVo = new MemberVO(); //MemberVO라는 빈칸 양식 종이를 새로 가져올때마다 new 선언
@@ -192,6 +187,10 @@ public class HomeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+        model.addAttribute("likeBoardList", likeBoardList);
+
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
@@ -214,6 +213,9 @@ public class HomeController {
             e.printStackTrace();
         }
 
+        List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+        model.addAttribute("likeBoardList", likeBoardList);
+
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
@@ -235,6 +237,9 @@ public class HomeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+        model.addAttribute("likeBoardList", likeBoardList);
 
         List<ArticleVO> articles = this.articleService.retrieveMyArticle(userNo);
         model.addAttribute("articles", articles);
@@ -267,6 +272,9 @@ public class HomeController {
         model.addAttribute("replyListOneMember", replyListOneMember);
         log.info(replyListOneMember.toString());
 
+        List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+        model.addAttribute("likeBoardList", likeBoardList);
+
         List<BoardVO> boardNameList = this.boardService.retrieveBoardNameList();
         model.addAttribute("boardNameList", boardNameList);
         log.info(boardNameList.toString());
@@ -295,6 +303,9 @@ public class HomeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+        model.addAttribute("likeBoardList", likeBoardList);
 
         List<ArticleVO> likeArticle = this.articleService.retrieveMyLikeArticle(userNo);
         model.addAttribute("likeArticle", likeArticle);

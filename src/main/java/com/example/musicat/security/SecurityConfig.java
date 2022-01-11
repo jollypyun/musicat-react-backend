@@ -16,14 +16,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -98,13 +101,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         //인증 성공 시 인증 결과를 담은 인증 객체를 파라미터로 받음 (인증 요청하지 않은 사용자의 정보는 HomController(/main)에서 처리해줌
-                        MemberVO member = (MemberVO) authentication.getPrincipal();
+                        MemberVO member = ((MemberAccount) authentication.getPrincipal()).getMemberVo();
                         log.info("principal : " + member.toString());
 
 //                        HttpSession session = request.getSession();
 //                        session.setAttribute("loginUser", member);
 //                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
 
+                        log.info("인증성공 onAuthenticationSuccess");
 
                         //사용자 요청페이지 저장
                         RequestCache requestCache = new HttpSessionRequestCache();
@@ -113,11 +117,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         if(savedRequest == null) { //요청페이지가 없으면 보낼 url
                             log.info("별도 요청 페이지 없음(main에서 로그인)");
                             response.sendRedirect("/main");
-                            
+
                         } else { //요청 페이지가 있으면 보낼 url
                             log.info("요청페이지 savedRequest.getRedirectUrl() : " + savedRequest.getRedirectUrl());
                             response.sendRedirect(savedRequest.getRedirectUrl());
                         }
+
+
 
                     }
                 })
@@ -125,13 +131,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
                         //이전에 입력한 이메일
-                        //log.info("email : " + request.getParameter("email"));
+                        log.info("email : " + request.getParameter("email"));
 
                         //로그인 실패 예외 발생 시 처리
                         //log.info("exception(로그인실패) : " + exception.getMessage());
 
                         if (exception instanceof UsernameNotFoundException) { //DB에 일치하는 email이 없는 경우
-                            request.setAttribute("loginFailMessage", "아이디 또는 비밀번호를 잘못 입력하였습니다.");
+                            request.setAttribute("loginFailMessage", "아이디 또는 비밀번asdfasdfsf호를 잘못 입력하였습니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
                         } else if (exception instanceof BadCredentialsException) { //비밀번호가 틀린 경우
                             request.setAttribute("loginFailMessage", "아이디 또는 비밀번호를 잘못 입력하였습니다.");
@@ -155,8 +161,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout") //로그아웃 처리 url
                 .invalidateHttpSession(true) //세션비우기
-                //.deleteCookies("JESSIONID", "remember-me") //로그아웃 후 쿠키 삭제 (remeberme 사용 했을 때 필요)
+                //.deleteCookies("remember-me", "JSESSIONID") //자동로그인 쿠키, Tomcat이 발금한 세션 유지 쿠키 삭제 (순서 중요) 로그아웃 후 쿠키 삭제 (remeberme 사용 했을 때 필요)
+                .deleteCookies("JSESSIONID", "remember-me")
                 .logoutSuccessUrl("/musicatlogin"); //로그아웃 후 이동할 페이지
+
+
+        http
+                .sessionManagement() //세션 관리
+                .sessionFixation().changeSessionId() //세션 고정 보호(뭔말임) 세션 조작을 통한 보안 공격 방지를 위해, 인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지 (security가 기본으로 제공해주기 때문에 별도로 설정해줄 필요 없음)
+                .maximumSessions(3) //최대 세션 개수
+                .expiredUrl("/expiredUrl") //session 만료 시 이동 페이지
+                .maxSessionsPreventsLogin(true); //false : 이전에 로그인한 세션 만료, true : 나중에 로그인 시도하는 세션 생성 불가(로그인 불가)
+
+        //이거 에러 메세지 처리 필요
+                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS) //스프링 시큐리티가 session을 생성하지도 않고, 존재해도 사용하지 않음 (JWT와 같이 session을 사용하지 않을 경우에 적용)
+
+
+        //RememberMeAuthenticationFilter가 작동하는 조건
+        //1. authentication(인증이 성공한 사용자의 정보를 담은 인증객체)이 null인 경우(security context안에 authentication이 존재하지 않는 경우(즉, session이 끊겼거나 만료된 경우)),
+        //2. form 인증 당시 remember Me 기능을 활성화하여 rememberMe 쿠키를 받은 경우에 작동
+        //쿠키에 JSESSIONID와 remember-me 토큰이 저장됨. remember-me 체크하지 않을 경우 JSESSIONID삭제하면 다시 로그인해아하나, remember-me 쿠키를 사용할 경우 JSESSIONID 삭제해도 재인증 필요x
+        http
+                .rememberMe()
+                .rememberMeParameter("remember-me") //form에서 rememberMe 기능 사용 여부를 체크할 때 받을 파라미터명과 동일해야 함. 기본 파라미터명은 remember-me
+                //.key("uniqeAndSecretRememberMe")
+                .tokenValiditySeconds(3600) //rememberMe 토큰 만료 기간. default 14일
+                .alwaysRemember(false) //remember Me 기능이 활성화되지 않아도 항상 실행 (false로 하는 것이 좋음 근데 예시는 왜 true)
+                .userDetailsService(userDetailsService); //rememberMe 인증 시 인증 계정 조회를 위해 필요
+
 
         log.info("SecurityConfig 순회 완--------------------");
 
