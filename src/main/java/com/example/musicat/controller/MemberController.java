@@ -82,6 +82,20 @@ public class MemberController {
 								// html 파일명 쓰기)
 	}
 
+	@ResponseBody
+	@PostMapping("/joinCheck")
+	public int joinCheck(@RequestParam("type") String type
+						,@RequestParam("value") String value) {
+		HashMap<String, Object> checkMap = new HashMap<>();
+		if ("email".equals(type)) {
+			checkMap.put(type, value);
+		} else if ("nickname".equals(type)) {
+			checkMap.put(type, value);
+		}
+		int check = this.memberService.joinCheck(checkMap);
+		return check;
+	}
+
 	// 회원 목록 조회
 	@GetMapping("/members")
 	public String viewMemberList(Model model, Criteria crt) {

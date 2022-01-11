@@ -178,6 +178,7 @@ public class ArticleController {
 //		MemberVO member = (MemberVO) session.getAttribute("loginUser");
 
 		MemberVO member = HomeController.checkMemberNo();
+		model.addAttribute("memberNo", member.getNo());
 
 		// bind
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -207,8 +208,10 @@ public class ArticleController {
 			,BindingResult result
 			,@ModelAttribute FileFormVO form
 			,@RequestParam("tags") String tags
+			,@RequestParam("audioNo") int audioNo
 			,HttpServletRequest req) throws IOException {
 		ModelAndView mv = new ModelAndView();
+		log.info("audioNo= {}",audioNo);
 		log.info("insert접근");
 		if (result.hasErrors()){
 			List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -221,9 +224,6 @@ public class ArticleController {
 			return mv;
 		}
 		// create
-//		HttpSession session = req.getSession();
-//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
-
 		MemberVO member = HomeController.checkMemberNo();
 
 		// 파일 첨부 지정 폴더에 Upload도 동시에 실행
@@ -248,7 +248,7 @@ public class ArticleController {
 			article.setTagList(tagList);
 		}
 
-		this.articleService.registerArticle(article);
+		this.articleService.registerArticle(article, audioNo);
 		int articleNo = article.getNo(); // 작성 후 게시글 세부조회page로 넘어가기 때문에 게시글 번호를 넘겨준다. (insert문 실행 뒤 Last ID 받아온다.)
 		log.info("입력 게시글={}", article.toString());
 
@@ -420,8 +420,10 @@ public class ArticleController {
 	}
 
 	@GetMapping("/musicRegister")
-	public String musicRegister() {
-
+	public String musicRegister(Model model) {
+		int memberNo = HomeController.checkMemberNo().getNo();
+		model.addAttribute("memberNo", memberNo);
+		log.info("memberNo : " + memberNo);
 		return "/view/board/musicRegister";
 	}
 

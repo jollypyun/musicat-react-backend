@@ -43,12 +43,12 @@ public class MusicController {
 
     @PostMapping("musicpost")
     public ModelAndView upload(@RequestParam(value = "audio") MultipartFile file, @RequestParam(value = "image") MultipartFile imagefile,
-                               @RequestParam(value = "title") @Size(min = 1, max = 1) String title, @RequestParam(value = "memberNo") int memberNo,
-                               @RequestParam(value = "articleNo") int articleNo) throws HttpClientErrorException {
+                               @RequestParam(value = "title") @Size(min = 1, max = 1) String title
+            , @RequestParam(value = "memberNo") int memberNo) throws HttpClientErrorException {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("view/board/musicRegisterCheck");
 
-        Music music = musicApiService.registerMusic(file, imagefile, title, memberNo, articleNo);
+        Music music = musicApiService.registerMusic(file, imagefile, title, memberNo);
         mv.addObject("music", music);
         return mv;
     }

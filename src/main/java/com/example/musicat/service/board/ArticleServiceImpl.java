@@ -66,13 +66,14 @@ public class ArticleServiceImpl implements ArticleService {
 	// 게시글 추가
 	@Override
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public void registerArticle(ArticleVO article) {
+	public void registerArticle(ArticleVO article, int audioNo) {
 		this.memberMapper.plusMemberDocs(article.getMemberNo());
 		this.articleDao.insertArticle(article); // 게시글 추가
 		this.fileService.uploadFile(article);
 		if (article.getTagList() != null) { // 입력태그가 있을 때만 동작
 			this.articleDao.insertTags(article.getNo(), article.getTagList());	
 		}
+//		audioNo, article.getNo(); audio setArticleNo();
 	}
 
 	@Override
