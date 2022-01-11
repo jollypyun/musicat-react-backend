@@ -26,12 +26,12 @@ public interface MemberMapper {
 	// 연주 ----------------------------------------
 	// 회원 가입
 	void insertMember(MemberVO mVo);
+
+	void insertMemberGrade(int memberNo);
+
 	// 회원가입 중복 체크
 	int joinCheck(Map<String, Object> map);
 
-	// 회원가입 시 이메일 중복체크
-	//삭제 예정
-	String selectEmail(String email);
 
 	// 회원 자진 탈퇴
 //	void updateMember(int no, String password);
