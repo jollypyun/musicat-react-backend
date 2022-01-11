@@ -22,6 +22,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -111,5 +112,21 @@ public class MusicApiService {
         Map<String, Long> params = new HashMap<String, Long>();
         params.put("musicId", musicId);
         restTemplate.delete("http://localhost:20000/api/musics/deleteById/{musicId}", params);
+    }
+
+    public void connectToArticle(Long musicId, int articleNo) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("musicId", musicId);
+        params.put("articleNo", articleNo);
+        log.info(params.toString());
+        restTemplate.put("http://localhost:20000/api/musics/connectToArticle/{musicId}/{articleNo}",String.class, params);
+    }
+
+    public List<Music> retrieveMusics(int articleNo){
+        ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
+        List<Music> musicList = response.getBody();
+
+        log.info(musicList.toString());
+        return musicList;
     }
 }
