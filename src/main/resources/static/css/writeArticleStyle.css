@@ -57,9 +57,17 @@
 		rgba(102, 175, 233, .6);
 }
 
+.write-audio-style,
+.write-image-style,
 .write-file-style{
 	margin-left:5px;
 	margin-right: 30px;
+}
+
+.write-audio-style:hover,
+.write-image-style:hover,
+.write-file-style:hover{
+	cursor: pointer;
 }
 
 .write-content-style{
@@ -159,6 +167,7 @@
 	margin-right: 20px;
 }
 
+#write-audiofile-upload,
 .write-area-style input[type="file"] {
 	position: absolute;
 	width: 0;
@@ -176,4 +185,9 @@
 .preview-div img{
 	border: 1px solid#666666;
 	margin: 5px;
+}
+
+.songRegisterBtn{
+	border: none;
+	background-color: transparent;
 }
