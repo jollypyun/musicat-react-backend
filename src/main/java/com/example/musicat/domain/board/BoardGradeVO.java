@@ -18,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 //@RequiredArgsConstructor
 @ToString
-@Repository("boardGradeVO")
+@Repository("boardGradeVo")
 public class BoardGradeVO {
 	
 	private int boardNo;
@@ -27,13 +27,22 @@ public class BoardGradeVO {
 	private int readwrite;
 	private int gradeNo;
 	private String gradeName;
-	//ArrayList<BoardGradeVO> baordGradeList = new ArrayList<>();
-	
-//	public BoardGradeVO(int readGrade, int writeGrade) {
-//		this.readGrade = readGrade;
-//		this.writeGrade = writeGrade;
-//	}
-//	
+
+
+	//
+	public BoardGradeVO(int boardNo, int readGrade, int writeGrade) {
+		this.boardNo = boardNo;
+		this.readGrade = readGrade;
+		this.writeGrade = writeGrade;
+	}
+	//
+
+
+	public BoardGradeVO(int readGrade, int writeGrade) {
+		this.readGrade = readGrade;
+		this.writeGrade = writeGrade;
+	}
+
 	
 	
 	

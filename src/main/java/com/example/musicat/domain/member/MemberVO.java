@@ -32,6 +32,7 @@ public class MemberVO {
 	private String ban = "";
 	private int isMember;
 
+
 	public MemberVO(@NonNull String email, String password) {
 		super();
 		this.email = email;
@@ -69,4 +70,9 @@ public class MemberVO {
 		this.nickname = nickname;
 	}
 
+	// 팔로우 필요 정보
+	public MemberVO(int no, String nickname) {
+		this.no = no;
+		this.nickname = nickname;
+	}
 }

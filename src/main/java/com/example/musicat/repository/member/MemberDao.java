@@ -8,8 +8,10 @@ import java.util.HashMap;
 
 public interface MemberDao {
 
-	// 양
+	// 양 ~
 	public MemberVO selectMemberByEmail(String email);
+
+	// ~ 양
 
 	public void test();
 
@@ -39,6 +41,7 @@ public interface MemberDao {
 
 	boolean selectNickname(String nickname);
 
+	//비밀번호 변경
 	void updatePassword(MemberVO memberVo);
 
 

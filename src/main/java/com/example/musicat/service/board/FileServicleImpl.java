@@ -9,6 +9,7 @@ import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.board.FileVO;
 import com.example.musicat.repository.board.FileDao;
 import com.example.musicat.util.FileManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,20 +18,17 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service("fiileService")
 public class FileServicleImpl implements FileService {
 
-	public FileServicleImpl() {
-	}
-
-	@Autowired
-	private FileDao fileDao;
-	@Autowired
-	private FileManager fileManager;
 	@Value("${file.dir}")
 	private String dirPath;
+	private final FileManager fileManager;
+	private final FileDao fileDao;
 
-
+	// 파일 1개 조회
+	@Override
 	public FileVO selectOneFile(int fileNo){
 		return fileDao.selectFile(fileNo);
 	}
@@ -52,6 +50,13 @@ public class FileServicleImpl implements FileService {
 			List<FileVO> fileList = article.getFileList();
 			for (FileVO file : fileList) {
 				if (fileCheck(this.dirPath, file.getSystemFileName())) {
+					int pos = file.getSystemFileName().indexOf(".");
+					String ext = file.getSystemFileName().substring(pos + 1);
+					if("mp4".equals(ext)){ // 동영상 저장
+						file.setArticleNo(articleNo);
+						file.setFileType(2);
+						this.fileDao.insertFile(file); // 이미지 파일들 저장
+					}
 					file.setArticleNo(articleNo);
 					file.setFileType(1);
 					this.fileDao.insertFile(file); // 이미지 파일들 저장
@@ -61,6 +66,7 @@ public class FileServicleImpl implements FileService {
 	}
 
 	// 썸네일 생성
+	@Override
 	public void createThumbnail(FileVO thumbFile) throws IOException {
 		String thumPath = this.dirPath + "thumbnail";
 		if (fileCheck(thumPath, thumbFile.getSystemFileName())) {
@@ -69,6 +75,7 @@ public class FileServicleImpl implements FileService {
 	}
 
 	// file 꺼내서 추출, retirveArticle에서 사용됨
+	@Override
 	public ArticleVO fileList(ArticleVO article, List<FileVO> files) {
 		if (files == null) {
 			return article;
@@ -90,7 +97,7 @@ public class FileServicleImpl implements FileService {
 		File files[] = dir.listFiles();
 		int pos = path.length();
 		for (File file : files) {
-			log.info("files:" + file.toString());
+			log.info("FileServiceImpl.fileCheck: files:" + file.toString());
 			String fileName = file.toString().substring(pos + 1);
 			if (fileName.equals(systemFileName)) { // 첨부파일 중복검사
 				return false;
@@ -118,11 +125,6 @@ public class FileServicleImpl implements FileService {
 		this.fileDao.deleteFile(fileNo);
 	}
 	
-	@Override
-	public void allDelete(int articleNo) {
-		this.fileDao.allDelete(articleNo);
-	}
-
 	@Override
 	public List<FileVO> selectArticleFiles(int articleNo) {
 		return this.fileDao.selectArticleFiles(articleNo);

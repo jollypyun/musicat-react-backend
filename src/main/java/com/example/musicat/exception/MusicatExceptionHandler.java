@@ -1,6 +1,10 @@
 package com.example.musicat.exception;
 
+import com.example.musicat.domain.board.CategoryVO;
+import com.example.musicat.service.board.CategoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,14 +20,6 @@ import java.util.List;
 @ControllerAdvice
 public class MusicatExceptionHandler {
 
-    //static private List<PageEnum> pages;
-
-//    MusicatExceptionHandler(){
-//        if(pages == null) {
-//            pages = new ArrayList<PageEnum>();
-//            pages.add(PageE)
-//        }
-//    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ModelAndView handleConstraintViolationException(HttpServletRequest req, ConstraintViolationException e) {
@@ -51,10 +47,13 @@ public class MusicatExceptionHandler {
                 viewPage = "/view/board/musicRegister"; // 포워드
                 //viewPage = "redirect:/articles/musicRegister"; // 리다이렉트 (리다이렉트 하면 addobject 값은 get 방식으로 넘어감..)
 
-                mv.addObject("errorMsg", e.getLocalizedMessage());
+                mv.setViewName(viewPage);
+
                 break;
+
         }
 
+        mv.addObject("errorMsg", e.getLocalizedMessage());
         mv.setViewName(viewPage);
     }
 }

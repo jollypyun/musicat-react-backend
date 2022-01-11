@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 public class MusicController {
 
-    public MusicApiService musicApiService;
+    private final MusicApiService musicApiService;
 
     @Autowired
     public MusicController(MusicApiService musicApiService) {

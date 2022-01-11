@@ -5,7 +5,7 @@ function writeForm(){
 $(document).ready(function () {
 
 	/*-------------------댓글 ------------------ */
-	const getAjax = function (url, no, content) {
+	const getAjax = function (url, no, content, depth) {
 		// resolve, reject는 자바스크립트에서 지원하는 콜백 함수이다.
 		return new Promise((resolve, reject) => {
 			$.ajax({
@@ -15,8 +15,8 @@ $(document).ready(function () {
 				data: {
 					no: no,
 					content: content,
-					articleNo: $("#article_no").val()
-
+					articleNo: $("#article_no").val(),
+					depth: depth
 				},
 				success: function (data) {
 					resolve(data);
@@ -50,7 +50,7 @@ $(document).ready(function () {
 		});
 	}
 
-	async function requestProcess(url, no, content) {
+	async function requestProcess(url, no, content, depth) {
 		try {
 			console.log("rP 접속");
 			let replyList = null;
@@ -58,7 +58,7 @@ $(document).ready(function () {
 				replyList = await removeReply(url, no);
 			} else {
 				console.log("GetAjAx 전");
-				replyList = await getAjax(url, no, content);
+				replyList = await getAjax(url, no, content, depth);
 				console.log("GetAjAx 후");
 			}
 
@@ -103,21 +103,61 @@ $(document).ready(function () {
 
 	//댓글 작성
 	$('#write_reply_btn').on('click', function () {
-		const articleNo = $("#article_no").val();
+		//const articleNo = $("#article_no").val();
 		const content = $('#write_content').val();
+		const depth = 0; // 최초 작성은 원글이라 depth는 0
 		if(content == null || content === ""){
 			$('#write_content').attr("placeholder", "내용을 입력하세요");
 			$('#write_content').addClass('changeplaceholder');
 			return false;
 		}
 		console.log('ajax전');
-		requestProcess('/insertReply', articleNo, content);
+		requestProcess('/insertReply',0, content, depth);
 		$("#write_content").val(""); // textarea 비우기
 		$('#write_content').removeClass('changeplaceholder');
 		$("#write_content").attr('placeholder', '댓글을 입력해주세요');
 		console.log('ajax후');
 	});
 
+	
+	//답글 작성
+	$('#write_depth_reply_btn').on('click', function () {
+		// const no = $(this).find('.grp_no').val(); // grp 값
+		const no = $('#write_depth_reply_form').find('#grp_no').val();
+		console.log('no값', no);
+		const content = $('#write_depth_content').val();
+		const depth = 1; // 답글은 depth:1
+		if(content == null || content === ""){
+			$('#write_depth_content').attr("placeholder", "내용을 입력하세요");
+			$('#write_depth_content').addClass('changeplaceholder');
+			return false;
+		}
+		console.log('ajax전');
+		requestProcess('/insertReply', no, content, depth);
+		$('#write_depth_reply_form').hide(); // 폼 닫기
+		$("#write_depth_content").val(""); // textarea 비우기
+		$('#write_depth_content').removeClass('changeplaceholder');
+		$("#write_depth_content").attr('placeholder', '댓글을 입력해주세요');
+		console.log('ajax후');
+	});
+
+	//답글 폼
+	$(document).on('click', '.depth_reply_btn', function () {
+		const no = $(this).parents('table').attr('id');
+		var grpCheck = $('#write_depth_reply_form').find('grp_no');
+		if (grpCheck != null){
+			$('#write_depth_reply_form').find('#grp_no').remove();
+		}
+		var $input = $('<input type="hidden" id="grp_no" value=' + no + '>');
+		$('#write_depth_reply_form').append($input);
+		$('#write_depth_reply_form').insertAfter('#' + no);
+		$('#write_depth_reply_form').show();
+	});
+
+	//답글 취소
+	$('.depth_reply_cancle_btn').on('click', function () {
+		$('#write_depth_reply_form').hide();
+	});
 
 	//댓글 수정폼
 	$(document).on('click', '.modify_Reply_Form_Btn', function () {
@@ -147,13 +187,14 @@ $(document).ready(function () {
 		const no = $('#no').val();
 		console.log('modifyActionNo:', no);
 		const content = $('#' + no).parent('div').find('#reply_content').val();
+		const depth = $(this).parents('table').find('.depth').val();
 		if(content == null || content === ""){
 			$('#reply_content').attr("placeholder", "내용을 입력하세요");
 			$('#reply_content').addClass('changeplaceholder');
 			return false;
 		}
 		console.log('modifyReplyContent:', content);
-		requestProcess('/modifyReply', no, content);
+		requestProcess('/modifyReply', no, content, depth);
 		$('#reply_content').removeClass('changeplaceholder');
 		$('#modify_reply_form').insertAfter('#writeReplyForm');
 		$('#modify_reply_form').hide();

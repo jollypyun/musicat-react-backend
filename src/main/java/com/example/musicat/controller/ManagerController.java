@@ -1,11 +1,13 @@
 package com.example.musicat.controller;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.example.musicat.domain.etc.DailyStatisticsVO;
 import com.example.musicat.domain.etc.TotalStatisticsVO;
 import com.example.musicat.service.etc.DailyStatisticsServiceImpl;
 import com.example.musicat.service.etc.TotalStatisticsServiceImpl;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,29 +25,56 @@ public class ManagerController {
 	@Autowired
 	TotalStatisticsServiceImpl totalServiceImpl;
 
-	@GetMapping("/petopia-manager")
+	@GetMapping("/manager")
 	public String manager(Model model) {
 		model.addAttribute("managerContent", "fragments/MemberContent");
 		return "view/home/viewManagerTemplate";
 	}
 
-	@GetMapping("/petopia-manager/daily")
+	@GetMapping("/manager/daily")
 	public String managerDaily(Model model) {
 
-		DailyStatisticsVO dailyVo = dailyServiceImpl.retrieve();
-		ArrayList<DailyStatisticsVO> dailyList = dailyServiceImpl.retrieveList();
-		
 		dailyServiceImpl.registerAndmodifyDaily();
-		
+
+		ArrayList<DailyStatisticsVO> dailyList = dailyServiceImpl.retrieveList();
+
+		Calendar calendar = new GregorianCalendar();
+		SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
+
+		String chkDate = SDF.format(calendar.getTime());
+
+
+
+
+
+		if (dailyList.size()==1){
+			calendar.add(Calendar.DATE, -1);
+			chkDate = SDF.format(calendar.getTime());
+
+			dailyList.add(new DailyStatisticsVO(2,chkDate,1,0));
+
+			calendar.add(Calendar.DATE, -1);
+			chkDate = SDF.format(calendar.getTime());
+
+			dailyList.add(new DailyStatisticsVO(3,chkDate,2,0));
+
+
+		}else if (dailyList.size()==2){
+			calendar.add(Calendar.DATE, -2);
+			chkDate = SDF.format(calendar.getTime());
+
+			dailyList.add(new DailyStatisticsVO(3,chkDate,2,0));
+
+		}
+
 		model.addAttribute("managerContent", "fragments/StatisticsDailyContent");
 
-		model.addAttribute("dailyOne", dailyVo);
 		model.addAttribute("dailyList", dailyList);
 
 		return "view/home/viewManagerTemplate";
 	}
 
-	@GetMapping("/petopia-manager/total")
+	@GetMapping("/manager/total")
 	public String managerTotal(Model model) {
 
 		totalServiceImpl.registerAndmodifyTotal();

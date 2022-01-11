@@ -235,8 +235,8 @@ sup {
 }
 
 a {
-  color: #0d6efd;
-  text-decoration: underline;
+  /*color: #0d6efd;*/
+  /*text-decoration: underline;*/
 }
 a:hover {
   color: #0a58ca;
@@ -11399,7 +11399,7 @@ body {
 
 .sb-nav-fixed #layoutSidenav #layoutSidenav_content {
   padding-left: 225px;
-  top: 56px;
+  top: 80px;
 }
 
 #layoutError {
@@ -11426,7 +11426,7 @@ body {
 
 .sb-topnav {
   padding-left: 0;
-  height: 56px;
+  height: 80px;
   z-index: 1039;
 }
 .sb-topnav .navbar-brand {

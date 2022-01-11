@@ -12,7 +12,7 @@ public interface BoardService {
 	
 	public void registerBoard(BoardVO boardVo, BoardGradeVO boardGradeVo);
 	
-	public ArrayList<BoardVO> retrieveBoardkind(); 
+	public ArrayList<BoardVO> retrieveBoardkind();
 	
 	public int retrieveConnectArticle(int boardNo);
 	
@@ -28,12 +28,16 @@ public interface BoardService {
 	
 	public boolean retrieveAllReadBoard(int boardNo, int gradeNo);
 	
-//	public int retrieveDuplicateBoard(String boardName);
-//	
-//	public void registerFavoriteBoard(BoardVO boardVo);
-//	
-//	public void removeFavoriteBoard(BoardVO boardVo);
-//	
-//	public ArrayList<BoardVO> retrieveFavoriteBoardList(int no);
+	public Integer retrieveDuplicatedBoard(String boardName);
+
+	public List<BoardVO> retrieveBoardNameList();
+
+	public void registerLikeBoard(int memberNo, int boardNo);
+
+	public void removeLikeBoard(int memberNo, int boardNo);
+
+	public int retrieveLikeBoard(int memberNo, int boardNo);
+
+	public ArrayList<BoardVO> retrieveLikeBoardList(int no);
 
 }

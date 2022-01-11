@@ -26,7 +26,7 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 	private MemberMapper mapper;
 //기본 세팅 끝
 
-	// 양
+	// 양 ~
 	// 로그인 - email을 통해 session에 담을 정보를 조회하고 memberVo에 담음
 	@Override
 	public MemberVO selectMemberByEmail(String email) {
@@ -34,6 +34,11 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 		//log.info("Email, password, auth(grade) : " + memberVo.getEmail() + " " + memberVo.getPassword() + " " +  memberVo.getGrade());
 		return memberVo;
 	}
+
+	// ~ 양
+
+	@Override
+	public void test() {}
 
 	// 회원가입
 	@Override
@@ -64,9 +69,6 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 		this.mapper.updatePassword(memNo, newPassword);
 	}
 
-	public void test() {
-		// TODO Auto-generated method stub
-	}
 
 	@Override
 	public void updateLastDdate(int no) throws Exception {

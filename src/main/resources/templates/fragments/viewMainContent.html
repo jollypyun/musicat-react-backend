@@ -2,7 +2,7 @@
       xmlns:th="http://thymeleaf.org">
 
 <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-<link th:href="@{../css/homeContentsStyle.css}" rel="stylesheet"/>
+<link th:href="@{/css/homeContentsStyle.css}" rel="stylesheet"/>
 
 <div id="layoutSidenav_content" class="mb-4">
     <main>
@@ -53,15 +53,15 @@
                         <div class="content-top-right-table">
                             <table>
                                 <tbody>
-                                    <tr th:each="bestArticle : ${bestArticles}">
-                                        <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
-                                        <td th:text="${bestArticle.rank}"></td>
-                                        <td style="display: inline-block">
-                                            <a th:text="${bestArticle.subject}"
-                                               th:href="|/articles/${bestArticle.articleNo}|"></a>
-                                        </td>
-<!--                                        <td th:text="${bestArticle.likecount}"></td>-->
-                                    </tr>
+                                <tr th:each="bestArticle : ${bestArticles}">
+                                    <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
+                                    <td th:text="${bestArticle.rank}"></td>
+                                    <td style="display: inline-block">
+                                        <a th:text="${bestArticle.subject}"
+                                           th:href="|/articles/${bestArticle.articleNo}|"></a>
+                                    </td>
+                                    <!--                                        <td th:text="${bestArticle.likecount}"></td>-->
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -74,7 +74,7 @@
                     <i class="fas fa-table me-1"></i><span> 전체 글 보기</span>
                 </div>
                 <div class="card-body">
-                    <table id="datatablesSimple">
+                    <table id="datatablesSimple" class="list-normal-table">
                         <thead>
                         <tr>
                             <th>No</th>
@@ -93,7 +93,7 @@
                             <th>작성자</th>
                             <th>날짜</th>
                             <th>조회수</th>
-                            <th>좋아요</th>
+                            <th>추천</th>
                         </tr>
                         </tfoot>
                         <tbody>
@@ -103,7 +103,18 @@
                                 <a th:text="${article.subject}"
                                    th:href="|/articles/${article.no}|"></a>
                             </td>
-                            <td th:text="${article.nickname}"></td>
+                            <!-- DropBox-->
+                            <td class="dropdown">
+                                <a class="dropdown-toggle" data-bs-toggle="dropdown"
+                                   th:text="${article.nickname}">
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item"
+                                           th:href="|/myPage/Playlist/${article.memberNo}|">MyPage</a></li>
+                                    <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                </ul>
+                            </td>
+                            <!-- DropBox-->
                             <td th:text="${article.writeDate}"></td>
                             <td th:text="${article.viewcount}"></td>
                             <td th:text="${article.likecount}"></td>

@@ -5,19 +5,21 @@
 	layout:decorate="~{layout/default_layout}">
 
 <th:block layout:fragment="head">
-	<title>반려동물 카페</title>
-	<link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+	<title>Musicat</title>
+	<meta property="og:description" content="Hello. This is a music site. Share your information.">
+	<meta name="description" content="Hello. This is a music site. Share your information.">
+	<link rel="shortcut icon" th:href="@{/upload/favicon.ico}">
 	<link
 		th:href="@{https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css}"
 		rel="stylesheet" />
 	<link th:href="@{/css/theme_styles.css}" rel="stylesheet" />
 
-	<link th:href="@{/css/homeContentsStyle.css}" rel="stylesheet" />
 	<link th:href="@{/css/homeNavStyle.css}" rel="stylesheet" />
 
-	<script
-		th:src="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js}"
-		th:crossorigin="anonymous"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+		  rel="stylesheet">
+
+
 </th:block>
 
 <body class="sb-nav-fixed">
@@ -32,24 +34,30 @@
 		
 		<!-- Content -->
 		<!-- NomalList -->
-		<div th:if="${boardkind == 0}">
+		<div th:if="${boardkind == 0}" class="mb-5" style="width: 100%">
 		<th:block layout:fragment="viewMainContent"
 			th:include="@{/view/board/listArticleNomal}"></th:block>
 		</div>
 		
 		<!-- Content -->
 		<!-- ThumbnailList -->
-		<div th:if="${boardkind == 1}">
+		<div th:if="${boardkind == 1}" class="mb-5" style="width: 100%">
 		<th:block layout:fragment="viewMainContent"
 			th:include="@{/view/board/listArticleThumbnail}"></th:block>
 		</div>
 		
 		<!-- Content -->
-		<!-- SimpleList -->
-		<div th:if="${boardkind == 2}">
+		<!-- audioList -->
+		<div th:if="${boardkind == 2}" class="mb-5" style="width: 100%">
 		<th:block layout:fragment="viewMainContent"
-			th:include="@{/view/board/listArticleSimple}"></th:block>
+			th:include="@{/view/board/listArticleMusic}"></th:block>
 		</div>
+<!-- 양 ~		-->
+<!--		<div>-->
+<!--			<th:block layout:fragment="viewMainContent"-->
+<!--					  th:include="@{${HomeContent}}"></th:block>-->
+<!--		</div>-->
+
 	</div>
 
 	<!-- footer -->
@@ -62,15 +70,17 @@
 		th:crossorigin="anonymous"></script>
 	<script th:src="@{/js/scripts.js}"></script>
 	<script
-		th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js}"
-		th:crossorigin="anonymous"></script>
-	<script th:src="@{/js/chart-area-demo.js}"></script>
-	<script th:src="@{/js/chart-bar-demo.js}"></script>
-	<script
 		th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@latest}"
 		th:crossorigin="anonymous"></script>
 	<script th:src="@{/js/datatables-simple-demo.js}"></script>
 
+	<script
+			th:src="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js}"
+			th:crossorigin="anonymous"></script>
+
+	<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+	
+	<script th:src="@{/js/playlistbar.js}"></script>
 
 </body>
 </html>

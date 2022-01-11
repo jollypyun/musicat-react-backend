@@ -1,0 +1,158 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' -- etc--
+class ChatRoomVO{
+- String roomId
+- String name
+- Set<WebSocketSession> sessions = new HashSet<>
+
++ {static} create(String name): ChatRoomVO
++ getRoomId(): String
++ setRoomId(String roomId): void
++ getName(): String
++ setName(String name): void
++ getSessions(): HashSet<WebSocketSession>
++ setSessions(Set<WebSocketSession> sessions): void
+}
+
+class CharVO{
+- String roomId
+- String writer
+- String message
+- boolean isSystem = false
+
++ getRoomId(): String
++ setRoomId(String roomId): void
++ getWriter(): String
++ setWriter(String writer): void
++ getMessage(): String
++ setMessage(String message): void
++ getIsSystem(): boolean
++ setIsSystem(boolean isSystem): void
+}
+
+class DailyStatisticsVO{
+- int dailyNo
+- String dailyDate
+- int dailyVisits
+- int dailyArticle
+
++ DailyStatisticsVO()
++ DailyStatisticsVO(int dailyNo, String dailyDate, int dailyVisits, int dailyArticle)
++ toString()
++ getDailyNo(): int
++ setInt(int dailyNo) dailyNo: void
++ getDailyDate(): String
++ setString(String dailyDate) dailyDate: void
++ getDailyVisits(): int
++ setInt(int dailyVisits) dailyVisits: void
++ getDailyArticle(): int
++ setInt(int dailyArticle) dailyArticle: void
+}
+
+class NoteVO{
+- int note_no
+- int member_no
+- int notecontent_no
+- int counterpart_no
+- String counterpart_nickname
+- String content
+- String sendDate
+- String readDate
+- int sendrecieve
+- boolean read = false
+
++ NoteVO()
++ NoteVO(int note_no, int member_no, int notecontent_no, int counterpart_no, String counterpart_nickname, String content, String sendDate,String readDate)
++ NoteVO(int note_no, int member_no, int notecontent_no, int counterpart_no, String counterpart_nickname, String content, String sendDate,String readDate, int sendrecieve)
++ boolean checkRead()
++ toString()
++ getNote_no(): int
++ setNote_no(int note_no): void
++ getMember_no(): int
++ setMember_no(int member_no): void
++ getNotecontent_no(): int
++ setNotecontent_no(int notecontent_no): void
++ getCounterpart_no(): int
++ setCounterpart_no(int counterpart_no): void
++ getCounterpart_nickname(): String
++ setCounterpart_nickname(String counterpart_nickname): void
++ getContent(): String
++ setContent(String content): void
++ getSendDate(): String
++ setSendDate(String sendDate): void
++ getReadDate(): String
++ setReadDate(String readDate): void
++ getSendrecieve(): int
++ setSendrecieve(int sendrecieve): void
++ getRead(): boolean
++ setRead(boolean read): void
+}
+
+class TotalStatisticsVO{
+private int totalNo;
+- int totalMember;
+- int totalArticle;
+- int totalView;
+- int totalVisits;
+
++ TotalStatisticsVO()
++ TotalStatisticsVO(int totalNo, int totalMember, int totalArticle, int totalView, int totalVisits)
++ toString()
++ getTotalNo(): int
++ setTotalNo(int totalNo): void
++ getTotalMember(): int
++ setTotalMember(int totalMember): void
++ getTotalArticle(): int
++ setTotalArticle(int totalArticle): void
++ getTotalView(): int
++ setTotalView(int totalView): void
++ getTotalVisits(): int
++ setTotalVisits(int totalVisits): void
+}
+
+
+
+' -------------------  etc -----------------------
+interface DailyStatisticsDao{
+- DailyStatisticsMapper dailyMapper
+- DailyStatisticsVO dailyVo
+
++ selectDaily(): DailyStatisticsVO
++ selectList(): ArrayList<DailyStatisticsVO>
++ insertAndupdateDaily(): void
+}
+
+interface NoteDao{
+- NoteMapper mapper
+
++ test(): NoteVO
++ selectNoteList(int userNo, int isUserReciever, int pageSize, int startOffset): ArrayList<NoteVO>
++ selectTotalNoteCount(int userNo, int isRecieve): int
++ updateRead(int noteNo, int userNo): void
++ selectNote(int noteNo): NoteVO
++ insertNoteContent(String content) throws Exception: int
++ insertNote_member(Map<String, Object> map) throws Exception: void
++ insertNote_counterpart(Map<String, Object> map) throws Exception: void
++ deleteNote(NoteVO note): void
++ updateRecieveNoteDeleteOnNoteContent(NoteVO note): void
++ updateSendNoteDeleteOnNoteContent(NoteVO note): void
++ deleteNoteContent(): void
+}
+
+interface TotalStatisticsDao{
+- TotalStatisticsMapper totalMapper
+- TotalStatisticsVO totalVo
+
++ selectTotal(): TotalStatisticsVO
++ insertAndupdateTotal(): void
+}
+
+' 그려주세요
+class ChatRoomRepository{}
+class DailyStatisticsDaoImpl
+class NoteDaoImpl
+class TotalStatisticsDaoImpl
+
+@enduml

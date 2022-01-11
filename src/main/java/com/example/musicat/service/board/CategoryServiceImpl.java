@@ -28,7 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void modifyCategory(int categoryNo, String categoryName) {
-		System.out.println("Secireg ---------------- " + categoryNo + " " + categoryName);
 		this.categoryDao.updateCategory(categoryNo, categoryName);
 	}
 
@@ -40,13 +39,12 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void removeCategory(int categoryNo) {
+		log.info("removeCategory-----------");
 		this.categoryDao.deleteCategory(categoryNo);
 	}
 
-	@Override
 	public ArrayList<CategoryVO> retrieveCategoryList() {
 		ArrayList<CategoryVO> categoryList = this.categoryDao.selectCategoryList();
-		log.info("Service ----------------------------------------" + categoryList.toString());
 		return categoryList;
 	}
 
@@ -73,7 +71,6 @@ public class CategoryServiceImpl implements CategoryService {
 			if (temp.getBoardVo().getBoardName() != null)
 				category.addBoardList(new BoardVO(temp.getBoardVo().getBoardNo(), temp.getBoardVo().getBoardName(), temp.getBoardVo().getBoardkind()));
 		}
-
 		return categoryList;
 
 	}
@@ -84,11 +81,11 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryVo;
 	}
 
-//	@Override
-//	public int retrieveDuplicateCategory(String categoryName) {
-//		int checkDuplicateCategory = this.categoryDao.selectDuplicateCategory(categoryName);
-//		return checkDuplicateCategory;
-//	}
+	@Override
+	public Integer retrieveDuplicatedCategory(String categoryName) {
+		Integer duplicatedCategory = this.categoryDao.selectDuplicatedCategory(categoryName);
+		return duplicatedCategory;
+	}
 //
 //	@Override
 //	public ArrayList<CategoryVO> retrieveCategoryList() {

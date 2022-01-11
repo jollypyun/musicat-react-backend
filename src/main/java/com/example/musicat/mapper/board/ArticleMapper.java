@@ -9,54 +9,84 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ArticleMapper {
 	
-	
-	List<SelectArticleVO> selectArticle(int articleNo); //세부 조회
-	
-	List<ArticleVO> selectBoard(int boardNo); // 게시판 목록 조회
-	
-	void insertArticle(ArticleVO article); // 추가
-	
-	void updateArticle(ArticleVO article); // 수정
-	
-	void deleteArticle(int articleNo); // 삭제
-	
-	void upViewcount(int aritlceNo); // 조회수 증가
-	
-	List<ArticleVO> selectAllArticle();
-	
-	int likeCheck(ArticleVO articleVO); // 추천 햿는지 체크
+	//게시글 세부 조회
+	List<SelectArticleVO> selectArticle(int articleNo);
 
+	//앞 뒤 게시글 조회
+	List<ArticleVO> selectSubArticle(int articleNo);
+
+	//게시판 별 게시글 목록 조회
+	List<ArticleVO> selectBoard(int boardNo);
+
+	//게시글 등록
+	void insertArticle(ArticleVO article);
+
+	//게시글 수정
+	void updateArticle(ArticleVO article);
+
+	//게시글 삭제
+	void deleteArticle(int articleNo);
+
+	//조회수 증가
+	void upViewcount(int aritlceNo);
+
+	//전체글 조회
+	List<ArticleVO> selectAllArticle();
+
+	//추천 여부 체크
+	int likeCheck(ArticleVO articleVO);
+
+	//추천 (bestArticle Table)
 	void insertLike(ArticleVO articleVO);
-//	
-	void deleteLike(ArticleVO articleVO); // 추천 삭제 
-//	
+
+	//추천 취소(bestArticle Table)
+	void deleteLike(ArticleVO articleVO);
+
+	//게시글의 총 추천 수 조회
 	int totalLikeCount(int articleNo);
-	
+
+	//추천 (Article Table)
 	void upLikecount(int articleNo);
-	
+
+	//추천 취소 (Article Table)
 	void downLikecount(int articleNo);
 
+	//태그 등록
 	void insertTag(TagVO tagVO);
 
+	//게시글의 모든 태그 조회
 	List<TagVO> selectArticleTags(int articleNo);
 
+	//태그 삭제
 	void deleteTag(int tagNo);
 
+	//검색
 	List<ArticleVO> search(Map<String, Object> map);
 
+	//베스트글 조회
 	List<ArticleVO> selectBestArticle();
 
+	//베스트글 Table 비우기
 	void deleteAllBestArticle(); // BestArticle 테이블 비우기
 
+	//베스트글 Table Insert
 	void insertBestArticle(Map<String, Object> map);
 
-//	List<> selectBest(); //Main Page 베스트글 출력 용
-
+	//베스트글 선정을 위한 현재 날짜 조회
 	int selectNowDate(); // 현재 날짜 조회
 
-	List<ArticleVO> selectUpdateBestArticle(int now); // 새로운 best글 뽑기
+	//베스트글에 속한 게시글이 삭제됐을 때 새로운 베스트글 게시글 조회
+	List<ArticleVO> selectUpdateBestArticle(int now);
 
-	boolean checkBestArticle(int articleNo); // bestarticle table에 존재 여부 확인
+	//게시글 삭제시 게시글이 베스트 게시글에 속해 있는지 확인
+	boolean checkBestArticle(int articleNo);
 
-	List<BestArticleVO> selectAllBestArticle(); // main page 출력 용
+	//베스트글 모두 조회
+	List<BestArticleVO> selectAllBestArticle();
+
+	//작성한 게시글 조회
+	List<ArticleVO> selectMyArticle(int memberNo);
+
+	//추천 누른 게시글 조회
+	List<ArticleVO> selectMyLikeArticle(int memberNo);
 }

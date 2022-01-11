@@ -40,16 +40,22 @@ public interface BoardMapper {
 	public ArrayList<BoardBoardGradeVO> selectAllBoard();
 
 	//게시판이름 중복 검사
-	public int selectDuplicateBoard(String boardName);
+	public Integer selectDuplicatedBoard(String boardName);
+
+	//게시판 이름 목록 조회
+	public List<BoardVO> selectBoardNameList();
 
 	//즐겨찾기 게시판 추가
-	public void insertFavoriteBoard(BoardVO boardVo);
+	public void insertLikeBoard(int memberNo, int boardNo);
 	
 	//즐겨찾기 게시판 삭제
-	public void deleteFavoriteBoard(BoardVO boardVo);
+	public void deleteLikeBoard(int memberNo, int boardNo);
+
+	//즐겨찾기 게시판 여부 조회
+	public int selectLikeBoard(int memberNo, int boardNo);
 	
 	//즐겨찾기 게시판 조회
-	public ArrayList<BoardVO> selectFavoriteBoardList(int no);
+	public ArrayList<BoardVO> selectLikeBoardList(int no);
 	
 	
 	

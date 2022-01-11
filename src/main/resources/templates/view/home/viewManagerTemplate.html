@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
+      xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default_layout}">
 
 <th:block layout:fragment="head">
-    <title>반려동물 카페</title>
-    <link rel="shortcut icon" th:href="@{/images/favicon.ico}">
+    <title>Musicat</title>
+    <meta property="og:description" content="Hello. This is a music site. Share your information.">
+    <meta name="description" content="Hello. This is a music site. Share your information.">
+    <link rel="shortcut icon" th:href="@{/upload/favicon.ico}">
     <link
             th:href="@{https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css}"
             rel="stylesheet"/>
@@ -34,8 +36,8 @@
 </div>
 
 <!-- footer -->
-<th:block layout:fragment="viewFrameFooter"
-          th:include="@{/fragments/viewFrameFooter}"></th:block>
+<!--<th:block layout:fragment="viewFrameFooter"-->
+<!--          th:include="@{/fragments/viewFrameFooter}"></th:block>-->
 
 <!-- Script -->
 <script th:src="@{/js/bootstrap.bundle.min.js}"

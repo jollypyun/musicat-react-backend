@@ -56,6 +56,13 @@
 }
 .content-top-right-table table tr td{
 	padding: 5px 0;
+	overflow-x: hidden;
+}
+.content-top-right-table table tr td a{
+	text-decoration: none;
+	color: black;
+	width: 100%;
+
 }
 
 .content-top-right-table table tr td:first-child{
@@ -66,7 +73,7 @@
 }
 
 .content-top-right-table table tr td:last-child{
-	width: 60%;
+	width: 100%;
 }
 .content-top-right-table table tr td img{
 	width: 40px;
@@ -75,4 +82,19 @@
 
 .icon-gray{
 	color: rgba(255, 255, 255, 0.5);
+}
+
+.dataTable-search{
+	display: none;
+}
+
+.dropdown-toggle::after{
+	display: none; !important;
+}
+.dropdown-toggle{
+	cursor: pointer;
+}
+.list-normal-table a{
+	text-decoration: none;
+	color: black;
 }

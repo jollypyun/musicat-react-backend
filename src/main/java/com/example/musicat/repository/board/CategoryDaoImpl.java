@@ -29,7 +29,6 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public void updateCategory(int categoryNo, String categoryName) {
-		System.out.println("Dao ---------------- " + categoryNo + " " + categoryName);
 		this.categoryMapper.updateCategory(categoryNo, categoryName);	
 	}
 	
@@ -47,8 +46,6 @@ public class CategoryDaoImpl implements CategoryDao {
 	@Override
 	public ArrayList<CategoryVO> selectCategoryList() {
 		ArrayList<CategoryVO> categoryList = this.categoryMapper.selectCategoryList();
-		log.info("Dao ----------------------------------------" + categoryList.toString());
-		
 		return categoryList;
 	}
 	
@@ -66,9 +63,9 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	@Override
-	public int selectDuplicateCategory(String categoryName) {
-		int checkDuplicateCategory = this.categoryMapper.selectDuplicateCategory(categoryName);
-		return checkDuplicateCategory;
+	public Integer selectDuplicatedCategory(String categoryName) {
+		Integer duplicatedCategory = this.categoryMapper.selectDuplicatedCategory(categoryName);
+		return duplicatedCategory;
 	}
 
 

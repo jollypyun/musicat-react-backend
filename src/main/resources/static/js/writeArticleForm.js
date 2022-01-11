@@ -24,7 +24,8 @@ $(document).ready(function (){
             console.log("keypress");
 
             // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
-            if (e.key === "Enter" || e.keyCode == 32) {
+            // if (e.key === "Enter" || e.keyCode == 32) {
+            if (e.key === "Enter") {
 
                 var tagValue = self.val(); // 값 가져오기
 
@@ -40,7 +41,7 @@ $(document).ready(function (){
                     // 태그 중복 검사
                     if (result.length == 0) {
                         $("#tag-list")
-                            .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>");
+                            .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>X</span></li>");
                         addTag(tagValue);
                         self.val("");
                     } else {
@@ -127,18 +128,29 @@ function setThumbnail(event) {
         var reader = new FileReader();
 
         reader.onload = function (event) {
-            //image preview
-            var $div = $('<div id=image' + index + ' class="preview-div">');
-            var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="400" height="400">');
-            // var $input = $('<button id=' + index + ' class="preview-de"></button>');
-            // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
 
-            // $input.append($i);
-            $div.append($img);
-            // $div.append($input);
-            $('#image_container').append($div);
+            var pos = image.name.lastIndexOf(".");
+            var ext = image.name.substring(pos + 1).toLowerCase();
+            console.log(image.name);
 
-            index++;
+            if ($.inArray(ext, ['png', 'jpg', 'mp4']) == -1){
+                alert('이미지 첨부는 png, jpg, mp4만 가능합니다');
+                return false;
+            } else {
+
+                //image preview
+                var $div = $('<div id=image' + index + ' class="preview-div">');
+                var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="100" height="100">');
+                // var $input = $('<button id=' + index + ' class="preview-de"></button>');
+                // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
+
+                // $input.append($i);
+                $div.append($img);
+                // $div.append($input);
+                $('#image_container').append($div);
+
+                index++;
+            }
         };
 
         console.log(image);
@@ -151,3 +163,11 @@ function setThumbnail(event) {
 $(document).on('click', '#write-imagefile-upload', function (){
     $('#image_container').html("");
 })
+
+$("#write-attachefile-upload").on('change',function(){
+    let fileName = $("#write-attachefile-upload").val();
+    let splitfileName = fileName.split("\\");
+    let spliieLength = splitfileName.length;
+
+    $("#file-upload-filename").text(splitfileName[spliieLength-1]);
+});

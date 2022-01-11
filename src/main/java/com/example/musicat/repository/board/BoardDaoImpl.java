@@ -77,36 +77,45 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public ArrayList<BoardBoardGradeVO> selectAllBoard() {
 		ArrayList<BoardBoardGradeVO> boardAndGradeList = this.boardMapper.selectAllBoard();
-		System.out.println("Dao------------------------" + boardAndGradeList.get(5));
 		return boardAndGradeList;
 	}
 
 	//게시판 이름 중복 검사
 	@Override
-	public int selectDuplicateBoard(String boardName) {
-		int count = this.boardMapper.selectDuplicateBoard(boardName);
-		return count;
+	public Integer selectDuplicatedBoard(String boardName) {
+		Integer duplicatedBoard = this.boardMapper.selectDuplicatedBoard(boardName);
+		return duplicatedBoard;
 	}
-	
+
+	//게시판 이름 목록 조회
+	@Override
+	public List<BoardVO> selectBoardNameList() {
+		return this.boardMapper.selectBoardNameList();
+	}
+
 	//즐겨찾기 게시판 추가
 	@Override
-	public void insertFavoriteBoard(BoardVO boardVo) {
-		this.boardMapper.insertFavoriteBoard(boardVo);
+	public void insertLikeBoard(int memberNo, int boardNo) {
+		this.boardMapper.insertLikeBoard(memberNo, boardNo);
 		
 	}
 	
 	//즐겨찾기 게시판 삭제
 	@Override
-	public void deleteFavoriteBoard(BoardVO boardVo) {
-		this.boardMapper.deleteFavoriteBoard(boardVo);		
+	public void deleteLikeBoard(int memberNo, int boardNo) {
+		this.boardMapper.deleteLikeBoard(memberNo, boardNo);
+	}
+
+	@Override
+	public int selectLikeBoard(int memberNo, int boardNo) {
+		return this.boardMapper.selectLikeBoard(memberNo, boardNo);
 	}
 
 	//즐겨찾기 게시판 조회
 	@Override
-	public ArrayList<BoardVO> selectFavoriteBoardList(int no) {
-		ArrayList<BoardVO> favoriteList = this.boardMapper.selectFavoriteBoardList(no);
-		//System.out.println("Dao-------------------" + favoriteList);
-		return favoriteList;
+	public ArrayList<BoardVO> selectLikeBoardList(int no) {
+		ArrayList<BoardVO> likeBoardList = this.boardMapper.selectLikeBoardList(no);
+		return likeBoardList;
 	}
 
 
