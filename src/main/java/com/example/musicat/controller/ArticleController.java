@@ -145,7 +145,9 @@ public class ArticleController {
 			int likeCheck = this.articleService.likeCheck(memberNo, articleNo);
 
 			ArticleVO result = ArticleVO.addReplyAndLike(article, likeCheck, replys, totalCount); //리팩토링
+			List<ArticleVO> subArticle = this.articleService.selectSubArticle(articleNo);
 
+			model.addAttribute("subArticles", subArticle);
 			// xss 처리 Html tag로 변환
 //			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
 //			article.setSubject(escapeSubject);

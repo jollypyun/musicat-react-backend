@@ -10,19 +10,25 @@ $(document).ready(function () {
             var reader = new FileReader();
 
             reader.onload = function (event) {
-                //image preview
-                var $div = $('<div id=image' + index + ' class="preview-div">');
-                var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="400" height="400">');
-                // var $input = $('<button id=' + index + ' class="preview-de"></button>');
-                // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
+                var pos = image.name.lastIndexOf(".");
+                var ext = image.name.substring(pos + 1).toLowerCase();
+                console.log(image.name);
 
-                // $input.append($i);
-                $div.append($img);
-                // $div.append($input);
-                $('#image_container').append($div);
+                if ($.inArray(ext, ['png', 'jpg', 'mp4']) == -1) {
+                    alert('이미지 첨부는 png, jpg, mp4만 가능합니다');
+                    return false;
+                } else {
+                    //image preview
+                    var $div = $('<div id=image' + index + ' class="preview-div">');
+                    var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="400" height="400">');
 
-                index++;
-            };
+                    // $input.append($i);
+                    $div.append($img);
+                    $('#image_container').append($div);
+
+                    index++;
+                }
+            }
 
             // console.log(image);
             // reader.readAsDataURL(event.target.files[0]);

@@ -44,6 +44,7 @@ public class ReplyController {
 			this.replyService.registerReply(reply); // DB insert
 		}else{ //답글
 			ReplyVO reply = ReplyVO.createDepthReply(articleNo, memberNo, nickname, content, depth, grpNo);
+			log.info("------------------" + reply.toString());
 			this.replyService.registerReply(reply); // DB insert
 		}
 

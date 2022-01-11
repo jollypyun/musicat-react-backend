@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
+import com.example.musicat.controller.form.JoinForm;
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.FollowVO;
 
@@ -170,8 +171,9 @@ public class HomeController {
 	
 	@GetMapping("/join1")
 	public String join(Model model) {
-		MemberVO mVo = new MemberVO(); //MemberVO라는 빈칸 양식 종이를 새로 가져올때마다 new 선언
-		model.addAttribute("mVo", mVo); //model은 우편부, addAttribute 누군가에게 붙여주는 행동, "member"는 member가 속한이름, member 우편물 내용
+		//MemberVO mVo = new MemberVO(); //MemberVO라는 빈칸 양식 종이를 새로 가져올때마다 new 선언
+        JoinForm joinForm = new JoinForm();
+        model.addAttribute("form", joinForm); //model은 우편부, addAttribute 누군가에게 붙여주는 행동, "member"는 member가 속한이름, member 우편물 내용
 		return "view/member/register"; // "view/member/register" 이 주소로 보낸다.
 	}
 	

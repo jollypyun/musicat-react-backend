@@ -11,7 +11,10 @@ import java.util.Map;
 public interface ArticleService {
 
 	//게시글 세부 조회
-	ArticleVO retrieveArticle(int articleNo); 
+	ArticleVO retrieveArticle(int articleNo);
+
+	//앞 뒤 게시글 조회
+	List<ArticleVO> selectSubArticle(int articleNo);
 	
 	//게시판 별 게시글 목록 조회
 	List<ArticleVO> retrieveBoard(int boardNo); 
