@@ -35,4 +35,5 @@ public class MetaFile {
         this.systemFileName = systemFileName;
         this.fileSize = fileSize;
     }
+
 }

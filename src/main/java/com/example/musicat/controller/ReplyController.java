@@ -34,8 +34,9 @@ public class ReplyController {
 			,@RequestParam("depth") int depth
 			,HttpServletRequest req) {
 		// create
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int memberNo = member.getNo();
 		String nickname = member.getNickname();
 		if(depth == 0){ //원본글
@@ -70,8 +71,9 @@ public class ReplyController {
 	public List<ReplyVO> deleteReply(@RequestParam("no") int replyNo
 			,@RequestParam("articleNo") int articleNo
 			,HttpServletRequest req){
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int memberNo = member.getNo();
 		this.replyService.removeReply(replyNo, memberNo); // 댓글 삭제
 		List<ReplyVO> replyList = this.replyService.retrieveAllReply(articleNo); // 목록 출력

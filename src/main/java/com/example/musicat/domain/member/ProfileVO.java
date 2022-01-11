@@ -30,4 +30,5 @@ public class ProfileVO {
         this.systemFileName = systemFileName;
         this.fileSize = fileSize;
     }
+
 }

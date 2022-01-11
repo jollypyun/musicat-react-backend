@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 //@RequiredArgsConstructor
-@Alias("categoryVO")
+@Alias("categoryVo")
 @ToString
 public class CategoryVO {
     private int categoryNo;
@@ -33,7 +33,8 @@ public class CategoryVO {
         this.boardList.add(board);
     }
 
-//    public void addCategoryList(CategoryVO categoryVo) {
+
+    //    public void addCategoryList(CategoryVO categoryVo) {
 //        this.categoryList.add(categoryVo);
 //    }
 }

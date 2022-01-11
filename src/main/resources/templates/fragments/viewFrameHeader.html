@@ -96,26 +96,16 @@
           class="dropdown-menu dropdown-menu-end"
           aria-labelledby="navbarDropdown"
         >
-          <!-- <li><a class="dropdown-item" href="#!">가가가</a></li>
-				<li><a class="dropdown-item" href="#!">신입집사</a></li>
-				<li><hr class="dropdown-divider" /></li> -->
-          <!--				<li><a class="dropdown-item" href="/myPage/Playlist">Profile</a></li>-->
-          <!--				<li>Profile</a></li>-->
+
           <li th:if="${#authorization.expr('isAuthenticated()')}">
-            <a class="dropdown-item" th:href="@{'/myPage/Playlist/' + ${session.loginUser.no}}">
-              <span th:text="${session.loginUser.email}"></span>
+            <a class="dropdown-item" th:href="@{'/myPage/Playlist/' + ${#authentication.principal.getNo()}}">
+              <span th:text="${#authentication.principal.getEmail()}"></span>
             </a>
           </li>
 
           <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
 
           <li><hr class="dropdown-divider" /></li>
-
-          <!--				<li th:if ="${isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>-->
-          <!--				<li th:if ="${isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>-->
-
-          <!--				<li th:if ="${session.isLogin != 0}"><a class="dropdown-item" href="/logout">Logout</a></li>-->
-          <!--				<li th:if ="${session.isLogin == 0}"><a class="dropdown-item" href="/musicatlogin">Login</a></li>-->
 
           <!--				로그인한 사용자 -->
           <li th:if="${#authorization.expr('isAuthenticated()')}">

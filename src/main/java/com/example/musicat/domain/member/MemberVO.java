@@ -32,6 +32,7 @@ public class MemberVO {
 	private String ban = "";
 	private int isMember;
 
+
 	public MemberVO(@NonNull String email, String password) {
 		super();
 		this.email = email;

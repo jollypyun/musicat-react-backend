@@ -148,8 +148,17 @@
 
 		$('#writeCategoryBtn').on('click', function () {
 			const categoryName = $('#categoryName').val();
-			if (categoryName == "") {
-				alert("카테고리명은 1 ~ 20자로 입력해주세요.");
+			// const includeBlank = categoryName.match(/  /g);
+			// if (includeBlank != null) {
+			// 	alert(includeBlank.length);
+			// }
+			// if (categoryName.indexOf("  ") != -1) {
+			// 	categoryName.replaceAll("  ", " ");
+			// }
+			// console.log(categoryName.indexOf("  "));
+			// console.log(categoryName);
+			if(categoryName == "" || categoryName == " " || categoryName.indexOf("  ") != -1) {
+				alert("카테고리명은 1 ~ 20자로 입력해주세요.(공백 불가)");
 				return false;
 			}
 			requestWriteCategory('/writeCategory', categoryName);
@@ -233,7 +242,8 @@
 							modifyCategoryForm += "<table><tbody>";
 							modifyCategoryForm += "<tr>";
 							modifyCategoryForm += "<td>카테고리 이름:</td>";
-							modifyCategoryForm += "<td><input id='modifyCategoryName' name='categoryName' type='text' value=" + category.categoryName + " maxlength='20'></td>";
+							modifyCategoryForm += "<td><input id='modifyCategoryName' name='categoryName' type='text' value='" + category.categoryName + "' maxlength='20'></td>";
+							console.log("category.categoryName : ", category.categoryName);
 							modifyCategoryForm += "</tr>";
 							modifyCategoryForm += "</tbody></table>";
 
@@ -248,8 +258,8 @@
 		$('#modifyCategoryBtn').on('click', function () {
 			const categoryNo = $('#modifyCategoryNo').val();
 			const categoryName = $('#modifyCategoryName').val();
-			if (categoryName == "") {
-				alert("카테고리명은 1 ~ 20자로 입력해주세요.");
+			if (categoryName == "" || categoryName == " " || categoryName.indexOf("  ") != -1) {
+				alert("카테고리명은 1 ~ 20자로 입력해주세요.(공백 불가)");
 				return false;
 			}
 			requestModifyCategory('/modifyCategory', categoryNo, categoryName);
@@ -320,19 +330,21 @@
 		}
 
 		async function requestRemoveCategory(url, categoryNo) {
-			alert("카테고리를 삭제하시겠습니까?");
-			try {
-				let result = await removeCategoryAjax(url, categoryNo);
+			if (confirm("카테고리를 삭제하시겠습니까?") == true) {
+				try {
+					let result = await removeCategoryAjax(url, categoryNo);
 
-				if (result == 0) {
-					alert("카테고리가 삭제되었습니다.");
-					location.href = "boardManager";
-				} else {
-					alert("게시판이 있는 카테고리는 삭제할 수 없습니다.");
-					return false;
+					if (result == 0) {
+						alert("카테고리가 삭제되었습니다.");
+						location.href = "boardManager";
+					} else {
+						alert("게시판이 있는 카테고리는 삭제할 수 없습니다.");
+						return false;
+					}
+				} catch (error) {
+					console.log("error : ", error);
 				}
-			} catch (error) {
-				console.log("error : ", error);
+			} else {
 			}
 		}
 
@@ -425,7 +437,7 @@
 			const writeGrade = $('#writeGrade').val();
 			const readGrade = $('#readGrade').val();
 			const boardkind = $('#boardkind').val();
-			if (boardName == "") {
+			if (boardName == "" || boardName == " " || boardName.indexOf("  ") != -1) {
 				alert("게시판명은 1 ~ 20자로 입력해주세요.");
 				return false;
 			}
@@ -520,7 +532,7 @@
 							modifyBoardForm += "</tr>";
 
 							modifyBoardForm += "<tr>";
-							modifyBoardForm += "<td>게시판명:</td>	<td><input type='text' id='modifyBoardName' name='boardName' maxlength='20' value=" + list.bbg.boardVo.boardName + " ></td>";
+							modifyBoardForm += "<td>게시판명:</td>	<td><input type='text' id='modifyBoardName' name='boardName' maxlength='20' value='" + list.bbg.boardVo.boardName + "' ></td>";
 							modifyBoardForm += "</tr>";
 
 							modifyBoardForm += "<tr>";
@@ -598,7 +610,7 @@
 			const writeGrade = $('#modifyWriteGrade').val();
 			const readGrade = $('#modifyReadGrade').val();
 			const boardkind = $('#modifyBoardkind').val();
-			if (boardName == "") {
+			if (boardName == "" || boardName == " " || boardName.indexOf("  ") != -1) {
 				alert("게시판명은 1 ~ 20자로 입력해주세요.");
 				return false;
 			}
@@ -675,19 +687,21 @@
 		}
 
 		async function requestRemoveBoard(url, boardNo) {
-			alert("게시판을 삭제하시겠습니까?");
-			try {
-				let result = await removeBoardAjax(url, boardNo);
+			if (confirm("게시판을 삭제하시겠습니까?") == true) {
+				try {
+					let result = await removeBoardAjax(url, boardNo);
 
-				if (result == 0) {
-					alert("게시판이 삭제되었습니다.");
-					location.href = "boardManager";
-				} else {
-					alert("게시글이 있는 게시판은 삭제할 수 없습니다.");
-					return false;
+					if (result == 0) {
+						alert("게시판이 삭제되었습니다.");
+						location.href = "boardManager";
+					} else {
+						alert("게시글이 있는 게시판은 삭제할 수 없습니다.");
+						return false;
+					}
+				} catch (error) {
+					console.log("error : ", error);
 				}
-			} catch (error) {
-				console.log("error : ", error);
+			} else {
 			}
 		}
 

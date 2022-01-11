@@ -21,7 +21,7 @@ public class GradeVO {
 	private int docs;
 	private int comms;
 	private int person;
-	
+
 	public GradeVO(int gradeNo, String name, int docs, int comms) {
 		super();
 		this.gradeNo = gradeNo;

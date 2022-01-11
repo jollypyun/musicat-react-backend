@@ -1,226 +1,237 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8"/>
 
 <link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
-	crossorigin="anonymous">
+      href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
+      crossorigin="anonymous">
 
 <link th:href="@{../css/detailArticleStyle.css}" rel="stylesheet" />
 
 
 <div id="layoutSidenav_content">
-	<main>
-		<div class="container-fluid px-4">
+    <main>
+        <div class="container-fluid px-4">
 
-			<div class="row mt-3 mb-5">
-				<div class="detailArticle-content-style">
-					<h3>게시글 세부 조회</h3>
-					<div class="detailArticle-table-style">
-						<h1>
-							<input type="hidden" id="login_no" th:value="${loginMemberNo}">
-							<input type="hidden" id="member_no"	th:value="${article.memberNo}">
-							<input type="hidden" id="article_no" th:value="${article.no}">
-							<input type="hidden" id="board_no" th:value="${article.boardNo}">
-						</h1>
-						<form id="detailContent" class="detail-content-style" th:object="${article}" name="article">
-							<table width=100% class="list-normal-tables">
-								<colgroup>
-									<col width="15%">
-									<col width="35%">
-									<col width="15%">
-									<col width="*">
-								</colgroup>
-								<tbody>
-									<tr>
-										<th>제목</th>
-										<td th:text="${article.subject}" th:field="*{subject}"></td>
-										<th>조회수</th>
-										<td th:text="${article.viewcount}" th:field="*{viewcount}"></td>
-									</tr>
-									<tr>
-										<th>작성자</th>
+            <div class="row mt-3 mb-5">
+                <div class="detailArticle-content-style">
+                    <h3>게시글 세부 조회</h3>
+                    <div class="detailArticle-table-style">
+                        <h1>
+                            <input type="hidden" id="login_no" th:value="${loginMemberNo}">
+                            <input type="hidden" id="member_no"	th:value="${article.memberNo}">
+                            <input type="hidden" id="article_no" th:value="${article.no}">
+                            <input type="hidden" id="board_no" th:value="${article.boardNo}">
+                        </h1>
+                        <form id="detailContent" class="detail-content-style" th:object="${article}" name="article">
+                            <table width=100% class="list-normal-tables">
+                                <colgroup>
+                                    <col width="15%">
+                                    <col width="35%">
+                                    <col width="15%">
+                                    <col width="*">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>제목</th>
+                                    <td th:text="${article.subject}" th:field="*{subject}"></td>
+                                    <th>조회수</th>
+                                    <td th:text="${article.viewcount}" th:field="*{viewcount}"></td>
+                                </tr>
+                                <tr>
+                                    <th>작성자</th>
 
-										<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
+                                    <!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
 
-										<td th:field="*{nickname}" class="dropdown">
-											<a th:id = "${article.memberNo}" class="dropdown-toggle" data-bs-toggle="dropdown" th:text="${article.nickname}">
-											</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item" th:href="|/myPage/Playlist/${article.memberNo}|">MyPage</a></li>
-												<li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
-											</ul>
-										</td>
-<!--										<p>쪽지 창</p>-->
-<!--										<a th:href="|/myPage/Playlist/${article.memberNo}|">myPage</a>-->
+                                    <td th:field="*{nickname}" class="dropdown">
+                                        <a th:id = "${article.memberNo}" class="dropdown-toggle" data-bs-toggle="dropdown" th:text="${article.nickname}">
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" th:href="|/myPage/Playlist/${article.memberNo}|">MyPage</a></li>
+                                            <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                        </ul>
+                                    </td>
+                                    <!--										<p>쪽지 창</p>-->
+                                    <!--										<a th:href="|/myPage/Playlist/${article.memberNo}|">myPage</a>-->
 
-										<!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
+                                    <!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
 
-										<th>작성일</th>
-										<td th:text="${article.writeDate}"></td>
-									</tr>
-									<tr>
-										<th>내용</th>
-										<td th:text="${article.content}" th:field="*{content}"></td>
-										<th></th>
-										<td></td>
-									</tr>
-									<tr>
-										<th>첨부파일</th>
-										<td th:if="${article.attacheFile == null}">첨부된 파일이 없습니다.</td>
-										<td th:unless="${article.attacheFile == null}"><a
-											th:href="|/attach/${article.getAttacheFile().getNo()}|"
-											th:text="${article.getAttacheFile().getSystemFileName()}"></a>
-										</td>
-										<th></th>
-										<td></td>
-									</tr>
-									<tr th:if="${article.fileList != null}">
+                                    <th>작성일</th>
+                                    <td th:text="${article.writeDate}"></td>
+                                </tr>
+                                <tr>
+                                    <th>내용</th>
+                                    <td th:text="${article.content}" th:field="*{content}"></td>
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>첨부파일</th>
+                                    <td th:if="${article.attacheFile == null}">첨부된 파일이 없습니다.</td>
+                                    <td th:unless="${article.attacheFile == null}"><a
+                                            th:href="|/attach/${article.getAttacheFile().getNo()}|"
+                                            th:text="${article.getAttacheFile().getSystemFileName()}"></a>
+                                    </td>
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+                                <tr th:if="${article.fileList != null}">
+                                    <div th:each="imageFile : ${article.fileList}" >
+                                        <th:block th:if = "${imageFile.fileType == 2}">
+                                            <td>
+                                                <video width="320" controls>
+                                                    <source th:src="|/images/${imageFile.getSystemFileName()}|" type="video/mp4">
+                                                </video>
+                                            </td>
+                                        </th:block>
+                                        <th:block th:unless="${imageFile.fileType == 2}">
+                                            <td>
+                                            <!--이미지 파일들-->
+                                                <img th:src="|/images/${imageFile.getSystemFileName()}|"
+                                                            width="200" height="200" />
+                                            </td>
+                                        </th:block>
+                                    </div>
 
-										<td>
-											<!--이미지 파일들--> <img th:each="imageFile : ${article.fileList}"
-											th:src="|/images/${imageFile.getSystemFileName()}|"
-											width="200" height="200" />
-										</td>
-									</tr>
-									<tr>
+                                </tr>
+                                <tr>
 
-										<td colspan="3">
-											<div class="detailArticle-btn-style">
-												<div class="detailArticle-function-style">
-													<button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
-													 <input type="button"
-														th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"
-														value="목록" />
-												</div>
-												<div id="like_area" class="detailArticle-like-style">
-													<div th:if="${article.likeCheck eq 0}">
-														<button type="button" id="add_like_btn" value="추천" />
-														<i class="far fa-heart"></i>
-														</button>
-													</div>
-													<div th:unless="${article.likeCheck eq 0}">
-														<button type="button" id="del_like_btn">
-															<i class="fas fa-heart"></i>
-														</button>
-													</div>
+                                    <td colspan="3">
+                                        <div class="detailArticle-btn-style">
+                                            <div class="detailArticle-function-style">
+                                                <button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
+                                                <input type="button"
+                                                       th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"
+                                                       value="목록" />
+                                            </div>
+                                            <div id="like_area" class="detailArticle-like-style">
+                                                <div th:if="${article.likeCheck eq 0}">
+                                                    <button type="button" id="add_like_btn" value="추천" />
+                                                    <i class="far fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                                <div th:unless="${article.likeCheck eq 0}">
+                                                    <button type="button" id="del_like_btn">
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
 
-													<div>
-														<strong th:text="${article.likecount}"></strong>
-													</div>
-												</div>
+                                                <div>
+                                                    <strong th:text="${article.likecount}"></strong>
+                                                </div>
+                                            </div>
 
-												<!--Tag 출력 부분-->
-												<div id="tag_area" class="detailArticle-tag-style">
-													<ul id="tag-list" class="tag-ul" >
-														<div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
-															<li class='tag-item'  th:text="${tag.name}"></li>
-														</div>
-													</ul>
-												</div>
-											</div>
-										</td>
+                                            <!--Tag 출력 부분-->
+                                            <div id="tag_area" class="detailArticle-tag-style">
+                                                <ul id="tag-list" class="tag-ul" >
+                                                    <div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
+                                                        <li class='tag-item'  th:text="${tag.name}"></li>
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
 
-										<!--본인만 가능-->
-										<div class="detail-userCheck-style"
-											th:if="${loginMemberNo == article.memberNo}"
-											style="float: right;">
-											<td>
-												<div class="detail-userBtn-style">
-													<input type="button"
-														th:onclick="|location.href='@{/articles/update/{articleNo}(articleNo=${article.no})}'|"
-														value="수정" />
-												<input type="button"
-													   th:onclick="|location.href='@{/articles/remove/{articleNo}(articleNo=${article.no})}'|"
-													   value="삭제" />
-												</div>
-											</td>
-										</div>
-									</tr>
-								</tbody>
-							</table>
-						</form>
-					</div>
+                                    <!--본인만 가능-->
+                                    <div class="detail-userCheck-style"
+                                         th:if="${loginMemberNo == article.memberNo}"
+                                         style="float: right;">
+                                        <td>
+                                            <div class="detail-userBtn-style">
+                                                <input type="button"
+                                                       th:onclick="|location.href='@{/articles/update/{articleNo}(articleNo=${article.no})}'|"
+                                                       value="수정" />
+                                                <input type="button"
+                                                       th:onclick="|location.href='@{/articles/remove/{articleNo}(articleNo=${article.no})}'|"
+                                                       value="삭제" />
+                                            </div>
+                                        </td>
+                                    </div>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
 
-					<!-- 댓글 -->
-					<div id="writeReplyForm" class="detailArticle-reply-style">
+                    <!-- 댓글 -->
+                    <div id="writeReplyForm" class="detailArticle-reply-style">
 						<textarea id="write_content" name="write_content" rwos="10"
-							cols="75" placeholder="댓글을 입력해주세요."></textarea>
+                                  cols="75" placeholder="댓글을 입력해주세요."></textarea>
 
-						<button type="button" id="write_reply_btn">등록</button>
-					</div>
+                        <button type="button" id="write_reply_btn">등록</button>
+                    </div>
 
-					<div id="replys">
-						<div class="reply_list"
-							th:each="reply : ${article.getReplyList()}">
-							<th:block th:if="${reply.hide == 1}" >
-								<p>삭제된 댓글 입니다.</p>
-							</th:block>
-							<th:block th:if="${reply.hide == 0}">
-							<p th:if="${reply.depth == 1}">ㄴ</p>
-							<table th:id="${reply.getNo()}">
-								<colgroup>
-									<col width="15%">
-									<col width="35%">
-								</colgroup>
-								<tbody>
-									<tr>
-										<th>내용</th>
-										<td class="Content" th:text="${reply.content}"></td>
-									</tr>
-									<tr>
-										<th>닉네임</th>
-										<td th:text="${reply.nickname}"></td>
-									</tr>
-									<tr>
-										<th>작성 날짜</th>
-										<td th:text="${reply.writeDate}"></td>
-									</tr>
-								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="3">
-											<div>
-											<input type="button" class="depth_reply_btn" value="답글쓰기" />
-											</div>
-											<div  th:if="${loginMemberNo == reply.memberNo}" >
-												<input type="button" class="modify_Reply_Form_Btn" value="수정" />
-												<input type="button" class="remove_Reply_Btn" value="삭제" />
-											</div>
-										</td>
-									</tr>
-								</tfoot>
-							</table>
-							</th:block>
-						</div>
-					</div>
+                    <div id="replys">
+                        <div class="reply_list"
+                             th:each="reply : ${article.getReplyList()}">
+                            <th:block th:if="${reply.hide == 1}" >
+                                <p>삭제된 댓글 입니다.</p>
+                            </th:block>
+                            <th:block th:if="${reply.hide == 0}">
+                                <p th:if="${reply.depth == 1}">ㄴ</p>
+                                <table th:id="${reply.getNo()}">
+                                    <colgroup>
+                                        <col width="15%">
+                                        <col width="35%">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th>내용</th>
+                                        <td class="Content" th:text="${reply.content}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>닉네임</th>
+                                        <td th:text="${reply.nickname}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>작성 날짜</th>
+                                        <td th:text="${reply.writeDate}"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div>
+                                                <input type="button" class="depth_reply_btn" value="답글쓰기" />
+                                            </div>
+                                            <div  th:if="${loginMemberNo == reply.memberNo}" >
+                                                <input type="button" class="modify_Reply_Form_Btn" value="수정" />
+                                                <input type="button" class="remove_Reply_Btn" value="삭제" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </th:block>
+                        </div>
+                    </div>
 
-					<!-- 답글 폼 -->
-					<div id="write_depth_reply_form" style="display: none">
-						<div id="writeDepthReplyForm" class="detailArticle-reply-style">
+                    <!-- 답글 폼 -->
+                    <div id="write_depth_reply_form" style="display: none">
+                        <div id="writeDepthReplyForm" class="detailArticle-reply-style">
 							<textarea id="write_depth_content" name="write_content" rwos="10"
-									  cols="75" placeholder="댓글을 입력해주세요."></textarea>
+                                      cols="75" placeholder="댓글을 입력해주세요."></textarea>
 
-							<button type="button" id="write_depth_reply_btn">등록</button>
-							<button type="button" class="depth_reply_cancle_btn">취소</button>
-						</div>
-					</div>
+                            <button type="button" id="write_depth_reply_btn">등록</button>
+                            <button type="button" class="depth_reply_cancle_btn">취소</button>
+                        </div>
+                    </div>
 
-					<!-- 수정 폼 -->
-					<div id="modify_reply_form" style="display: none;"
-						class="detailArticle-replyModify-style">
-						<div id="updateReplyForm">
-							<input type="hidden" id="no" />
-							<textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
-							<button class="modify_cancle">취소</button>
-							<button class="modify_reply_btn">수정</button>
-						</div>
-					</div>
+                    <!-- 수정 폼 -->
+                    <div id="modify_reply_form" style="display: none;"
+                         class="detailArticle-replyModify-style">
+                        <div id="updateReplyForm">
+                            <input type="hidden" id="no" />
+                            <textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
+                            <button class="modify_cancle">취소</button>
+                            <button class="modify_reply_btn">수정</button>
+                        </div>
+                    </div>
 
-				</div>
-			</div>
-		</div>
-	</main>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
 </html>

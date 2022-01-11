@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Alias("boardVO")
+@Alias("boardVo")
 public class BoardVO {
 
     private int categoryNo;
@@ -24,8 +24,6 @@ public class BoardVO {
     private String boardName;
     private int boardkind; //게시판종류  / TINYINT / NotNull, 0, 1
     private String boardkindName;
-
-
 
 
     private int favoriteNo;

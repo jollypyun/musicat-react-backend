@@ -144,4 +144,16 @@ public class ArticleDaoImpl implements ArticleDao {
 	public List<BestArticleVO> selectAllBestArticle() {
 		return this.articleMapper.selectAllBestArticle();
 	}
+
+	//작성한 게시글 조회
+	@Override
+	public List<ArticleVO> selectMyArticle(int memberNo) {
+		List<ArticleVO> myArticleList = this.articleMapper.selectMyArticle(memberNo);
+		return myArticleList;
+	}
+
+	@Override
+	public List<ArticleVO> selectMyLikeArticle(int memberNo) {
+		return this.articleMapper.selectMyLikeArticle(memberNo);
+	}
 }
