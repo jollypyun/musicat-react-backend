@@ -2,6 +2,7 @@ package com.example.musicat.controller;
 
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.service.music.MusicApiService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -15,8 +16,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Validated
 @RestController
 public class MusicController {
@@ -68,4 +71,18 @@ public class MusicController {
         return map;
     }
 
+    @PutMapping("musicConnectArticle/{musicId}/{articleNo}")
+    public void connectToArticle(@PathVariable(name="musicId") Long musicId, @PathVariable(name="articleNo") int articleNo) {
+        log.info("musicId : " + musicId);
+        log.info("articleNo : " + articleNo);
+
+        musicApiService.connectToArticle(musicId, articleNo);
+    }
+
+    @GetMapping("retrieveMusics/{articleNo}")
+    public List<Music> retrieveMusics(@PathVariable(name="articleNo") int articleNo){
+        List<Music> musicList = musicApiService.retrieveMusics(articleNo);
+        log.info(musicList.toString());
+        return musicList;
+    }
 }
