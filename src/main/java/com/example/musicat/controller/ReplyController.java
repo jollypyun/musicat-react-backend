@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotBlank;
 
+import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.etc.NotifyVO;
+import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.websocket.manager.NotifyManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,7 +33,10 @@ public class ReplyController {
 
 	@Autowired
 	private NotifyManager notifyManager;
-	
+
+	@Autowired
+	private ArticleService articleService;
+
 	@ResponseBody
 	@PostMapping("/insertReply")
 	public List<ReplyVO> insertReply(@RequestParam("articleNo") int articleNo
@@ -49,7 +54,8 @@ public class ReplyController {
 		List<ReplyVO> replyList = this.replyService.retrieveAllReply(articleNo); // select Replys
 
 		// 예나 - 실시간 알림 테스트
-		notifyManager.addNotify(new NotifyVO(1, "댓글 알림 테스트", "/main"));
+		ArticleVO articleVo = articleService.retrieveArticle(articleNo);
+		notifyManager.addNotify(new NotifyVO(articleVo.getMemberNo(), "게시글 [" + articleVo.getSubject() + "]에 새로운 댓글이 달렸습니다. (" + replyList.size() + ")", "articles/"+articleVo.getNo()));
 		return replyList;
 	}
 	
