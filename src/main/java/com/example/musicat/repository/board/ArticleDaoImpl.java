@@ -21,8 +21,10 @@ public class ArticleDaoImpl implements ArticleDao {
 	public ArticleDaoImpl(ArticleMapper articleMapper) {
 		this.articleMapper = articleMapper;
 	}
-	
-	
+
+	@Override
+	public List<ArticleVO> selectSubArticle(int articleNo) {return this.articleMapper.selectSubArticle(articleNo);}
+
 	@Override
 	public List<SelectArticleVO> selectArticle(int articleNo) {
 		return this.articleMapper.selectArticle(articleNo);

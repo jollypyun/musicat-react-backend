@@ -9,12 +9,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.example.musicat.controller.form.JoinForm;
 import com.example.musicat.service.member.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,9 +49,26 @@ public class MemberController {
 	private ProfileService profileService;
 
 //	회원가입
+//	@PostMapping("/join") // 이걸 실행하는 값의 주소
+//	public String joinMember(MemberVO mVo) {
+//		mVo.setPassword(encodePwd.encode(mVo.getPassword())); //비밀번호 암호화
+//		try{
+//			this.memberService.registerMember(mVo);
+//			this.profileService.addProfile(mVo.getNo());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		//log.info("비밀번호 : " + mVo.getPassword() + " 이메일 : " + mVo.getEmail() + " 닉네임 : " + mVo.getNickname());
+//
+//		//log.info("비밀번호(암호화) : " + mVo.getPassword());
+//		return "redirect:/musicatlogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
+//								// html 파일명 쓰기)
+//	}
+
 	@PostMapping("/join") // 이걸 실행하는 값의 주소
-	public String joinMember(MemberVO mVo) {
-		mVo.setPassword(encodePwd.encode(mVo.getPassword())); //비밀번호 암호화
+	public String joinMember(JoinForm form) {
+		MemberVO mVo = new MemberVO();
+		mVo.setPassword(encodePwd.encode(form.getPassword())); //비밀번호 암호화
 		try{
 			this.memberService.registerMember(mVo);
 			this.profileService.addProfile(mVo.getNo());
