@@ -190,14 +190,15 @@
 		INSERT INTO member(email, password, nickname)
 		VALUES (#{email}, #{password}, #{nickname})
 		<!-- #{}안에는 MemberVO에서 선언한 변수명과 일치해야 함 -->
+		<selectKey resultType="int" keyProperty="no" keyColumn="member_no" order="AFTER" >
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 	</insert>
-	
-	<!-- 회원가입 시 이메일 중복확인 -->
-	<select id="selectEmail"  parameterType="String"  resultType="String">
-		SELECT email
-		FROM member
-		WHERE email = #{email}
-	</select>
+
+	<insert id="insertMemberGrade" parameterType="int">
+		{ CALL sp_insert_member_grade(#{memberNo}) }
+	</insert>
+
 
 	<select id="selectSearchMemberByEmail" parameterType="Map" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT M.member_no, M.email, G.name, M.regdate, M.visits, M.ban
@@ -290,4 +291,18 @@
 			WHERE followed = #{no}
 			)
 	</select>
+
+	<select id="joinCheck" parameterType="hashMap" resultType="int">
+		SELECT count(*) FROM member
+		<where>
+			<if test="email != null and !email.equals('')">
+				AND email = #{email}
+			</if>
+			<if test="nickname != null and !nickname.equals('')">
+				AND nickname = #{nickname}
+			</if>
+		</where>
+	</select>
+
+
 </mapper>

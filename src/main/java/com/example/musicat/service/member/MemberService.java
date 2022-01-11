@@ -4,6 +4,7 @@ import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.paging.Criteria;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public interface MemberService {
@@ -39,6 +40,8 @@ public interface MemberService {
 	// 회원가입
 	MemberVO retreiveMemberProfile(int member_no);
 
+    int joinCheck(Map<String, Object> map);
+
 	//회원 자진 탈퇴
 	void modifyMember(int memberNo, String password);
 
@@ -51,7 +54,7 @@ public interface MemberService {
 
 	public void updatePassword(MemberVO memberVo);
 
-	boolean retrieveEmail(String email);
+//	boolean retrieveEmail(String email);
 
 	int updateTempPassword(MemberVO mVo);
 

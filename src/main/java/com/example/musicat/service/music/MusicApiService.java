@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -37,7 +39,7 @@ public class MusicApiService {
      ******************************************************************/
     public MusicApiService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.restTemplate.setErrorHandler(new RestErrorHandler());
+        //this.restTemplate.setErrorHandler(new RestErrorHandler());
     }
 
     public void retrieveMusicById(Long id) {
@@ -52,7 +54,7 @@ public class MusicApiService {
         System.out.println("fileName : " + fileName);
     }
 
-    public Music registerMusic(MultipartFile file, MultipartFile imagefile, String title, int memberNo, int articleNo) {
+    public Music registerMusic(MultipartFile file, MultipartFile imagefile, String title, int memberNo) throws HttpClientErrorException {
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -91,19 +93,40 @@ public class MusicApiService {
         body.add("image", byteArray2);
         body.add("title", title);
         body.add("memberNo", memberNo);
-        body.add("articleNo", articleNo);
-
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         ResponseEntity<Music> response = restTemplate.postForEntity(URI_MUSICS_UPLOAD, requestEntity, Music.class);
 
+        System.out.println("status code : " + response.getStatusCode());
 
         return response.getBody();
     }
 
-    public void deleteMusic(int articleNo) {
+    public void deleteMusicByArticleNo(int articleNo) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put("articleNo", articleNo);
-        restTemplate.delete("http://localhost:20000/api/musics/{articleNo}", params);
+        restTemplate.delete("http://localhost:20000/api/musics/deleteByArticleNo/{articleNo}", params);
+    }
+
+    public void deleteByMusicId(Long musicId) {
+        Map<String, Long> params = new HashMap<String, Long>();
+        params.put("musicId", musicId);
+        restTemplate.delete("http://localhost:20000/api/musics/deleteById/{musicId}", params);
+    }
+
+    public void connectToArticle(Long musicId, int articleNo) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("musicId", musicId);
+        params.put("articleNo", articleNo);
+        log.info(params.toString());
+        restTemplate.put("http://localhost:20000/api/musics/connectToArticle/{musicId}/{articleNo}",String.class, params);
+    }
+
+    public List<Music> retrieveMusics(int articleNo){
+        ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
+        List<Music> musicList = response.getBody();
+
+        log.info(musicList.toString());
+        return musicList;
     }
 }

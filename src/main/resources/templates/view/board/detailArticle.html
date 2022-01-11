@@ -63,8 +63,28 @@
                                 <tr>
                                     <th>내용</th>
                                     <td th:text="${article.content}" th:field="*{content}"></td>
-                                    <th></th>
-                                    <td></td>
+                                    <th>음악</th>
+                                    <td th:each="music :${musicList}">
+                                        <div class="detail-audio-part-style">
+                                            <img id="detailAudioImg" src="http://localhost:20000/api/musics/" alt="" srcset="">
+
+                                            <div id="audioDiv" class="detail-audioDiv-style">
+                                                <div id="audioInfoDiv" class="detail-audioInfo-style">
+                                                    <button id="audioPlayBtn" class="audioPlayBtn" onclick="detailPlayAudio()" style="visibility: hidden">
+                                                        <span id="audioPlayIcon" class="material-icons">play_circle</span>
+                                                    </button>
+
+                                                    <span id="audioTitle" class="audioTitle">1</span>
+                                                </div>
+                                                <div class="detail-audioControls-style">
+                                                    <!--            <div id="waveform"></div>-->
+                                                    <!--            <p id="audioResource" style="display: none"></p>-->
+                                                    <audio src="http://localhost:20000/api/musics/dfebb215-4843-402d-bf31-cae77aafb062.audio" id="detail-audio" controls=""></audio>
+                                                    <!--              style="display: none"-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>첨부파일</th>
@@ -229,6 +249,21 @@
                         </div>
                     </div>
 
+                    <div id="sub_article_area">
+                        <table th:each="subArticle : ${subArticles}">
+                            <tr>
+                                <td th:text="${subArticle.no}">번호</td>
+                                <td>
+                                    <a th:text="${subArticle.subject}"
+                                       th:href="|/articles/${subArticle.no}|"></a>
+                                </td>
+                                <td th:text="${subArticle.nickname}">닉네임</td>
+                                <td th:text="${subArticle.writeDate}">날짜</td>
+                                <td th:text="${subArticle.viewcount}">조회수</td>
+                                <td th:text="${subArticle.likecount}">추천</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

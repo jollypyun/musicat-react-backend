@@ -52,7 +52,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		{ CALL sp_article_select_detail(#{articleNo}) }
 	</select>
 
-
+	<select id="selectSubArticle" parameterType="Integer" statementType="CALLABLE" resultMap="detailArticleVOResult">
+		{ CALL sp_select_subarticle(#{articleNo}) }
+	</select>
 
 
 

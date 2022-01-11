@@ -4,6 +4,7 @@ import com.example.musicat.domain.board.CategoryVO;
 import com.example.musicat.service.board.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -45,6 +46,9 @@ public class MusicatExceptionHandler {
             case MUSIC_POST:
                 viewPage = "/view/board/musicRegister"; // 포워드
                 //viewPage = "redirect:/articles/musicRegister"; // 리다이렉트 (리다이렉트 하면 addobject 값은 get 방식으로 넘어감..)
+
+                mv.setViewName(viewPage);
+
                 break;
 
         }
@@ -52,5 +56,4 @@ public class MusicatExceptionHandler {
         mv.addObject("errorMsg", e.getLocalizedMessage());
         mv.setViewName(viewPage);
     }
-
 }
