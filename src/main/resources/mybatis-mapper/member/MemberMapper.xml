@@ -290,4 +290,18 @@
 			WHERE followed = #{no}
 			)
 	</select>
+
+	<select id="joinCheck" parameterType="hashMap" resultType="int">
+		SELECT count(*) FROM member
+		<where>
+			<if test="email != null and !email.equals('')">
+				WHERE email = #{email}
+			</if>
+			<if test="nickname != null and !nickname.equals('')">
+				WHERE nickname = #{nickname}
+			</if>
+		</where>
+	</select>
+
+
 </mapper>

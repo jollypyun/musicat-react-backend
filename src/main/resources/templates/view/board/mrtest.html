@@ -80,7 +80,7 @@
       //     console.log("audioDelBtn");
       // });
 
-      const getAjax = function (url, musicId) {
+      const getAjaxMusic = function (url, musicId) {
         return new Promise((resolve, reject) => {
           $.ajax({
             url: url,
@@ -106,10 +106,10 @@
         });
       };
 
-      async function requestProcess(url, musicId) {
+      async function requestProcessMusic(url, musicId) {
         try {
           // await 다음에는 비동기 처리 작업이 와야함.
-          const result = await getAjax(url, musicId);
+          const result = await getAjaxMusic(url, musicId);
 
           if (result.success == 1) {
             $("#receive").empty();
@@ -123,7 +123,7 @@
 
       function test(e) {
         console.log($(e).attr("id"));
-        requestProcess("/musicDelete", $(e).attr("id"));
+        requestProcessMusic("/musicDelete", $(e).attr("id"));
       }
 
       // let audioEvent = document.getElementById("detail-audio");

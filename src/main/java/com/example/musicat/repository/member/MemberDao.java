@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public interface MemberDao {
 
@@ -23,6 +24,8 @@ public interface MemberDao {
 
 	// 회원 가입
 	void insertMember(MemberVO mVo);
+
+	int joinCheck(Map<String, Object> map);
 
 
 	// 회원가입 시 이메일 중복확인

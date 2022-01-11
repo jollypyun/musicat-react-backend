@@ -53,8 +53,8 @@
       <div class="song-title">
         <input type="text" id = "title" name = "title"/>
         <p th:text="${errorMsg}"></p>
-        <input type="text" id = "memberNo" name = "memberNo"/>
-        <input type="text" id = "articleNo" name = "articleNo"/>
+        <input type="text" id = "memberNo" name = "memberNo" th:value="${memberNo}"/>
+<!--        <input type="text" id = "articleNo" name = "articleNo"/>-->
       </div>
       <div class="preview-thumnail">
         <img id="registered_img" style="visibility: hidden" src="" alt="" />

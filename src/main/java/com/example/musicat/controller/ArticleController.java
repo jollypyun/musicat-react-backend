@@ -13,8 +13,10 @@ import javax.servlet.http.HttpSession;
 import com.example.musicat.controller.form.ArticleForm;
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.domain.music.Music;
 import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.repository.board.ArticleDao;
+import com.example.musicat.service.music.MusicApiService;
 import com.example.musicat.util.FileManager;
 
 import lombok.RequiredArgsConstructor;
@@ -51,7 +53,7 @@ public class ArticleController {
 	private final BoardService boardService;
 	private final CategoryService categoryService;
 	private final ArticleDao articleDao;
-
+	private final MusicApiService musicApiService;
 
 
 	/**
@@ -61,58 +63,6 @@ public class ArticleController {
 	 * @param model
 	 * @return
 	 */
-//	@GetMapping("/{articleNo}")
-//	public String detailArticle(@PathVariable("articleNo") int articleNo
-//			,HttpServletRequest req
-//			,Model model) {
-//		// create
-//		log.info("ArticleController.detailArticle: authAnon = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
-//
-//		HttpSession session = req.getSession();
-//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
-//
-//
-//
-//		ArticleVO article = this.articleService.retrieveArticle(articleNo);
-//		log.info("Acontroller.detailArticle: -------" + article.toString());
-//		int boardNo = article.getBoardNo();
-//		int gradeNo = member.getGradeNo();
-//		boolean grade = this.boardService.retrieveAllReadBoard(boardNo, gradeNo);
-//		//boolean grade = true;
-//		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
-//		model.addAttribute("categoryBoardList", categoryList);
-//
-//		if (grade) {
-//			log.info("sidebar");
-//			int memberNo = member.getNo();
-//			model.addAttribute("loginMemberNo", memberNo);
-//			this.articleService.upViewcount(articleNo); // 조회수 증가
-//			// bind
-//			List<ReplyVO> replys = this.replyService.retrieveAllReply(articleNo);
-//			int totalCount = this.articleService.totalRecCount(articleNo);
-//			int likeCheck = this.articleService.likeCheck(memberNo, articleNo);
-//
-//			ArticleVO result = ArticleVO.addReplyAndLike(article, likeCheck, replys, totalCount); //리팩토링
-//
-//			// xss 처리 Html tag로 변환
-////			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
-////			article.setSubject(escapeSubject);
-////			String escapeContent = StringEscapeUtils.unescapeHtml4(article.getContent());
-////			article.setContent(escapeContent);
-//
-//			model.addAttribute("article", result);
-//			log.info("detailArticle: {}", result.toString());
-//			model.addAttribute("HomeContent", "/view/board/detailArticle");
-//		} else {
-//			model.addAttribute("HomeContent", "/view/board/accessDenied");
-//		}
-//		return "view/home/viewHomeTemplate";
-//	}
-
-	//-------------------------------------------------------------------------------------------------------------
-
-
-
 
 	@GetMapping("/{articleNo}")
 	public String detailArticle(@PathVariable("articleNo") int articleNo
@@ -146,8 +96,14 @@ public class ArticleController {
 
 			ArticleVO result = ArticleVO.addReplyAndLike(article, likeCheck, replys, totalCount); //리팩토링
 			List<ArticleVO> subArticle = this.articleService.selectSubArticle(articleNo);
-
 			model.addAttribute("subArticles", subArticle);
+
+			// audio 파일
+			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
+			model.addAttribute("musicList", musicList);
+//				log.info(musicList.toString());
+
+
 			// xss 처리 Html tag로 변환
 //			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
 //			article.setSubject(escapeSubject);
@@ -178,6 +134,7 @@ public class ArticleController {
 //		MemberVO member = (MemberVO) session.getAttribute("loginUser");
 
 		MemberVO member = HomeController.checkMemberNo();
+		model.addAttribute("memberNo", member.getNo());
 
 		// bind
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -207,8 +164,10 @@ public class ArticleController {
 			,BindingResult result
 			,@ModelAttribute FileFormVO form
 			,@RequestParam("tags") String tags
+			,@RequestParam("audioNo") Long audioNo
 			,HttpServletRequest req) throws IOException {
 		ModelAndView mv = new ModelAndView();
+		log.info("audioNo= {}",audioNo);
 		log.info("insert접근");
 		if (result.hasErrors()){
 			List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -221,17 +180,14 @@ public class ArticleController {
 			return mv;
 		}
 		// create
-//		HttpSession session = req.getSession();
-//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
-
 		MemberVO member = HomeController.checkMemberNo();
 
 		// 파일 첨부 지정 폴더에 Upload도 동시에 실행
 		FileVO attacheFile = fileManager.uploadFile(form.getImportAttacheFile()); // 첨부 파일
 		List<FileVO> imageFiles = fileManager.uploadFiles(form.getImageFiles()); // 이미지 파일
-		int pos = imageFiles.get(0).getSystemFileName().indexOf(".");
-		String ext = imageFiles.get(0).getSystemFileName().substring(pos + 1);
 		if (imageFiles.size() > 0) {
+			int pos = imageFiles.get(0).getSystemFileName().indexOf(".");
+			String ext = imageFiles.get(0).getSystemFileName().substring(pos + 1);
 			if ("mp4".equals(ext)){
 				if (imageFiles.get(1) != null){
 					fileManager.createThumbnail(imageFiles.get(1).getSystemFileName()); // 썸네일 생성
@@ -248,7 +204,7 @@ public class ArticleController {
 			article.setTagList(tagList);
 		}
 
-		this.articleService.registerArticle(article);
+		this.articleService.registerArticle(article, audioNo);
 		int articleNo = article.getNo(); // 작성 후 게시글 세부조회page로 넘어가기 때문에 게시글 번호를 넘겨준다. (insert문 실행 뒤 Last ID 받아온다.)
 		log.info("입력 게시글={}", article.toString());
 
@@ -420,8 +376,10 @@ public class ArticleController {
 	}
 
 	@GetMapping("/musicRegister")
-	public String musicRegister() {
-
+	public String musicRegister(Model model) {
+		int memberNo = HomeController.checkMemberNo().getNo();
+		model.addAttribute("memberNo", memberNo);
+		log.info("memberNo : " + memberNo);
 		return "/view/board/musicRegister";
 	}
 

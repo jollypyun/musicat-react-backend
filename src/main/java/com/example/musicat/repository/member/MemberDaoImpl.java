@@ -2,6 +2,7 @@ package com.example.musicat.repository.member;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.mapper.member.MemberMapper;
@@ -45,6 +46,11 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 	public void insertMember(MemberVO mVo) { // 자바스크립트의 MemberDao에 있는거 리턴부터 변수명(파라미터값) 그대로 복붙
 		//this.sqlSession.insert("Member.join", mVo); //(mapper.xml에 있는 매퍼명.해당 id, mVo는 변수명)
 		this.mapper.insertMember(mVo);
+	}
+
+	@Override
+	public int joinCheck(Map<String, Object> map) {
+		return this.mapper.joinCheck(map);
 	}
 
 	// 회원가입 시 이메일 중복확인

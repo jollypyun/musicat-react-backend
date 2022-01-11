@@ -44,6 +44,11 @@ public class MemberServiceImpl implements MemberService {
 		
 	}
 
+	@Override
+	public int joinCheck(Map<String, Object> map) {
+		return this.memberdao.joinCheck(map);
+	}
+
 	@Override //회원 자진 탈퇴
 	public void modifyMember(int memberNo, String password) {
 		memberdao.updateMember(memberNo, password);	//@Autowired해서 memberdao로 씀.
