@@ -421,6 +421,7 @@ public class ArticleController {
 
 	@GetMapping("/musicRegister")
 	public String musicRegister() {
+
 		return "/view/board/musicRegister";
 	}
 

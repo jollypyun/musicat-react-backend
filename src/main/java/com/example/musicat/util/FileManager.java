@@ -72,6 +72,7 @@ public class FileManager {
 	public void createThumbnail(String systemFileName) throws IOException {
 		File image = new File(getFullPath(systemFileName));
 		File thumbnail = new File(getFullPath("thumbnail/thumb" + systemFileName));
+
 		//systemFileName에서 확장자 추출
 		int pos = systemFileName.lastIndexOf("."); 
 		String ext = systemFileName.substring(pos + 1);
