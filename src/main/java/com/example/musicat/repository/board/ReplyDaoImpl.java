@@ -22,7 +22,12 @@ public class ReplyDaoImpl implements ReplyDao {
 
 	@Override
 	public void insertReply(ReplyVO reply) {
-		this.replyMapper.insertReply(reply);
+		int depth = reply.getDepth();
+		if (depth == 0){ // 댓글
+			this.replyMapper.insertReply(reply);
+		} else{ // 답글
+			this.replyMapper.insertDepthReply(reply);
+		}
 	}
 
 	@Override
@@ -34,8 +39,9 @@ public class ReplyDaoImpl implements ReplyDao {
 	public void deleteReply(int replyNo) {
 		this.replyMapper.deleteReply(replyNo);
 	}
-	
 
-	
-
+	@Override
+	public List<ReplyVO> selectReplyOneMember(int memberNo) {
+		return this.replyMapper.selectReplyOneMember(memberNo);
+	}
 }

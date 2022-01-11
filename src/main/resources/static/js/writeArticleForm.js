@@ -24,7 +24,8 @@ $(document).ready(function (){
             console.log("keypress");
 
             // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
-            if (e.key === "Enter" || e.keyCode == 32) {
+            // if (e.key === "Enter" || e.keyCode == 32) {
+            if (e.key === "Enter") {
 
                 var tagValue = self.val(); // 값 가져오기
 
@@ -127,18 +128,29 @@ function setThumbnail(event) {
         var reader = new FileReader();
 
         reader.onload = function (event) {
-            //image preview
-            var $div = $('<div id=image' + index + ' class="preview-div">');
-            var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="100" height="100">');
-            // var $input = $('<button id=' + index + ' class="preview-de"></button>');
-            // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
 
-            // $input.append($i);
-            $div.append($img);
-            // $div.append($input);
-            $('#image_container').append($div);
+            var pos = image.name.lastIndexOf(".");
+            var ext = image.name.substring(pos + 1).toLowerCase();
+            console.log(image.name);
 
-            index++;
+            if ($.inArray(ext, ['png', 'jpg', 'mp4']) == -1){
+                alert('이미지 첨부는 png, jpg, mp4만 가능합니다');
+                return false;
+            } else {
+
+                //image preview
+                var $div = $('<div id=image' + index + ' class="preview-div">');
+                var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="100" height="100">');
+                // var $input = $('<button id=' + index + ' class="preview-de"></button>');
+                // var $i = $('<i class="fas fa-minus-circle fa-5x"></i>');
+
+                // $input.append($i);
+                $div.append($img);
+                // $div.append($input);
+                $('#image_container').append($div);
+
+                index++;
+            }
         };
 
         console.log(image);
@@ -159,3 +171,57 @@ $("#write-attachefile-upload").on('change',function(){
 
     $("#file-upload-filename").text(splitfileName[spliieLength-1]);
 });
+
+function openChild() {
+    // window.name = "부모창 이름";
+    window.name = "parentForm";
+    // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+    openWin = window.open(
+        "/articles/musicRegister",
+        "childForm",
+        "width=570, height=350, resizable = no, scrollbars = no"
+    );
+}
+
+const getAjaxMusic = function (url, musicId) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            method: "DELETE",
+            dataType: "json",
+            data: {
+                musicId: musicId,
+            },
+            success: function (data) {
+                // 비동기 작업 성공 시 호출
+                resolve(data);
+            },
+            error: function (e) {
+                // 비동기 작업 실패 시 호출
+                reject(e);
+            },
+        });
+    });
+};
+
+async function requestProcessMusic(url, musicId) {
+    try {
+        // await 다음에는 비동기 처리 작업이 와야함.
+        const result = await getAjaxMusic(url, musicId);
+        console.log("ajax")
+        if (result.success == 1) {
+            $("#receive").empty();
+            $("#receive").hide();
+            console.log("success");
+        } else {
+            console.log(result);
+        }
+    } catch (error) {
+        console.log("error : ", error);
+    }
+}
+
+function test(e) {
+    console.log($(e).attr("id"));
+    requestProcessMusic("/musicDelete", $(e).attr("id"));
+}

@@ -1,6 +1,8 @@
 package com.example.musicat.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Member;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,10 @@ import javax.servlet.http.HttpSession;
 import com.example.musicat.controller.form.ArticleForm;
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.domain.music.Music;
+import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.repository.board.ArticleDao;
+import com.example.musicat.service.music.MusicApiService;
 import com.example.musicat.util.FileManager;
 
 import lombok.RequiredArgsConstructor;
@@ -48,7 +53,7 @@ public class ArticleController {
 	private final BoardService boardService;
 	private final CategoryService categoryService;
 	private final ArticleDao articleDao;
-
+	private final MusicApiService musicApiService;
 
 
 	/**
@@ -58,6 +63,7 @@ public class ArticleController {
 	 * @param model
 	 * @return
 	 */
+
 	@GetMapping("/{articleNo}")
 	public String detailArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req
@@ -65,13 +71,14 @@ public class ArticleController {
 		// create
 		log.info("ArticleController.detailArticle: authAnon = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
 
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
+		int gradeNo = member.getGradeNo();
+
 
 		ArticleVO article = this.articleService.retrieveArticle(articleNo);
 		log.info("Acontroller.detailArticle: -------" + article.toString());
 		int boardNo = article.getBoardNo();
-		int gradeNo = member.getGradeNo();
+		//gradeNo = member.getGradeNo();
 		boolean grade = this.boardService.retrieveAllReadBoard(boardNo, gradeNo);
 		//boolean grade = true;
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -88,6 +95,14 @@ public class ArticleController {
 			int likeCheck = this.articleService.likeCheck(memberNo, articleNo);
 
 			ArticleVO result = ArticleVO.addReplyAndLike(article, likeCheck, replys, totalCount); //리팩토링
+			List<ArticleVO> subArticle = this.articleService.selectSubArticle(articleNo);
+			model.addAttribute("subArticles", subArticle);
+
+			// audio 파일
+			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
+			model.addAttribute("musicList", musicList);
+//				log.info(musicList.toString());
+
 
 			// xss 처리 Html tag로 변환
 //			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
@@ -104,6 +119,8 @@ public class ArticleController {
 		return "view/home/viewHomeTemplate";
 	}
 
+	//-------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * 작성 폼 이동
 	 */
@@ -113,8 +130,12 @@ public class ArticleController {
 		// create
 		ArticleForm form = new ArticleForm(); // 변경
 
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+
+		MemberVO member = HomeController.checkMemberNo();
+		model.addAttribute("memberNo", member.getNo());
+
 		// bind
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
@@ -143,8 +164,10 @@ public class ArticleController {
 			,BindingResult result
 			,@ModelAttribute FileFormVO form
 			,@RequestParam("tags") String tags
+			,@RequestParam("audioNo") Long audioNo
 			,HttpServletRequest req) throws IOException {
 		ModelAndView mv = new ModelAndView();
+		log.info("audioNo= {}",audioNo);
 		log.info("insert접근");
 		if (result.hasErrors()){
 			List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -157,13 +180,21 @@ public class ArticleController {
 			return mv;
 		}
 		// create
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
+
 		// 파일 첨부 지정 폴더에 Upload도 동시에 실행
 		FileVO attacheFile = fileManager.uploadFile(form.getImportAttacheFile()); // 첨부 파일
 		List<FileVO> imageFiles = fileManager.uploadFiles(form.getImageFiles()); // 이미지 파일
 		if (imageFiles.size() > 0) {
-			fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
+			int pos = imageFiles.get(0).getSystemFileName().indexOf(".");
+			String ext = imageFiles.get(0).getSystemFileName().substring(pos + 1);
+			if ("mp4".equals(ext)){
+				if (imageFiles.get(1) != null){
+					fileManager.createThumbnail(imageFiles.get(1).getSystemFileName()); // 썸네일 생성
+				}
+			} else {
+				fileManager.createThumbnail(imageFiles.get(0).getSystemFileName()); // 썸네일 생성
+			}
 		}
 		// bind
 		ArticleVO article = ArticleVO.createArticle(member.getNo(), member.getNickname(), articleForm, attacheFile, imageFiles);
@@ -173,7 +204,7 @@ public class ArticleController {
 			article.setTagList(tagList);
 		}
 
-		this.articleService.registerArticle(article);
+		this.articleService.registerArticle(article, audioNo);
 		int articleNo = article.getNo(); // 작성 후 게시글 세부조회page로 넘어가기 때문에 게시글 번호를 넘겨준다. (insert문 실행 뒤 Last ID 받아온다.)
 		log.info("입력 게시글={}", article.toString());
 
@@ -194,8 +225,9 @@ public class ArticleController {
 		ArticleVO article = this.articleService.retrieveArticle(articleNo); // 게시글 정보 가져오기
 		ArticleForm form = ArticleForm.updateArticle(article);
 		// create
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int gradeNo = member.getGradeNo();
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
@@ -259,12 +291,13 @@ public class ArticleController {
 		return mv;
 	}
 
-	@GetMapping("/remove/{articleNo}")
+	@PostMapping("/remove/{articleNo}")
 	public RedirectView removeArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req) {
 		RedirectView redirectView = new RedirectView();
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int memberNo = member.getNo();
 		int boardNo = this.articleService.removeArticle(articleNo, memberNo);
 		redirectView.setUrl("/board/" + boardNo + "/articles");
@@ -276,8 +309,9 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String, Object> recUpdate(@RequestBody HashMap<String, Object> map
 			,HttpServletRequest req) {
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int memberNo = member.getNo();
 		int articleNo = Integer.parseInt((String)map.get("articleNo"));
 
@@ -292,8 +326,9 @@ public class ArticleController {
 	@ResponseBody
 	public Map<String, Object> recDelete(@RequestBody HashMap<String, Object> map
 			,HttpServletRequest req) {
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		ArticleVO article = new ArticleVO();
 		int articleNo = Integer.parseInt((String)map.get("articleNo"));
 		article.setNo(articleNo);
@@ -341,7 +376,14 @@ public class ArticleController {
 	}
 
 	@GetMapping("/musicRegister")
-	public String musicRegister() {
+	public String musicRegister(Model model) {
+		int memberNo = HomeController.checkMemberNo().getNo();
+		model.addAttribute("memberNo", memberNo);
+		log.info("memberNo : " + memberNo);
 		return "/view/board/musicRegister";
 	}
+
+
+
+
 }

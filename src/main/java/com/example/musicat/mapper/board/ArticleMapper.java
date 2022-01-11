@@ -12,6 +12,9 @@ public interface ArticleMapper {
 	//게시글 세부 조회
 	List<SelectArticleVO> selectArticle(int articleNo);
 
+	//앞 뒤 게시글 조회
+	List<ArticleVO> selectSubArticle(int articleNo);
+
 	//게시판 별 게시글 목록 조회
 	List<ArticleVO> selectBoard(int boardNo);
 
@@ -80,4 +83,10 @@ public interface ArticleMapper {
 
 	//베스트글 모두 조회
 	List<BestArticleVO> selectAllBestArticle();
+
+	//작성한 게시글 조회
+	List<ArticleVO> selectMyArticle(int memberNo);
+
+	//추천 누른 게시글 조회
+	List<ArticleVO> selectMyLikeArticle(int memberNo);
 }

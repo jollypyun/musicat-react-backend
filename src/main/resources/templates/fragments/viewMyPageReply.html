@@ -13,43 +13,70 @@
                     </div>
                     <div class="myPage-top-profile">
                         <span>NickName</span>
-                        <button onclick="location.href='/ChangePwd'" th:if = "${session.principal.gradeNo} != 4 and ${session.principal.no} == ${member.getNo()}">비밀번호 변경</button>
-                        <button onclick="" th:if = "${session.principal.gradeNo} != 4 and ${session.principal.no} != ${member.getNo()}">Follow</button>
+                        <th:block th:if = "${#authorization.expr('isAuthenticated()')}">
+                            <button onclick="location.href='/ChangePwd'" th:if = "${#authentication.principal.getNo()} == ${member.getNo()}">비밀번호 변경</button>
+                            <button onclick="" th:if = "${#authentication.principal.getNo()} != ${member.getNo()}">Follow</button>
+                        </th:block>
                     </div>
                 </div>
                 <div class="mt-4 mb-4 myPage-nav">
                     <a th:href="@{'/myPage/Playlist/' + ${member.getNo()}}">Playlist</a>
                     <a th:href="@{'/myPage/Board/' + ${member.getNo()}}">글</a>
                     <a th:href="@{'/myPage/Reply/' + ${member.getNo()}}">댓글</a>
-                    <span th:if="${session.principal.no} == ${member.getNo()}"><a th:href="@{'/myPage/Like/' + ${member.getNo()}}">좋아요</a></span>
+                    <th:block th:if="${#authorization.expr('isAuthenticated()')} != false">
+                        <span th:if="${#authentication.principal.getNo()} == ${member.getNo()}">
+                            <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">좋아요</a></span>
+                    </th:block>
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">
-                        내 댓글 페이지
-                    </div>
-                    <div class="myPage-content-right">
-                        <div class="myPage-content-right-top">
-                            <table>
-                                <thead>
+                        <table id="datatablesSimple"  class="list-normal-table">
+                            <thead>
                                 <tr>
-                                    <th><a th:href="|/followedList/${member.getNo()}|">Followers</a></th>
-                                    <th><a th:href="|/followingList/${member.getNo()}|">Following</a></th>
+                                    <th>No</th>
+<!--                                    <th>게시판이름</th>-->
+                                    <th>내용</th>
+                                    <th>작성날짜</th>
                                 </tr>
-                                </thead>
+                            </thead>
+                            <div class="reply_list" th:each="reply : ${replyListOneMember}">
                                 <tbody>
-                                <td th:text = "${follow.followed}"></td>
-                                <td th:text = "${follow.following}"></td>
+                                    <td class="Content" th:text="${reply.no}"></td>
+<!--                                    <td class="Content" th:text="${게시판이름....}}"></td>-->
+                                    <td><a class="Content"  th:text="${reply.content}"
+                                       th:href="|/articles/${reply.articleNo}|"></a></td>
+                                    <td class="Content" th:text="${reply.writeDate}"></td>
                                 </tbody>
-                            </table>
-                        </div>
-                        <div class="myPage-content-right-bottom">
-                            <ul>
-                                <li>1</li>
-                                <li>2</li>
-                                <li>3</li>
-                                <li>4</li>
-                            </ul>
-                        </div>
+                            </div>
+                        </table>
+                    </div>
+                </div>
+                <div class="myPage-content-right">
+                    <div class="myPage-content-right-top">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+    <!--                                        <a th:href="|/followedList/${member.getNo()}|">Followers</a>-->
+                                    </th>
+                                    <th>
+    <!--                                        <a th:href="|/followingList/${member.getNo()}|">Following</a>-->
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+    <!--                                <td th:text = "${follow.followed}"></td>-->
+    <!--                                <td th:text = "${follow.following}"></td>-->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="myPage-content-right-bottom">
+                        <ul>
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -57,3 +84,4 @@
     </main>
 </div>
 </html>
+

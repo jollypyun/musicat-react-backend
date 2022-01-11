@@ -63,9 +63,9 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	@Override
-	public int selectDuplicateCategory(String categoryName) {
-		int checkDuplicateCategory = this.categoryMapper.selectDuplicateCategory(categoryName);
-		return checkDuplicateCategory;
+	public Integer selectDuplicatedCategory(String categoryName) {
+		Integer duplicatedCategory = this.categoryMapper.selectDuplicatedCategory(categoryName);
+		return duplicatedCategory;
 	}
 
 
