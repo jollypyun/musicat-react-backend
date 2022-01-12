@@ -159,14 +159,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
   <script th:inline="javascript">
     $(document).ready(function() {
-      if( [[${#authorization.expr('isAuthenticated()')}]]) {
+      var sta = [[${#authorization.expr('isAuthenticated()')}]];
+      if(sta) {
         var sockJs = new SockJS("/stomp/topic");
         var stomp = Stomp.over(sockJs);
-
-        stomp.connect({}, function() {
+        stomp.connect({}, function () {
           console.log("STOMP Connection");
 
-          var userInfo = [[${#authentication.principal}]];
+          var userVo = [[${#authentication.principal}]];
+          console.log(userVo);
+          var userInfo = userVo.memberVo;
           var notifyId = userInfo.notifyId;
           console.log(notifyId);
 
@@ -208,21 +210,12 @@
           // 연결 확인 테스트용
           //stomp.send('/pub/topic/notify/register', {}, JSON.stringify({notifyId: notifyId}));
           stomp.send('/pub/topic/notify/register', {}, userInfo.no);
+          });
+          }
+
+
         });
-      }
 
-
-      // $(document).on("click", "#notifyTestBtn", function () {
-      //   var userInfo = [[${#authentication.principal}]];
-      //   var notifyId = userInfo.notifyId;
-      //
-      //   console.log("click");
-      //
-      //   stomp.send("/sub/topic/notify/" + notifyId, {}, JSON.stringify({notifyId: notifyId}));
-      // });
-
-
-    });
 
     function openChildChat() {
       window.open(

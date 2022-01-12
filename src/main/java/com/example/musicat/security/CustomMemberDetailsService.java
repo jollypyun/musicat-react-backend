@@ -29,7 +29,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
 
         //view에서 받은 email을 사용해 사용자 정보가 있는지 조회하는 memberService 메소드
         MemberVO memberVo = memberService.retrieveMemberByEmail(email);
-        log.info("CustomMemberDetailsService : " + memberVo.toString());
+        //log.info("CustomMemberDetailsService : " + memberVo.toString());
 
         //정보 없으면 예외 발생
         if(memberVo == null) {

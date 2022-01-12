@@ -35,12 +35,18 @@
                     </th:block>
                 </div>
           
-                <div th:if="${session.principal.no} == ${member.getNo()}">
+                <div th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                     <form method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
                         <button type="submit">추가</button>
                     </form>
-
                 </div>
+
+                <div th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
+                    <form method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
+                        <button type="submit">추가</button>
+                    </form>
+                </div>
+
                 <div class="myPage-content">
                     <div class="myPage-content-left" th:each="playlist : ${playlists}" th:object="${playlist}">
                         <div class="myPage-content-left-playlist">
