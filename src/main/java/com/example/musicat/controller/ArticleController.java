@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.example.musicat.controller.form.ArticleForm;
 import com.example.musicat.domain.board.*;
+import com.example.musicat.domain.etc.NotifyVO;
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.mapper.board.ArticleMapper;
@@ -19,6 +20,7 @@ import com.example.musicat.repository.board.ArticleDao;
 import com.example.musicat.service.music.MusicApiService;
 import com.example.musicat.util.FileManager;
 
+import com.example.musicat.websocket.manager.NotifyManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,6 +57,7 @@ public class ArticleController {
 	private final ArticleDao articleDao;
 	private final MusicApiService musicApiService;
 
+	private final NotifyManager notifyManager;
 
 	/**
 	 * 세부 조회
@@ -212,6 +215,9 @@ public class ArticleController {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/articles/" + articleNo);
 		mv.setView(redirectView);
+
+		// 예나 - 알림 테스트
+		//notifyManager.addNotify(new NotifyVO(1, "댓글 알림 테스트", "/main"));
 		return mv;
 	}
 
