@@ -26,15 +26,4 @@ public class MemberAccount extends User {
         return memberVo;
     }
 
-    @Override
-    public String getUsername() {
-        log.info("getusername : " + memberVo.getEmail());
-        return memberVo.getEmail();
-    }
-
-    @Override
-    public String getPassword() {
-        return memberVo.getPassword();
-    }
-
 }

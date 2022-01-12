@@ -2,9 +2,9 @@ package com.example.musicat.security;
 
 import com.example.musicat.domain.member.MemberVO;
 import lombok.extern.java.Log;
-import org.apache.catalina.session.StandardSessionFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -16,26 +16,22 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Log
@@ -58,6 +54,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomAutheticationProvider();
     }
 
+    //ApplicationListener<SessionDestroyedEvent> 를 사용하기 위한 Bean 등록
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher(){
+        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher(){
+        });
+    }
+
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
@@ -74,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
 
         http
                 .csrf().disable();
@@ -104,12 +110,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         MemberVO member = ((MemberAccount) authentication.getPrincipal()).getMemberVo();
                         log.info("principal : " + member.toString());
 
-//                        HttpSession session = request.getSession();
-//                        session.setAttribute("loginUser", member);
-//                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
-
-                        log.info("인증성공 onAuthenticationSuccess");
-
                         //사용자 요청페이지 저장
                         RequestCache requestCache = new HttpSessionRequestCache();
                         SavedRequest savedRequest = requestCache.getRequest(request, response);
@@ -122,9 +122,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             log.info("요청페이지 savedRequest.getRedirectUrl() : " + savedRequest.getRedirectUrl());
                             response.sendRedirect(savedRequest.getRedirectUrl());
                         }
-
-
-
                     }
                 })
                 .failureHandler(new AuthenticationFailureHandler() { //로그인 실패
@@ -134,7 +131,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         log.info("email : " + request.getParameter("email"));
 
                         //로그인 실패 예외 발생 시 처리
-                        //log.info("exception(로그인실패) : " + exception.getMessage());
 
                         if (exception instanceof UsernameNotFoundException) { //DB에 일치하는 email이 없는 경우
                             request.setAttribute("loginFailMessage", "아이디 또는 비밀번asdfasdfsf호를 잘못 입력하였습니다.");
@@ -161,14 +157,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout") //로그아웃 처리 url
                 .invalidateHttpSession(true) //세션비우기
-                //.deleteCookies("remember-me", "JSESSIONID") //자동로그인 쿠키, Tomcat이 발금한 세션 유지 쿠키 삭제 (순서 중요) 로그아웃 후 쿠키 삭제 (remeberme 사용 했을 때 필요)
-                .deleteCookies("JSESSIONID", "remember-me")
+                .deleteCookies("JSESSIONID", "remember-me") //로그아웃 시 Tomcat이 발급한 세션 유지 쿠키, 자동 로그인을 위한 remember-me 쿠키 삭제(remeberme 사용 했을 때 필요)
                 .logoutSuccessUrl("/musicatlogin"); //로그아웃 후 이동할 페이지
-
 
         http
                 .sessionManagement() //세션 관리
-                .sessionFixation().changeSessionId() //세션 고정 보호(뭔말임) 세션 조작을 통한 보안 공격 방지를 위해, 인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지 (security가 기본으로 제공해주기 때문에 별도로 설정해줄 필요 없음)
+                .sessionFixation().changeSessionId() //세션 고정 보호. 세션 조작을 통한 보안 공격 방지를 위해, 인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지 (security가 기본으로 제공해주기 때문에 별도로 설정해줄 필요 없음)
                 .maximumSessions(3) //최대 세션 개수
                 .expiredUrl("/expiredUrl") //session 만료 시 이동 페이지
                 .maxSessionsPreventsLogin(true); //false : 이전에 로그인한 세션 만료, true : 나중에 로그인 시도하는 세션 생성 불가(로그인 불가)
@@ -193,4 +187,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         log.info("SecurityConfig 순회 완--------------------");
 
     }
+
 }
