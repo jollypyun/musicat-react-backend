@@ -2,6 +2,7 @@ package com.example.musicat.security;
 
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.service.member.MemberService;
+import com.example.musicat.websocket.manager.NotifyManager;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +21,9 @@ public class CustomMemberDetailsService implements UserDetailsService {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private NotifyManager notifyManager;
 
     //loadUserByUsername : 인증을 시도하는 사용자의 ID(username)가 DB에 있는지 확인
     //UserDetails 타입으로 member 정보 반환해야 함(Session > spring session > authenticate 객체 안에 들어갈 수 있는 타입은 2가지
@@ -41,6 +45,9 @@ public class CustomMemberDetailsService implements UserDetailsService {
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(memberVo.getGrade())); //role
 
+        // 예나 - notify 임시 id set
+        memberVo.setNotifyId(memberVo.getNo() + memberVo.getEmail());
+        notifyManager.addToNotifyList(memberVo.getNo(), memberVo.getNotifyId());
 
         return new MemberAccount(memberVo, roles);
     }
