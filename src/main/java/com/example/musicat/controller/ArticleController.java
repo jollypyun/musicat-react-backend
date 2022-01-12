@@ -99,8 +99,8 @@ public class ArticleController {
 			model.addAttribute("subArticles", subArticle);
 
 			// audio 파일
-			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
-			model.addAttribute("musicList", musicList);
+//			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
+//			model.addAttribute("musicList", musicList);
 //				log.info(musicList.toString());
 
 
