@@ -92,7 +92,7 @@ public class MusicController {
 
     // 플레이리스트 삭제
     @DeleteMapping("deleteplaylist/{memberNo}/{playNo}")
-    public ModelAndView removePlaylist(HttpServletRequest req, @PathVariable(name = "playNo") int playNo, @PathVariable(name = "memberNo")Integer memberNo) {
+    public ModelAndView removePlaylist(HttpServletRequest req, @PathVariable(name = "playNo") String playNo, @PathVariable(name = "memberNo")Integer memberNo) {
         ModelAndView mv = new ModelAndView();
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
         log.info("no : " + playNo);
@@ -117,7 +117,7 @@ public class MusicController {
 
     // 특정 플레이리스트 안의 곡 빼기
     @DeleteMapping("/pullmusic/{playlistNo}")
-    public void deleteMusicFromPlaylist(HttpServletRequest req, @PathVariable int playlistNo, @RequestParam(name = "musicNos") List<Integer> musicNos) {
+    public void deleteMusicFromPlaylist(HttpServletRequest req, @PathVariable String playlistNo, @RequestParam(name = "musicNos") List<Integer> musicNos) {
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
         int memberNo = 6;
         log.info("musicNos : " + musicNos);
@@ -127,7 +127,7 @@ public class MusicController {
 
     // 플레이리스트 수정
     @PostMapping("/changeplaylist/{playlistNo}")
-    public ModelAndView changePlaylistName(@PathVariable int playlistNo, @RequestParam(name = "title") String title, @RequestParam(name="image") MultipartFile image) {
+    public ModelAndView changePlaylistName(@PathVariable String playlistNo, @RequestParam(name = "title") String title, @RequestParam(name="image") MultipartFile image) {
         ModelAndView mv = new ModelAndView();
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
         //int memberNo = 6;
@@ -155,7 +155,7 @@ public class MusicController {
 
     // 플레이리스트 썸네일 미리보기 이미지 가져오기
     @GetMapping("/playlistTempImage/")
-    public void getThumbnailImage(@RequestParam(name = "playlistNos") List<Integer> playlistNos){
+    public void getThumbnailImage(@RequestParam(name = "playlistNos") List<String> playlistNos){
     }
 
     @PutMapping("musicConnectArticle/{musicId}/{articleNo}")

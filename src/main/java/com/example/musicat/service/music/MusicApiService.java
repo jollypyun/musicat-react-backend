@@ -181,8 +181,8 @@ public class MusicApiService {
     }
 
     // 플레이리스트 삭제
-    public void deletePlaylist(int memberNo, int playlistNo) {
-        Map<String, Integer> map = new HashMap<String, Integer>();
+    public void deletePlaylist(int memberNo, String playlistNo) {
+        Map<String, Object> map = new HashMap<>();
         map.put("memberNo", memberNo);
         map.put("playlistNo", playlistNo);
         log.info("map : " + map);
@@ -190,6 +190,7 @@ public class MusicApiService {
     }
 
     // 특정 플레이리스트 안에 곡 넣기
+
     public List<Music> pushMusic(List<Integer> musicNos, String playlistNo) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
@@ -200,7 +201,7 @@ public class MusicApiService {
     }
 
     // 특정 플레이리스트 안의 곡 빼기
-    public void pullMusic(List<Integer> musicNos, int playlistNo) {
+    public void pullMusic(List<Integer> musicNos, String playlistNo) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
         map.put("playlistNo", playlistNo);
@@ -214,7 +215,7 @@ public class MusicApiService {
     }
 
     // 플레이리스트 수정
-    public Playlist updatePlaylistName(int playlistNo, String title, MultipartFile imgfile) {
+    public Playlist updatePlaylistName(String playlistNo, String title, MultipartFile imgfile) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
