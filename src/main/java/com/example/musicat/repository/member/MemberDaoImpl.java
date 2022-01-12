@@ -49,16 +49,16 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 	}
 
 	@Override
+	public void insertMemberGrade(int memberNo){
+		this.mapper.insertMemberGrade(memberNo);
+	}
+
+	//중복체크(이메일, 닉네임)
+	@Override
 	public int joinCheck(Map<String, Object> map) {
 		return this.mapper.joinCheck(map);
 	}
 
-	// 회원가입 시 이메일 중복확인
-	@Override
-	public String selectEmail(String email) {
-		// this.sqlSession.selectOne("Member.joinidcheck", email);
-		return this.mapper.selectEmail(email);
-	}
 
 	// 회원 자진 탈퇴
 	@Override

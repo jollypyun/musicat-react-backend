@@ -5,7 +5,6 @@ spring:
       jdbc-url: jdbc:mysql://13.124.245.202:3306/musicat
       username: scott
       password: Tiger_1234
-
       connection-timeout: 20000
       minimum-idle: 5
       maximum-pool-size: 20
@@ -38,7 +37,11 @@ spring:
           ssl:
             enable: true
             trust: smtp.naver.com
-#  servlet:
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
 #    multipart:
 #      max-file-size: 10MB
 #      max-request-size: 10MB
@@ -50,8 +53,8 @@ server.error:
   include-stacktrace: always
 
 file:
-#  dir: /upload/
-  dir: D:/SpringBootHome/musicat/src/main/resources/static/upload/
+  dir: /upload/
+#  dir: D:/SpringBootHome/musicat/src/main/resources/static/upload/
 #  dir2: D:/SpringBootHome/musicat/src/main/resources/static/upload/
 #  dir2: C:/Users/MZC/git/musicat/src/main/resources/static/upload/
 

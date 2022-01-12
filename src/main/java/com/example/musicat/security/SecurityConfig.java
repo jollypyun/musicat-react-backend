@@ -1,8 +1,9 @@
 package com.example.musicat.security;
 
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.websocket.manager.NotifyManager;
+import com.example.musicat.websocket.manager.StompHandler;
 import lombok.extern.java.Log;
-import org.apache.catalina.session.StandardSessionFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,6 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private NotifyManager notifyManager;
 
     //비밀번호 암호화
     @Bean
@@ -101,10 +104,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         MemberVO member = (MemberVO) authentication.getPrincipal();
                         log.info("principal : " + member.toString());
 
+                        // 예나 - notify 임시 id set
+                        member.setNotifyId(member.getNo() + member.getEmail());
+                        notifyManager.addToNotifyList(member.getNo(), member.getNotifyId());
 //                        HttpSession session = request.getSession();
 //                        session.setAttribute("loginUser", member);
 //                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
-
 
                         //사용자 요청페이지 저장
                         RequestCache requestCache = new HttpSessionRequestCache();

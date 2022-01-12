@@ -38,10 +38,8 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	@Override // 회원가입
 	public void registerMember(MemberVO mVo) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		log.info("회원가입 - map.toString()" + map.toString());
 		this.memberdao.insertMember(mVo); //this를 적어주는 이유는 @Autowired 연결 선언해준 memberDao랑 같은 애라는걸 알려주려고 적는 거임 (얘가 얘다)
-		
+		this.memberdao.insertMemberGrade(mVo.getNo()); //membergrade insert
 	}
 
 	@Override
@@ -161,16 +159,7 @@ public class MemberServiceImpl implements MemberService {
 		return null;
 	}
 
-	@Override
-	public boolean retrieveEmail(String email) {
-		String checkEmail = this.memberdao.selectEmail(email);
 
-		if (checkEmail != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 
 	@Override
