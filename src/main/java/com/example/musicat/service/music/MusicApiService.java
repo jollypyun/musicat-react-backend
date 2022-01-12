@@ -6,13 +6,12 @@ import com.example.musicat.domain.music.PlaylistImage;
 import com.example.musicat.exception.RestErrorHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.apache.logging.log4j.core.pattern.MdcPatternConverter;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -132,15 +131,51 @@ public class MusicApiService {
 
     public List<Music> retrieveMusics(int articleNo){
         ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
-        List<Music> musicList = response.getBody();
 
-        log.info(musicList.toString());
+        log.info("response body : " + response.getBody());
+
+        List<Music> musicList = response.getBody();
+//        HttpHeaders headers = new HttpHeaders();
+//
+//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>()
+//
+//        Map<String, Integer> params = new HashMap<String, Integer>();
+//        params.put("articleNo", articleNo);
+//
+//        ResponseEntity<List<Music>> response = restTemplate.exchange(
+//                "http://localhost:20000/api/musics/findMusics/{articleNo}",
+//                HttpMethod.GET, Integer.class, new ParameterizedTypeReference<List<Music>>() {});
+//        List<Music> musicList = response.getBody();
+
+
+        log.info("retrieveMusics : " + musicList.toString());
+
         return musicList;
     }
 
     // 플레이리스트 추가
-    public Playlist createPlaylist(Playlist playlist) {
-        ResponseEntity<Playlist> response = restTemplate.postForEntity(URI_PLAYLIST_CREATE, playlist, Playlist.class);
+    public Playlist createPlaylist(Playlist playlist, MultipartFile file) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+
+        ByteArrayResource byteArray = null;
+        try {
+            byteArray = new ByteArrayResource(file.getBytes()) {
+                @Override
+                public String getFilename() throws IllegalStateException {
+                    return URLEncoder.encode(file.getName(), StandardCharsets.UTF_8);
+                }
+            };
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        body.add("image", byteArray);
+        body.add("playlist", playlist);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        ResponseEntity<Playlist> response = restTemplate.postForEntity(URI_PLAYLIST_CREATE, requestEntity, Playlist.class);
         log.info("body : " + response.getBody());
         return response.getBody();
     }

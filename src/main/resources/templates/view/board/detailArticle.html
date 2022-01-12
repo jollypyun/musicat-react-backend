@@ -6,7 +6,7 @@
 <link rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
       crossorigin="anonymous">
-
+<link th:href="@{/css/detailAudioArticle.css}" rel="stylesheet" />
 <link th:href="@{../css/detailArticleStyle.css}" rel="stylesheet" />
 
 
@@ -64,22 +64,20 @@
                                     <th>내용</th>
                                     <td th:text="${article.content}" th:field="*{content}"></td>
                                     <th>음악</th>
-                                    <td th:each="music :${musicList}">
+                                    <td th:each="music : ${musicList}">
                                         <div class="detail-audio-part-style">
-                                            <img id="detailAudioImg" src="http://localhost:20000/api/musics/" alt="" srcset="">
-
+                                            <img id="detailAudioImg" th:src="${music.links[1].href}" alt="" srcset="">
                                             <div id="audioDiv" class="detail-audioDiv-style">
                                                 <div id="audioInfoDiv" class="detail-audioInfo-style">
                                                     <button id="audioPlayBtn" class="audioPlayBtn" onclick="detailPlayAudio()" style="visibility: hidden">
                                                         <span id="audioPlayIcon" class="material-icons">play_circle</span>
                                                     </button>
-
-                                                    <span id="audioTitle" class="audioTitle">1</span>
+                                                    <span id="audioTitle" class="audioTitle" th:text="${music.title}"></span>
                                                 </div>
                                                 <div class="detail-audioControls-style">
                                                     <!--            <div id="waveform"></div>-->
                                                     <!--            <p id="audioResource" style="display: none"></p>-->
-                                                    <audio src="http://localhost:20000/api/musics/dfebb215-4843-402d-bf31-cae77aafb062.audio" id="detail-audio" controls=""></audio>
+                                                    <audio th:src="${music.links[0].href}" id="detail-audio" controls=""></audio>
                                                     <!--              style="display: none"-->
                                                 </div>
                                             </div>

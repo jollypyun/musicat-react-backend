@@ -26,7 +26,6 @@ import java.util.Map;
 
 @Validated
 @RestController
-@Slf4j
 public class MusicController {
 
     private final MusicApiService musicApiService;
@@ -78,13 +77,13 @@ public class MusicController {
 
     // 플레이리스트 추가
     @PostMapping("/addplaylist")
-    public ModelAndView addPlaylist(HttpServletRequest req, @RequestParam(name = "title") String title, @RequestParam(name = "id") int memberNo) {
+    public ModelAndView addPlaylist(@RequestParam(name = "title") String title, @RequestParam(name = "id") int memberNo, @RequestParam("image") MultipartFile file) {
         ModelAndView mv =  new ModelAndView();
         log.info("title : " + title);
         Playlist playlist = new Playlist();
         playlist.setMemberNo(memberNo); playlist.setPlaylistName(title);
         log.info("playlist : " + playlist.getPlaylistName());
-        musicApiService.createPlaylist(playlist);
+        musicApiService.createPlaylist(playlist, file);
         mv.setView(new RedirectView("/myPage/Playlist/" + memberNo));
         return mv;
     }
@@ -143,13 +142,13 @@ public class MusicController {
         List<Playlist> list = musicApiService.showPlaylist(memberNo);
         return list;
     }
-//
-//    // 플레이리스트 상세 불러오기
-//    @GetMapping("getDetailPlaylist/{playlistNo}")
-//    public void getDetailPlaylist(@PathVariable int playlistNo) {
-//        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
-//        String str = musicApiService.showDetailPlaylist(playlistNo);
-//    }
+
+    // 플레이리스트 상세 불러오기
+    @GetMapping("getDetailPlaylist/{playlistNo}")
+    public void getDetailPlaylist(@PathVariable int playlistNo) {
+        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
+        //String str = musicApiService.showDetailPlaylist(playlistNo);
+    }
 
     // 플레이리스트 썸네일 미리보기 이미지 가져오기
     @GetMapping("/playlistTempImage/")
