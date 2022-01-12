@@ -45,8 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private NotifyManager notifyManager;
 
     //비밀번호 암호화
     @Bean
@@ -116,9 +114,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         log.info("principal : " + member.toString());
 
 
-                        // 예나 - notify 임시 id set
-                        member.setNotifyId(member.getNo() + member.getEmail());
-                        notifyManager.addToNotifyList(member.getNo(), member.getNotifyId());
+
+
 //                        HttpSession session = request.getSession();
 //                        session.setAttribute("loginUser", member);
 //                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
