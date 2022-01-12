@@ -218,7 +218,7 @@ public class HomeController {
     }
 
     @GetMapping("/myPage/Playlist/{userNo}/{playlistNo}")
-    public String myPagePlaylistDetail(Model model, @PathVariable(name = "playlistNo") int playlistNo, @PathVariable(name = "userNo") int userNo) {
+    public String myPagePlaylistDetail(Model model, @PathVariable(name = "playlistNo") String playlistNo, @PathVariable(name = "userNo") int userNo) {
         MemberVO member = new MemberVO();
         List<Music> musics = new ArrayList<>();
         try {
