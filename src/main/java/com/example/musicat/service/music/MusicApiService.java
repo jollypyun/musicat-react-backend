@@ -190,11 +190,12 @@ public class MusicApiService {
     }
 
     // 특정 플레이리스트 안에 곡 넣기
-    public String pushMusic(List<Integer> musicNos, int playlistNo) {
+    public List<Music> pushMusic(List<Integer> musicNos, String playlistNo) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
         map.put("playlistNo", playlistNo);
-        ResponseEntity<String> response = restTemplate.postForEntity(URI_PLAYLIST_PUSH, map, String.class);
+        ResponseEntity<List> response = restTemplate.postForEntity(URI_PLAYLIST_PUSH, map, List.class);
+        log.info("res : " + response.getBody());
         return response.getBody();
     }
 
@@ -252,7 +253,7 @@ public class MusicApiService {
     }
 
     // 플레이리스트 상세 불러오기
-    public List<Music> showDetailPlaylist(int playlistNo) {
+    public List<Music> showDetailPlaylist(String playlistNo) {
         ResponseEntity<List> response = restTemplate.getForEntity(URI_PLAYLIST_DETAIL, List.class, playlistNo);
         List<Music> musics = response.getBody();
         log.info("playlist : " + musics);

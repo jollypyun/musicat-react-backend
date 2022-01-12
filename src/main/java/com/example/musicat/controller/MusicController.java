@@ -20,6 +20,7 @@ import javax.validation.constraints.Min;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,12 +103,16 @@ public class MusicController {
 
     // 특정 플레이리스트 안에 곡 넣기
     @PostMapping("/pushmusic/{playlistNo}")
-    public void insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name = "musicNos") List<Integer> musicNos, @PathVariable int playlistNo) {
-        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
-        int memberNo = 6; // 임시방편
-        log.info("musicNo : " + musicNos);
+    public List<Music> insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name="musicNos") int musicNos/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistNo) {
+        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); //이게 제대로 된 방법
+        //int memberNo = 6; // 임시방편
         log.info("playlistNo : " + playlistNo);
-        musicApiService.pushMusic(musicNos, playlistNo);
+        log.info("musicNo : " + musicNos);
+        List<Integer> m = new ArrayList<Integer>();
+        m.add(musicNos);
+        List<Music> musics = musicApiService.pushMusic(m, playlistNo);
+        //log.info("1 : " + musics.get(1).getLinks().get(1));
+        return musics;
     }
 
     // 특정 플레이리스트 안의 곡 빼기

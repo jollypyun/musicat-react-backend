@@ -69,15 +69,16 @@
                                     <button id="playlist-close"><span class="material-icons">close</span></button>
                                 </div>
                             </div>
-                            <ul>
+                            <ul id = "currentPlayList_ul">
+<!--                                <button type="button" onclick="testinggg()">테스트트</button>-->
                                 <li>
                                     <div class="playlist-dropUp-content-inner">
                                         <div class="dropUp-inner-info">
-                                            <img src="upload/main-4.jpg"/>
+                                            <img src="#"/>
                                             <button><span class="material-icons">play_circle</span></button>
                                             <div class="dropUp-inner-info-text">
-                                                <span>90sFlaasadadadadadsdadasdaday</span>
-                                                <span>Callassdasdasdasdadsaadsdassdame</span>
+                                                <span></span>
+                                                <span></span>
                                             </div>
                                         </div>
                                         <div class="dropUp-inner-time">
@@ -96,12 +97,15 @@
                 </div>
 
 
-                <audio style="display: none" id="audio" controls>
-                    <source src="https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" type="audio/mp3">
+                <audio style="display: none" id="audio" controls src="https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" >
+<!--                    <source type="audio/mp3">-->
                 </audio>
             </div>
         </div>
     </div>
+    <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+    <span id = "userNoForPlaylist" th:text = "${#authentication.principal.getNo()}" style="display: none"></span>
+    </th:block>
 </footer>
 
 </html>
