@@ -2,11 +2,12 @@ package com.example.musicat.domain.board;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
 @Getter
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter
+@ToString
 @Alias("replyVo")
 public class ReplyVO {
 
@@ -53,18 +54,6 @@ public class ReplyVO {
     }
 
 
-
-    @Override
-    public String toString() {
-        return "Reply{" +
-                "no=" + no +
-                ", articleNo=" + articleNo +
-                ", memberNo=" + memberNo +
-                ", nickname='" + nickname + '\'' +
-                ", writeDate='" + writeDate + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
 
     public ReplyVO() {
     }

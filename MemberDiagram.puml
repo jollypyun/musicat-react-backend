@@ -1,0 +1,185 @@
+@startuml
+
+' --- member ---
+class FollowVO{
+- int no
+- int following
+- int followed
+
++ FollowVO()
++ FollowVO(int no, int following, int followed)
++ getNo(): int
++ getFollowing(): int
++ getFollowed(): int
++ setNo(int no): void
++ setFollowing(int following): void
++ setFollowed(int followed): void
+}
+class GradeVO{
+- int gradeNo
+- String name
+- String grade
+- int docs
+- int comms
+- int person
+
++ GradeVO()
++ GradeVO(int gradeNo, String name, int docs, int comms)
++ GradeVO(int gradeNo, String name, String grade, int docs, int comms, int person)
++ toString()
++ getGradeNo(): int
++ getName(): String
++ getGrade(): String
++ getDocs(): int
++ getComms(): int
++ getPerson(): int
++ setGradeNo(int gradeNo): void
++ setName(String name): void
++ setGrade(String grade): void
++ setDocs(int docs): void
++ setComms(int comms): void
++ setPerson(int person): void
+}
+
+class MemberVO{
+- int no
+- String email
+- String password
+- String nickname
+- String regDate
+- String lastDate
+- String grade
+- int gradeNo
+- int docs
+- int comms
+- int visits
+- String ban
+- int isMember
+
++ MemberVO()
++ MemberVO(int no, String email, String nickname)
++ MemberVO(String email, String password)
++ MemberVO(int no, String email, String grade, String nickname, String regDate, String lastDate, int docs, int comms, int visits, String ban, int isMember)
++ MemberVO(String email, String password,String nickname)
++ MemberVO(int no, String nickname)
++ MemberVO(@NonNull int no, @NonNull String email, String password, @NonNull String nickname, String regDate, String lastDate, String grade, int gradeNo, int docs, int comms, int visits, String ban, int isMember)
++ toString()
++ getNo(): int
++ setNo(int no): void
++ getEmail(): String
++ setEmail(String email): void
++ getPassword(): String
++ setPassword(String password): void
++ getNickname(): String
++ setNickname(String nickname): void
++ getRegDate(): String
++ setRegDate(String regDate): void
++ getLastDate(): String
++ setLastDate(String lastDate): void
++ getGrade(): String
++ setGrade(String grade): void
++ getGradeNo(): int
++ setGradeNo(int gradeNo): void
++ getDocs(): int
++ setDocs(int docs): void
++ getComms(): int
++ setComms(int comms): void
++ getVisits(): int
++ setVisits(int visits): void
++ getBan(): String
++ setBan(String ban): void
++ getIsMember(): int
++ setIsMember(int isMember): void
+}
+
+class ProfileVO{
+- int no
+- String originalFileName
+- String systemFileName
+- long fileSize
+- String bio
+
++ ProfileVO()
++ ProfileVO(String originalFileName, String systemFileName, long fileSize)
++ ProfileVO(int no, String originalFileName, String systemFileName, long fileSize)
++ ProfileVO(int no, String originalFileName, String systemFileName, long fileSize, String bio)
++ getNo(): int
++ setNo(int no): void
++ getOriginalFileName(): String
++ setOriginalFileName(String originalFileName): void
++ getSystemFileName(): String
++ setSystemFileName(String systemFileName): void
++ getFileSize(): long
++ setFileSize(long fileSize): void
++ getBio(): String
++ setBio(String bio): void
+}
+
+' --- paging ---
+class Criteria{
+- int currentPageNo
+- int dataPerPage
+
++ Criteria()
++ Criteria(int currentPageNo, int dataPerPage)
++ toString()
++ getCurrentPageNo(): int
++ getDataPerPage(): int
++ setCurrentPageNo(int page): void
++ setDataPerPage(int num): void
+}
+
+class Paging{
+- int total
+- int showPage = 3
+- int startPage
+- int endPage
+- int endNumber
+- boolean prev
+- boolean next
+- Criteria crt
+
++ pagingData(): void
++ Paging()
++ toString()
++ getTotal(): int
++ setTotal(int tot): void
++ getShowPage(): int
++ setShowPage(int no): void
++ getStartPage(): int
++ setStartPage(int startPage): void
++ getEndPage(): int
++ setEndPage(int endPage): void
++ getEndNumber(): int
++ setEndNumber(int endNumber): void
++ getPrev(): boolean
++ setPrev(boolean prev): void
++ getNext(): boolean
++ setNext(boolean next): void
++ getCrt(): Criteria
++ setCrt(Criteria crt): void
+}
+
+
+interface MemberDao{
+- MemberMapper mapper
+
++ selectMemberByEmail(String email): MemberVO
++ test(): void
++ selectMember(int no): MemberVO
++ selectMember(String email, String password) throws Exception: MemberVO
++ updateLastDdate(int no) throws Exception: void
++ insertMember(MemberVO mVo): void
++ selectEmail(String email): String
++ updateMember(int memberNo, String password): void
++ updatePassword(int memNo, String newPassword): void
++ selectMember(String email): MemberVO
++ selectMemberProfile(int member_no): MemberVO
++ selectNickname(String nickname): boolean
++ updatePassword(MemberVO memberVo): void
++ <MemberVO> selectSearchMember(int startRow, int memberPerPage, String keyfield, String keyword): ArrayLis
++ updateTempPassword(MemberVO mVo) throws Exception: int
+}
+
+class MemberDaoImpl
+@enduml

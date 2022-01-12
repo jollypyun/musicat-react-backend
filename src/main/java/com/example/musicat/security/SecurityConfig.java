@@ -1,6 +1,8 @@
 package com.example.musicat.security;
 
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.websocket.manager.NotifyManager;
+import com.example.musicat.websocket.manager.StompHandler;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -42,6 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private NotifyManager notifyManager;
 
     //비밀번호 암호화
     @Bean
@@ -110,6 +115,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         MemberVO member = ((MemberAccount) authentication.getPrincipal()).getMemberVo();
                         log.info("principal : " + member.toString());
 
+
+                        // 예나 - notify 임시 id set
+                        member.setNotifyId(member.getNo() + member.getEmail());
+                        notifyManager.addToNotifyList(member.getNo(), member.getNotifyId());
+//                        HttpSession session = request.getSession();
+//                        session.setAttribute("loginUser", member);
+//                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
+
+
                         //사용자 요청페이지 저장
                         RequestCache requestCache = new HttpSessionRequestCache();
                         SavedRequest savedRequest = requestCache.getRequest(request, response);
@@ -167,20 +181,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .expiredUrl("/expiredUrl") //session 만료 시 이동 페이지
                 .maxSessionsPreventsLogin(true); //false : 이전에 로그인한 세션 만료, true : 나중에 로그인 시도하는 세션 생성 불가(로그인 불가)
 
-        //이거 에러 메세지 처리 필요
-                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS) //스프링 시큐리티가 session을 생성하지도 않고, 존재해도 사용하지 않음 (JWT와 같이 session을 사용하지 않을 경우에 적용)
-
-
         //RememberMeAuthenticationFilter가 작동하는 조건
         //1. authentication(인증이 성공한 사용자의 정보를 담은 인증객체)이 null인 경우(security context안에 authentication이 존재하지 않는 경우(즉, session이 끊겼거나 만료된 경우)),
         //2. form 인증 당시 remember Me 기능을 활성화하여 rememberMe 쿠키를 받은 경우에 작동
         //쿠키에 JSESSIONID와 remember-me 토큰이 저장됨. remember-me 체크하지 않을 경우 JSESSIONID삭제하면 다시 로그인해아하나, remember-me 쿠키를 사용할 경우 JSESSIONID 삭제해도 재인증 필요x
         http
                 .rememberMe()
-                .rememberMeParameter("remember-me") //form에서 rememberMe 기능 사용 여부를 체크할 때 받을 파라미터명과 동일해야 함. 기본 파라미터명은 remember-me
-                //.key("uniqeAndSecretRememberMe")
-                .tokenValiditySeconds(3600) //rememberMe 토큰 만료 기간. default 14일
-                .alwaysRemember(false) //remember Me 기능이 활성화되지 않아도 항상 실행 (false로 하는 것이 좋음 근데 예시는 왜 true)
+                .rememberMeParameter("remember-me") //form에서 rememberMe 기능 사용 여부를 체크할 때 받을 파라미터명과 동일해야 함
+                .tokenValiditySeconds(3600) //rememberMe 토큰 만료 기간
+                .alwaysRemember(false) //remember Me 기능이 활성화되지 않아도 항상 실행
                 .userDetailsService(userDetailsService); //rememberMe 인증 시 인증 계정 조회를 위해 필요
 
 

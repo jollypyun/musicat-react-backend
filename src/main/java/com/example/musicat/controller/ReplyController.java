@@ -5,6 +5,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.example.musicat.domain.board.ArticleVO;
+import com.example.musicat.domain.etc.NotifyVO;
+import com.example.musicat.service.board.ArticleService;
+import com.example.musicat.websocket.manager.NotifyManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +29,12 @@ public class ReplyController {
 	@Autowired
 	private ReplyService replyService;
 
-	
+	@Autowired
+	private NotifyManager notifyManager;
+
+	@Autowired
+	private ArticleService articleService;
+
 	@ResponseBody
 	@PostMapping("/insertReply")
 	public List<ReplyVO> insertReply(@RequestParam("no") int grpNo
@@ -34,8 +43,9 @@ public class ReplyController {
 			,@RequestParam("depth") int depth
 			,HttpServletRequest req) {
 		// create
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int memberNo = member.getNo();
 		String nickname = member.getNickname();
 		if(depth == 0){ //원본글
@@ -43,12 +53,16 @@ public class ReplyController {
 			this.replyService.registerReply(reply); // DB insert
 		}else{ //답글
 			ReplyVO reply = ReplyVO.createDepthReply(articleNo, memberNo, nickname, content, depth, grpNo);
+			log.info("------------------" + reply.toString());
 			this.replyService.registerReply(reply); // DB insert
 		}
 
 		// bind
 		List<ReplyVO> replyList = this.replyService.retrieveAllReply(articleNo); // select Replys
 
+		// 예나 - 실시간 알림 테스트
+		ArticleVO articleVo = articleService.retrieveArticle(articleNo);
+		notifyManager.addNotify(new NotifyVO(articleVo.getMemberNo(), "게시글 [" + articleVo.getSubject() + "]에 새로운 댓글이 달렸습니다. (" + replyList.size() + ")", "articles/"+articleVo.getNo()));
 		return replyList;
 	}
 	
@@ -70,8 +84,9 @@ public class ReplyController {
 	public List<ReplyVO> deleteReply(@RequestParam("no") int replyNo
 			,@RequestParam("articleNo") int articleNo
 			,HttpServletRequest req){
-		HttpSession session = req.getSession();
-		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+//		HttpSession session = req.getSession();
+//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		MemberVO member = HomeController.checkMemberNo();
 		int memberNo = member.getNo();
 		this.replyService.removeReply(replyNo, memberNo); // 댓글 삭제
 		List<ReplyVO> replyList = this.replyService.retrieveAllReply(articleNo); // 목록 출력

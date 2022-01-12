@@ -1,0 +1,420 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+package "Mapper"{
+   interface ArticleMapepr
+   interface FileMapper
+   interface MemberMapper
+}
+
+package "Domain"{
+    class ArticleVO
+    class FileVO
+    class TagVO
+    class LikeVO
+}
+
+package "Dao"{
+    interface ArticleDao
+    class ArticleDaoImpl
+    interface FileDao
+    class FileDaoImpl
+}
+
+package "Service"{
+    interface ArticleService
+    class ArticleServiceImpl
+    interface FileService
+    class FileServiceImpl
+    interface BoardService
+    interface ReplyService
+    interface CategoryService
+}
+
+package "Controller"{
+    class ArticleController
+    class FileController
+    class ArticleForm
+    class FileForm
+}
+
+package "Util"{
+    class FileManager
+    class BestArticle
+}
+
+ArticleDao <|.. ArticleDaoImpl
+FileDao <|.. FileDaoImpl
+
+ArticleService <|.. ArticleServiceImpl
+FileService <|.. FileServiceImpl
+
+ArticleMapepr <.. ArticleDao
+ArticleMapepr <.. ArticleService
+MemberMapper <.. ArticleService
+FileMapper <.. FileDao
+
+ArticleDao <.. ArticleService
+FileService <.. ArticleService
+BestArticle <.. ArticleService
+
+FileDao <.. FileService
+FileManager <.. FileService
+
+ArticleService <.. ArticleController
+FileManager <.. ArticleController
+FileService <.. ArticleController
+ReplyService <.. ArticleController
+BoardService <.. ArticleController
+CategoryService <.. ArticleController
+ArticleDao <.. ArticleController
+
+FileManager <.. FileController
+FileDao <.. FileController
+FileService <.. FileController
+
+interface MemberMapper{}
+
+interface ArticleMapepr{
++ selectArticle(int articleNo): List<SelectArticleVO>
++ selectBoard(int boardNo): List<ArticleVO>
++ insertArticle(ArticleVO article): void
++ updateArticle(ArticleVO article): void
++ deleteArticle(int articleNo): void
++ upViewcount(int aritlceNo): void
++ selectAllArticle(): List<ArticleVO>
++ likeCheck(ArticleVO articleVO): int
++ insertLike(ArticleVO articleVO): void
++ deleteLike(ArticleVO articleVO): void
++ totalLikeCount(int articleNo): int
++ upLikecount(int articleNo): void
++ downLikecount(int articleNo): void
++ insertTag(TagVO tagVO): void
++ selectArticleTags(int articleNo): List<TagVO>
++ deleteTag(int tagNo): void
++ search(Map<String, Object> map): List<ArticleVO>
++ selectBestArticle(): List<ArticleVO>
++ deleteAllBestArticle(): void
++ insertBestArticle(Map<String, Object> map): void
++ selectNowDate(): int
++ selectAllBestArticle(): List<BestArticleVO>
++ selectUpdateBestArticle(int now): List<ArticleVO>
++ checkBestArticle(int articleNo): boolean
+}
+
+interface FileMapper{
++ selectFile(int fileNo): FileVO
++ insertFile(FileVO fileVO): void
++ selectThumbFile(FileVO fileVo): List<FileVO>
++ deleteFile(int FileNo): void
++ selectArticleFiles(int articleNo): List<FileVO>
+}
+
+
+class ArticleVO{
+- int no
+- int memberNo
+- int boardNo
+- String nickname
+- String subject
+- String content
+- String writeDate
+- int viewcount
+- int likecount
+- int displayNotice
+- List<FileVO> fileList = new ArrayList<>
+- List<ReplyVO> replyList = new ArrayList<>
+- FileVO attacheFile
+- FileVO thumbnail
+- String[] tagList
+- List<TagVO> selectTags = new ArrayList<>
+- int likeCheck
+
++ createArticle(int memberNo, String nickname, ArticleForm form, FileVO attacheFile, List<FileVO> imageFiles): ArticleVO
++ updateArticle(ArticleVO article,int articleNo, ArticleForm form, FileVO attacheFile, List<FileVO> imageFiles): void
++ addReplyAndLike(ArticleVO article, int likeCheck, List<ReplyVO> replys, int totalCount): ArticleVO
++ ArticleVO()
++ toString()
++ getNo(): int
++ setNo(int no): void
++ getMemberNo(): int
++ setMemberNo(int memberNo): void
++ getBoardNo(): int
++ setBoardNo(int boardNo): void
++ getNickname(): String
++ setNickname(String nickname): void
++ getSubject(): String
++ setSubject(String subject): void
++ getContent(): String
++ setContent(String content): void
++ getWriteDate(): String
++ setWriteDate(String writeDate): void
++ getViewcount(): int
++ setViewcount(int viewcount): void
++ getLikecount(): int
++ setLikecount(int likecount): void
++ getDisplayNotice(): int
++ setDisplayNotice(int displayNotice): void
++ getFileList() = new ArrayList<FileVO>
++ setFileList(List<FileVO> fileList = new ArrayList<>): void
++ getReplyList() = new ArrayList<ReplyVO>
++ setReplyList(List<ReplyVO> replyList = new ArrayList<>): void
++ getAttacheFile(): FileVO
++ setAttacheFile(FileVO attacheFile): void
++ getThumbnail(): FileVO
++ setThumbnail(FileVO thumbnail): void
++ getTagList(): String[]
++ setTagList(String[] tagList): void
++ getSelectTags(): new ArrayList<TagVO>
++ setSelectTags(List<TagVO> selectTags = new ArrayList<>): void
++ getLikeCheck() int
++ setLikeCheck(int likeCheck): void
+}
+
+class FileVO{
+- int no
+- int articleNo
+- String originalFileName
+- String systemFileName
+- Long fileSize
+- int fileType
+
++ {static} createFile(int articleNo, String originalFileName, String systemFileName, Long fileSize, int fileType): FileVO
++ FileVO()
++ FileVO(String originalFileName, String systemFileName, Long fileSize)
++ toString()
++ getNo(): int
++ setNo(int no): void
++ getArticleNo(): int
++ setArticleNo(int articleNo): void
++ getOriginalFileName(): String
++ setOriginalFileName(String originalFileName): void
++ getSystemFileName(): String
++ setSystemFileName(String systemFileName): void
++ getFileSize(): Long
++ setFileSize(Long fileSize): void
++ getFileType(): int
++ setFileType(int fileType): void
+}
+
+class LikeVO{
+- int no
+- int memberNo
+- int articleNo
+
++ LikeVO()
++ toString()
++ getNo(): int
++ setNo(int no): void
++ getMemberNo(): int
++ setMemberNo(int memberNo): void
++ getArticleNo(): int
++ setArticleNo(int articleNo): void
+}
+
+class TagVO{
+- int tagNo
+- int articleNo
+- String name
+
++ TagVO(int articleNo, String name)
++ toString()
++ getTagNo(): int
++ setTagNo(int tagNo): void
++ getArticleNo(): int
++ setArticleNo(int articleNo): void
++ getName(): String
++ setName(String name): void
+}
+
+interface ArticleDao{
+- ArticleMapper articleMapper
+
++ selectArticle(int articleNo): List<SelectArticleVO>
++ selectBoard(int boardNo): List<ArticleVO>
++ insertArticle(ArticleVO article): void
++ updateArticle(ArticleVO article): void
++ deleteArticle(int articleNo): void
++ upViewcount(int articleNo): void
++ selectAllArticle(): List<ArticleVO>
++ likeCheck(ArticleVO articleVO): int
++ insertLike(ArticleVO articleVO): void
++ deleteLike(ArticleVO articleVO): void
++ totalRecCount(int totalRecCount): int
++ upLikecount(int articleNo): void
++ downLikecount(int articleNo): void
++ insertTags(int articleNo, String[] tagList): void
++ selectArticleTags(int articleNo): List<TagVO>
++ deleteTag(int tagNo) void
++ search(Map<String, Object> map): List<ArticleVO>
++ selectBestArticle(): List<ArticleVO>
++ deleteAllBestArticle(): void
++ insertBestArticle(Map<String, Object> map): void
++ selectNowDate(): int
++ selectUpdateBestArticle(int now): List<ArticleVO>
++ checkBestArticle(int articleNo): boolean
++ selectAllBestArticle(): List<BestArticleVO>
+}
+
+
+
+interface FileDao{
+- FileMapper fileMapper
+
++ selectFile(int fileNo): FileVO
++ selectFileList(int articleNo): List<FileVO>
++ selectThumbFile(FileVO file): List<FileVO>
++ insertFile(FileVO fileVO): void
++ deleteFile(int FileNo): void
++ selectArticleFiles(int articleNo): List<FileVO>
+}
+
+class ArticleDaoImpl
+class FileDaoImpl
+
+interface ArticleService{
+- ArticleMapper articleMapper;
+- ArticleDao articleDao;
+- FileService fileService;
+- MemberMapper memberMapper;
+- BestArticle bestArticleUtil;
+
++ retrieveArticle(int articleNo): ArticleVO
++ retrieveBoard(int boardNo): List<ArticleVO>
++ registerArticle(ArticleVO article): void
++ modifyArticle(ArticleVO article): void
++ removeArticle(int articleNo,int memberNo): int
++ retrieveAllArticle(): List<ArticleVO>
++ upViewcount(int articleNo): void
++ recUpdate(int articleNo, int memberNo): void
++ totalRecCount(int articleNo): int
++ recDelete(ArticleVO aritcleVO): void
++ likeCheck(int memberNo, int ArticleNo): int
++ deleteTag(int tagNo): void
++ search(Map<String, Object> map): List<ArticleVO>
++ selectAllBestArticle(): List<BestArticleVO>
+}
+
+interface FileService{
+- String dirPath
+- FileManager fileManager
+- FileDao fileDao
+
++ selectOneFile(int fileNo): FileVO
++ uploadFile(ArticleVO article): void
++ fileList(ArticleVO article, List<FileVO> files): ArticleVO
++ createThumbnail(FileVO thumbnail) throws IOException: void
++ retrieveThumbFile(FileVO file): FileVO
++ removeFile(int fileNo): void
++ selectArticleFiles(int articleNo): List<FileVO>
+}
+
+class ArticleServiceImpl
+class FileServiceImpl
+
+class ArticleController{
+- ArticleService articleService
+- FileManager fileManager
+- FileService fileService
+- ReplyService replyService
+- BoardService boardService
+- CategoryService categoryService
+- ArticleDao articleDao
+
++ detailArticle(@PathVariable("articleNo") int articleNo,HttpServletRequest req,Model model): String
++ writeForm(HttpServletRequest req, Model model): String
++ insertArticle(@Validated(ValidationSequence.class) @ModelAttribute("form") ArticleForm articleForm, BindingResult result,
+ @ModelAttribute FileFormVO form, @RequestParam("tags") String tags, HttpServletRequest req) throws IOException: ModelAndView
++ updateForm(@PathVariable int articleNo ,HttpServletRequest req,Model model): String
++ updatetArticle(@ModelAttribute("article") ArticleVO article, @Validated @ModelAttribute("form") ArticleForm articleForm,
+ BindingResult result, @ModelAttribute FileFormVO form, @RequestParam("tags") String tags, @PathVariable("articleNo") int articleNo) throws IOException: ModelAndView
++ removeArticle(@PathVariable("articleNo") int articleNo, HttpServletRequest req): RedirectView
++ recUpdate(@RequestBody HashMap<String, Object> map, HttpServletRequest req): Map<String, Object>
++ recDelete(@RequestBody HashMap<String, Object> map, HttpServletRequest req): Map<String, Object>
++ removeTag(@RequestParam("tagNo") int tagNo, @RequestParam("articleNo") int articleNo): List<TagVO>
++ searchByBoard(@RequestParam("keyword") String keyword, @RequestParam("content") String content, Model model): String
++ musicRegister(): String
+}
+
+class FileController{
+- FileManager fileManager
+- FileDao fileDao
+- FileService fileService
+
++ downLoadImage(@PathVariable String filename) throws MalformedURLException: Resource
++ downLoadThumbnailImage(@PathVariable String filename) throws MalformedURLException: Resource
++ downloadAttach(@PathVariable int fileNo) throws MalformedURLException: ResponseEntity<Resource>
++ fileDelete(@RequestParam("fileNo") int fileNo, @RequestParam("articleNo") articleNo): List<FileVO>
+}
+
+class ArticleForm{
+- @Min int boardNo
+- @NotBlank @Size String subject
+- @NotBlank @Size String content
+- ArrayList<BoardVO> boardList
+- int displayNotice
+- Long fileNo
+- MultipartFile importAttacheFile
+- List<MultipartFile> imageFiles
+- FileVO attacheFile
+- ArrayList<FileVO> fileList
+
++ {static} updateArticle(ArticleVO article): ArticleForm
++ ArticleForm()
++getBoardNo(): int
++getSubject(): String
++getContent(): String
++getBoardList(): ArrayList<BoardVO>
++getDisplayNotice(): int
++getFileNo(): Long
++getImportAttacheFile(): MultipartFile
++getImageFiles(): List<MultipartFile>
++getAttacheFile(): FileVO
++getFileList(): ArrayList<FileVO>
++setBoardNo()
++setSubject()
++setContent()
++setBoardList()
++setDisplayNotice()
++setFileNo()
++setImportAttacheFile()
++setImageFiles()
++setAttacheFile()
++setFileList()
+}
+
+class FileForm{
+- fileNo
+- importAttacheFile
+- imageFiles
+
++ FileForm()
++ FileForm(fileNo, importAttacheFile, imageFiles)
++ toString()
++ getFileNo(): Long
++ getImportAttacheFile(): MultipartFile
++ getImageFiles(): List<MultipartFile>
++ setFileNo()
++ setImportAttacheFile()
++ setImageFiles()
+}
+
+class BestArticle{
+- ArticleDao articleDao
++ insertBestArticle(List<ArticleVO> bestArticles): void
+}
+
+class FileManager{
+- @Value String fileDir
+
++ getFullPath(String fileName): String
++ uploadFiles(List<MultipartFile> multipartFiles) throws IOException: List<FileVO>
++ uploadFile(MultipartFile multipartFile) throws IOException: FileVO
++ createThumbnail(String systemFileName) throws IOException: void
++ deleteUploadFile(FileVO fileVO): void
++ createSystemFileName(String originalFileName): String
++ extract(String originaFileName): String
+
+}
+@enduml

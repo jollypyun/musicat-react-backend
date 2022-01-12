@@ -9,6 +9,7 @@ import com.example.musicat.domain.board.*;
 import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.board.ArticleDao;
+import com.example.musicat.service.music.MusicApiService;
 import com.example.musicat.util.BestArticle;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
 
+	private final MusicApiService musicApiService;
 	private final ArticleMapper articleMapper;
 	private final ArticleDao articleDao;
 	private final FileService fileService;
@@ -54,6 +56,11 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public List<ArticleVO> selectSubArticle(int articleNo) {
+		return this.articleDao.selectSubArticle(articleNo);
+	}
+
+	@Override
 	public List<ArticleVO> retrieveBoard(int boardNo) { // 게시판 목록 조회
 		return this.articleDao.selectBoard(boardNo);
 	}
@@ -61,12 +68,15 @@ public class ArticleServiceImpl implements ArticleService {
 	// 게시글 추가
 	@Override
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public void registerArticle(ArticleVO article) {
+	public void registerArticle(ArticleVO article, Long audioNo) {
 		this.memberMapper.plusMemberDocs(article.getMemberNo());
 		this.articleDao.insertArticle(article); // 게시글 추가
 		this.fileService.uploadFile(article);
 		if (article.getTagList() != null) { // 입력태그가 있을 때만 동작
 			this.articleDao.insertTags(article.getNo(), article.getTagList());	
+		}
+		if (audioNo != null) {
+			musicApiService.connectToArticle(audioNo, article.getNo());
 		}
 	}
 
@@ -134,12 +144,18 @@ public class ArticleServiceImpl implements ArticleService {
 		return this.articleDao.likeCheck(art);
 	}
 
+	/**
+	 * tag
+	 */
 	@Override
 	@Transactional()
 	public void deleteTag(int tagNo) {
 		this.articleDao.deleteTag(tagNo);
 	}
 
+	/**
+	 * 검색 
+	 */
 	@Override
 	public List<ArticleVO> search(Map<String, Object> map) {
 		String keyword = (String) map.get("keyword");
@@ -160,6 +176,9 @@ public class ArticleServiceImpl implements ArticleService {
 		return result;
 	}
 
+	/**
+	 * 베스트글 조회 
+	 */
 	@Override
 	public List<BestArticleVO> selectAllBestArticle() {
 		List<BestArticleVO> bestArticles = this.articleDao.selectAllBestArticle();

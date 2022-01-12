@@ -17,7 +17,6 @@ $(document).ready(function () {
 					content: content,
 					articleNo: $("#article_no").val(),
 					depth: depth
-
 				},
 				success: function (data) {
 					resolve(data);

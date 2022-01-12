@@ -15,4 +15,5 @@ public class DailyStatisticsVO {
 	private String dailyDate;
 	private int dailyVisits;
 	private int dailyArticle;
+
 }

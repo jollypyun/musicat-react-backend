@@ -49,6 +49,7 @@ public class FileController {
 		return new UrlResource("file:" + fileManager.getFullPath(thumPath));
 	}
 
+
 	// 첨부파일 다운로드
 	@GetMapping("/attach/{fileNo}")
 	public ResponseEntity<Resource> downloadAttach(@PathVariable int fileNo) throws MalformedURLException{
