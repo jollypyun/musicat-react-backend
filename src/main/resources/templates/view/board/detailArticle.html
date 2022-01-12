@@ -6,222 +6,244 @@
 <link rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
       crossorigin="anonymous">
-<link th:href="@{/css/detailAudioArticle.css}" rel="stylesheet" />
-<link th:href="@{../css/detailArticleStyle.css}" rel="stylesheet" />
+<!--<link th:href="@{/css/detailAudioArticle.css}" rel="stylesheet"/>-->
+<link th:href="@{/css/detailArticleStyle.css}" rel="stylesheet"/>
 
 
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-4">
 
-            <div class="row mt-3 mb-5">
+            <div class="row mt-3 mb-5 detail-row-style">
                 <div class="detailArticle-content-style">
-                    <h3>게시글 세부 조회</h3>
+                    <h3 th:text="${boardName}"
+                        th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"></h3>
+
+
                     <div class="detailArticle-table-style">
                         <h1>
                             <input type="hidden" id="login_no" th:value="${loginMemberNo}">
-                            <input type="hidden" id="member_no"	th:value="${article.memberNo}">
+                            <input type="hidden" id="member_no" th:value="${article.memberNo}">
                             <input type="hidden" id="article_no" th:value="${article.no}">
                             <input type="hidden" id="board_no" th:value="${article.boardNo}">
                         </h1>
                         <form id="detailContent" class="detail-content-style" th:object="${article}" name="article">
-                            <table width=100% class="list-normal-tables">
-                                <colgroup>
-                                    <col width="15%">
-                                    <col width="35%">
-                                    <col width="15%">
-                                    <col width="*">
-                                </colgroup>
-                                <tbody>
-                                <tr>
-                                    <th>제목</th>
-                                    <td th:text="${article.subject}" th:field="*{subject}"></td>
-                                    <th>조회수</th>
-                                    <td th:text="${article.viewcount}" th:field="*{viewcount}"></td>
-                                </tr>
-                                <tr>
-                                    <th>작성자</th>
+                            <div class="mb-3">
+                                <span th:text="${article.subject}" th:field="*{subject}"
+                                      class="content-title-style"></span>
+                            </div>
 
-                                    <!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
+                            <div class="dropdown-divider"></div>
 
-                                    <td th:field="*{nickname}" class="dropdown">
-                                        <a th:id = "${article.memberNo}" class="dropdown-toggle" data-bs-toggle="dropdown" th:text="${article.nickname}">
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" th:href="|/myPage/Playlist/${article.memberNo}|">MyPage</a></li>
-                                            <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
-                                        </ul>
-                                    </td>
-                                    <!--										<p>쪽지 창</p>-->
-                                    <!--										<a th:href="|/myPage/Playlist/${article.memberNo}|">myPage</a>-->
 
-                                    <!--  ------------dropbox로 표현해야 되는 부분 ----------- -->
+                            <div class="content-info-style">
+                                <span th:field="*{nickname}" class="dropdown me-md-2 info-nickname-style">
+                                    <a th:id="${article.memberNo}" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                       th:text="${article.nickname}">
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item"
+                                               th:href="|/myPage/Playlist/${article.memberNo}|">MyPage</a></li>
+                                        <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                    </ul>
+                                </span>
+                                <span th:text="추천 + '  ' + ${article.likecount}" class="me-md-2"></span>
 
-                                    <th>작성일</th>
-                                    <td th:text="${article.writeDate}"></td>
-                                </tr>
-                                <tr>
-                                    <th>내용</th>
-                                    <td th:text="${article.content}" th:field="*{content}"></td>
-                                    <th>음악</th>
-                                    <td th:each="music : ${musicList}">
+                                <span th:text="조회수 + '  ' + ${article.viewcount}" th:field="*{viewcount}"
+                                      class="me-md-4"></span>
+                                <span th:text="${article.writeDate}" class="me-md-2"></span>
+                            </div>
+
+                            <div class="dropdown-divider"></div>
+
+                            <div class="content-inner-style">
+                                <div class="content-inner-file-style">
+                                    <th:block th:if="${article.attacheFile == null}">
+                                    </th:block>
+                                    <th:block th:unless="${article.attacheFile == null}">
+                                        <a th:href="|/attach/${article.getAttacheFile().getNo()}|"
+                                           th:text="${article.getAttacheFile().getSystemFileName()}"></a>
+                                    </th:block>
+                                </div>
+
+                                <th:block th:if="${article.fileList != null}">
+                                    <div class="content-file-style">
+                                        <div th:each=" imageFile : ${article.fileList}">
+                                            <th:block th:if="${imageFile.fileType == 2}">
+                                                <video width="320" controls>
+                                                    <source th:src="|/images/${imageFile.getSystemFileName()}|"
+                                                            type="video/mp4">
+                                                </video>
+                                            </th:block>
+                                            <th:block th:unless="${imageFile.fileType == 2}">
+                                                <!--이미지 파일들-->
+                                                <img th:src="|/images/${imageFile.getSystemFileName()}|"
+                                                     width="200" height="200"/>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </th:block>
+                                <th:block th:if="${not #strings.isEmpty(musicList)}">
+                                    <div th:each="music : ${musicList}">
                                         <div class="detail-audio-part-style">
                                             <img id="detailAudioImg" th:src="${music.links[1].href}" alt="" srcset="">
                                             <div id="audioDiv" class="detail-audioDiv-style">
                                                 <div id="audioInfoDiv" class="detail-audioInfo-style">
-                                                    <button id="audioPlayBtn" class="audioPlayBtn" onclick="detailPlayAudio()" style="visibility: hidden">
-                                                        <span id="audioPlayIcon" class="material-icons">play_circle</span>
+                                                    <button id="audioPlayBtn" class="audioPlayBtn"
+                                                            onclick="detailPlayAudio()">
+                                                        <span id="audioPlayIcon"
+                                                              class="material-icons">play_circle</span>
                                                     </button>
-                                                    <span id="audioTitle" class="audioTitle" th:text="${music.title}"></span>
+                                                    <span id="audioTitle" class="audioTitle"
+                                                          th:text="${music.title}"></span>
                                                 </div>
                                                 <div class="detail-audioControls-style">
                                                     <!--            <div id="waveform"></div>-->
                                                     <!--            <p id="audioResource" style="display: none"></p>-->
-                                                    <audio th:src="${music.links[0].href}" id="detail-audio" controls=""></audio>
+                                                    <audio th:src="${music.links[0].href}" id="detail-audio"
+                                                           controls=""></audio>
                                                     <!--              style="display: none"-->
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>첨부파일</th>
-                                    <td th:if="${article.attacheFile == null}">첨부된 파일이 없습니다.</td>
-                                    <td th:unless="${article.attacheFile == null}"><a
-                                            th:href="|/attach/${article.getAttacheFile().getNo()}|"
-                                            th:text="${article.getAttacheFile().getSystemFileName()}"></a>
-                                    </td>
-                                    <th></th>
-                                    <td></td>
-                                </tr>
-                                <tr th:if="${article.fileList != null}">
-                                    <div th:each="imageFile : ${article.fileList}" >
-                                        <th:block th:if = "${imageFile.fileType == 2}">
-                                            <td>
-                                                <video width="320" controls>
-                                                    <source th:src="|/images/${imageFile.getSystemFileName()}|" type="video/mp4">
-                                                </video>
-                                            </td>
-                                        </th:block>
-                                        <th:block th:unless="${imageFile.fileType == 2}">
-                                            <td>
-                                            <!--이미지 파일들-->
-                                                <img th:src="|/images/${imageFile.getSystemFileName()}|"
-                                                            width="200" height="200" />
-                                            </td>
-                                        </th:block>
                                     </div>
+                                </th:block>
+                                <p class="content-text-style" th:text="${article.content}" th:field="*{content}"></p>
+                            </div>
 
-                                </tr>
-                                <tr>
+                            <div class="dropdown-divider"></div>
 
-                                    <td colspan="3">
-                                        <div class="detailArticle-btn-style">
-                                            <div class="detailArticle-function-style">
-                                                <button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
-                                                <input type="button"
-                                                       th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"
-                                                       value="목록" />
-                                            </div>
-                                            <div id="like_area" class="detailArticle-like-style">
-                                                <div th:if="${article.likeCheck eq 0}">
-                                                    <button type="button" id="add_like_btn" value="추천" />
-                                                    <i class="far fa-heart"></i>
-                                                    </button>
-                                                </div>
-                                                <div th:unless="${article.likeCheck eq 0}">
-                                                    <button type="button" id="del_like_btn">
-                                                        <i class="fas fa-heart"></i>
-                                                    </button>
-                                                </div>
-
-                                                <div>
-                                                    <strong th:text="${article.likecount}"></strong>
-                                                </div>
-                                            </div>
-
-                                            <!--Tag 출력 부분-->
-                                            <div id="tag_area" class="detailArticle-tag-style">
-                                                <ul id="tag-list" class="tag-ul" >
-                                                    <div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
-                                                        <li class='tag-item'  th:text="${tag.name}"></li>
-                                                    </div>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <!--본인만 가능-->
-                                    <div class="detail-userCheck-style"
-                                         th:if="${loginMemberNo == article.memberNo}"
-                                         style="float: right;">
-                                        <td>
-                                            <div class="detail-userBtn-style">
-                                                <input type="button"
-                                                       th:onclick="|location.href='@{/articles/update/{articleNo}(articleNo=${article.no})}'|"
-                                                       value="수정" />
-                                                <input type="button"
-                                                       th:onclick="|location.href='@{/articles/remove/{articleNo}(articleNo=${article.no})}'|"
-                                                       value="삭제" />
-                                            </div>
-                                        </td>
+                            <div class="detailArticle-btn-style">
+                                <div id="like_area" class="detailArticle-like-style">
+                                    <div th:if="${article.likeCheck eq 0}">
+                                        <button type="button" id="add_like_btn" value="추천"/>
+                                        <i class="far fa-heart fa-lg"></i>
+                                        </button>
                                     </div>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    <div th:unless="${article.likeCheck eq 0}">
+                                        <button type="button" id="del_like_btn">
+                                            <i class="fas fa-heart fa-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="detailArticle-function-style">
+                                    <button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn"
+                                            onclick="writeForm()" type="button">글쓰기
+                                    </button>
+                                </div>
+
+                                <!--본인만 가능-->
+                                <div class="detail-userCheck-style me-3" th:if="${loginMemberNo == article.memberNo}"
+                                     style="float: right;">
+                                    <div class="detail-userBtn-style">
+                                        <input type="button"
+                                               th:onclick="|location.href='@{/articles/update/{articleNo}(articleNo=${article.no})}'|"
+                                               value="수정"/>
+                                        <input type="button"
+                                               th:onclick="|location.href='@{/articles/remove/{articleNo}(articleNo=${article.no})}'|"
+                                               value="삭제"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dropdown-divider"></div>
+
+                            <!--Tag 출력 부분-->
+                            <div id="tag_area" class="detailArticle-tag-style mt-3">
+                                <ul id="tag-list" class="tag-ul">
+                                    <div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
+                                        <li class='tag-item' th:text="${tag.name}"></li>
+                                    </div>
+                                </ul>
+                            </div>
+
                         </form>
                     </div>
 
+                    <div class="dropdown-divider"></div>
+
+
+                    <div id="sub_article_area" class="sub_article_area-style mb-3 mt-3">
+                        <div th:each="subArticle : ${subArticles}" class="mb-3">
+                            <th:block th:if="${subArticleStat.count  } == 1">
+                                <span>이전글</span>
+                            </th:block>
+                            <th:block th:if="${subArticleStat.count  } == 2">
+                                <span>현재글</span>
+                            </th:block>
+                            <th:block th:if="${subArticleStat.count  } == 3">
+                                <span>다음글</span>
+                            </th:block>
+                            <!--                            <span th:text="${subArticle.no}">번호</span>-->
+                            <span class="ms-3"><a th:text="${subArticle.subject}"
+                                                  th:href="|/articles/${subArticle.no}|"/></span>
+                            <div style="float: right">
+                                <span class="me-3 dropdown">
+                                    <a th:id="${subArticle.memberNo}" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                       th:text="${subArticle.nickname}">
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item"
+                                               th:href="|/myPage/Playlist/${subArticle.memberNo}|">MyPage</a></li>
+                                        <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                    </ul>
+                                </span>
+
+                                <span th:text="${subArticle.writeDate}">날짜</span>
+                            </div>
+                            <!--                            <span th:text="${subArticle.viewcount}">조회수</span>-->
+                            <!--                            <span th:text="${subArticle.likecount}">추천</span>-->
+                        </div>
+                    </div>
+
+                    <div class="dropdown-divider"></div>
+
                     <!-- 댓글 -->
                     <div id="writeReplyForm" class="detailArticle-reply-style">
-						<textarea id="write_content" name="write_content" rwos="10"
-                                  cols="75" placeholder="댓글을 입력해주세요."></textarea>
+                        <textarea id="write_content" name="write_content" placeholder="댓글을 입력해주세요."></textarea>
 
                         <button type="button" id="write_reply_btn">등록</button>
                     </div>
 
-                    <div id="replys">
-                        <div class="reply_list"
-                             th:each="reply : ${article.getReplyList()}">
-                            <th:block th:if="${reply.hide == 1}" >
+                    <div id="replys" class="mt-2">
+                        <div class="reply_list" th:each="reply : ${article.getReplyList()}">
+
+                            <th:block th:if="${reply.hide == 1}">
                                 <p>삭제된 댓글 입니다.</p>
                             </th:block>
+
                             <th:block th:if="${reply.hide == 0}">
                                 <p th:if="${reply.depth == 1}">ㄴ</p>
-                                <table th:id="${reply.getNo()}">
-                                    <colgroup>
-                                        <col width="15%">
-                                        <col width="35%">
-                                    </colgroup>
-                                    <tbody>
-                                    <tr>
-                                        <th>내용</th>
-                                        <td class="Content" th:text="${reply.content}"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>닉네임</th>
-                                        <td th:text="${reply.nickname}"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>작성 날짜</th>
-                                        <td th:text="${reply.writeDate}"></td>
-                                    </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div>
-                                                <input type="button" class="depth_reply_btn" value="답글쓰기" />
-                                            </div>
-                                            <div  th:if="${loginMemberNo == reply.memberNo}" >
-                                                <input type="button" class="modify_Reply_Form_Btn" value="수정" />
-                                                <input type="button" class="remove_Reply_Btn" value="삭제" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tfoot>
-                                </table>
+                                <div class="reply-style" th:id="${reply.getNo()}">
+                                    <div class="reply-info-style">
+                                        <div>
+                                            <span class="me-3 dropdown">
+<!--                                                <span class="fw-bold fs-5" th:text="${reply.nickname}"></span>-->
+                                                <a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown"
+                                                   th:text="${reply.nickname}">
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item"
+                                                           th:href="|/myPage/Playlist/${reply.memberNo}|">MyPage</a></li>
+                                                    <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                                </ul>
+                                            </span>
+                                            <span th:text="${reply.writeDate}"></span>
+                                        </div>
+                                        <span class="Content reply-text-style" th:text="${reply.content}"></span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <input type="button" class="depth_reply_btn" value="답글쓰기"/>
+
+                                        <th:block th:if="${loginMemberNo == reply.memberNo}">
+                                            <input type="button" class="modify_Reply_Form_Btn" value="수정"/>
+                                            <input type="button" class="remove_Reply_Btn" value="삭제"/>
+                                        </th:block>
+                                    </div>
+                                </div>
                             </th:block>
+
                         </div>
                     </div>
 
@@ -240,28 +262,14 @@
                     <div id="modify_reply_form" style="display: none;"
                          class="detailArticle-replyModify-style">
                         <div id="updateReplyForm">
-                            <input type="hidden" id="no" />
+                            <input type="hidden" id="no"/>
                             <textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
                             <button class="modify_cancle">취소</button>
                             <button class="modify_reply_btn">수정</button>
                         </div>
                     </div>
 
-                    <div id="sub_article_area">
-                        <table th:each="subArticle : ${subArticles}">
-                            <tr>
-                                <td th:text="${subArticle.no}">번호</td>
-                                <td>
-                                    <a th:text="${subArticle.subject}"
-                                       th:href="|/articles/${subArticle.no}|"></a>
-                                </td>
-                                <td th:text="${subArticle.nickname}">닉네임</td>
-                                <td th:text="${subArticle.writeDate}">날짜</td>
-                                <td th:text="${subArticle.viewcount}">조회수</td>
-                                <td th:text="${subArticle.likecount}">추천</td>
-                            </tr>
-                        </table>
-                    </div>
+
                 </div>
             </div>
         </div>

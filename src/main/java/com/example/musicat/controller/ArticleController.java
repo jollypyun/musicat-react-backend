@@ -84,6 +84,8 @@ public class ArticleController {
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 
+		BoardBoardGradeVO bbg = this.boardService.retrieveOneBoard(boardNo);
+		model.addAttribute("boardName",bbg.getBoardVo().getBoardName());
 		if (grade) {
 			log.info("sidebar");
 			int memberNo = member.getNo();

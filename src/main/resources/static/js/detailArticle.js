@@ -68,26 +68,28 @@ $(document).ready(function () {
 			console.log(htmlStr);
 			for (let i = 0; i < replyList.length; i++) {
 				htmlStr.push('<div class="reply_list">');
-				htmlStr.push('<table id=' + replyList[i].no + '>');
-				htmlStr.push('<tbody>');
-				htmlStr.push('<tr>');
-				htmlStr.push('<td class="Content">' + replyList[i].content + "</td>");
-				htmlStr.push('<tr>');
-				htmlStr.push('<td>' + replyList[i].nickname + "</td>");
-				htmlStr.push('</tr>');
-				htmlStr.push('<tr>');
+				htmlStr.push('<div class="reply-style" id=' + replyList[i].no + '>');
+				htmlStr.push('<div class="reply-info-style">');
+				htmlStr.push('<div>');
+				htmlStr.push('<span class="me-3 dropdown">');
+				htmlStr.push('<a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown" th:text='+replyList[i].nickname + '></a>');
+				htmlStr.push('<ul class="dropdown-menu">');
+				htmlStr.push('<li><a class="dropdown-item"th:href="|/myPage/Playlist/'+replyList[i].memberNo +'|>MyPage</a></li>');
+				htmlStr.push('<li><a class="dropdown-item" href="/notelist">쪽지함</a></li>');
 				htmlStr.push('<td>' + replyList[i].writeDate + "</td>");
-				htmlStr.push('</tr>');
-				htmlStr.push('</tbody>');
-				htmlStr.push('<tfoot>');
+				htmlStr.push('</ul>');
+				htmlStr.push('</span>');
+				htmlStr.push('<span th:text='+replyList[i].writeDate+'></span>');
+				htmlStr.push('</div>');
+				htmlStr.push('<span class="Content reply-text-style" th:text='+replyList[i].content+'></span>');
+				htmlStr.push('</div>');
+				htmlStr.push('<div class="mt-2">');
+				htmlStr.push('<input type="button" class="depth_reply_btn" value="답글쓰기"/>');
 				if (replyList[i].memberNo == $('#login_no').val()) {
-					htmlStr.push("<tr>");
-					htmlStr.push('<td><input type="button" class="modify_Reply_Form_Btn" value="수정" />&nbsp;');
-					htmlStr.push('<input type="button" class="remove_Reply_Btn" value="삭제" /></td>');
-					htmlStr.push('</tr>');
+					htmlStr.push('<input type="button" class="modify_Reply_Form_Btn" value="수정" />');
+					htmlStr.push('<input type="button" class="remove_Reply_Btn" value="삭제" />');
 				}
-				htmlStr.push('</tfoot>');
-				htmlStr.push('</table>');
+				htmlStr.push('</div>');
 				htmlStr.push('</div>');
 			}
 			console.log(htmlStr);
@@ -225,8 +227,8 @@ $(document).ready(function () {
 				//let count = JSON.parse(data).totalCount;
 				// alert(count);
 				let likecount = [];
-				likecount += "<button type='button' id='del_like_btn'><i class='fas fa-heart'></i> </button>";
-				likecount += "<strong>" + count + "</strong>";
+				likecount += "<button type='button' id='del_like_btn'><i class='fas fa-heart fa-lg'></i> </button>";
+				// likecount += "<strong>" + count + "</strong>";
 				$('#like_area').html("");
 				$('#like_area').html(likecount);
 			},
@@ -250,8 +252,8 @@ $(document).ready(function () {
 			success: function (data) {
 				let count = data.totalcount; // 총 추천 수
 				let likecount = [];
-				likecount += "<button type='button' id='add_like_btn'><i class='far fa-heart'></i></button>";
-				likecount += "<strong>" + count + "</strong>";
+				likecount += "<button type='button' id='add_like_btn'><i class='far fa-heart fa-lg'></i></button>";
+				// likecount += "<strong>" + count + "</strong>";
 				$('#like_area').html("");
 				$('#like_area').html(likecount);
 			},
