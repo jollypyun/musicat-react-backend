@@ -2,6 +2,7 @@ package com.example.musicat.mapper.member;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.example.musicat.domain.member.MemberVO;
@@ -26,9 +27,11 @@ public interface MemberMapper {
 	// 회원 가입
 	void insertMember(MemberVO mVo);
 
+	void insertMemberGrade(int memberNo);
 
-	// 회원가입 시 이메일 중복체크
-	String selectEmail(String email);
+	// 회원가입 중복 체크
+	int joinCheck(Map<String, Object> map);
+
 
 	// 회원 자진 탈퇴
 //	void updateMember(int no, String password);
@@ -97,4 +100,9 @@ public interface MemberMapper {
 	
 	void updatePassword(MemberVO memberVo);
 
+	// 멤버의 팔로잉 리스트
+	List<MemberVO> selectFollowingList(int memberNo);
+
+	// 멤버의 파로우 리스트
+	List<MemberVO> selectFollowedList(int memberNo);
 }

@@ -20,8 +20,8 @@ public interface CategoryService {
 	public ArrayList<CategoryVO> retrieveCategoryBoardList();
 	
 	public CategoryVO retrieveOneCategory(int categoryNo);
-//
-//	public int retrieveDuplicateCategory(String categoryName);
+
+	public Integer retrieveDuplicatedCategory(String categoryName);
 	
 //	public ArrayList<CategoryVO> retrieveCategoryList();
 	

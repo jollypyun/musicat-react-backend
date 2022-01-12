@@ -51,12 +51,13 @@
                         <td></td>
                     </tr>
                     <tr th:if="${articleVO.fileList != null}">
+                        <div th:each="imageFile : ${articleVO.fileList}" >
+<!--                            <th:block th:if="${imageFile.getFileType() == 2}">-->
+                                <video width="320" controls>
+                                    <source th:src="|/images/${imageFile.getSystemFileName()}|" type="video/mp4">
+                                </video>
 
-                        <td>
-                            <!--이미지 파일들--> <img th:each="imageFile : ${articleVO.fileList}"
-                                                th:src="|/images/${imageFile.getSystemFileName()}|" width="200"
-                                                height="200"/>
-                        </td>
+                        </div>
                     </tr>
                     <tr>
 

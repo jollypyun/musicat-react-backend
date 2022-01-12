@@ -11,13 +11,16 @@ import java.util.Map;
 public interface ArticleService {
 
 	//게시글 세부 조회
-	ArticleVO retrieveArticle(int articleNo); 
+	ArticleVO retrieveArticle(int articleNo);
+
+	//앞 뒤 게시글 조회
+	List<ArticleVO> selectSubArticle(int articleNo);
 	
 	//게시판 별 게시글 목록 조회
 	List<ArticleVO> retrieveBoard(int boardNo); 
 	
 	//게시글 작성
-	void registerArticle(ArticleVO article);
+	void registerArticle(ArticleVO article, Long audioNo);
 	
 	//게시글 수정
 	void modifyArticle(ArticleVO article);
@@ -51,4 +54,10 @@ public interface ArticleService {
 
 	//베스트글 전체 조회
 	List<BestArticleVO> selectAllBestArticle();
+
+	//작성한 게시글 조회
+	List<ArticleVO> retrieveMyArticle(int memberNo);
+
+	//추천 누른 게시글 조회
+	List<ArticleVO> retrieveMyLikeArticle(int memberNo);
 }

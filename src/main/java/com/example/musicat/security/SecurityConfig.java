@@ -5,6 +5,7 @@ import com.example.musicat.websocket.manager.NotifyManager;
 import com.example.musicat.websocket.manager.StompHandler;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -66,7 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //정적파일 뿐만 아니라 인증이 필요 없는 url은 ignoring 처리 해주는 것이 좋음
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**");
+        //web.ignoring().antMatchers("/static/**");
+        //web.ignoring().mvcMatchers("/favicon.ico");
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
     @Override
@@ -79,11 +82,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //강사님께서 코드 짜보고 계시고 완성되면 주시겠다고...
                 .authorizeRequests()
                 //인증된 사용자이면 접근 가능한 페이지
-                .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated()
+                .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated() //
                 //매니저 + root(admin) 부터 접근 가능한 페이지
                 .antMatchers("/manager/**", "/members/**", "/boardManager/**").access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')" )
                 //root(admin)만 접근 개능한 페이지
-                .antMatchers("/admin/**", "/grades/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 //그 외 요청은 모두 허용 ex) /main, /musicatlogin 등
                 .anyRequest().permitAll();
 
@@ -99,15 +102,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         //인증 성공 시 인증 결과를 담은 인증 객체를 파라미터로 받음 (인증 요청하지 않은 사용자의 정보는 HomController(/main)에서 처리해줌
                         MemberVO member = (MemberVO) authentication.getPrincipal();
+                        log.info("principal : " + member.toString());
 
                         // 예나 - notify 임시 id set
                         member.setNotifyId(member.getNo() + member.getEmail());
                         notifyManager.addToNotifyList(member.getNo(), member.getNotifyId());
-
-                        HttpSession session = request.getSession();
-                        session.setAttribute("loginUser", member);
-                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
-
+//                        HttpSession session = request.getSession();
+//                        session.setAttribute("loginUser", member);
+//                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
 
                         //사용자 요청페이지 저장
                         RequestCache requestCache = new HttpSessionRequestCache();

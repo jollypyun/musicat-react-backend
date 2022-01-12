@@ -52,8 +52,9 @@
     <form class="song-register-content" th:action="@{/musicpost}" method="post" enctype="multipart/form-data">
       <div class="song-title">
         <input type="text" id = "title" name = "title"/>
-        <input type="text" id = "memberNo" name = "memberNo"/>
-        <input type="text" id = "articleNo" name = "articleNo"/>
+        <p th:text="${errorMsg}"></p>
+        <input type="text" id = "memberNo" name = "memberNo" th:value="${memberNo}"/>
+<!--        <input type="text" id = "articleNo" name = "articleNo"/>-->
       </div>
       <div class="preview-thumnail">
         <img id="registered_img" style="visibility: hidden" src="" alt="" />

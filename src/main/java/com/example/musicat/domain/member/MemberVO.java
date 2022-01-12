@@ -10,6 +10,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.lang.reflect.Member;
+
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -32,7 +34,9 @@ public class MemberVO {
 	private String ban = "";
 	private int isMember;
 
+
 	private String notifyId; // stomp id
+
 
 	public MemberVO(@NonNull String email, String password) {
 		super();
@@ -64,11 +68,25 @@ public class MemberVO {
 	}
 
 
-	//회원가입 (연주)
-	public MemberVO(@NonNull String email, String password, @NonNull String nickname) {
-		this.email = email;
-		this.password = password;
+//	//회원가입 (연주)
+//	public MemberVO(@NonNull String email, String password, @NonNull String nickname) {
+//		this.email = email;
+//		this.password = password;
+//		this.nickname = nickname;
+//	}
+
+	// 팔로우 필요 정보
+	public MemberVO(int no, String nickname) {
+		this.no = no;
 		this.nickname = nickname;
+	}
+	//회원 가입
+	public static MemberVO joinMember(String email, String password, String nickname) {
+		MemberVO member = new MemberVO();
+		member.email = email;
+		member.password = password;
+		member.nickname = nickname;
+		return member;
 	}
 
 }

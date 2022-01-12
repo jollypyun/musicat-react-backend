@@ -41,4 +41,9 @@ public class ReplyServiceImpl implements ReplyService {
 		this.replyDao.deleteReply(replyNo);
 	}
 
+	//내가 쓴 댓글 조회
+	@Override
+	public List<ReplyVO> retrieveReplyOneMember(int memberNo) {
+		return this.replyDao.selectReplyOneMember(memberNo);
+	}
 }

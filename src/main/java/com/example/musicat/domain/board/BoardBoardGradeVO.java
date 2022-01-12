@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import lombok.Data;
 
 @Data
-@Alias("boardBoardGradeVO")
+@Alias("boardBoardGradeVo")
 public class BoardBoardGradeVO {
 	private BoardVO boardVo;
 	private BoardGradeVO boardGradeVo;

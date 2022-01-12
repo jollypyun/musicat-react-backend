@@ -19,5 +19,4 @@ public class BestArticleVO {
 	private String subject;
 	private int likecount;
 	private int rank; // 순위
-
 }

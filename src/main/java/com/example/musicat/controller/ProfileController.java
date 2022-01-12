@@ -44,7 +44,8 @@ public class ProfileController {
             return "view/member/profile";
         } catch (Exception e) {
             e.printStackTrace();
-            return "/error";
+//            return "/error";
+            return null;
         }
     }
 
@@ -98,7 +99,8 @@ public class ProfileController {
             return "redirect:/profile";
         } catch(Exception e) {
             e.printStackTrace();
-            return "error";
+//            return "error";
+            return null;
         }
     }
 }

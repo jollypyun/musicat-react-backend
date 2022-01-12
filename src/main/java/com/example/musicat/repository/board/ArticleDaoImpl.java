@@ -21,8 +21,10 @@ public class ArticleDaoImpl implements ArticleDao {
 	public ArticleDaoImpl(ArticleMapper articleMapper) {
 		this.articleMapper = articleMapper;
 	}
-	
-	
+
+	@Override
+	public List<ArticleVO> selectSubArticle(int articleNo) {return this.articleMapper.selectSubArticle(articleNo);}
+
 	@Override
 	public List<SelectArticleVO> selectArticle(int articleNo) {
 		return this.articleMapper.selectArticle(articleNo);
@@ -143,5 +145,17 @@ public class ArticleDaoImpl implements ArticleDao {
 	@Override
 	public List<BestArticleVO> selectAllBestArticle() {
 		return this.articleMapper.selectAllBestArticle();
+	}
+
+	//작성한 게시글 조회
+	@Override
+	public List<ArticleVO> selectMyArticle(int memberNo) {
+		List<ArticleVO> myArticleList = this.articleMapper.selectMyArticle(memberNo);
+		return myArticleList;
+	}
+
+	@Override
+	public List<ArticleVO> selectMyLikeArticle(int memberNo) {
+		return this.articleMapper.selectMyLikeArticle(memberNo);
 	}
 }

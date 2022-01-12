@@ -39,6 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public void removeCategory(int categoryNo) {
+		log.info("removeCategory-----------");
 		this.categoryDao.deleteCategory(categoryNo);
 	}
 
@@ -80,11 +81,11 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryVo;
 	}
 
-//	@Override
-//	public int retrieveDuplicateCategory(String categoryName) {
-//		int checkDuplicateCategory = this.categoryDao.selectDuplicateCategory(categoryName);
-//		return checkDuplicateCategory;
-//	}
+	@Override
+	public Integer retrieveDuplicatedCategory(String categoryName) {
+		Integer duplicatedCategory = this.categoryDao.selectDuplicatedCategory(categoryName);
+		return duplicatedCategory;
+	}
 //
 //	@Override
 //	public ArrayList<CategoryVO> retrieveCategoryList() {

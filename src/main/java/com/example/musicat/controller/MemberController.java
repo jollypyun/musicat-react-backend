@@ -9,12 +9,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.example.musicat.controller.form.JoinForm;
 import com.example.musicat.service.member.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +32,8 @@ import com.example.musicat.domain.paging.Criteria;
 import com.example.musicat.domain.paging.Paging;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 //여기부터가 기본 세팅
 @Slf4j
@@ -47,20 +52,60 @@ public class MemberController {
 	private ProfileService profileService;
 
 //	회원가입
-	@PostMapping("/join") // 이걸 실행하는 값의 주소
-	public String joinMember(MemberVO mVo) {
-		mVo.setPassword(encodePwd.encode(mVo.getPassword())); //비밀번호 암호화
-		try{
-			this.memberService.registerMember(mVo);
-			this.profileService.addProfile(mVo.getNo());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		//log.info("비밀번호 : " + mVo.getPassword() + " 이메일 : " + mVo.getEmail() + " 닉네임 : " + mVo.getNickname());
+//	@PostMapping("/join") // 이걸 실행하는 값의 주소
+//	public String joinMember(MemberVO mVo) {
+//		mVo.setPassword(encodePwd.encode(mVo.getPassword())); //비밀번호 암호화
+//		try{
+//			this.memberService.registerMember(mVo);
+//			this.profileService.addProfile(mVo.getNo());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		//log.info("비밀번호 : " + mVo.getPassword() + " 이메일 : " + mVo.getEmail() + " 닉네임 : " + mVo.getNickname());
+//
+//		//log.info("비밀번호(암호화) : " + mVo.getPassword());
+//		return "redirect:/musicatlogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
+//								// html 파일명 쓰기)
+//	}
 
-		//log.info("비밀번호(암호화) : " + mVo.getPassword());
-		return "redirect:/musicatlogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
+	@PostMapping("/join") // 이걸 실행하는 값의 주소
+	public ModelAndView joinMember(@Validated JoinForm form, BindingResult result) throws Exception{
+		ModelAndView mv = new ModelAndView();
+		if(result.hasErrors()){
+			mv.setViewName("view/member/register");
+			return mv;
+		}
+		if ( !(form.getPassword().equals(form.getConfirmPassword())) ) {
+			// 비밀번호 일치 검증
+			mv.addObject("form", form);
+			mv.addObject("passwdError", "비밀번호가 일치하지 않습니다.");
+			mv.setViewName("/musicatlogin");
+			return mv;
+		}
+
+		String encodePassword = encodePwd.encode(form.getPassword()); //비밀번호 암호화
+		MemberVO mvo = MemberVO.joinMember(form.getEmail(), encodePassword, form.getNickname());
+		this.memberService.registerMember(mvo);
+//		this.profileService.addProfile(mvo.getNo());
+
+//		return "redirect:/musicatlogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
 								// html 파일명 쓰기)
+		mv.setView(new RedirectView("/musicatlogin"));
+		return mv;
+	}
+
+	@ResponseBody
+	@PostMapping("/joinCheck")
+	public int joinCheck(@RequestParam("type") String type
+						,@RequestParam("value") String value) {
+		HashMap<String, Object> checkMap = new HashMap<>();
+		if ("email".equals(type)) {
+			checkMap.put(type, value);
+		} else if ("nickname".equals(type)) {
+			checkMap.put(type, value);
+		}
+		int check = this.memberService.joinCheck(checkMap);
+		return check;
 	}
 
 	// 회원 목록 조회
@@ -120,8 +165,9 @@ public class MemberController {
 			System.out.println(model);
 			return "view/home/viewManagerTemplate";
 		} catch (Exception e) {
-			e.printStackTrace();
-			return "/error";
+//			e.printStackTrace();
+//			return "/error";
+			return null;
 		}
 	}
 
@@ -145,7 +191,8 @@ public class MemberController {
 			return "redirect:/members";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "/error";
+//			return "/error";
+			return null;
 		}
 	}
 

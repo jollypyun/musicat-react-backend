@@ -39,11 +39,14 @@ public class CustomMemberDetailsService implements UserDetailsService {
         //이번 프로젝트에서는 회원당 role이 하나씩이나 추후 확장성을 고려하여(회원 등급 추가되어 회원 당 role이 여러 개가 될 경우) List로 role을 받음
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(memberVo.getGrade())); //role
+//
+//        //Member member = new Member(memberVo, roles);
+//        Member member = new Member(memberVo, roles);
+//        log.info("----" + roles.toString() + "----" + member.getMemberVo().getEmail() + "----" + member.getMemberVo().getPassword() + "----" + member.getMemberVo().getNo());
 
-        MemberContext memberContext = new MemberContext(memberVo, roles);
-        log.info("----" + roles.toString() + "----" + memberContext.getMemberVo().getEmail() + "----" + memberContext.getMemberVo().getPassword());
+//        return member;
 
-        return memberContext;
+        return new MemberAccount(memberVo, roles);
     }
 
 

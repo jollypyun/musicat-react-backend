@@ -1,5 +1,47 @@
 $(document).ready(function () {
 
+    /* 이미지  미리 보기 */
+    let index = 0;
+    // let removeIndexArray = [];
+
+    function setThumbnail(event) {
+        for (var image of event.target.files) {
+
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+                var pos = image.name.lastIndexOf(".");
+                var ext = image.name.substring(pos + 1).toLowerCase();
+                console.log(image.name);
+
+                if ($.inArray(ext, ['png', 'jpg', 'mp4']) == -1) {
+                    alert('이미지 첨부는 png, jpg, mp4만 가능합니다');
+                    return false;
+                } else {
+                    //image preview
+                    var $div = $('<div id=image' + index + ' class="preview-div">');
+                    var $img = $('<img id=image' + index + ' src=' + event.target.result + ' width="400" height="400">');
+
+                    // $input.append($i);
+                    $div.append($img);
+                    $('#image_container').append($div);
+
+                    index++;
+                }
+            }
+
+            // console.log(image);
+            // reader.readAsDataURL(event.target.files[0]);
+            reader.readAsDataURL(image);
+        }
+
+    }
+
+    $(document).on('click', '#write-imagefile-upload', function (){
+        $('#image_container').html("");
+    });
+
+    /* End 이미지 미리보기 */
 
     $(document).on('click','.origin_tag_delete_btn', function (){
         const tagNo = $(this).attr('id');
@@ -88,7 +130,6 @@ $(document).ready(function () {
 
         }
     });
-
 
     // start tag
     var tag = {};
