@@ -54,7 +54,7 @@ public interface MemberService {
 
 	public void updatePassword(MemberVO memberVo);
 
-	boolean retrieveEmail(String email);
+//	boolean retrieveEmail(String email);
 
 	int updateTempPassword(MemberVO mVo);
 

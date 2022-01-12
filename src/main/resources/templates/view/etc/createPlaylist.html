@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div>Playlist Title</div>
+<form th:action="|/addplaylist|" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="${memberNo}">
+    <input type="file" id="image" name="image" accept="image/*" onchange="showImage(this)">
+    <img id="preview_img" style="visibility: hidden" src="" alt="">
+    <input type="text" name="title">
+    <button type="submit">Save</button>
+</form>
+</html>
+
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script>
+    function showImage(a) {
+        var reader = new FileReader();
+        reader.onload = function (a) {
+            var img = document.getElementById("preview_img");
+            img.setAttribute("src", a.target.result);
+            img.style.visibility = "visible";
+        };
+        reader.readAsDataURL(a.files[0]);
+    }
+</script>
