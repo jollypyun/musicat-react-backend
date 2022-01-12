@@ -20,7 +20,7 @@ public interface ArticleService {
 	List<ArticleVO> retrieveBoard(int boardNo); 
 	
 	//게시글 작성
-	void registerArticle(ArticleVO article);
+	void registerArticle(ArticleVO article, Long audioNo);
 	
 	//게시글 수정
 	void modifyArticle(ArticleVO article);
