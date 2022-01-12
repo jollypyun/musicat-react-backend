@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import java.util.Collection;
 
 @Log
+
 // User : Spring Security가 제공하는 UserDetails의 구현체
 public class MemberAccount extends User {
 

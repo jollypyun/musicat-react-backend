@@ -64,7 +64,7 @@
 
 						<!-- 카테고리 추가 -->
 						<div id="writeCategory" style="display: none;">
-							<form th:action="@{/writeCategory}" th:object="${categoryVo}" method="post" id="writeCategoryController">
+							<form th:action="@{/writeCategory}" th:object="${categoryVo}" method="post">
 								<table>
 									<tbody>
 									<tr>
@@ -84,7 +84,7 @@
 
 						<!-- 카테고리 수정 -->
 						<div id="modifyCategory" style="display: none;">
-							<form th:action="@{/modifyCategory}" th:object="${categoryVo}" method="post" id="modifyCategoryController">
+							<form th:action="@{/modifyCategory}" th:object="${categoryVo}" method="post">
 								<div id="modifyCategoryForm"></div>
 
 								<div class="boardManager-func">
@@ -99,7 +99,7 @@
 
 						<!-- 게시판 추가 -->
 						<div id="writeBoard" style="display: none;">
-							<form th:action="@{/writeBoard}" method="post" id="writeBoardController">
+							<form th:action="@{/writeBoard}" method="post">
 								<div id="addBoardForm"></div>
 
 								<div class="boardManager-func">
@@ -111,7 +111,7 @@
 
 						<!-- 게시판 수정 -->
 						<div id="modifyBoard" style="display: none;">
-							<form th:action="@{/modifyBoard}" method="post" id="modifyBoardController">
+							<form th:action="@{/modifyBoard}" method="post">
 								<div id="modifyBoardForm"></div>
 
 								<div class="boardManager-func">
@@ -148,15 +148,6 @@
 
 		$('#writeCategoryBtn').on('click', function () {
 			const categoryName = $('#categoryName').val();
-			// const includeBlank = categoryName.match(/  /g);
-			// if (includeBlank != null) {
-			// 	alert(includeBlank.length);
-			// }
-			// if (categoryName.indexOf("  ") != -1) {
-			// 	categoryName.replaceAll("  ", " ");
-			// }
-			// console.log(categoryName.indexOf("  "));
-			// console.log(categoryName);
 			if(categoryName == "" || categoryName == " " || categoryName.indexOf("  ") != -1) {
 				alert("카테고리명은 1 ~ 20자로 입력해주세요.(공백 불가)");
 				return false;
@@ -623,7 +614,6 @@
 					url : url,
 					method : 'POST',
 					dataType : 'json',
-					//contentType: 'application/json',
 					data : {
 						boardNo : boardNo,
 						categoryNo : categoryNo,

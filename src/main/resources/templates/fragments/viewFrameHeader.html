@@ -99,10 +99,12 @@
         >
 
           <li th:if="${#authorization.expr('isAuthenticated()')}">
-            <a class="dropdown-item" th:href="@{'/myPage/Playlist/' + ${#authentication.principal.getNo()}}">
-              <span th:text="${#authentication.principal.getEmail()}"></span>
+            <a class="dropdown-item" th:href="@{'/myPage/Playlist/' + ${#authentication.principal.getMemberVo.getNo}}">
+                  <span th:text="${#authentication.principal.getMemberVo.getEmail}"></span>
             </a>
           </li>
+
+          <li th:if="${#authorization.expr('isRememberMe()')} == false">dddddd</li>
 
           <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
 

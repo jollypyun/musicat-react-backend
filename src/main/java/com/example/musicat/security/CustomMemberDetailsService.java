@@ -29,6 +29,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
 
         //view에서 받은 email을 사용해 사용자 정보가 있는지 조회하는 memberService 메소드
         MemberVO memberVo = memberService.retrieveMemberByEmail(email);
+        log.info("CustomMemberDetailsService : " + memberVo.toString());
 
         //정보 없으면 예외 발생
         if(memberVo == null) {
@@ -39,12 +40,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
         //이번 프로젝트에서는 회원당 role이 하나씩이나 추후 확장성을 고려하여(회원 등급 추가되어 회원 당 role이 여러 개가 될 경우) List로 role을 받음
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(memberVo.getGrade())); //role
-//
-//        //Member member = new Member(memberVo, roles);
-//        Member member = new Member(memberVo, roles);
-//        log.info("----" + roles.toString() + "----" + member.getMemberVo().getEmail() + "----" + member.getMemberVo().getPassword() + "----" + member.getMemberVo().getNo());
 
-//        return member;
 
         return new MemberAccount(memberVo, roles);
     }

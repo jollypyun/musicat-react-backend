@@ -126,10 +126,12 @@ public class BoardController {
 		Integer duplicatedCategory = this.categoryService.retrieveDuplicatedCategory(categoryName);
 		if (duplicatedCategory == null) { //중복 x
 			map.put("result", 0);
+			log.info("----------------------------1 ");
 			this.categoryService.modifyCategory(categoryNo, categoryName);
 		} else { //중복 o
 			if(duplicatedCategory == categoryNo) {
 				map.put("result", 0); //해당 카테고리면 저장o
+				log.info("----------------------------2 ");
 			} else {
 				map.put("result", 1); //다른 카테고리면 저장x
 			}
@@ -348,6 +350,11 @@ public class BoardController {
 				article.setThumbnail(noFile);
 			}
 		}
+
+		MemberVO member = HomeController.checkMemberNo();
+		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+		model.addAttribute("likeBoardList", likeBoardList);
+
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		CategoryVO categoryVo = new CategoryVO();
 
@@ -409,11 +416,9 @@ public class BoardController {
 		log.info("즐찾에 있나요? : ", likeboard);
 
 		if (likeboard == 0) { //즐찾 안된 게시판이면
-			log.info("즐찾에 저장 안 된 애 (0)");
 			map.put("result", 0);
 			this.boardService.registerLikeBoard(memberNo, boardNo);
 		} else { //즐찾게시판면
-			log.info("즐찾게시판에 저장된 애 (1)");
 			map.put("result", 1);
 			this.boardService.removeLikeBoard(memberNo, boardNo);
 		}
