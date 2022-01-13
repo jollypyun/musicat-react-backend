@@ -103,6 +103,6 @@ public interface MemberMapper {
 	// 멤버의 팔로잉 리스트
 	List<MemberVO> selectFollowingList(int memberNo);
 
-	// 멤버의 파로우 리스트
+	// 멤버의 팔로우 리스트
 	List<MemberVO> selectFollowedList(int memberNo);
 }

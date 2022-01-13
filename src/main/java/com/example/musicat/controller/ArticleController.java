@@ -177,7 +177,7 @@ public class ArticleController {
 			,BindingResult result
 			,@ModelAttribute FileFormVO form
 			,@RequestParam("tags") String tags
-			,@RequestParam("audioNo") Long audioNo
+			,@RequestParam(value = "audioNo", required = false) Long audioNo
 			,HttpServletRequest req) throws IOException {
 		ModelAndView mv = new ModelAndView();
 		log.info("audioNo= {}",audioNo);
