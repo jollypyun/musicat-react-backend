@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     document.getElementById("playlist-prev").addEventListener("click", playlistPrev);
     document.getElementById("playlist-pause").addEventListener("click", playlistPause);
     document.getElementById("playlist-play").addEventListener("click", playlistPlay);
@@ -205,10 +206,17 @@ async function requestProcessAddToPlay(url, musicNos) {
         // await 다음에는 비동기 처리 작업이 와야함.
         //const result = await getAjaxAddToPlay(url, playlistNo, musicNos);
         const result = await getAjaxAddToPlay(url, musicNos);
-        console.log(result[0].links[1].href);
+        //localStorage.setItem("musics", JSON.stringify(result));
+        //console.log(JSON.parse(localStorage.getItem("musics")));
 
-        $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + result[0].links[1].href
-            + '"/> <button><span class="material-icons">play_circle</span></button><div class="dropUp-inner-info-text"><span>'+ result[0].title +'</span></div></div><div class="dropUp-inner-time"><span>30:30</span><button class="song-addInfo"><span class="material-icons">dehaze</span></button><div class="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div></li>');
+        //console.log(result[0].links[1].href);
+        result.forEach(function(e){
+            $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
+                + '"/> <button id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons">play_circle</span></button><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><span>30:30</span><button class="song-addInfo"><span class="material-icons">dehaze</span></button><div class="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
+
+        });
+        $("#audio").attr("src", result[0].links[0].href);
+        $("#audio").trigger("play");
 
 
     } catch (error) {
@@ -216,6 +224,11 @@ async function requestProcessAddToPlay(url, musicNos) {
     }
 }
 
+function playAudio(btn){
+    //console.log($(btn).attr("id"));
+    $("#audio").attr("src", $(btn).attr("id"));
+    $("#audio").trigger("play");
+}
 // function testinggg() {
 //     console.log($("#audio").attr("src"));
 //     $("#audio").attr("src", "http://localhost:20000/api/musics/6e7b0b3d-6275-46bb-b997-97b664801ed9.audio");
