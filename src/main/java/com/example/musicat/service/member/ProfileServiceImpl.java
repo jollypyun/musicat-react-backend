@@ -30,7 +30,7 @@ public class ProfileServiceImpl implements ProfileService{
     public void addProfile(int no) throws Exception{
         String originalFileName = initOriginImg;
         String systemFileName = initSysImg;
-        String location = dir2 + "profile/" + systemFileName;
+        String location = dir2 + systemFileName;
         File file = new File(location);
         long fileSize = file.length();
         log.info("no : " + no);
@@ -64,7 +64,8 @@ public class ProfileServiceImpl implements ProfileService{
         String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
         String systemFileName = UUID.randomUUID().toString() + "." + extension;
         long fileSize = multipartFile.getSize();
-        String location = dir2 + "profile/" + systemFileName;
+        //String location = this.dir2 + systemFileName;
+        String location = this.dir2 + "profile/" + systemFileName;
 
         log.info("Original : " + originalFileName);
         log.info("System : " + systemFileName);
@@ -79,7 +80,7 @@ public class ProfileServiceImpl implements ProfileService{
     // 프로필 이미지 업데이트 시 기존 프로필 이미지 삭제
     @Override
     public void deleteProfilePhoto(ProfileVO profile) throws Exception {
-        String location = dir2 + "profile/" + profile.getSystemFileName();
+        String location = this.dir2 + "profile/" + profile.getSystemFileName();
         log.info("loc : " + location);
         File file = new File(location);
         if(file.exists()) {

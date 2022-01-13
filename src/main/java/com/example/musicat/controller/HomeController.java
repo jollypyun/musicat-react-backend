@@ -1,21 +1,13 @@
 package com.example.musicat.controller;
 
-import java.lang.reflect.Member;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import java.util.*;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 import com.example.musicat.controller.form.JoinForm;
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.FollowVO;
-import com.example.musicat.domain.member.GradeVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
 
@@ -28,23 +20,8 @@ import com.example.musicat.service.member.FollowService;
 import com.example.musicat.service.member.GradeService;
 import com.example.musicat.service.music.MusicApiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.method.P;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -216,13 +193,16 @@ public class HomeController {
 
     }
 
-    @GetMapping("/myPage/Playlist/{userNo}/{playlistNo}")
-    public String myPagePlaylistDetail(Model model, @PathVariable(name = "playlistNo") int playlistNo, @PathVariable(name = "userNo") int userNo) {
+    @GetMapping("/myPage/Playlist/{userNo}/{playlistKey}")
+    public String myPagePlaylistDetail(Model model, @PathVariable(name = "playlistKey") String playlistKey, @PathVariable(name = "userNo") int userNo) {
         MemberVO member = new MemberVO();
+        FollowVO follow = new FollowVO();
         List<Music> musics = new ArrayList<>();
         try {
             member = memberService.retrieveMemberByManager(userNo);
-            musics = musicApiService.showDetailPlaylist(playlistNo);
+            follow.setFollowing(followService.countFollowing(userNo));
+            follow.setFollowed(followService.countFollowed(userNo));
+            musics = musicApiService.showDetailPlaylist(playlistKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,6 +216,7 @@ public class HomeController {
         CategoryVO categoryVo = new CategoryVO();
         model.addAttribute("categoryVo", categoryVo);
         model.addAttribute("member", member);
+        model.addAttribute("follow", follow);
         model.addAttribute("musics", musics);
 
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylistDetail");
@@ -248,8 +229,11 @@ public class HomeController {
     @GetMapping("/myPage/Board/{userNo}")
     public String myPageBoard(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
+        FollowVO follow = new FollowVO();
         try {
             member = memberService.retrieveMemberByManager(userNo);
+            follow.setFollowing(followService.countFollowing(userNo));
+            follow.setFollowed(followService.countFollowed(userNo));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -267,6 +251,7 @@ public class HomeController {
         model.addAttribute("categoryVo", categoryVo);
 
         model.addAttribute("member", member);
+        model.addAttribute("follow", follow);
         log.info("대체 뭐가 문젠데 Board " + member.getNo());
         model.addAttribute("HomeContent", "fragments/viewMyPageBoard");
         return "view/home/viewHomeTemplate";
@@ -277,8 +262,11 @@ public class HomeController {
     @GetMapping("/myPage/Reply/{userNo}")
     public String myPageReply(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
+        FollowVO follow = new FollowVO();
         try {
             member = memberService.retrieveMemberByManager(userNo);
+            follow.setFollowing(followService.countFollowing(userNo));
+            follow.setFollowed(followService.countFollowed(userNo));
             log.info("대체 뭐가 문젠데 Reply " + member.getNo());
         } catch (Exception e) {
             e.printStackTrace();
@@ -303,7 +291,7 @@ public class HomeController {
 
         model.addAttribute("member", member);
 
-
+        model.addAttribute("follow", follow);
 
         model.addAttribute("HomeContent", "fragments/viewMyPageReply");
         return "view/home/viewHomeTemplate";
@@ -314,8 +302,11 @@ public class HomeController {
     @GetMapping("/myPage/Like/{userNo}")
     public String myPageLike(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
+        FollowVO follow = new FollowVO();
         try {
             member = memberService.retrieveMemberByManager(userNo);
+            follow.setFollowing(followService.countFollowing(userNo));
+            follow.setFollowed(followService.countFollowed(userNo));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -333,6 +324,7 @@ public class HomeController {
         model.addAttribute("categoryVo", categoryVo);
 
         model.addAttribute("member", member);
+        model.addAttribute("follow", follow);
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";
 
@@ -353,7 +345,7 @@ public class HomeController {
 
     // 플레이리스트 수정 폼 요청
     @GetMapping("/changePlaylistForm/{id}")
-    public String changePlaylist(Model model, @PathVariable("id") int id) {
+    public String changePlaylist(Model model, @PathVariable("id") String id) {
         Playlist playlist = musicApiService.getOnePlaylist(id);
         log.info("playlist : " + playlist.getPlaylistImage().getId());
         model.addAttribute("playlist", playlist);
