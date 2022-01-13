@@ -146,7 +146,7 @@ footer{
     width: 100%;
     vertical-align: center;
     overflow-y : auto;
-    height: 100%;
+    height: 70%;
 }
 
 
@@ -224,7 +224,7 @@ footer{
 
 .dropUp-inner-title{
     display: flex;
-    margin: 10px 20px 70px 20px;
+    margin: 10px 20px 20px 20px;
     justify-content: space-between;
 
     vertical-align: center;
@@ -276,4 +276,21 @@ footer{
 
 #songInfo-dropbox button:last-child{
     margin: 0 0 10px 0;
+}
+
+
+
+.playlist-dropUp-content-playBtn:hover span{
+    cursor: pointer;
+    color: #0b5ed7;
+}
+
+.playlist-dropUp-content-playBtn input{
+    border: none;
+    background-color: transparent;
+}
+
+.playlist-dropUp-content-playBtn span{
+    left: 2px;
+    top: 2px;
 }
