@@ -27,9 +27,9 @@
 	<select id="selectMemberByEmail" resultType="memberVo" resultMap="selectMemberByEmailResultMap">
 		select member_no, email, password, nickname,
 			   (select auth from grade where grade_no =
-											 (select grade_no from membergrade where member_no =
+											 (select grade_no from member_grade where member_no =
 																					 (select member_no from member where email = #{email}))) as auth,
-			   (select grade_no from membergrade where member_no =
+			   (select grade_no from member_grade where member_no =
 													   (select member_no from member where email = #{email})) as grade_no,
 			   lastdate, ban, ismember
 		from member
