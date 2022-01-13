@@ -95,6 +95,8 @@ public class ArticleController {
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 
+		BoardBoardGradeVO bbg = this.boardService.retrieveOneBoard(boardNo);
+		model.addAttribute("boardName",bbg.getBoardVo().getBoardName());
 		if (grade) {
 			log.info("sidebar");
 			int memberNo = member.getNo();
@@ -112,7 +114,7 @@ public class ArticleController {
 			// audio 파일
 			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
 			model.addAttribute("musicList", musicList);
-//				log.info(musicList.toString());
+			log.info("article controller musiclist : " + musicList.toString());
 
 
 			// xss 처리 Html tag로 변환

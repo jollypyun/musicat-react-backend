@@ -30,6 +30,8 @@
 .Thumbnail-ul{
     border-bottom: 1px solid #aaa;
     *zoom: 1;
+    display: flex;
+    flex-flow: row wrap;
 
 }
 .Thumbnail-li{
@@ -103,4 +105,8 @@
 .dropdown-item{
     text-decoration: none; !important;
     color: black; !important;
+}
+
+.fixed_img_col{
+    width: 900px;
 }
