@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     document.getElementById("playlist-prev").addEventListener("click", playlistPrev);
     document.getElementById("playlist-pause").addEventListener("click", playlistPause);
     document.getElementById("playlist-play").addEventListener("click", playlistPlay);
@@ -15,7 +16,7 @@ $(document).ready(function () {
     let volumeMuteOn = document.getElementById("volume-mute-on");
     let volumeProgress = document.getElementById("volume-progress");
     let timeProgress = document.getElementById("time-progress");
-    let songAddInfo = document.getElementById("song-addInfo");
+    let songAddInfo = document.getElementsByClassName(".song-addInfo");
     let playlistClose = document.getElementById("playlist-close");
 
 
@@ -85,14 +86,12 @@ $(document).ready(function () {
 
 
     songAddInfo.addEventListener('click', function () {
-        if ($("#songInfo-dropbox").css("display") === "none") {
-            document.getElementById("songInfo-dropbox").style.display = "flex";
+        if ($(".songInfo-dropbox").css("display") === "none") {
+            document.getElementsByClassName("songInfo-dropbox").style.display = "flex";
         } else {
-            document.getElementById("songInfo-dropbox").style.display = "none";
+            document.getElementsByClassName("songInfo-dropbox").style.display = "none";
         }
     })
-
-
 
 
     function playlistPrev() {
@@ -156,11 +155,83 @@ $(document).ready(function () {
             document.getElementById("playlist-dropUp-content").style.display = "block";
         } else {
             document.getElementById("playlist-dropUp-content").style.display = "none";
-            if ($("#songInfo-dropbox").css("display") !== "none") {
-                document.getElementById("songInfo-dropbox").style.display = "none";
+            if ($(".songInfo-dropbox").css("display") !== "none") {
+                document.getElementsByClassName("songInfo-dropbox").style.display = "none";
             }
         }
 
 
     }
 });
+
+
+function onAddtoPlayClick(btn) {
+    //var playlistNo = [[${#authentication.principal.getNo}]];
+    var playlistNo = $("#userNoForPlaylist").text();
+    playlistNo = playlistNo + "pl1";
+    var musicNos = $(btn).children().text();
+    console.log("playlistNo : ", playlistNo);
+    console.log("musicNos : ", musicNos);
+    requestProcessAddToPlay("/pushmusic/" + playlistNo, musicNos);
+}
+
+const getAjaxAddToPlay = function (url, musicNos) {
+    // var objParams = {
+    //     "playlistNo": playlistNo,
+    //     "musicNos" : musicNos
+    // };
+    //console.log(objParams);
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            method: "POST",
+            dataType: "json",
+            data: {
+                musicNos: musicNos
+            },
+            success: function (data) {
+                // 비동기 작업 성공 시 호출
+                resolve(data);
+            },
+            error: function (e) {
+                // 비동기 작업 실패 시 호출
+                reject(e);
+            },
+        });
+    });
+};
+
+async function requestProcessAddToPlay(url, musicNos) {
+    try {
+        // await 다음에는 비동기 처리 작업이 와야함.
+        //const result = await getAjaxAddToPlay(url, playlistNo, musicNos);
+        const result = await getAjaxAddToPlay(url, musicNos);
+        //localStorage.setItem("musics", JSON.stringify(result));
+        //console.log(JSON.parse(localStorage.getItem("musics")));
+
+        //console.log(result[0].links[1].href);
+        result.forEach(function(e){
+            $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
+                + '"/> <button id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons">play_circle</span></button><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><span>30:30</span><button class="song-addInfo"><span class="material-icons">dehaze</span></button><div class="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
+
+        });
+        $("#audio").attr("src", result[0].links[0].href);
+        $("#audio").trigger("play");
+
+
+    } catch (error) {
+        console.log("error : ", error);
+    }
+}
+
+function playAudio(btn){
+    //console.log($(btn).attr("id"));
+    $("#audio").attr("src", $(btn).attr("id"));
+    $("#audio").trigger("play");
+}
+// function testinggg() {
+//     console.log($("#audio").attr("src"));
+//     $("#audio").attr("src", "http://localhost:20000/api/musics/6e7b0b3d-6275-46bb-b997-97b664801ed9.audio");
+//     console.log($("#audio").attr("src"));
+//
+// }

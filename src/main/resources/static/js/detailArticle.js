@@ -1,266 +1,276 @@
-function writeForm(){
-	location.href="/articles/insert";
+function writeForm() {
+    location.href = "/articles/insert";
 }
 
 $(document).ready(function () {
 
-	/*-------------------댓글 ------------------ */
-	const getAjax = function (url, no, content, depth) {
-		// resolve, reject는 자바스크립트에서 지원하는 콜백 함수이다.
-		return new Promise((resolve, reject) => {
-			$.ajax({
-				url: url,
-				method: 'POST',
-				dataType: 'json',
-				data: {
-					no: no,
-					content: content,
-					articleNo: $("#article_no").val(),
-					depth: depth
-				},
-				success: function (data) {
-					resolve(data);
-				},
-				error: function (e) {
-					reject(e);
-				}
-			});
-		});
-	}
+    /*-------------------댓글 ------------------ */
+    const getAjax = function (url, no, content, depth) {
+        // resolve, reject는 자바스크립트에서 지원하는 콜백 함수이다.
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url,
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    no: no,
+                    content: content,
+                    articleNo: $("#article_no").val(),
+                    depth: depth
+                },
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (e) {
+                    reject(e);
+                }
+            });
+        });
+    }
 
-	const removeReply = function (url, no) {
-		// resolve, reject는 자바스크립트에서 지원하는 콜백 함수이다.
-		return new Promise((resolve, reject) => {
-			$.ajax({
-				url: url,
-				method: 'GET',
-				dataType: 'json',
-				data: {
-					no: no,
-					articleNo: $("#article_no").val()
-				},
-				success: function (data) {
-					resolve(data);
-				},
-				error: function (e) {
-					console.trace();
-					reject(e);
-				}
-			});
-		});
-	}
+    const removeReply = function (url, no) {
+        // resolve, reject는 자바스크립트에서 지원하는 콜백 함수이다.
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: url,
+                method: 'GET',
+                dataType: 'json',
+                data: {
+                    no: no,
+                    articleNo: $("#article_no").val()
+                },
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (e) {
+                    console.trace();
+                    reject(e);
+                }
+            });
+        });
+    }
 
-	async function requestProcess(url, no, content, depth) {
-		try {
-			console.log("rP 접속");
-			let replyList = null;
-			if (content == null || content == '' || typeof content == "undefined") {
-				replyList = await removeReply(url, no);
-			} else {
-				console.log("GetAjAx 전");
-				replyList = await getAjax(url, no, content, depth);
-				console.log("GetAjAx 후");
-			}
+    async function requestProcess(url, no, content, depth) {
+        try {
+            console.log("rP 접속");
+            let replyList = null;
+            if (content == null || content == '' || typeof content == "undefined") {
+                replyList = await removeReply(url, no);
+            } else {
+                console.log("GetAjAx 전");
+                replyList = await getAjax(url, no, content, depth);
+                console.log("GetAjAx 후");
+            }
 
-			$('#replys').html("");
-			let htmlStr = [];
+            $('#replys').html("");
+            let htmlStr = [];
 
-			console.log(htmlStr);
-			for (let i = 0; i < replyList.length; i++) {
-				htmlStr.push('<div class="reply_list">');
-				htmlStr.push('<table id=' + replyList[i].no + '>');
-				htmlStr.push('<tbody>');
-				htmlStr.push('<tr>');
-				htmlStr.push('<td class="Content">' + replyList[i].content + "</td>");
-				htmlStr.push('<tr>');
-				htmlStr.push('<td>' + replyList[i].nickname + "</td>");
-				htmlStr.push('</tr>');
-				htmlStr.push('<tr>');
-				htmlStr.push('<td>' + replyList[i].writeDate + "</td>");
-				htmlStr.push('</tr>');
-				htmlStr.push('</tbody>');
-				htmlStr.push('<tfoot>');
-				if (replyList[i].memberNo == $('#login_no').val()) {
-					htmlStr.push("<tr>");
-					htmlStr.push('<td><input type="button" class="modify_Reply_Form_Btn" value="수정" />&nbsp;');
-					htmlStr.push('<input type="button" class="remove_Reply_Btn" value="삭제" /></td>');
-					htmlStr.push('</tr>');
-				}
-				htmlStr.push('</tfoot>');
-				htmlStr.push('</table>');
-				htmlStr.push('</div>');
-			}
-			console.log(htmlStr);
-			$('#replys').html(htmlStr.join(""));
+            console.log(htmlStr);
+            for (let i = 0; i < replyList.length; i++) {
+                htmlStr.push('<div class="reply_list">');
+                htmlStr.push('<table id=' + replyList[i].no + '>');
+                htmlStr.push('<tbody>');
+                htmlStr.push('<tr>');
+                htmlStr.push('<td class="Content">' + replyList[i].content + "</td>");
+                htmlStr.push('<tr>');
+                htmlStr.push('<td>' + replyList[i].nickname + "</td>");
+                htmlStr.push('</tr>');
+                htmlStr.push('<tr>');
+                htmlStr.push('<td>' + replyList[i].writeDate + "</td>");
+                htmlStr.push('</tr>');
+                htmlStr.push('</tbody>');
+                htmlStr.push('<tfoot>');
+                if (replyList[i].memberNo == $('#login_no').val()) {
+                    htmlStr.push("<tr>");
+                    htmlStr.push('<td><input type="button" class="modify_Reply_Form_Btn" value="수정" />&nbsp;');
+                    htmlStr.push('<input type="button" class="remove_Reply_Btn" value="삭제" /></td>');
+                    htmlStr.push('</tr>');
+                }
+                htmlStr.push('</tfoot>');
+                htmlStr.push('</table>');
+                htmlStr.push('</div>');
+            }
+            console.log(htmlStr);
+            $('#replys').html(htmlStr.join(""));
 
-		} catch (error) {
-			console.trace();
-			console.log("error : ", error);
-		}
-	}
+        } catch (error) {
+            console.trace();
+            console.log("error : ", error);
+        }
+    }
 
-	console.log();
+    console.log();
 
-	//댓글 작성
-	$('#write_reply_btn').on('click', function () {
-		//const articleNo = $("#article_no").val();
-		const content = $('#write_content').val();
-		const depth = 0; // 최초 작성은 원글이라 depth는 0
-		if(content == null || content === ""){
-			$('#write_content').attr("placeholder", "내용을 입력하세요");
-			$('#write_content').addClass('changeplaceholder');
-			return false;
-		}
-		console.log('ajax전');
-		requestProcess('/insertReply',0, content, depth);
-		$("#write_content").val(""); // textarea 비우기
-		$('#write_content').removeClass('changeplaceholder');
-		$("#write_content").attr('placeholder', '댓글을 입력해주세요');
-		console.log('ajax후');
-	});
-
-	
-	//답글 작성
-	$('#write_depth_reply_btn').on('click', function () {
-		// const no = $(this).find('.grp_no').val(); // grp 값
-		const no = $('#write_depth_reply_form').find('#grp_no').val();
-		console.log('no값', no);
-		const content = $('#write_depth_content').val();
-		const depth = 1; // 답글은 depth:1
-		if(content == null || content === ""){
-			$('#write_depth_content').attr("placeholder", "내용을 입력하세요");
-			$('#write_depth_content').addClass('changeplaceholder');
-			return false;
-		}
-		console.log('ajax전');
-		requestProcess('/insertReply', no, content, depth);
-		$('#write_depth_reply_form').hide(); // 폼 닫기
-		$("#write_depth_content").val(""); // textarea 비우기
-		$('#write_depth_content').removeClass('changeplaceholder');
-		$("#write_depth_content").attr('placeholder', '댓글을 입력해주세요');
-		console.log('ajax후');
-	});
-
-	//답글 폼
-	$(document).on('click', '.depth_reply_btn', function () {
-		const no = $(this).parents('table').attr('id');
-		var grpCheck = $('#write_depth_reply_form').find('grp_no');
-		if (grpCheck != null){
-			$('#write_depth_reply_form').find('#grp_no').remove();
-		}
-		var $input = $('<input type="hidden" id="grp_no" value=' + no + '>');
-		$('#write_depth_reply_form').append($input);
-		$('#write_depth_reply_form').insertAfter('#' + no);
-		$('#write_depth_reply_form').show();
-	});
-
-	//답글 취소
-	$('.depth_reply_cancle_btn').on('click', function () {
-		$('#write_depth_reply_form').hide();
-	});
-
-	//댓글 수정폼
-	$(document).on('click', '.modify_Reply_Form_Btn', function () {
-		const no = $(this).parents('table').attr('id');
-		$('#modify_reply_form').insertAfter('#' + no);
-		const content = $('#' + no).find('.Content').text();
-		console.log('content:', content);
-		$('#reply_content[placeholder]').val(content);
-		$('#no').val(no);
-		$('#modify_reply_form').show();
-		$('#' + no).hide();
-	});
+    //댓글 작성
+    $('#write_reply_btn').on('click', function () {
+        //const articleNo = $("#article_no").val();
+        const content = $('#write_content').val();
+        const depth = 0; // 최초 작성은 원글이라 depth는 0
+        if (content == null || content === "") {
+            $('#write_content').attr("placeholder", "내용을 입력하세요");
+            $('#write_content').addClass('changeplaceholder');
+            return false;
+        }
+        console.log('ajax전');
+        requestProcess('/insertReply', 0, content, depth);
+        $("#write_content").val(""); // textarea 비우기
+        $('#write_content').removeClass('changeplaceholder');
+        $("#write_content").attr('placeholder', '댓글을 입력해주세요');
+        console.log('ajax후');
+    });
 
 
-	//댓글 수정폼 닫기
-	$('.modify_cancle').on('click', function () {
-		const no = $('#no').val();
-		console.log('cancelModifyFormNo:', no);
-		$('#' + no).show();
-		$('#modify_reply_form').hide();
-		$('#modify_reply_form').insertAfter('#writeReplyForm');
-	});
+    //답글 작성
+    $('#write_depth_reply_btn').on('click', function () {
+        // const no = $(this).find('.grp_no').val(); // grp 값
+        const no = $('#write_depth_reply_form').find('#grp_no').val();
+        console.log('no값', no);
+        const content = $('#write_depth_content').val();
+        const depth = 1; // 답글은 depth:1
+        if (content == null || content === "") {
+            $('#write_depth_content').attr("placeholder", "내용을 입력하세요");
+            $('#write_depth_content').addClass('changeplaceholder');
+            return false;
+        }
+        console.log('ajax전');
+        requestProcess('/insertReply', no, content, depth);
+        $('#write_depth_reply_form').hide(); // 폼 닫기
+        $("#write_depth_content").val(""); // textarea 비우기
+        $('#write_depth_content').removeClass('changeplaceholder');
+        $("#write_depth_content").attr('placeholder', '댓글을 입력해주세요');
+        console.log('ajax후');
+    });
 
-	//댓글 수정
-	$('.modify_reply_btn').on('click', function () {
-		// 댓글No
-		const no = $('#no').val();
-		console.log('modifyActionNo:', no);
-		const content = $('#' + no).parent('div').find('#reply_content').val();
-		const depth = $(this).parents('table').find('.depth').val();
-		if(content == null || content === ""){
-			$('#reply_content').attr("placeholder", "내용을 입력하세요");
-			$('#reply_content').addClass('changeplaceholder');
-			return false;
-		}
-		console.log('modifyReplyContent:', content);
-		requestProcess('/modifyReply', no, content, depth);
-		$('#reply_content').removeClass('changeplaceholder');
-		$('#modify_reply_form').insertAfter('#writeReplyForm');
-		$('#modify_reply_form').hide();
-		$('#modify_reply_form').html();
-	});
+    //답글 폼
+    $(document).on('click', '.depth_reply_btn', function () {
+        const no = $(this).parents('table').attr('id');
+        var grpCheck = $('#write_depth_reply_form').find('grp_no');
+        if (grpCheck != null) {
+            $('#write_depth_reply_form').find('#grp_no').remove();
+        }
+        var $input = $('<input type="hidden" id="grp_no" value=' + no + '>');
+        $('#write_depth_reply_form').append($input);
+        $('#write_depth_reply_form').insertAfter('#' + no);
+        $('#write_depth_reply_form').show();
+    });
 
+    //답글 취소
+    $('.depth_reply_cancle_btn').on('click', function () {
+        $('#write_depth_reply_form').hide();
+    });
 
-	//댓글 삭제
-	$(document).on('click', '.remove_Reply_Btn', function () {
-		const no = $(this).parents('table').attr('id');
-		console.log('remove', no)
-		requestProcess('/removeReply', no);
-	});
-
-
-
-	$(document).on('click', '#add_like_btn', function () {
-		$.ajax({
-			url: '/articles/addLike',
-			method: 'POST',
-			dataType: 'json',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				"articleNo": $("#article_no").val()
-			}),
-			success: function (data) {
-				let count = data.totalcount; // 총 추천 수
-				//let count = JSON.parse(data).totalCount;
-				// alert(count);
-				let likecount = [];
-				likecount += "<button type='button' id='del_like_btn'><i class='fas fa-heart'></i> </button>";
-				likecount += "<strong>" + count + "</strong>";
-				$('#like_area').html("");
-				$('#like_area').html(likecount);
-			},
-			error: function (e) {
-				console.trace();
-				reject(e);
-			}
-		});
-	});
+    //댓글 수정폼
+    $(document).on('click', '.modify_Reply_Form_Btn', function () {
+        const no = $(this).parents('table').attr('id');
+        $('#modify_reply_form').insertAfter('#' + no);
+        const content = $('#' + no).find('.Content').text();
+        console.log('content:', content);
+        $('#reply_content[placeholder]').val(content);
+        $('#no').val(no);
+        $('#modify_reply_form').show();
+        $('#' + no).hide();
+    });
 
 
-	$(document).on('click', '#del_like_btn', function () {
-		$.ajax({
-			url: "/articles/delLike",
-			method: 'POST',
-			dataType: 'json',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				"articleNo": $("#article_no").val()
-			}),
-			success: function (data) {
-				let count = data.totalcount; // 총 추천 수
-				let likecount = [];
-				likecount += "<button type='button' id='add_like_btn'><i class='far fa-heart'></i></button>";
-				likecount += "<strong>" + count + "</strong>";
-				$('#like_area').html("");
-				$('#like_area').html(likecount);
-			},
-			error: function (e) {
-				console.trace();
-				reject(e);
-			}
-		});
-	})
+    //댓글 수정폼 닫기
+    $('.modify_cancle').on('click', function () {
+        const no = $('#no').val();
+        console.log('cancelModifyFormNo:', no);
+        $('#' + no).show();
+        $('#modify_reply_form').hide();
+        $('#modify_reply_form').insertAfter('#writeReplyForm');
+    });
+
+    //댓글 수정
+    $('.modify_reply_btn').on('click', function () {
+        // 댓글No
+        const no = $('#no').val();
+        console.log('modifyActionNo:', no);
+        const content = $('#' + no).parent('div').find('#reply_content').val();
+        const depth = $(this).parents('table').find('.depth').val();
+        if (content == null || content === "") {
+            $('#reply_content').attr("placeholder", "내용을 입력하세요");
+            $('#reply_content').addClass('changeplaceholder');
+            return false;
+        }
+        console.log('modifyReplyContent:', content);
+        requestProcess('/modifyReply', no, content, depth);
+        $('#reply_content').removeClass('changeplaceholder');
+        $('#modify_reply_form').insertAfter('#writeReplyForm');
+        $('#modify_reply_form').hide();
+        $('#modify_reply_form').html();
+    });
+
+
+    //댓글 삭제
+    $(document).on('click', '.remove_Reply_Btn', function () {
+        const no = $(this).parents('table').attr('id');
+        console.log('remove', no)
+        requestProcess('/removeReply', no);
+    });
+
+
+    $(document).on('click', '#add_like_btn', function () {
+        $.ajax({
+            url: '/articles/addLike',
+            method: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "articleNo": $("#article_no").val()
+            }),
+            success: function (data) {
+                let count = data.totalcount; // 총 추천 수
+                //let count = JSON.parse(data).totalCount;
+                // alert(count);
+                let likecount = [];
+                likecount += "<button type='button' id='del_like_btn'><i class='fas fa-heart'></i> </button>";
+                likecount += "<strong>" + count + "</strong>";
+                $('#like_area').html("");
+                $('#like_area').html(likecount);
+            },
+            error: function (e) {
+                console.trace();
+                reject(e);
+            }
+        });
+    });
+
+
+    $(document).on('click', '#del_like_btn', function () {
+        $.ajax({
+            url: "/articles/delLike",
+            method: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "articleNo": $("#article_no").val()
+            }),
+            success: function (data) {
+                let count = data.totalcount; // 총 추천 수
+                let likecount = [];
+                likecount += "<button type='button' id='add_like_btn'><i class='far fa-heart'></i></button>";
+                likecount += "<strong>" + count + "</strong>";
+                $('#like_area').html("");
+                $('#like_area').html(likecount);
+            },
+            error: function (e) {
+                console.trace();
+                reject(e);
+            }
+        });
+    })
+
 
 
 });
+
+// $(".addToPlay").on('click', function (e) {
+//     var children = $(e.currentTarget).children();
+//     console.log(children.val());
+//     console.log(children.innerText);
+//     //var playlistNo = [[${#authentication.principal.getNickname()}]] + "pl1";
+//     //var musicNos = [];
+//     // musicNos[0] =
+//     //requestProcessAddToPlay("/pushmusic/", playlistNo, musicNos);
+// });

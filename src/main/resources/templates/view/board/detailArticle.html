@@ -6,7 +6,7 @@
 <link rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
       crossorigin="anonymous">
-
+<link th:href="@{/css/detailAudioArticle.css}" rel="stylesheet" />
 <link th:href="@{../css/detailArticleStyle.css}" rel="stylesheet" />
 
 
@@ -64,22 +64,21 @@
                                     <th>내용</th>
                                     <td th:text="${article.content}" th:field="*{content}"></td>
                                     <th>음악</th>
-                                    <td th:each="music :${musicList}">
+                                    <td th:each="music : ${musicList}">
                                         <div class="detail-audio-part-style">
-                                            <img id="detailAudioImg" src="http://localhost:20000/api/musics/" alt="" srcset="">
-
+                                            <img id="detailAudioImg" th:src="${music.links[1].href}" alt="" srcset="">
                                             <div id="audioDiv" class="detail-audioDiv-style">
                                                 <div id="audioInfoDiv" class="detail-audioInfo-style">
                                                     <button id="audioPlayBtn" class="audioPlayBtn" onclick="detailPlayAudio()" style="visibility: hidden">
                                                         <span id="audioPlayIcon" class="material-icons">play_circle</span>
                                                     </button>
-
-                                                    <span id="audioTitle" class="audioTitle">1</span>
+                                                    <span id="audioTitle" class="audioTitle" th:text="${music.title}"></span>
                                                 </div>
                                                 <div class="detail-audioControls-style">
                                                     <!--            <div id="waveform"></div>-->
                                                     <!--            <p id="audioResource" style="display: none"></p>-->
-                                                    <audio src="http://localhost:20000/api/musics/dfebb215-4843-402d-bf31-cae77aafb062.audio" id="detail-audio" controls=""></audio>
+                                                    <audio th:src="${music.links[0].href}" id="detail-audio" controls=""></audio>
+                                                    <button type = "button" class = "addToPlay" onclick="onAddtoPlayClick(this)"><div id = "asdf" th:text="${music.id}">재생목록에 추가</button>
                                                     <!--              style="display: none"-->
                                                 </div>
                                             </div>
@@ -243,7 +242,7 @@
                          class="detailArticle-replyModify-style">
                         <div id="updateReplyForm">
                             <input type="hidden" id="no" />
-                            <textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
+                            <textarea id="reply_content" rows="5" cols="50" placeholder=""></textarea>
                             <button class="modify_cancle">취소</button>
                             <button class="modify_reply_btn">수정</button>
                         </div>
@@ -269,4 +268,52 @@
         </div>
     </main>
 </div>
+
+<!--<script th:inline="javascript">-->
+
+<!--    function onAddtoPlayClick(btn) {-->
+<!--        var playlistNo = [[${#authentication.principal.getNo}]];-->
+<!--        var playlistNo = playlistNo + "pl1";-->
+<!--        var musicNos = $(btn).children().text();-->
+<!--        console.log("playlistNo : ", playlistNo);-->
+<!--        console.log("musicNos : ", musicNos);-->
+<!--        requestProcessAddToPlay("/pushmusic/" + playlistNo, musicNos);-->
+<!--    }-->
+<!--    const getAjaxAddToPlay = function (url, musicNos) {-->
+<!--        // var objParams = {-->
+<!--        //     "playlistNo": playlistNo,-->
+<!--        //     "musicNos" : musicNos-->
+<!--        // };-->
+<!--        //console.log(objParams);-->
+<!--        return new Promise((resolve, reject) => {-->
+<!--            $.ajax({-->
+<!--                url: url,-->
+<!--                method: "POST",-->
+<!--                dataType: "json",-->
+<!--                data: {-->
+<!--                    musicNos:musicNos-->
+<!--                },-->
+<!--                success: function (data) {-->
+<!--                    // 비동기 작업 성공 시 호출-->
+<!--                    resolve(data);-->
+<!--                },-->
+<!--                error: function (e) {-->
+<!--                    // 비동기 작업 실패 시 호출-->
+<!--                    reject(e);-->
+<!--                },-->
+<!--            });-->
+<!--        });-->
+<!--    };-->
+
+<!--    async function requestProcessAddToPlay(url, musicNos) {-->
+<!--        try {-->
+<!--            // await 다음에는 비동기 처리 작업이 와야함.-->
+<!--            //const result = await getAjaxAddToPlay(url, playlistNo, musicNos);-->
+<!--            await getAjaxAddToPlay(url, musicNos);-->
+<!--        } catch (error) {-->
+<!--            console.log("error : ", error);-->
+<!--        }-->
+<!--    }-->
+
+<!--</script>-->
 </html>

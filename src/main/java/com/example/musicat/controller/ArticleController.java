@@ -112,7 +112,7 @@ public class ArticleController {
 			// audio 파일
 			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
 			model.addAttribute("musicList", musicList);
-//				log.info(musicList.toString());
+			log.info("article controller musiclist : " + musicList.toString());
 
 
 			// xss 처리 Html tag로 변환
