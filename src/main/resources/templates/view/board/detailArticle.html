@@ -53,20 +53,24 @@
                                       class="me-md-4"></span>
                                 <span th:text="${article.writeDate}" class="me-md-2"></span>
                             </div>
-
                             <div class="dropdown-divider"></div>
 
+
                             <div class="content-inner-style">
-                                <div class="content-inner-file-style">
-                                    <th:block th:if="${article.attacheFile == null}">
-                                    </th:block>
-                                    <th:block th:unless="${article.attacheFile == null}">
+                                <th:block th:if="${article.attacheFile == null}">
+                                </th:block>
+                                <th:block th:unless="${article.attacheFile == null}">
+                                    <div class="content-inner-file-style">
+                                        <th:block th:if="${article.attacheFile == null}">
+                                        </th:block>
+
                                         <a th:href="|/attach/${article.getAttacheFile().getNo()}|"
                                            th:text="${article.getAttacheFile().getSystemFileName()}"></a>
-                                    </th:block>
-                                </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                </th:block>
 
-                                <th:block th:if="${article.fileList != null}">
+                                <th:block th:if="${not #strings.isEmpty(article.fileList)}">
                                     <div class="content-file-style">
                                         <div th:each=" imageFile : ${article.fileList}">
                                             <th:block th:if="${imageFile.fileType == 2}">
@@ -80,10 +84,11 @@
                                                 <img th:src="|/images/${imageFile.getSystemFileName()}|"/>
                                             </th:block>
                                         </div>
+
                                     </div>
+                                    <div class="dropdown-divider"></div>
                                 </th:block>
 
-                                <div class="dropdown-divider"></div>
 
 
                                 <th:block th:if="${not #strings.isEmpty(musicList)}">
