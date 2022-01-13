@@ -16,7 +16,10 @@
                         <span th:text="${#authorization.expr('isAuthenticated()')}"></span>
                         <th:block th:if = "${#authorization.expr('isAuthenticated()')}">
                             <button onclick="location.href='/ChangePwd'" th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">비밀번호 변경</button>
-                            <button onclick="" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()}">Follow</button>
+                            <div id="ezy">
+                                <button th:onclick="'follow(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 0">Follow</button>
+                                <button th:onclick="'cancel(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 1">Cancel</button>
+                            </div>
                         </th:block>
 
                     </div>
@@ -42,7 +45,7 @@
                       method="POST"
                     >
                       <input type="hidden" name="_method" value="DELETE" />
-                      <button id="delete-Btn">삭제</button>
+                      <button id="class">삭제</button>
                     </form>
                   </div>
                 </div>
@@ -87,7 +90,7 @@
                                     </form>
                                     <form th:action="|/deleteplaylist/*{memberNo}/*{id}|" method="POST">
                                         <input type="hidden" name="_method" value="DELETE">
-                                        <button id="delete-Btn">삭제</button>
+                                        <button class="delete-Btn">삭제</button>
                                     </form>
 
                                 </div>
@@ -126,8 +129,8 @@
     </main>
   </div>
 </html>
-
-<script>
+<script th:src="@{../js/jquery-3.6.0.min.js}"></script>
+<script th:inline="javascript">
   $(function () {
     $.ajax({
       url: "/profile",
@@ -143,5 +146,54 @@
         $("#modal-profile").modal("show");
       },
     });
+  }
+  function follow(opponent, my) {
+      $.ajax({
+          url: "/follow",
+          method: "POST",
+          dataType: "json",
+          data: {
+              opponent: opponent,
+              my: my
+          },
+          success: function(data) {
+              console.log(data.checkFollow);
+              console.log(data.opponent);
+              console.log(data.my);
+
+              a = '';
+              //$("#ezy button").remove();
+              a += '<button onclick="cancel(' + data.opponent + ',' + data.my + ')" >Cancel</button>';
+              $('#ezy').html(a);
+          },
+          error: function(err) {
+              console.trace(err);
+          }
+      });
+  }
+
+  function cancel(opponent, my){
+      $.ajax({
+          url: "/followCancel",
+          method: "POST",
+          dataType: "json",
+          data: {
+              opponent: opponent,
+              my: my
+          },
+          success: function(data) {
+              console.log(data.checkFollow);
+              console.log(data.opponent);
+              console.log(data.my);
+
+              a = '';
+              //$("#ezy button").remove();
+              a += '<button onclick="follow(' + data.opponent + ',' + data.my + ')" >Follow</button>';
+              $('#ezy').html(a);
+          },
+          error: function(err) {
+              console.trace(err);
+          }
+      });
   }
 </script>
