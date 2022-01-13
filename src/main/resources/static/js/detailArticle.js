@@ -68,27 +68,33 @@ $(document).ready(function () {
 			console.log(htmlStr);
 			for (let i = 0; i < replyList.length; i++) {
 				htmlStr.push('<div class="reply_list">');
+				htmlStr.push('<div class="dropdown-divider"></div>');
+				if(replyList[i].depth == 1){
+					htmlStr.push('<div class="reply-style ms-4" id=' + replyList[i].no + '>');
+				}else{
+					htmlStr.push('<div class="reply-style" id=' + replyList[i].no + '>');
+				}
 				htmlStr.push('<div class="reply-style" id=' + replyList[i].no + '>');
 				htmlStr.push('<div class="reply-info-style">');
 				htmlStr.push('<div>');
 				htmlStr.push('<span class="me-3 dropdown">');
-				htmlStr.push('<a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown" th:text='+replyList[i].nickname + '></a>');
+				htmlStr.push('<a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown"> '+ replyList[i].nickname + '</a>');
 				htmlStr.push('<ul class="dropdown-menu">');
-				htmlStr.push('<li><a class="dropdown-item"th:href="|/myPage/Playlist/'+replyList[i].memberNo +'|>MyPage</a></li>');
+				htmlStr.push('<li><a class="dropdown-item" href="|/myPage/Playlist/'+replyList[i].memberNo +'|>MyPage</a></li>');
 				htmlStr.push('<li><a class="dropdown-item" href="/notelist">쪽지함</a></li>');
-				htmlStr.push('<td>' + replyList[i].writeDate + "</td>");
 				htmlStr.push('</ul>');
 				htmlStr.push('</span>');
-				htmlStr.push('<span th:text='+replyList[i].writeDate+'></span>');
+				htmlStr.push('<span>'+replyList[i].writeDate+'</span>');
 				htmlStr.push('</div>');
-				htmlStr.push('<span class="Content reply-text-style" th:text='+replyList[i].content+'></span>');
+				htmlStr.push('<span class="Content reply-text-style">'+replyList[i].content+'</span>');
 				htmlStr.push('</div>');
 				htmlStr.push('<div class="mt-2">');
-				htmlStr.push('<input type="button" class="depth_reply_btn" value="답글쓰기"/>');
+				htmlStr.push('<input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>');
 				if (replyList[i].memberNo == $('#login_no').val()) {
-					htmlStr.push('<input type="button" class="modify_Reply_Form_Btn" value="수정" />');
-					htmlStr.push('<input type="button" class="remove_Reply_Btn" value="삭제" />');
+					htmlStr.push('<input type="button" class="modify_Reply_Form_Btn me-2" value="수정" />');
+					htmlStr.push('<input type="button" class="remove_Reply_Btn me-2" value="삭제" />');
 				}
+				htmlStr.push('</div>');
 				htmlStr.push('</div>');
 				htmlStr.push('</div>');
 			}
@@ -145,7 +151,8 @@ $(document).ready(function () {
 
 	//답글 폼
 	$(document).on('click', '.depth_reply_btn', function () {
-		const no = $(this).parents('table').attr('id');
+		console.log("답글 폼 입장")
+		const no = $(this).parents('.reply-style').attr('id');
 		var grpCheck = $('#write_depth_reply_form').find('grp_no');
 		if (grpCheck != null){
 			$('#write_depth_reply_form').find('#grp_no').remove();
@@ -163,7 +170,7 @@ $(document).ready(function () {
 
 	//댓글 수정폼
 	$(document).on('click', '.modify_Reply_Form_Btn', function () {
-		const no = $(this).parents('table').attr('id');
+		const no = $(this).parents('.reply-style').attr('id');
 		$('#modify_reply_form').insertAfter('#' + no);
 		const content = $('#' + no).find('.Content').text();
 		console.log('content:', content);
@@ -206,7 +213,7 @@ $(document).ready(function () {
 
 	//댓글 삭제
 	$(document).on('click', '.remove_Reply_Btn', function () {
-		const no = $(this).parents('table').attr('id');
+		const no = $(this).parents('.reply-style').attr('id');
 		console.log('remove', no)
 		requestProcess('/removeReply', no);
 	});

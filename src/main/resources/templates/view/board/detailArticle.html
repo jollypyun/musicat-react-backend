@@ -77,35 +77,49 @@
                                             </th:block>
                                             <th:block th:unless="${imageFile.fileType == 2}">
                                                 <!--이미지 파일들-->
-                                                <img th:src="|/images/${imageFile.getSystemFileName()}|"
-                                                     width="200" height="200"/>
+                                                <img th:src="|/images/${imageFile.getSystemFileName()}|"/>
                                             </th:block>
                                         </div>
                                     </div>
                                 </th:block>
+
+                                <div class="dropdown-divider"></div>
+
+
                                 <th:block th:if="${not #strings.isEmpty(musicList)}">
-                                    <div th:each="music : ${musicList}">
-                                        <div class="detail-audio-part-style">
-                                            <img id="detailAudioImg" th:src="${music.links[1].href}" alt="" srcset="">
-                                            <div id="audioDiv" class="detail-audioDiv-style">
-                                                <div id="audioInfoDiv" class="detail-audioInfo-style">
-                                                    <button id="audioPlayBtn" class="audioPlayBtn"
-                                                            onclick="detailPlayAudio()">
-                                                        <span id="audioPlayIcon"
-                                                              class="material-icons">play_circle</span>
-                                                    </button>
+                                    <div class="mt-4 content-audioList-style">
+                                        <span class="material-icons md-36 float-end">playlist_add</span>
+
+
+                                        <div th:each="music : ${musicList}" class="mb-2">
+                                            <div class="detail-audio-part-style">
+                                                <img id="detailAudioImg" th:src="${music.links[1].href}" alt=""
+                                                     srcset="">
+                                                <div id="audioDiv" class="detail-audioDiv-style">
+                                                    <div id="audioInfoDiv" class="detail-audioInfo-style">
+
                                                     <span id="audioTitle" class="audioTitle"
                                                           th:text="${music.title}"></span>
-                                                </div>
-                                                <div class="detail-audioControls-style">
-                                                    <!--            <div id="waveform"></div>-->
-                                                    <!--            <p id="audioResource" style="display: none"></p>-->
-                                                    <audio th:src="${music.links[0].href}" id="detail-audio"
-                                                           controls=""></audio>
-                                                    <!--              style="display: none"-->
+
+                                                        <button id="audioPlayBtn" class="audioPlayBtn"
+                                                                onclick="detailPlayAudio()">
+                                                        <span id="audioPlayIcon"
+                                                              class="material-icons md-36">add</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="detail-audioControls-style" style="display: none">
+                                                        <!--            <div id="waveform"></div>-->
+                                                        <!--            <p id="audioResource" style="display: none"></p>-->
+                                                        <audio th:src="${music.links[0].href}" id="detail-audio"
+                                                               controls=""></audio>
+                                                        <!--              style="display: none"-->
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="dropdown-divider"></div>
+
                                     </div>
                                 </th:block>
                                 <p class="content-text-style" th:text="${article.content}" th:field="*{content}"></p>
@@ -208,16 +222,17 @@
 
                     <div id="replys" class="mt-2">
                         <div class="reply_list" th:each="reply : ${article.getReplyList()}">
-
+                            <div class="dropdown-divider"></div>
                             <th:block th:if="${reply.hide == 1}">
                                 <p>삭제된 댓글 입니다.</p>
                             </th:block>
 
                             <th:block th:if="${reply.hide == 0}">
-                                <p th:if="${reply.depth == 1}">ㄴ</p>
-                                <div class="reply-style" th:id="${reply.getNo()}">
-                                    <div class="reply-info-style">
-                                        <div>
+
+                                <th:block th:if="${reply.depth == 1}">
+                                    <div class="reply-style ms-4" th:id="${reply.getNo()}">
+                                        <div class="reply-info-style">
+                                            <div>
                                             <span class="me-3 dropdown">
 <!--                                                <span class="fw-bold fs-5" th:text="${reply.nickname}"></span>-->
                                                 <a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown"
@@ -229,19 +244,51 @@
                                                     <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
                                                 </ul>
                                             </span>
-                                            <span th:text="${reply.writeDate}"></span>
+                                                <span th:text="${reply.writeDate}"></span>
+                                            </div>
+                                            <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
-                                        <span class="Content reply-text-style" th:text="${reply.content}"></span>
-                                    </div>
-                                    <div class="mt-2">
-                                        <input type="button" class="depth_reply_btn" value="답글쓰기"/>
+                                        <div class="mt-2">
+                                            <input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>
 
-                                        <th:block th:if="${loginMemberNo == reply.memberNo}">
-                                            <input type="button" class="modify_Reply_Form_Btn" value="수정"/>
-                                            <input type="button" class="remove_Reply_Btn" value="삭제"/>
-                                        </th:block>
+                                            <th:block th:if="${loginMemberNo == reply.memberNo}">
+                                                <input type="button" class="modify_Reply_Form_Btn me-2" value="수정"/>
+                                                <input type="button" class="remove_Reply_Btn me-2" value="삭제"/>
+                                            </th:block>
+                                        </div>
                                     </div>
-                                </div>
+                                </th:block>
+
+                                <th:block th:unless="${reply.depth == 1}">
+                                    <div class="reply-style" th:id="${reply.getNo()}">
+                                        <div class="reply-info-style">
+                                            <div>
+                                            <span class="me-3 dropdown">
+<!--                                                <span class="fw-bold fs-5" th:text="${reply.nickname}"></span>-->
+                                                <a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown"
+                                                   th:text="${reply.nickname}">
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item"
+                                                           th:href="|/myPage/Playlist/${reply.memberNo}|">MyPage</a></li>
+                                                    <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                                </ul>
+                                            </span>
+                                                <span th:text="${reply.writeDate}"></span>
+                                            </div>
+                                            <span class="Content reply-text-style" th:text="${reply.content}"></span>
+                                        </div>
+                                        <div class="mt-2">
+                                            <input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>
+
+                                            <th:block th:if="${loginMemberNo == reply.memberNo}">
+                                                <input type="button" class="modify_Reply_Form_Btn me-2" value="수정"/>
+                                                <input type="button" class="remove_Reply_Btn me-2" value="삭제"/>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </th:block>
+
                             </th:block>
 
                         </div>
@@ -253,8 +300,10 @@
 							<textarea id="write_depth_content" name="write_content" rwos="10"
                                       cols="75" placeholder="댓글을 입력해주세요."></textarea>
 
-                            <button type="button" id="write_depth_reply_btn">등록</button>
-                            <button type="button" class="depth_reply_cancle_btn">취소</button>
+                            <div class="detailArticle-replyBtn-style">
+                                <button type="button" id="write_depth_reply_btn">등록</button>
+                                <button type="button" class="depth_reply_cancle_btn mt-2">취소</button>
+                            </div>
                         </div>
                     </div>
 

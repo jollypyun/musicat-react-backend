@@ -1,18 +1,15 @@
 @charset "utf-8";
 
 .category-board-style a {
-    margin-left: 20px;
+    margin-left: 5px;
     text-decoration: none;
     color: #eeeeee;
+    font-size: 14px;
 }
 
 .category-board-style span {
     display: inline-block;
     margin-left: 20px;
-}
-
-.category-board-style a {
-    margin-left: 5px;
 }
 
 .category-board-style a:hover {

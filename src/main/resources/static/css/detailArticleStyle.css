@@ -1,5 +1,10 @@
 @charset "utf-8";
 
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
 .detail-row-style{
 	width: 50%;
 	margin: 0 auto;
@@ -23,7 +28,6 @@
 }
 
 .reply-info-style{
-	border: 1px solid #666666;
 	display: flex;
 	flex-direction: column;
 	padding: 10px;
@@ -111,6 +115,8 @@
 .detailArticle-reply-style {
 	display: flex;
 	width: 100%;
+	margin-top: 20px;
+	align-items: center;
 }
 
 .detailArticle-reply-style textarea {
@@ -121,8 +127,10 @@
 	width: 100%;
 }
 
+
 .detailArticle-reply-style button {
 	width: 100px;
+	height: 40px;
 }
 
 .reply-text-style{
@@ -133,34 +141,7 @@
 	margin-top: 10px;
 	width: 100%;
 }
-.reply_list table{
-	width: 100%;	
-}
 
-.reply_list table th,
-.reply_list table td{
-	border: 1px solid #000000;
-	vertical-align: middle;
-	padding: 5px;
-}
-
-.reply_list table th{
-	text-align: center;
-}
-
-.reply_list table tfoot td{
-	padding: 10px;
-	border: none;
-}
-
-.reply_list table tfoot td input{
-	width:100px;
-	padding: 5px;
-}
-
-.reply_list table tfoot td input:first-child{
-	margin-right: 10px;
-}
 
 
 /** {*/
@@ -230,15 +211,15 @@
 	width: 100%;
 	display: flex;
 	align-items: center;
-	height: 100px;
-	margin: 20px 0px;
+	height: 70px;
 
 }
 
 .detail-audio-part-style img{
-	width: 100px;
-	height: 100px;
-	margin: 20px;
+	width: 50px;
+	height: 50px;
+	margin: 0 20px;
+	display: inline-block;
 }
 
 .detail-audioDiv-style{
@@ -260,11 +241,12 @@
 	align-items: center;
 	width: 100%;
 	justify-content: space-evenly;
-	height: 30%;
+	height: 100%;
 }
 
 .audioTitle{
 	width: 70%;
+	font-size: 24px;
 }
 
 .detail-audioInfo-style .audioPlayBtn {
@@ -273,6 +255,10 @@
 	padding: 0;
 	width: 20%;
 
+}
+
+.audioPlayBtn:hover{
+	color: #0c63e4;
 }
 
 .detail-audioInfo-style .audioDelBtn{
@@ -321,4 +307,14 @@
 
 .info-nickname-style{
 	font-weight: bold;
+}
+
+.detailArticle-content-style h3:hover{
+	color: #0c63e4;
+	cursor: pointer;
+}
+
+.detailArticle-replyModify-style textarea{
+	width: 100%;
+	resize: none;
 }
