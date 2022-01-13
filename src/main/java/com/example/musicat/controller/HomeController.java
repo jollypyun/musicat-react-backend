@@ -1,17 +1,8 @@
 package com.example.musicat.controller;
 
 
-import java.lang.reflect.Member;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,7 +12,6 @@ import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.FollowVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
-import com.example.musicat.mapper.member.GradeMapper;
 
 import com.example.musicat.domain.board.BestArticleVO;
 
@@ -31,6 +21,7 @@ import com.example.musicat.service.board.ReplyService;
 import com.example.musicat.service.member.FollowService;
 import com.example.musicat.service.member.GradeService;
 import com.example.musicat.service.music.MusicApiService;
+import com.example.musicat.util.TemplateModelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -78,6 +69,8 @@ public class HomeController {
     @Autowired
     private static AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TemplateModelFactory templateModelFactory;
 
     @GetMapping("/")
     public String mainPage(){
@@ -139,6 +132,11 @@ public class HomeController {
       List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
       model.addAttribute("likeBoardList", likeBoardList);
 
+
+//      templateModelFactory.setCurPlaylistModel(model);
+//      log.info("setted music : " + model.getAttribute("curPlaylist"));
+
+      //musicApiService.showDetailPlaylist()
 
       return "view/home/viewHomeTemplate";
 
@@ -209,7 +207,7 @@ public class HomeController {
     public String myPagePlaylistDetail(Model model, @PathVariable(name = "playlistKey") String playlistKey, @PathVariable(name = "userNo") int userNo) {
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
-        List<Music> musics = new ArrayList<>();
+        List<Music> musics = null;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
@@ -363,4 +361,5 @@ public class HomeController {
         model.addAttribute("playlist", playlist);
         return "view/etc/changePlaylist";
     }
+
 }

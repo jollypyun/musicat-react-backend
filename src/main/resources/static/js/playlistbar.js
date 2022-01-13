@@ -1,5 +1,11 @@
 $(document).ready(function () {
 
+
+    if( $("#userNoForPlaylist").text() != -1) {
+          console.log("로그인 회원, 재생 목록 받아오기 " + $("#userNoForPlaylist").text() + "pl1");
+          requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
+    }
+
     document.getElementById("playlist-prev").addEventListener("click", playlistPrev);
     document.getElementById("playlist-pause").addEventListener("click", playlistPause);
     document.getElementById("playlist-play").addEventListener("click", playlistPlay);
@@ -167,6 +173,7 @@ $(document).ready(function () {
 
 function onAddtoPlayClick(btn) {
     //var playlistNo = [[${#authentication.principal.getNo}]];
+
     var playlistNo = $("#userNoForPlaylist").text();
     playlistNo = playlistNo + "pl1";
     var musicNos = $(btn).children().text();
@@ -224,14 +231,51 @@ async function requestProcessAddToPlay(url, musicNos) {
     }
 }
 
-function playAudio(btn){
+function playAudio(btn) {
     //console.log($(btn).attr("id"));
     $("#audio").attr("src", $(btn).attr("id"));
     $("#audio").trigger("play");
 }
-// function testinggg() {
-//     console.log($("#audio").attr("src"));
-//     $("#audio").attr("src", "http://localhost:20000/api/musics/6e7b0b3d-6275-46bb-b997-97b664801ed9.audio");
-//     console.log($("#audio").attr("src"));
-//
-// }
+
+const getCurrentPlayAjax = function (url, musicNos) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            method: "GET",
+            // dataType: "json",
+            // data: {
+            //     playlist
+            // },
+            success: function (data) {
+                // 비동기 작업 성공 시 호출
+                resolve(data);
+            },
+            error: function (e) {
+                // 비동기 작업 실패 시 호출
+                reject(e);
+            },
+        });
+    });
+};
+
+async function requestCurrentPlay(url) {
+    try {
+        console.log("재생목록 받아오기 ajax 실행");
+        const result = await getCurrentPlayAjax(url);
+        $("#currentPlayList_ul").empty();
+        result.forEach(function(e){
+            $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
+                + '"/> <button id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons">play_circle</span></button><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><span>30:30</span><button class="song-addInfo"><span class="material-icons">dehaze</span></button><div class="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
+
+        });
+    } catch (error) {
+        console.log("error : ", error);
+    }
+}
+
+//     //이 페이지에서 뒤로가기 하거나, 목록을 누를때 그리고 새로고침을 할 때 이벤트 발생
+$(window).on("beforeunload", function (event) {
+    event.preventDefault();
+    //requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
+    // ajax
+});

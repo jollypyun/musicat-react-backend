@@ -1,6 +1,7 @@
 package com.example.musicat.security;
 
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.domain.music.Music;
 import lombok.extern.java.Log;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

@@ -167,4 +167,12 @@ public class MusicController {
         log.info(musicList.toString());
         return musicList;
     }
+
+    @GetMapping("retrieveMusicList/{playlistKey}")
+    public List<Music> retrieveMusicList(@PathVariable(name="playlistKey") String playlistKey){
+        List<Music> musics = musicApiService.showDetailPlaylist(playlistKey);
+
+        log.info("retireve music list : " + musics.toString());
+        return musics;
+    }
 }
