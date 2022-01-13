@@ -1,13 +1,10 @@
 package com.example.musicat.controller;
 
-import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
 import com.example.musicat.service.music.MusicApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -16,9 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Min;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,26 +86,26 @@ public class MusicController {
     }
 
     // 플레이리스트 삭제
-    @DeleteMapping("deleteplaylist/{memberNo}/{playNo}")
-    public ModelAndView removePlaylist(HttpServletRequest req, @PathVariable(name = "playNo") String playNo, @PathVariable(name = "memberNo")Integer memberNo) {
+    @DeleteMapping("deleteplaylist/{memberNo}/{playlistKey}")
+    public ModelAndView removePlaylist(HttpServletRequest req, @PathVariable(name = "playKey") String playlistKey, @PathVariable(name = "memberNo")Integer memberNo) {
         ModelAndView mv = new ModelAndView();
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
-        log.info("no : " + playNo);
-        musicApiService.deletePlaylist(memberNo, playNo);
+        log.info("no : " + playlistKey);
+        musicApiService.deletePlaylist(memberNo, playlistKey);
         mv.setView(new RedirectView("/myPage/Playlist/" + memberNo));
         return mv;
     }
 
     // 특정 플레이리스트 안에 곡 넣기
-    @PostMapping("/pushmusic/{playlistNo}")
-    public List<Music> insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name="musicNos") int musicNos/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistNo) {
+    @PostMapping("/pushmusic/{playlistKey}")
+    public List<Music> insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name="musicNos") int musicNos/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistKey) {
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); //이게 제대로 된 방법
         //int memberNo = 6; // 임시방편
-        log.info("playlistNo : " + playlistNo);
+        log.info("playlistKey : " + playlistKey);
         log.info("musicNo : " + musicNos);
         List<Integer> m = new ArrayList<Integer>();
         m.add(musicNos);
-        List<Music> musics = musicApiService.pushMusic(m, playlistNo);
+        List<Music> musics = musicApiService.pushMusic(m, playlistKey);
         //log.info("1 : " + musics.get(1).getLinks().get(1));
         return musics;
     }
@@ -126,13 +121,13 @@ public class MusicController {
     }
 
     // 플레이리스트 수정
-    @PostMapping("/changeplaylist/{playlistNo}")
-    public ModelAndView changePlaylistName(@PathVariable String playlistNo, @RequestParam(name = "title") String title, @RequestParam(name="image") MultipartFile image) {
+    @PostMapping("/changeplaylist/{playlistKey}")
+    public ModelAndView changePlaylistName(@PathVariable String playlistKey, @RequestParam(name = "title") String title, @RequestParam(name="image") MultipartFile image) {
         ModelAndView mv = new ModelAndView();
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
         //int memberNo = 6;
-        log.info("playlistNo : " + playlistNo);
-        Playlist playlist = musicApiService.updatePlaylistName(playlistNo, title, image);
+        log.info("playlistKey : " + playlistKey);
+        Playlist playlist = musicApiService.updatePlaylistName(playlistKey, title, image);
         int memberNo = playlist.getMemberNo();
         mv.setView(new RedirectView("/myPage/Playlist/" + memberNo));
         return mv;
@@ -147,8 +142,8 @@ public class MusicController {
     }
 
     // 플레이리스트 상세 불러오기
-    @GetMapping("getDetailPlaylist/{playlistNo}")
-    public void getDetailPlaylist(@PathVariable int playlistNo) {
+    @GetMapping("getDetailPlaylist/{playlistKey}")
+    public void getDetailPlaylist(@PathVariable String playlistKey) {
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
         //String str = musicApiService.showDetailPlaylist(playlistNo);
     }

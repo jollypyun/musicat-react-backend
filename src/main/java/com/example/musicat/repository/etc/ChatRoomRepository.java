@@ -12,7 +12,7 @@ public class ChatRoomRepository {
 
     private Map<String, ChatRoomVO> chatRoomDTOMap;
 
-    @PostConstruct
+    @PostConstruct // 한번만 실행되기 위해 사용
     private void init(){
         chatRoomDTOMap = new LinkedHashMap<>();
     }
@@ -34,5 +34,13 @@ public class ChatRoomRepository {
         chatRoomDTOMap.put(room.getRoomId(), room);
 
         return room;
+    }
+
+    public String deleteChatRoom(String chatRoomId) {
+
+        if(chatRoomDTOMap.remove(chatRoomId) == null)
+            return "room not exist";
+        else
+            return "delete Success";
     }
 }

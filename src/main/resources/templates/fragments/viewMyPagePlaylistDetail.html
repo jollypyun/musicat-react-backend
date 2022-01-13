@@ -21,7 +21,12 @@
                     <a th:href="@{'/myPage/Playlist/' + ${member.getNo()}}">Playlist</a>
                     <a th:href="@{'/myPage/Board/' + ${member.getNo()}}">글</a>
                     <a th:href="@{'/myPage/Reply/' + ${member.getNo()}}">댓글</a>
-                    <span th:if="${session.principal.no} == ${member.getNo()}"><a th:href="@{'/myPage/Like/' + ${member.getNo()}}">좋아요</a></span>
+
+                    <th:block th:if="${#authorization.expr('isAuthenticated()')} != false">
+                    <span th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
+                        <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">좋아요</a>
+                    </span>
+                    </th:block>
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">

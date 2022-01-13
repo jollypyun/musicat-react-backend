@@ -18,6 +18,7 @@ public class FollowController {
     @Autowired
     private FollowService followService;
 
+    // Following 수 세기
     @ResponseBody
     @GetMapping("/followingCount/{memberNo}")
     public int followingCount(@PathVariable int memberNo) {
@@ -26,12 +27,15 @@ public class FollowController {
         return this.followService.countFollowing(memberNo);
     }
 
+    // Followed 수 세기
     @ResponseBody
     @GetMapping("/followedCount/{memberNo}")
     public int followedCount(@PathVariable int memberNo) {
         return this.followService.countFollowed(memberNo);
     }
 
+
+    // Following 목록
     @GetMapping("/followingList/{memberNo}")
     public String followingList(@PathVariable int memberNo, Model model) {
         int flag = 0;
@@ -41,6 +45,7 @@ public class FollowController {
         return "view/member/listAboutFollow";
     }
 
+    // Followed 목록
     @GetMapping("/followedList/{memberNo}")
     public String followedList(@PathVariable int memberNo, Model model) {
         int flag = 1;
@@ -49,6 +54,7 @@ public class FollowController {
         log.info("msg : " + this.followService.retrieveFollowedList(memberNo));
         return "view/member/listAboutFollow";
     }
+
 
     @ResponseBody
     @PostMapping("/follow/{followedNo}")

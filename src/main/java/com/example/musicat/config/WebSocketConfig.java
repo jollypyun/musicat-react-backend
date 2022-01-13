@@ -1,7 +1,8 @@
 package com.example.musicat.config;
 
-import lombok.RequiredArgsConstructor;
+import com.example.musicat.websocket.manager.StompHandler;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
@@ -26,13 +27,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //        //보안상의 문제로 전체를 허용하는 것보다 직접 하나씩 지정해주어야 한다고 한다.
 //    }
 
-    //endpoint를 /stomp로 하고, allowedOrigins를 "*"로 하면 페이지에서
-    //Get /info 404 Error가 발생한다. 그래서 아래와 같이 2개의 계층으로 분리하고
-    //origins를 개발 도메인으로 변경하니 잘 동작하였다.
-    //이유는 왜 그런지 아직 찾지 못함
+
+    private final StompHandler stompHandler;
+
+    WebSocketConfig(StompHandler stompHandler) {
+        this.stompHandler = stompHandler;
+    }
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompHandler);
+    }
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp/chat")
+        registry.addEndpoint("/stomp/topic")
                 .setAllowedOrigins("http://localhost:8080")
                 .withSockJS();
     }

@@ -36,7 +36,7 @@ public class MusicApiService {
     private final String URI_PLAYLIST_PUSH = "http://localhost:20000/api/playlists/push";
     private final String URI_PLAYLIST_CHANGE = "http://localhost:20000/api/playlists/update";
     private final String URI_PLAYLIST_ID = "http://localhost:20000/api/playlists/{memberNo}";
-    private final String URI_PLAYLIST_DETAIL = "http://localhost:20000/api/playlists/detail/{playlistNo}";
+    private final String URI_PLAYLIST_DETAIL = "http://localhost:20000/api/playlists/detail/{playlistKey}";
     private final String URI_MUSICS_TEST = "http://localhost:20000/api/posttest";
 
     private final RestTemplate restTemplate;
@@ -181,41 +181,40 @@ public class MusicApiService {
     }
 
     // 플레이리스트 삭제
-    public void deletePlaylist(int memberNo, String playlistNo) {
+    public void deletePlaylist(int memberNo, String playlistKey) {
         Map<String, Object> map = new HashMap<>();
         map.put("memberNo", memberNo);
-        map.put("playlistNo", playlistNo);
+        map.put("playlistKey", playlistKey);
         log.info("map : " + map);
-        restTemplate.delete("http://localhost:20000/api/playlists/delete/{memberNo}/{playlistNo}" , map);
+        restTemplate.delete("http://localhost:20000/api/playlists/delete/{memberNo}/{playlistKey}" , map);
     }
 
     // 특정 플레이리스트 안에 곡 넣기
-
-    public List<Music> pushMusic(List<Integer> musicNos, String playlistNo) {
+    public List<Music> pushMusic(List<Integer> musicNos, String playlistKey) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
-        map.put("playlistNo", playlistNo);
+        map.put("playlistKey", playlistKey);
         ResponseEntity<List> response = restTemplate.postForEntity(URI_PLAYLIST_PUSH, map, List.class);
         log.info("res : " + response.getBody());
         return response.getBody();
     }
 
     // 특정 플레이리스트 안의 곡 빼기
-    public void pullMusic(List<Integer> musicNos, String playlistNo) {
+    public void pullMusic(List<Integer> musicNos, String playlistKey) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
-        map.put("playlistNo", playlistNo);
-        restTemplate.delete("http://localhost:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
+        map.put("playlistNo", playlistKey);
+        restTemplate.delete("http://localhost:20000/api/playlists/pull/{playlistKey}/{musicNos}", map);
     }
 
     // 플레이리스트 정보 가져오기
-    public Playlist getOnePlaylist(int playlistNo) {
-        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://localhost:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistNo);
+    public Playlist getOnePlaylist(String playlistKey) {
+        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://localhost:20000/api/onePlaylists/{playlistKey}", Playlist.class, playlistKey);
         return response.getBody();
     }
 
     // 플레이리스트 수정
-    public Playlist updatePlaylistName(String playlistNo, String title, MultipartFile imgfile) {
+    public Playlist updatePlaylistName(String playlistKey, String title, MultipartFile imgfile) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
@@ -224,18 +223,18 @@ public class MusicApiService {
 
         try {
             byteArray = new ByteArrayResource(imgfile.getBytes()){
-              @Override
-              public String getFilename() throws IllegalStateException {
-                  return URLEncoder.encode(imgfile.getName(), StandardCharsets.UTF_8);
-              }
+                @Override
+                public String getFilename() throws IllegalStateException {
+                    return URLEncoder.encode(imgfile.getName(), StandardCharsets.UTF_8);
+                }
             };
         } catch (Exception e) {
             e.printStackTrace();
         }
         body.add("image", byteArray);
-        body.add("playlistNo", playlistNo);
+        body.add("playlistKey", playlistKey);
         body.add("title", title);
-        log.info("map.playlistNo : " + body.get("playlistNo"));
+        log.info("map.playlistKey : " + body.get("playlistKey"));
         log.info("map.title : " + body.get("title"));
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
@@ -250,12 +249,15 @@ public class MusicApiService {
     public List<Playlist> showPlaylist(int memberNo) {
         ResponseEntity<List> pl = restTemplate.getForEntity(URI_PLAYLIST_ID, List.class, memberNo);
         //log.info(pl.toString());
+        List<Playlist> list = pl.getBody();
+        list.remove(0);
+        System.out.println(list);
         return pl.getBody();
     }
 
     // 플레이리스트 상세 불러오기
-    public List<Music> showDetailPlaylist(String playlistNo) {
-        ResponseEntity<List> response = restTemplate.getForEntity(URI_PLAYLIST_DETAIL, List.class, playlistNo);
+    public List<Music> showDetailPlaylist(String playlistKey) {
+        ResponseEntity<List> response = restTemplate.getForEntity(URI_PLAYLIST_DETAIL, List.class, playlistKey);
         List<Music> musics = response.getBody();
         log.info("playlist : " + musics);
         return musics;
