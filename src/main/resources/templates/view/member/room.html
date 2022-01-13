@@ -23,50 +23,21 @@
       <div class="col-6">
         <h1 class="chat-title">[[${room.name}]]</h1>
       </div>
-      <div class="forID" th:id="${username}"></div>
+<!--      <div class="forID" th:id="${username}"></div>-->
       <div class="chat-list">
         <div id="msgArea" class="col chat-content">
           <!-- 여기는 테스트 -->
-          <div class="col-6 myChat">
-            <div class="myChat-right chat-style">
-              <b> 내가 친 채팅</b>
-            </div>
-          </div>
-          <div class="col-6 otherChat">
-            <div class="otherChat-left chat-style">
-              <b> 너가 친 채팅</b>
-            </div>
-          </div>
-          <div class="col-6 myChat">
-            <div class="myChat-right chat-style">
-              <b> 내가 친 채팅</b>
-            </div>
-          </div>
-          <div class="col-6 otherChat">
-            <div class="otherChat-left chat-style">
-              <b> 너가 친 채팅</b>
-            </div>
-          </div>
-          <div class="col-6 myChat">
-            <div class="myChat-right chat-style">
-              <b> 내가 친 채팅</b>
-            </div>
-          </div>
-          <div class="col-6 otherChat">
-            <div class="otherChat-left chat-style">
-              <b> 너가 친 채팅</b>
-            </div>
-          </div>
-          <div class="col-6 myChat">
-            <div class="myChat-right chat-style">
-              <b> 내가 친 채팅</b>
-            </div>
-          </div>
-          <div class="col-6 otherChat">
-            <div class="otherChat-left chat-style">
-              <b> 너가 친 채팅</b>
-            </div>
-          </div>
+<!--          <div class="col-6 myChat">-->
+<!--            <div class="myChat-right chat-style">-->
+<!--              <b> 내가 친 채팅</b>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-6 otherChat">-->
+<!--            <div class="otherChat-left chat-style">-->
+<!--              <b> 너가 친 채팅</b>-->
+<!--            </div>-->
+<!--          </div>-->
+
 
           <!-- 여기는 테스트 -->
         </div>
@@ -94,17 +65,21 @@
       $(document).ready(function(){
           var roomName = [[${room.name}]];
           var roomId = [[${room.roomId}]];
-          var username = $('.forID').attr('id');
+          //var username = $('.forID').attr('id');
+
+          var username = [[${#authentication.principal.getNickname()}]];
+
+
 
           console.log(roomName + ", " + roomId + ", " + username);
 
-          var sockJs = new SockJS("/stomp/chat");
+          var sockJs = new SockJS("/stomp/topic");
           var stomp = Stomp.over(sockJs);
 
           stomp.connect({}, function(){
                console.log("STOMP Connection");
 
-               stomp.subscribe("/sub/chat/room/" + roomId, function(chat) {
+               stomp.subscribe("/sub/topic/chat/room/" + roomId, function(chat) {
                   var content = JSON.parse(chat.body);
                   var writer = content.writer;
                   var message = content.message;
@@ -135,13 +110,13 @@
                   $("#msgArea").append(str);
               });
 
-              stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}));
+              stomp.send('/pub/topic/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}));
           });
           $("#button-send").on("click", function(e){
               var msg = document.getElementById("msg");
 
               console.log(username + ":" + msg.value);
-              stomp.send('/pub/chat/message', {}, JSON.stringify({roomId: roomId, message : msg.value,
+              stomp.send('/pub/topic/chat/message', {}, JSON.stringify({roomId: roomId, message : msg.value,
               writer: username}));
               msg.value = '';
           });

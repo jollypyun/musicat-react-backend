@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import java.util.Collection;
 
 @Log
+
 // User : Spring Security가 제공하는 UserDetails의 구현체
 public class MemberAccount extends User {
 
@@ -17,7 +18,6 @@ public class MemberAccount extends User {
 
         //회원의 권한을 authorites에 받아서 memberVo에 추가
         super(memberVo.getEmail(), memberVo.getPassword(), authorities);
-        log.info("회원의 권한을 authorites에 받아서 memberVo에 추가 : " + authorities);
         this.memberVo = memberVo;
     }
 
