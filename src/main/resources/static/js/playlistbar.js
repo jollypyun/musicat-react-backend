@@ -1,6 +1,8 @@
 $(document).ready(function () {
 
 
+    //$("#audio").attr("src", "https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3");
+    //$("#audio").play();
     if( $("#userNoForPlaylist").text() != -1) {
           console.log("로그인 회원, 재생 목록 받아오기 " + $("#userNoForPlaylist").text() + "pl1");
           requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
@@ -46,8 +48,17 @@ $(document).ready(function () {
         timeProgress.max = duration;
 
         $('.playListBar-time-duration').text(getLength(duration));
+
     }
 
+    audio.oncanplaythrough = function() {
+
+        if(audio.currentTime < 10)
+            audio.currentTime=10
+
+        console.log("oncanplaythrough");
+        audio.play();
+    }
 
     // 사운드 시간 바뀔때 current 값 수정
     timeProgress.addEventListener('change', function () {
@@ -177,8 +188,8 @@ function onAddtoPlayClick(btn) {
     var playlistNo = $("#userNoForPlaylist").text();
     playlistNo = playlistNo + "pl1";
     var musicNos = $(btn).children().text();
-    console.log("playlistNo : ", playlistNo);
-    console.log("musicNos : ", musicNos);
+    //console.log("playlistNo : ", playlistNo);
+    //console.log("musicNos : ", musicNos);
     requestProcessAddToPlay("/pushmusic/" + playlistNo, musicNos);
 }
 
@@ -233,9 +244,30 @@ async function requestProcessAddToPlay(url, musicNos) {
 
 function playAudio(btn) {
     //console.log($(btn).attr("id"));
+
     $("#audio").attr("src", $(btn).attr("id"));
-    $("#audio").trigger("play");
+    //$("#audio").trigger("play");
+    // $("#audio").currentTime=10;
+    // console.log($("#audio").currentTime);
 }
+// $(function(){
+//     $('audio').bind('canplay', function(){
+//         console.log("canplay", $(this)[0].currentTime);
+//         if($(this)[0].currentTime < 10){
+//             $(this)[0].currentTime = 10;
+//         } else {
+//             $(this)[0].play();
+//         }
+//     });
+// });
+
+
+// $('#audio').bind('canplay', function() {
+//     //this.currentTime = 10;
+//     console.log(this.currentTime);
+//     console.log("canplay");
+//     $("#audio").trigger("play");
+// });
 
 const getCurrentPlayAjax = function (url, musicNos) {
     return new Promise((resolve, reject) => {
@@ -274,8 +306,15 @@ async function requestCurrentPlay(url) {
 }
 
 //     //이 페이지에서 뒤로가기 하거나, 목록을 누를때 그리고 새로고침을 할 때 이벤트 발생
-$(window).on("beforeunload", function (event) {
-    event.preventDefault();
-    //requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
-    // ajax
-});
+// $(window).on("beforeunload", function (event) {
+//     event.preventDefault();
+//     //requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
+//     // ajax
+//
+//     // 현재 시간이랑
+//     //$("#audio").currentTime;
+//     // 현재 음악의... 정보? 를 ajax로 넘겨서 security principal에 저장하고
+//     //$("#audio").attr("src");
+//
+//     // 이후 requestCurrentPlay 에서 audio 셋팅해줘야할듯
+// });
