@@ -6,8 +6,10 @@
 <link rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
       crossorigin="anonymous">
+
 <!--<link th:href="@{/css/detailAudioArticle.css}" rel="stylesheet"/>-->
 <link th:href="@{/css/detailArticleStyle.css}" rel="stylesheet"/>
+
 
 
 <div id="layoutSidenav_content">
@@ -28,6 +30,7 @@
                             <input type="hidden" id="board_no" th:value="${article.boardNo}">
                         </h1>
                         <form id="detailContent" class="detail-content-style" th:object="${article}" name="article">
+
                             <div class="mb-3">
                                 <span th:text="${article.subject}" th:field="*{subject}"
                                       class="content-title-style"></span>
@@ -74,6 +77,7 @@
                                     <div class="content-file-style">
                                         <div th:each=" imageFile : ${article.fileList}">
                                             <th:block th:if="${imageFile.fileType == 2}">
+
                                                 <video width="320" controls>
                                                     <source th:src="|/images/${imageFile.getSystemFileName()}|"
                                                             type="video/mp4">
@@ -328,8 +332,10 @@
                     <div id="modify_reply_form" style="display: none;"
                          class="detailArticle-replyModify-style">
                         <div id="updateReplyForm">
+
                             <input type="hidden" id="no"/>
                             <textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
+
                             <button class="modify_cancle">취소</button>
                             <button class="modify_reply_btn">수정</button>
                         </div>
@@ -341,4 +347,52 @@
         </div>
     </main>
 </div>
+
+<!--<script th:inline="javascript">-->
+
+<!--    function onAddtoPlayClick(btn) {-->
+<!--        var playlistNo = [[${#authentication.principal.getNo}]];-->
+<!--        var playlistNo = playlistNo + "pl1";-->
+<!--        var musicNos = $(btn).children().text();-->
+<!--        console.log("playlistNo : ", playlistNo);-->
+<!--        console.log("musicNos : ", musicNos);-->
+<!--        requestProcessAddToPlay("/pushmusic/" + playlistNo, musicNos);-->
+<!--    }-->
+<!--    const getAjaxAddToPlay = function (url, musicNos) {-->
+<!--        // var objParams = {-->
+<!--        //     "playlistNo": playlistNo,-->
+<!--        //     "musicNos" : musicNos-->
+<!--        // };-->
+<!--        //console.log(objParams);-->
+<!--        return new Promise((resolve, reject) => {-->
+<!--            $.ajax({-->
+<!--                url: url,-->
+<!--                method: "POST",-->
+<!--                dataType: "json",-->
+<!--                data: {-->
+<!--                    musicNos:musicNos-->
+<!--                },-->
+<!--                success: function (data) {-->
+<!--                    // 비동기 작업 성공 시 호출-->
+<!--                    resolve(data);-->
+<!--                },-->
+<!--                error: function (e) {-->
+<!--                    // 비동기 작업 실패 시 호출-->
+<!--                    reject(e);-->
+<!--                },-->
+<!--            });-->
+<!--        });-->
+<!--    };-->
+
+<!--    async function requestProcessAddToPlay(url, musicNos) {-->
+<!--        try {-->
+<!--            // await 다음에는 비동기 처리 작업이 와야함.-->
+<!--            //const result = await getAjaxAddToPlay(url, playlistNo, musicNos);-->
+<!--            await getAjaxAddToPlay(url, musicNos);-->
+<!--        } catch (error) {-->
+<!--            console.log("error : ", error);-->
+<!--        }-->
+<!--    }-->
+
+<!--</script>-->
 </html>

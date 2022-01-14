@@ -116,8 +116,6 @@ public class ArticleController {
 			log.info("article controller musiclist : " + musicList.toString());
 
 
-
-
 			// xss 처리 Html tag로 변환
 //			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
 //			article.setSubject(escapeSubject);
