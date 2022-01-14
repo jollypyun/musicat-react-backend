@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
@@ -24,10 +26,13 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
     //authentication : AuthenticationManager로부터 전달받은 인증객체로, username, password가 담겨 있음
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.info("커스텀한 인증처리 하러 왔습니다.");
+        //log.info("커스텀한 인증처리 하러 왔습니다.");
 
         String email = authentication.getName();
         String password = (String) authentication.getCredentials(); //Credentials : 비밀번호
+
+        //log.info("Authentication getPrincipal : " + authentication.getPrincipal());
+
 
         //loadUserByUsername : username(email) DB에 존재하는지 검증
         MemberAccount memberAccount = (MemberAccount) userDetailsService.loadUserByUsername(email);
@@ -38,7 +43,6 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         }
 
         //활동정지 회원 여부 (DisabledException : 계정 비활성화)
-        log.info("ban : " + memberAccount.getMemberVo().getBan());
         if(!memberAccount.getMemberVo().getBan().equals("")) {
             log.info("ban : " + memberAccount.getMemberVo().getBan());
             throw new DisabledException("DisabledException");
@@ -48,6 +52,10 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         if(memberAccount.getMemberVo().getIsMember() != 0) {
             System.out.println("ismember : " + memberAccount.getMemberVo().getIsMember());
             throw new AccountExpiredException("AccountExpiredException");
+        }
+
+        if(!bCryptPwd.matches(password, memberAccount.getPassword())) {
+            throw new BadCredentialsException("BadCredentialsException");
         }
 
 //        //휴면 회원 여부
@@ -62,8 +70,10 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         
         //인증 모두 완료될 경우 토큰 생성
         //인증 성공 시 authenticationToken에 회원 정보(비밀번호 제외한 회원 정보)를 담아 AuthenticationProvider를 호출한 AuthenticationManager에 전달
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberAccount.getMemberVo(), null, memberAccount.getAuthorities());
-        log.info("인증 성공 - authenticationToken에 정보 담아서 AuthenticationManager에 넘김 : " + authenticationToken.getName());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberAccount, null, memberAccount.getAuthorities());
+        //log.info("인증 성공 - authenticationToken에 정보 담아서 AuthenticationManager에 넘김 : " + authenticationToken.getName());
+
+
         return authenticationToken;
     }
 

@@ -12,4 +12,8 @@ import java.util.List;
 public interface FollowMapper {
     int selectFollowingCount(int memberNo);
     int selectFollowedCount(int memberNo);
+    // 상대 멤버의 팔로우 여부
+    int existFollow(int myNo, int opNo);
+    void insertFollow(int myNo, int opNo);
+    void deleteFollow(int myNo, int opNo);
 }

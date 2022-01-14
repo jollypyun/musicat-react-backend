@@ -15,8 +15,11 @@
                     <div class="myPage-top-profile">
                         <span>NickName</span>
                         <th:block th:if = "${#authorization.expr('isAuthenticated()')}">
-                            <button onclick="location.href='/ChangePwd'" th:if = "${#authentication.principal.getNo()} == ${member.getNo()}">비밀번호 변경</button>
-                            <button onclick="" th:if = "${#authentication.principal.getNo()} != ${member.getNo()}">Follow</button>
+                            <button onclick="location.href='/ChangePwd'" th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">비밀번호 변경</button>
+                            <div id="ezy">
+                                <button th:onclick="'follow(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 0">Follow</button>
+                                <button th:onclick="'cancel(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 1">Cancel</button>
+                            </div>
                         </th:block>
                     </div>
                 </div>
@@ -26,7 +29,7 @@
                     <a th:href="@{'/myPage/Board/' + ${member.getNo()}}">글</a>
                     <a th:href="@{'/myPage/Reply/' + ${member.getNo()}}">댓글</a>
                     <th:block th:if="${#authorization.expr('isAuthenticated()')} != false">
-                        <span th:if="${#authentication.principal.getNo()} == ${member.getNo()}">
+                        <span th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                             <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">좋아요</a></span>
                     </th:block>
                 </div>
@@ -64,16 +67,16 @@
                                 <thead>
                                 <tr>
                                     <th>
-<!--                                        <a th:href="|/followedList/${member.getNo()}|">Followers</a>-->
+                                        <a th:href="|/followedList/${member.getNo()}|">Followers</a>
                                     </th>
                                     <th>
-<!--                                        <a th:href="|/followingList/${member.getNo()}|">Following</a>-->
+                                        <a th:href="|/followingList/${member.getNo()}|">Following</a>
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
-<!--                                <td th:text = "${follow.followed}"></td>-->
-<!--                                <td th:text = "${follow.following}"></td>-->
+                                <td th:text = "${follow.followed}"></td>
+                                <td th:text = "${follow.following}"></td>
                                 </tbody>
                             </table>
                         </div>
@@ -92,3 +95,55 @@
     </main>
 </div>
 </html>
+<script th:src="@{../js/jquery-3.6.0.min.js}"></script>
+<script th:inline="javascript">
+    function follow(opponent, my) {
+        $.ajax({
+            url: "/follow",
+            method: "POST",
+            dataType: "json",
+            data: {
+                opponent: opponent,
+                my: my
+            },
+            success: function(data) {
+                console.log(data.checkFollow);
+                console.log(data.opponent);
+                console.log(data.my);
+
+                a = '';
+                //$("#ezy button").remove();
+                a += '<button onclick="cancel(' + data.opponent + ',' + data.my + ')" >Cancel</button>';
+                $('#ezy').html(a);
+            },
+            error: function(err) {
+                console.trace(err);
+            }
+        });
+    }
+
+    function cancel(opponent, my){
+        $.ajax({
+            url: "/followCancel",
+            method: "POST",
+            dataType: "json",
+            data: {
+                opponent: opponent,
+                my: my
+            },
+            success: function(data) {
+                console.log(data.checkFollow);
+                console.log(data.opponent);
+                console.log(data.my);
+
+                a = '';
+                //$("#ezy button").remove();
+                a += '<button onclick="follow(' + data.opponent + ',' + data.my + ')" >Follow</button>';
+                $('#ezy').html(a);
+            },
+            error: function(err) {
+                console.trace(err);
+            }
+        });
+    }
+</script>

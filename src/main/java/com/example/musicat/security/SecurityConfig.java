@@ -1,11 +1,10 @@
 package com.example.musicat.security;
 
 import com.example.musicat.domain.member.MemberVO;
-import com.example.musicat.websocket.manager.NotifyManager;
-import com.example.musicat.websocket.manager.StompHandler;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -24,15 +23,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Log
@@ -44,9 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private NotifyManager notifyManager;
-
     //비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder encodePwd() {
@@ -56,6 +53,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new CustomAutheticationProvider();
+    }
+
+    //ApplicationListener<SessionDestroyedEvent> 를 사용하기 위한 Bean 등록
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher(){
+        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher(){
+        });
     }
 
     @Override
@@ -75,11 +79,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        //http
+                //.addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class)
+
         http
                 .csrf().disable();
 
-        http    //DB resource 테이블 만들어서 처리하는 게 편할 거라고 하심(url 변경 되어도 따로 처리 안 해줘도 돼서)
-                //강사님께서 코드 짜보고 계시고 완성되면 주시겠다고...
+        http
                 .authorizeRequests()
                 //인증된 사용자이면 접근 가능한 페이지
                 .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated() //
@@ -89,7 +95,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 //그 외 요청은 모두 허용 ex) /main, /musicatlogin 등
                 .anyRequest().permitAll();
-
 
         http
                 .formLogin() //로그인 페이지 설정
@@ -101,15 +106,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         //인증 성공 시 인증 결과를 담은 인증 객체를 파라미터로 받음 (인증 요청하지 않은 사용자의 정보는 HomController(/main)에서 처리해줌
-                        MemberVO member = (MemberVO) authentication.getPrincipal();
+                        MemberVO member = ((MemberAccount) authentication.getPrincipal()).getMemberVo();
                         log.info("principal : " + member.toString());
-
-                        // 예나 - notify 임시 id set
-                        member.setNotifyId(member.getNo() + member.getEmail());
-                        notifyManager.addToNotifyList(member.getNo(), member.getNotifyId());
-//                        HttpSession session = request.getSession();
-//                        session.setAttribute("loginUser", member);
-//                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
 
                         //사용자 요청페이지 저장
                         RequestCache requestCache = new HttpSessionRequestCache();
@@ -118,22 +116,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         if(savedRequest == null) { //요청페이지가 없으면 보낼 url
                             log.info("별도 요청 페이지 없음(main에서 로그인)");
                             response.sendRedirect("/main");
-                            
+
                         } else { //요청 페이지가 있으면 보낼 url
                             log.info("요청페이지 savedRequest.getRedirectUrl() : " + savedRequest.getRedirectUrl());
                             response.sendRedirect(savedRequest.getRedirectUrl());
                         }
-
                     }
                 })
                 .failureHandler(new AuthenticationFailureHandler() { //로그인 실패
                     @Override
                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
                         //이전에 입력한 이메일
-                        //log.info("email : " + request.getParameter("email"));
+                        log.info("email : " + request.getParameter("email"));
 
                         //로그인 실패 예외 발생 시 처리
-                        //log.info("exception(로그인실패) : " + exception.getMessage());
 
                         if (exception instanceof UsernameNotFoundException) { //DB에 일치하는 email이 없는 경우
                             request.setAttribute("loginFailMessage", "아이디 또는 비밀번호를 잘못 입력하였습니다.");
@@ -147,7 +143,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         } else if (exception instanceof AccountExpiredException) { //isMember 1인 경우
                             request.setAttribute("loginFailMessage", "탈퇴처리 된 계정입니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
+                        } else if (exception instanceof SessionAuthenticationException) {
+                            request.setAttribute("loginFailMessage", "로그인 불가~~.");
                         }
+
+
 
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/musicatlogin");
                         dispatcher.forward(request, response);
@@ -160,10 +160,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout") //로그아웃 처리 url
                 .invalidateHttpSession(true) //세션비우기
-                //.deleteCookies("JESSIONID", "remember-me") //로그아웃 후 쿠키 삭제 (remeberme 사용 했을 때 필요)
+                .deleteCookies("JSESSIONID", "remember-me") //로그아웃 시 Tomcat이 발급한 세션 유지 쿠키, 자동 로그인을 위한 remember-me 쿠키 삭제(remeberme 사용 했을 때 필요)
                 .logoutSuccessUrl("/musicatlogin"); //로그아웃 후 이동할 페이지
+
+        http
+                .sessionManagement() //세션 관리
+                .sessionFixation().changeSessionId() //세션 고정 보호. 세션 조작을 통한 보안 공격 방지를 위해, 인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지 (security가 기본으로 제공해주기 때문에 별도로 설정해줄 필요 없음)
+                .maximumSessions(1) //최대 세션 개수
+                .expiredUrl("/expiredUrl") //session 만료 시 이동 페이지
+                .maxSessionsPreventsLogin(true); //false : 이전에 로그인한 세션 만료, true : 나중에 로그인 시도하는 세션 생성 불가(로그인 불가)
+
+        //RememberMeAuthenticationFilter가 작동하는 조건
+        //1. authentication(인증이 성공한 사용자의 정보를 담은 인증객체)이 null인 경우(security context안에 authentication이 존재하지 않는 경우(즉, session이 끊겼거나 만료된 경우)),
+        //2. form 인증 당시 remember Me 기능을 활성화하여 rememberMe 쿠키를 받은 경우에 작동
+        //쿠키에 JSESSIONID와 remember-me 토큰이 저장됨. remember-me 체크하지 않을 경우 JSESSIONID삭제하면 다시 로그인해아하나, remember-me 쿠키를 사용할 경우 JSESSIONID 삭제해도 재인증 필요x
+        http
+                .rememberMe()
+                .rememberMeParameter("remember-me") //form에서 rememberMe 기능 사용 여부를 체크할 때 받을 파라미터명과 동일해야 함
+                .tokenValiditySeconds(3600) //rememberMe 토큰 만료 기간
+                .alwaysRemember(false) //remember Me 기능이 활성화되지 않아도 항상 실행
+                .userDetailsService(userDetailsService); //rememberMe 인증 시 인증 계정 조회를 위해 필요
+
 
         log.info("SecurityConfig 순회 완--------------------");
 
     }
+
 }

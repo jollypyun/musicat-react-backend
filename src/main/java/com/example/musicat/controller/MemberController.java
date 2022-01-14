@@ -290,6 +290,32 @@ public class MemberController {
 		}
 	}
 
+
+	@GetMapping("/passwordCheck")
+	public String passwordCheckForm(Model model){
+		MemberVO member = HomeController.checkMemberNo();
+		model.addAttribute("memberNo", member.getNo());
+		return "view/member/passwordCheck";
+	}
+
+	@PostMapping("/passwordCheck")
+	public String passwordCheck(@RequestParam("password") String password
+			,@RequestParam("memberNo") int memberNo
+			,Model model){
+		String memberPassword = this.memberService.passwordCheck(memberNo);
+		log.info("Input Password: {}", memberPassword);
+		log.info("Input Password: {}", password);
+		if(this.encodePwd.matches(password, memberPassword)){
+			log.info("match");
+			return "view/member/passwordChange";
+		}
+		log.info("unMatch");
+		model.addAttribute("NotEquals", "비밀번호가 일치하지 않습니다.");
+		return "view/member/passwordCheck";
+	}
+
+
+
 	/**
 	 * 비밀번호 변경
 	 * @param password 변경할 비밀번호
