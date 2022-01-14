@@ -379,7 +379,7 @@ public class HomeController {
     // 플레이리스트 수정 폼 요청
     @GetMapping("/changePlaylistForm/{id}")
     public String changePlaylist(Model model, @PathVariable("id") int id) {
-        Playlist playlist = musicApiService.getOnePlaylist(id);
+        Playlist playlist = musicApiService.getOnePlaylist(String.valueOf(id));
         log.info("playlist : " + playlist.getPlaylistImage().getId());
         model.addAttribute("playlist", playlist);
         return "view/etc/changePlaylist";
