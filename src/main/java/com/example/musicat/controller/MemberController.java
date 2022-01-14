@@ -310,6 +310,7 @@ public class MemberController {
 			return "view/member/passwordChange";
 		}
 		log.info("unMatch");
+		model.addAttribute("memberNo", memberNo);
 		model.addAttribute("NotEquals", "비밀번호가 일치하지 않습니다.");
 		return "view/member/passwordCheck";
 	}
@@ -325,8 +326,8 @@ public class MemberController {
 			,HttpSession session) {
 		System.out.println(password);
 		
-		MemberVO mVo = new MemberVO();
-		mVo.setNo(((MemberVO) session.getAttribute("loginUser")).getNo());
+		MemberVO mVo = HomeController.checkMemberNo();
+//		mVo.setNo(((MemberVO) session.getAttribute("loginUser")).getNo());
 		mVo.setPassword(encodePwd.encode(password)); //비밀번호 암호화
 		this.memberService.updatePassword(mVo);
 		return "redirect:main";

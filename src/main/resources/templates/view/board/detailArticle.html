@@ -53,20 +53,24 @@
                                       class="me-md-4"></span>
                                 <span th:text="${article.writeDate}" class="me-md-2"></span>
                             </div>
-
                             <div class="dropdown-divider"></div>
 
+
                             <div class="content-inner-style">
-                                <div class="content-inner-file-style">
-                                    <th:block th:if="${article.attacheFile == null}">
-                                    </th:block>
-                                    <th:block th:unless="${article.attacheFile == null}">
+                                <th:block th:if="${article.attacheFile == null}">
+                                </th:block>
+                                <th:block th:unless="${article.attacheFile == null}">
+                                    <div class="content-inner-file-style">
+                                        <th:block th:if="${article.attacheFile == null}">
+                                        </th:block>
+
                                         <a th:href="|/attach/${article.getAttacheFile().getNo()}|"
                                            th:text="${article.getAttacheFile().getSystemFileName()}"></a>
-                                    </th:block>
-                                </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                </th:block>
 
-                                <th:block th:if="${article.fileList != null}">
+                                <th:block th:if="${not #strings.isEmpty(article.fileList)}">
                                     <div class="content-file-style">
                                         <div th:each=" imageFile : ${article.fileList}">
                                             <th:block th:if="${imageFile.fileType == 2}">
@@ -80,10 +84,10 @@
                                                 <img th:src="|/images/${imageFile.getSystemFileName()}|"/>
                                             </th:block>
                                         </div>
-                                    </div>
-                                </th:block>
 
-                                <div class="dropdown-divider"></div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                </th:block>
 
 
                                     <td colspan="3">
@@ -184,18 +188,21 @@
                             <div class="dropdown-divider"></div>
 
                             <!--Tag 출력 부분-->
-                            <div id="tag_area" class="detailArticle-tag-style mt-3">
-                                <ul id="tag-list" class="tag-ul">
-                                    <div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
-                                        <li class='tag-item' th:text="${tag.name}"></li>
-                                    </div>
-                                </ul>
-                            </div>
+                            <th:block th:if="${not #strings.isEmpty(article.getSelectTags())}">
+                                <div id="tag_area" class="detailArticle-tag-style mt-3">
+                                    <ul id="tag-list" class="tag-ul">
+                                        <div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
+                                            <li class='tag-item' th:text="${tag.name}"></li>
+                                        </div>
+                                    </ul>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                            </th:block>
 
                         </form>
                     </div>
 
-                    <div class="dropdown-divider"></div>
+
 
 
                     <div id="sub_article_area" class="sub_article_area-style mb-3 mt-3">
@@ -253,25 +260,25 @@
                             <th:block th:if="${reply.hide == 0}">
 
                                 <th:block th:if="${reply.depth == 1}">
-                                    <div class="reply-style ms-4" th:id="${reply.getNo()}">
+                                    <div class="reply-style ps-5" th:id="${reply.getNo()}">
                                         <div class="reply-info-style">
                                             <div>
-                                            <span class="me-3 dropdown">
-<!--                                                <span class="fw-bold fs-5" th:text="${reply.nickname}"></span>-->
-                                                <a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown"
-                                                   th:text="${reply.nickname}">
-                                                </a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item"
-                                                           th:href="|/myPage/Playlist/${reply.memberNo}|">MyPage</a></li>
-                                                    <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
-                                                </ul>
-                                            </span>
+                                                <span class="me-3 dropdown">
+    <!--                                                <span class="fw-bold fs-5" th:text="${reply.nickname}"></span>-->
+                                                    <a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown"
+                                                       th:text="${reply.nickname}">
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item"
+                                                               th:href="|/myPage/Playlist/${reply.memberNo}|">MyPage</a></li>
+                                                        <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                                    </ul>
+                                                </span>
                                                 <span th:text="${reply.writeDate}"></span>
                                             </div>
                                             <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
-                                        <div class="mt-2">
+                                        <div class="mt-2 detail-replyBtn-style">
                                             <input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>
 
                                             <th:block th:if="${loginMemberNo == reply.memberNo}">
@@ -301,8 +308,10 @@
                                             </div>
                                             <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
+
                                         <div class="mt-2">
-                                            <input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>
+                                            <input th:if="${#authorization.expr('isAuthenticated()')}" type="button" class="depth_reply_btn me-2" value="답글쓰기"/>
+
 
                                             <th:block th:if="${loginMemberNo == reply.memberNo}">
                                                 <input type="button" class="modify_Reply_Form_Btn me-2" value="수정"/>
