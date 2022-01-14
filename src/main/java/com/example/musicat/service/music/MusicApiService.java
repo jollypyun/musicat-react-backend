@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-`
+
 @Slf4j
 @Service
 public class MusicApiService {
@@ -208,7 +208,7 @@ public class MusicApiService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
 
-        map.put("playlistNo", playlistNo);
+        map.put("playlistKey", playlistKey);
         restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
     }
 
