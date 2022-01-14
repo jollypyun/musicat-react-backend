@@ -12,6 +12,8 @@
 		<result property="no" javaType="int" column="member_no" jdbcType="INTEGER"/>
 		<result property="email" javaType="string" column="email" jdbcType="VARCHAR"/>
 		<result property="password" javaType="string" column="password" jdbcType="VARCHAR"/>
+<!--		nickname을 안 넣었었는데 어떻게 가져 온 거야? memberVo형태라서 상관 없었니?-->
+		<result property="nickname" javaType="string" column="nickname" jdbcType="VARCHAR"/>
 		<result property="grade" javaType="string" column="auth" jdbcType="VARCHAR"/>
 		<result property="gradeNo" javaType="int" column="grade_no" jdbcType="INTEGER"/>
 		<!--	휴면계정	-->
@@ -166,7 +168,7 @@
 
 
     
-    <update id = "updateLastDdate" parameterType = "int">
+    <update id = "updateLastDate" parameterType = "int">
 	    UPDATE member
 	    SET lastdate = CURRENT_TIMESTAMP 
 	    WHERE member_no = #{no}

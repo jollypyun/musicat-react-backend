@@ -58,5 +58,9 @@ public interface MemberService {
 
 	int updateTempPassword(MemberVO mVo);
 
-    String passwordCheck(int memberNo);
+
+  void modifyLastDate(int no);
+
+  String passwordCheck(int memberNo);
+
 }

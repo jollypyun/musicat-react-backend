@@ -77,9 +77,9 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 
 
 	@Override
-	public void updateLastDdate(int no) throws Exception {
+	public void updateLastDate(int no) {
 		// TODO Auto-generated method stub
-		mapper.updateLastDdate(no);
+		mapper.updateLastDate(no);
 	}
 
 	@Override
@@ -106,13 +106,13 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 		return null;
 	}
 
-	
+
 	@Override
 	public boolean selectNickname(String nickname) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-		
+
 
 
 
