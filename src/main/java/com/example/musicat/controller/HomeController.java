@@ -247,7 +247,7 @@ public class HomeController {
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
         model.addAttribute("musics", musics);
-
+	model.addAttribute("checkFollow", checkFollow);
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylistDetail");
         return "view/home/viewHomeTemplate";
 
@@ -259,10 +259,12 @@ public class HomeController {
     public String myPageBoard(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
+	int checkFollow = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
+	    checkFollow = followService.checkFollow(me.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -281,6 +283,7 @@ public class HomeController {
 
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
+	model.addAttribute("checkFollow", checkFollow);
         log.info("대체 뭐가 문젠데 Board " + member.getNo());
         model.addAttribute("HomeContent", "fragments/viewMyPageBoard");
         return "view/home/viewHomeTemplate";
@@ -292,10 +295,12 @@ public class HomeController {
     public String myPageReply(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
+	int checkFollow = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
+	    checkFollow = followService.checkFollow(me.getNo(), userNo);
             log.info("대체 뭐가 문젠데 Reply " + member.getNo());
         } catch (Exception e) {
             e.printStackTrace();
@@ -321,6 +326,8 @@ public class HomeController {
         model.addAttribute("member", member);
 
         model.addAttribute("follow", follow);
+	    
+	model.addAttribute("checkFollow", checkFollow);
 
         model.addAttribute("HomeContent", "fragments/viewMyPageReply");
         return "view/home/viewHomeTemplate";
@@ -332,10 +339,12 @@ public class HomeController {
     public String myPageLike(Model model, @PathVariable int userNo) {
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
+	int checkFollow = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
+	    checkFollow = followService.checkFollow(me.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -354,6 +363,7 @@ public class HomeController {
 
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
+	model.addAttribute("checkFollow", checkFollow);
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";
 
