@@ -51,7 +51,7 @@
         </div>
         <div class="write_article_btn">
             <th:block th:if="${#authorization.expr('isAuthenticated()')}">
-                <button th:if="${writeCheck == 1}" id="writeForm_btn" onclick="writeForm()"
+                <button th:if="${writeCheck == 1}" id="writeForm_btn" onclick="location.href='/articles/insert'"
                         type="button">글쓰기
                 </button>
             </th:block>

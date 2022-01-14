@@ -155,6 +155,7 @@ public class HomeController {
 
   }
 
+
 	@GetMapping("/join1")
 	public String join(Model model) {
 		//MemberVO mVo = new MemberVO(); //MemberVO라는 빈칸 양식 종이를 새로 가져올때마다 new 선언
@@ -235,6 +236,7 @@ public class HomeController {
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
         model.addAttribute("musics", musics);
+
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylistDetail");
         return "view/home/viewHomeTemplate";
 
@@ -252,7 +254,7 @@ public class HomeController {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	    checkFollow = followService.checkFollow(me.getNo(), userNo);
+	    checkFollow = followService.checkFollow(member.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -289,7 +291,7 @@ public class HomeController {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	    checkFollow = followService.checkFollow(me.getNo(), userNo);
+	    checkFollow = followService.checkFollow(member.getNo(), userNo);
             log.info("대체 뭐가 문젠데 Reply " + member.getNo());
         } catch (Exception e) {
             e.printStackTrace();
@@ -302,9 +304,11 @@ public class HomeController {
         List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
         model.addAttribute("likeBoardList", likeBoardList);
 
+
 //         List<BoardVO> boardNameList = this.boardService.retrieveBoardNameList();
 //         model.addAttribute("boardNameList", boardNameList);
 //         log.info(boardNameList.toString());
+
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
@@ -334,7 +338,7 @@ public class HomeController {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	    checkFollow = followService.checkFollow(me.getNo(), userNo);
+	    checkFollow = followService.checkFollow(member.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -374,7 +378,7 @@ public class HomeController {
 
     // 플레이리스트 수정 폼 요청
     @GetMapping("/changePlaylistForm/{id}")
-    public String changePlaylist(Model model, @PathVariable("id") String id) {
+    public String changePlaylist(Model model, @PathVariable("id") int id) {
         Playlist playlist = musicApiService.getOnePlaylist(id);
         log.info("playlist : " + playlist.getPlaylistImage().getId());
         model.addAttribute("playlist", playlist);
