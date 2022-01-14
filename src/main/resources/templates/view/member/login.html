@@ -3,14 +3,28 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
+        <meta property="og:description" content="Hello. This is a music site. Share your information.">
+        <meta name="description" content="Hello. This is a music site. Share your information.">
+        <link rel="shortcut icon" th:href="@{/upload/favicon.ico}">
 <!--        <meta name="_csrf" th:content="${_csrf.token}">-->
 <!--		<meta name="_csrf_header" th:content="${_csrf.headerName}"> -->
-        <title>Login - SB Admin</title>
+        <title>Musicat - Login</title>
         <link href="css/theme_styles.css" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
-        <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script> 
+        <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+        <style>
+            @font-face {
+                font-family: 'catfont';
+                src: url('/font/Simplecat-d9xpV.otf') format('truetype');
+            }
+            @font-face {
+                font-family: 'catfont2';
+                src: url('/font/QuietMeows-48jx.ttf') format('truetype');
+            }
+            .card-header{
+                font-family: 'catfont2';
+            }
+        </style>
     </head>
     <body class="bg-primary">
         <div id="layoutAuthentication">
@@ -20,11 +34,11 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Musicat Login</h3></div>
+                                    <div class="card-header">
+                                        <span>고양이 이미지가 /main</span>
+                                        <h3 class="text-center font-weight-light my-4"><span><a href="/main"><i class="fas fa-cat"></i></a></span> Musicat Login</h3>
+                                    </div>
                                     <div class="card-body">
-                                        <div>
-
-                                        </div>
                                          <form th:action="@{/login}" method="post">
                                             <div class="form-floating mb-3">
                                                 <th:block th:if="${#httpServletRequest.getParameter('email')} != null">
@@ -43,17 +57,16 @@
                                                 <p id = "bottomText"></p>
                                             </div>
 
+                                            <div>
+                                                <input type="checkbox" name="remember-me">Remember Me
+                                            </div>
+
                                              <span style="color:red;" th:text="${#httpServletRequest.getAttribute('loginFailMessage')}"></span>
 
                                              <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <a class="small" href="/findPWD">Forgot Password?</a>
                                                 <button class = "btn btn-primary" type="submit" id="loginBtn">로그인</button>
                                             </div>
-
-                                             <div>
-                                                 <a href="/main">main(수정할예정)</a>
-                                             </div>
-
                                          </form>
                                     </div>
                                     <div class="card-footer text-center py-3">

@@ -12,15 +12,22 @@ import javax.servlet.http.HttpSession;
 
 import com.example.musicat.controller.form.ArticleForm;
 import com.example.musicat.domain.board.*;
+import com.example.musicat.domain.etc.NotifyVO;
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.repository.board.ArticleDao;
+
+import com.example.musicat.security.MemberAccount;
+
 import com.example.musicat.service.music.MusicApiService;
+
 import com.example.musicat.util.FileManager;
 
+import com.example.musicat.websocket.manager.NotifyManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,6 +62,7 @@ public class ArticleController {
 	private final ArticleDao articleDao;
 	private final MusicApiService musicApiService;
 
+	private final NotifyManager notifyManager;
 
 	/**
 	 * 세부 조회
@@ -73,16 +81,21 @@ public class ArticleController {
 		MemberVO member = HomeController.checkMemberNo();
 		int gradeNo = member.getGradeNo();
 
-
 		ArticleVO article = this.articleService.retrieveArticle(articleNo);
 		log.info("Acontroller.detailArticle: -------" + article.toString());
 		int boardNo = article.getBoardNo();
 		//gradeNo = member.getGradeNo();
 		boolean grade = this.boardService.retrieveAllReadBoard(boardNo, gradeNo);
 		//boolean grade = true;
+
+		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+		model.addAttribute("likeBoardList", likeBoardList);
+
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 
+		BoardBoardGradeVO bbg = this.boardService.retrieveOneBoard(boardNo);
+		model.addAttribute("boardName",bbg.getBoardVo().getBoardName());
 		if (grade) {
 			log.info("sidebar");
 			int memberNo = member.getNo();
@@ -97,11 +110,11 @@ public class ArticleController {
 			List<ArticleVO> subArticle = this.articleService.selectSubArticle(articleNo);
 			model.addAttribute("subArticles", subArticle);
 
-			// audio 파일
-//			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
-//			log.info("mm: {}" ,musicList.get(0));
-//			model.addAttribute("musicList", musicList);
-//				log.info(musicList.toString());
+
+			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
+			model.addAttribute("musicList", musicList);
+			log.info("article controller musiclist : " + musicList.toString());
+
 
 
 			// xss 처리 Html tag로 변환
@@ -130,13 +143,13 @@ public class ArticleController {
 		// create
 		ArticleForm form = new ArticleForm(); // 변경
 
-//		HttpSession session = req.getSession();
-//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
-
-		MemberVO member = HomeController.checkMemberNo();
+		// bind    
+    MemberVO member = HomeController.checkMemberNo();
 		model.addAttribute("memberNo", member.getNo());
+		
+		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+		model.addAttribute("likeBoardList", likeBoardList);
 
-		// bind
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 
@@ -164,7 +177,7 @@ public class ArticleController {
 			,BindingResult result
 			,@ModelAttribute FileFormVO form
 			,@RequestParam("tags") String tags
-			,@RequestParam("audioNo") Long audioNo
+			,@RequestParam(value = "audioNo", required = false) Long audioNo
 			,HttpServletRequest req) throws IOException {
 		ModelAndView mv = new ModelAndView();
 		log.info("audioNo= {}",audioNo);
@@ -212,6 +225,9 @@ public class ArticleController {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/articles/" + articleNo);
 		mv.setView(redirectView);
+
+		// 예나 - 알림 테스트
+		//notifyManager.addNotify(new NotifyVO(1, "댓글 알림 테스트", "/main"));
 		return mv;
 	}
 
@@ -225,10 +241,12 @@ public class ArticleController {
 		ArticleVO article = this.articleService.retrieveArticle(articleNo); // 게시글 정보 가져오기
 		ArticleForm form = ArticleForm.updateArticle(article);
 		// create
-//		HttpSession session = req.getSession();
-//		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+
 		MemberVO member = HomeController.checkMemberNo();
 		int gradeNo = member.getGradeNo();
+
+		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+		model.addAttribute("likeBoardList", likeBoardList);
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
@@ -258,6 +276,11 @@ public class ArticleController {
 
 		ModelAndView mv = new ModelAndView();
 		if (result.hasErrors()){
+
+			MemberVO member = HomeController.checkMemberNo();
+			List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+			mv.addObject("likeBoardList", likeBoardList);
+			
 			List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 			mv.addObject("categoryBoardList", categoryList);
 			List<BoardVO> boardList = this.boardService.retrieveAllWriteBoard(1);
@@ -364,6 +387,10 @@ public class ArticleController {
 		searchMap.put("content", content);
 		List<ArticleVO> articles = articleService.search(searchMap);
 		model.addAttribute("articles", articles);
+
+		MemberVO member = HomeController.checkMemberNo();
+		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
+		model.addAttribute("likeBoardList", likeBoardList);
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);

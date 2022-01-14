@@ -78,12 +78,17 @@
 
 								<!-- &lt;!&ndash; 이미지 파일 첨부 &ndash;&gt; -->
 								<label class="write-image-style" for="write-imagefile-upload">
-									<i class="far fa-file-image fa-2x"></i></label>
+									<i class="far fa-file-image fa-2x"></i>
+								</label>
+
 								<input type="file" id="write-imagefile-upload" th:field="*{imageFiles}"
 									onchange="setThumbnail(event)" multiple="multiple" />
-									<a name="selectbtnimage" id="selectimage"></a>&nbsp;<br/>
+									<a name="selectbtnimage" id="selectimage"></a>
 
-								<input type="button" value="노래 등록" onclick="openChild()" /><br />
+								<label class="write-audio-style" for="write-audiofile-upload">
+									<i class="fas fa-file-audio fa-2x"></i>
+								</label>
+								<input type="button" value="노래 등록" onclick="openChild()" id="write-audiofile-upload"/><br />
 <!--								<img src="/importfile.png" board='0'onclick="document.all.selectFile.click();document.all.selectbtnimage.value=document.all.selectFile.value" />-->
 							</div>
 							<div id="image_container">

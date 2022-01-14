@@ -27,9 +27,9 @@
 	<select id="selectMemberByEmail" resultType="memberVo" resultMap="selectMemberByEmailResultMap">
 		select member_no, email, password, nickname,
 			   (select auth from grade where grade_no =
-											 (select grade_no from membergrade where member_no =
+											 (select grade_no from member_grade where member_no =
 																					 (select member_no from member where email = #{email}))) as auth,
-			   (select grade_no from membergrade where member_no =
+			   (select grade_no from member_grade where member_no =
 													   (select member_no from member where email = #{email})) as grade_no,
 			   lastdate, ban, ismember
 		from member
@@ -85,7 +85,7 @@
 
 	<select id="selectMemberList" parameterType="criteria" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT M.member_no, M.email, G.name , M.regdate, M.visits, M.ban
-		FROM member M LEFT JOIN membergrade MG
+		FROM member M LEFT JOIN member_grade MG
 		ON M.member_no = MG.member_no
 		LEFT JOIN grade G
 		ON G.grade_no = MG.grade_no
@@ -100,7 +100,7 @@
 	
 	<select id="selectMemberByManager" parameterType="int" resultType="memberVo" resultMap="detailInfoByManager">
 		SELECT M.member_no, M.email, G.name, M.nickname, M.regdate, M.lastdate, M.docs, M.comms, M.visits, M.ban, M.ismember
-		FROM member M LEFT JOIN membergrade MG
+		FROM member M LEFT JOIN member_grade MG
 		ON M.member_no = MG.member_no
 	 	LEFT JOIN grade G
 		ON G.grade_no = MG.grade_no
@@ -202,7 +202,7 @@
 
 	<select id="selectSearchMemberByEmail" parameterType="Map" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT M.member_no, M.email, G.name, M.regdate, M.visits, M.ban
-		FROM member M LEFT JOIN membergrade MG
+		FROM member M LEFT JOIN member_grade MG
 		ON M.member_no = MG.member_no
 	  	LEFT JOIN grade G
 		ON G.grade_no = MG.grade_no
@@ -213,7 +213,7 @@
 	
 	<select id="selectSearchMemberByGrade" parameterType="Map" resultType="memberVo" resultMap="briefMemberInfo">
 		SELECT M.member_no, M.email, G.name, M.regdate, M.visits, M.ban
-		FROM member M LEFT JOIN membergrade MG
+		FROM member M LEFT JOIN member_grade MG
 		ON M.member_no = MG.member_no
 	  	LEFT JOIN grade G
 		ON G.grade_no = MG.grade_no
@@ -233,7 +233,7 @@
 	
 	<select id="selectTotalSearchMemberByGrade" parameterType="string" resultType="int">
 		SELECT COUNT(M.member_no)
-		FROM member M LEFT JOIN membergrade MG
+		FROM member M LEFT JOIN member_grade MG
 		ON M.member_no = MG.member_no
 	    LEFT JOIN grade G
 		ON G.grade_no = MG.grade_no

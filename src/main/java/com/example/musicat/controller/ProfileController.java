@@ -2,6 +2,7 @@ package com.example.musicat.controller;
 
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.member.ProfileVO;
+import com.example.musicat.security.MemberAccount;
 import com.example.musicat.service.member.MemberService;
 import com.example.musicat.service.member.ProfileService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +33,8 @@ public class ProfileController {
 
     // 프로필 페이지 이동, session 정보를 가져와서 이동할 예정. 기능 구현을 위해서 임시 처리
     @GetMapping("/profile")
-    public String chooseProfile(HttpServletRequest request, HttpServletResponse response, Model model) throws Exception{
-        HttpSession session = request.getSession();
-        MemberVO member = (MemberVO) session.getAttribute("loginUser");
+    public String chooseProfile(Model model) throws Exception{
+        MemberVO member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         //MemberVO member = memberService.retrieveMemberByManager(2);
         log.info("member : " + member);
         try {
@@ -76,7 +77,7 @@ public class ProfileController {
         log.info("update 시작");
         log.info("flag : " + flag);
         log.info("null : " + importAttachFile.getOriginalFilename().isEmpty());
-        MemberVO member = (MemberVO) req.getSession().getAttribute("loginUser");
+        MemberVO member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         log.info("mul : " + importAttachFile.getOriginalFilename());
         try {
             if(!importAttachFile.getOriginalFilename().isEmpty()){
