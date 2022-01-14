@@ -377,7 +377,9 @@ public class BoardController {
 			}
 		}
 
+
 		//MemberVO member = HomeController.checkMemberNo();
+    
 		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
 		model.addAttribute("likeBoardList", likeBoardList);
 
