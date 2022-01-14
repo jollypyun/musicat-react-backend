@@ -19,7 +19,7 @@ public interface MemberMapper {
 
 	public MemberVO selectMember_byIDPwd(String email, String password) throws Exception;
 
-	public void updateLastDdate(int no) throws Exception;
+	public void updateLastDate(int no) ;
 
 	public MemberVO test();
 
