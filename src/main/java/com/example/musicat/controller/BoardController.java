@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.domain.paging.Criteria;
 import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.board.FileService;
 import org.apache.commons.text.StringEscapeUtils;
@@ -331,7 +332,32 @@ public class BoardController {
 	public String selectAllNomalArticle(@PathVariable("boardNo") int boardNo, // @RequestParam("memberNo") int memberNo,
 										Model model) {
 		// create
-		List<ArticleVO> articles = this.articleService.retrieveBoard(boardNo);
+		BoardBoardGradeVO bbgVO = this.boardService.retrieveOneBoard(boardNo);
+		String boardName = bbgVO.getBoardVo().getBoardName();
+		int boardkind = bbgVO.getBoardVo().getBoardkind();
+		List<ArticleVO> articles = new ArrayList<>();
+		int startPage = 1;
+
+		MemberVO member = HomeController.checkMemberNo();
+		int gradeNo = member.getGradeNo();
+
+		int writeCheck = boardService.checkWriteGrade(boardNo, gradeNo);
+		model.addAttribute("writeCheck", writeCheck);
+
+		if(boardkind == 0){ //일반 게시판
+			articles = this.articleService.retrieveBoard(boardNo);
+		} else { // 썸네일 보드
+			articles = this.articleService.selectBoardList(boardNo, startPage);
+		}
+
+		int totalCount = this.articleService.boardTotalCount(boardNo);
+		Criteria creitea = Criteria.getThumbnailPaging(1, totalCount);
+
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("pageSize", creitea.getPageSize());
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("endPage", creitea.getEndPage());
+		log.info("startPage: {}, pageSize: {}, totalCount: {}, endPage: {}",startPage,creitea.getPageSize(),totalCount,creitea.getEndPage());
 		// bind
 		FileVO file = new FileVO();
 		for (ArticleVO article : articles) {
@@ -351,18 +377,14 @@ public class BoardController {
 			}
 		}
 
-		MemberVO member = HomeController.checkMemberNo();
+		//MemberVO member = HomeController.checkMemberNo();
 		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
 		model.addAttribute("likeBoardList", likeBoardList);
 
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		CategoryVO categoryVo = new CategoryVO();
 
-		BoardBoardGradeVO bbgVO = this.boardService.retrieveOneBoard(boardNo);
-		String boardName = bbgVO.getBoardVo().getBoardName();
 
-
-		int boardkind = bbgVO.getBoardVo().getBoardkind();
 		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
@@ -379,15 +401,58 @@ public class BoardController {
 		return "/view/home/viewBoardTemplate";
 	}
 
+//	@ResponseBody
+//	@GetMapping("/board/paging")
+//	public List<ArticleVO> pagingBoardList(@RequestParam("movePage") int movePage,
+//										   @RequestParam("boardNo") int boardNo){
+//		List<ArticleVO> articles = this.articleService.selectBoardList(boardNo, movePage);
+//		return articles;
+//	}
+
+	@ResponseBody
+	@GetMapping("/board/paging")
+	public Map<String, Object> pagingBoardList(@RequestParam("movePage") int movePage,
+										   @RequestParam("boardNo") int boardNo,
+											   @RequestParam(value = "keyword", required = false) String keyword,
+											   @RequestParam(value = "content", required = false) String content){
+		HashMap<String, Object> result = new HashMap<>();
+		//int
+		int totalCount = this.articleService.boardTotalCount(boardNo);
+		Criteria creitea = Criteria.getThumbnailPaging(movePage, totalCount);
+//		creitea.bindEndPage(totalCount); //endPage 바인딩
+
+		// currentPage, pageSize, endPage
+		result.put("currentPage", movePage);
+		result.put("creitea", creitea);
+		List<ArticleVO> articles = new ArrayList<>();
+		if (keyword != null && content != null) { //검색 paigng
+			HashMap<String, Object> searchMap = new HashMap<>();
+			searchMap.put(keyword, content);
+			Criteria cre = Criteria.getThumbnailPaging(movePage, totalCount);
+			int offset = cre.getPageStart();
+			searchMap.put("offset", offset);
+			articles = this.articleService.search(searchMap);
+		}else { // 기본 paging
+			articles = this.articleService.selectBoardList(boardNo, movePage);
+		}
+		result.put("articles", articles);
+
+		return result;
+	}
+
+
+
+
 	// 게시판 내 검색
 	@GetMapping("/board/search")
 	@ResponseBody
-	public List<ArticleVO> searchByBoard(@RequestParam("keyword") String keyword
+	public Map<String, Object> searchByBoard(@RequestParam("keyword") String keyword
 			,@RequestParam("content") String content
 			,@RequestParam("boardNo") Integer boardNo
-			,@RequestParam("aKeyword") String aKeyword
-			,@RequestParam("aContent") String aContent){
+			,@RequestParam(value = "aKeyword", required = false) String aKeyword
+			,@RequestParam(value = "aContent", required = false) String aContent){
 		HashMap<String, Object> searchMap = new HashMap<>();
+		searchMap.put("offset", 0);
 		if(aKeyword != null){
 			if(!aKeyword.equals(keyword)){ // keyword가 같다면 생략
 				searchMap.put(aKeyword, aContent);
@@ -399,8 +464,17 @@ public class BoardController {
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
 
+		Map<String, Object> result = new HashMap<>();
 		List<ArticleVO> results = articleService.search(searchMap);
-		return results;
+		Criteria creitea = Criteria.getThumbnailPaging(1, results.size());
+//		creitea.bindEndPage(totalCount); //endPage 바인딩
+
+
+		result.put("results", results);
+		result.put("currentPage", 1);
+		result.put("creitea", creitea);
+
+		return result;
 	}
 
 	//즐겨찾기 게시판 추가

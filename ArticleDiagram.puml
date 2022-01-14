@@ -1,25 +1,21 @@
 @startuml
 'https://plantuml.com/class-diagram
-
-
-package "Mapper"{
-   interface ArticleMapepr
-   interface FileMapper
-   interface MemberMapper
-}
+left to right direction
 
 package "Domain"{
     class ArticleVO
     class FileVO
     class TagVO
     class LikeVO
+    class ArticleForm
+    class FileForm
 }
 
-package "Dao"{
-    interface ArticleDao
-    class ArticleDaoImpl
-    interface FileDao
-    class FileDaoImpl
+
+package "Controller"{
+    class ArticleController
+    class FileController
+
 }
 
 package "Service"{
@@ -32,11 +28,17 @@ package "Service"{
     interface CategoryService
 }
 
-package "Controller"{
-    class ArticleController
-    class FileController
-    class ArticleForm
-    class FileForm
+package "Dao"{
+    interface ArticleDao
+    class ArticleDaoImpl
+    interface FileDao
+    class FileDaoImpl
+}
+
+package "Mapper"{
+   interface ArticleMapepr
+   interface FileMapper
+   interface MemberMapper
 }
 
 package "Util"{
@@ -44,7 +46,7 @@ package "Util"{
     class BestArticle
 }
 
-ArticleDao <|.. ArticleDaoImpl
+ArticleDao <|... ArticleDaoImpl
 FileDao <|.. FileDaoImpl
 
 ArticleService <|.. ArticleServiceImpl
@@ -73,43 +75,6 @@ ArticleDao <.. ArticleController
 FileManager <.. FileController
 FileDao <.. FileController
 FileService <.. FileController
-
-interface MemberMapper{}
-
-interface ArticleMapepr{
-+ selectArticle(int articleNo): List<SelectArticleVO>
-+ selectBoard(int boardNo): List<ArticleVO>
-+ insertArticle(ArticleVO article): void
-+ updateArticle(ArticleVO article): void
-+ deleteArticle(int articleNo): void
-+ upViewcount(int aritlceNo): void
-+ selectAllArticle(): List<ArticleVO>
-+ likeCheck(ArticleVO articleVO): int
-+ insertLike(ArticleVO articleVO): void
-+ deleteLike(ArticleVO articleVO): void
-+ totalLikeCount(int articleNo): int
-+ upLikecount(int articleNo): void
-+ downLikecount(int articleNo): void
-+ insertTag(TagVO tagVO): void
-+ selectArticleTags(int articleNo): List<TagVO>
-+ deleteTag(int tagNo): void
-+ search(Map<String, Object> map): List<ArticleVO>
-+ selectBestArticle(): List<ArticleVO>
-+ deleteAllBestArticle(): void
-+ insertBestArticle(Map<String, Object> map): void
-+ selectNowDate(): int
-+ selectAllBestArticle(): List<BestArticleVO>
-+ selectUpdateBestArticle(int now): List<ArticleVO>
-+ checkBestArticle(int articleNo): boolean
-}
-
-interface FileMapper{
-+ selectFile(int fileNo): FileVO
-+ insertFile(FileVO fileVO): void
-+ selectThumbFile(FileVO fileVo): List<FileVO>
-+ deleteFile(int FileNo): void
-+ selectArticleFiles(int articleNo): List<FileVO>
-}
 
 
 class ArticleVO{
@@ -227,6 +192,48 @@ class TagVO{
 + getName(): String
 + setName(String name): void
 }
+
+
+
+interface MemberMapper{}
+
+interface ArticleMapepr{
++ selectArticle(int articleNo): List<SelectArticleVO>
++ selectBoard(int boardNo): List<ArticleVO>
++ insertArticle(ArticleVO article): void
++ updateArticle(ArticleVO article): void
++ deleteArticle(int articleNo): void
++ upViewcount(int aritlceNo): void
++ selectAllArticle(): List<ArticleVO>
++ likeCheck(ArticleVO articleVO): int
++ insertLike(ArticleVO articleVO): void
++ deleteLike(ArticleVO articleVO): void
++ totalLikeCount(int articleNo): int
++ upLikecount(int articleNo): void
++ downLikecount(int articleNo): void
++ insertTag(TagVO tagVO): void
++ selectArticleTags(int articleNo): List<TagVO>
++ deleteTag(int tagNo): void
++ search(Map<String, Object> map): List<ArticleVO>
++ selectBestArticle(): List<ArticleVO>
++ deleteAllBestArticle(): void
++ insertBestArticle(Map<String, Object> map): void
++ selectNowDate(): int
++ selectAllBestArticle(): List<BestArticleVO>
++ selectUpdateBestArticle(int now): List<ArticleVO>
++ checkBestArticle(int articleNo): boolean
+}
+
+interface FileMapper{
++ selectFile(int fileNo): FileVO
++ insertFile(FileVO fileVO): void
++ selectThumbFile(FileVO fileVo): List<FileVO>
++ deleteFile(int FileNo): void
++ selectArticleFiles(int articleNo): List<FileVO>
+}
+
+
+
 
 interface ArticleDao{
 - ArticleMapper articleMapper

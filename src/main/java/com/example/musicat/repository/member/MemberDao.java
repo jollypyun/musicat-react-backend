@@ -20,7 +20,7 @@ public interface MemberDao {
 
 	public MemberVO selectMember(String email, String password) throws Exception;
 
-	public void updateLastDdate(int no) throws Exception;
+	public void updateLastDate(int no);
 
 	// 회원 가입
 	void insertMember(MemberVO mVo);
@@ -50,5 +50,8 @@ public interface MemberDao {
 	ArrayList<MemberVO> selectSearchMember(int startRow, int memberPerPage, String keyfield, String keyword);
 
 	int updateTempPassword(MemberVO mVo) throws Exception;
+
+
+	String selectMemberPassword(int memberNo);
 
 }

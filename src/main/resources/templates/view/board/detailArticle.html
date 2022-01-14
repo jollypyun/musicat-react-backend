@@ -90,6 +90,26 @@
                                 </th:block>
 
 
+                                    <td colspan="3">
+                                        <div class="detailArticle-btn-style">
+                                            <div class="detailArticle-function-style">
+                                                <button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn" onclick="writeForm()" type="button">글쓰기</button>
+                                                <input type="button" onclick="history.back()" value="목록" />
+                                                <!--th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"-->
+                                            </div>
+                                            <div id="like_area" class="detailArticle-like-style">
+                                                <div th:if="${article.likeCheck eq 0}">
+                                                    <button type="button" id="add_like_btn" value="추천" />
+                                                    <i class="far fa-heart"></i>
+                                                    </button>
+                                                </div>
+                                                <div th:unless="${article.likeCheck eq 0}">
+                                                    <button type="button" id="del_like_btn">
+                                                        <i class="fas fa-heart"></i>
+                                                    </button>
+                                                </div>
+
+
                                 <th:block th:if="${not #strings.isEmpty(musicList)}">
                                     <div class="mt-4 content-audioList-style">
                                         <span class="material-icons md-36 float-end">playlist_add</span>
@@ -221,8 +241,11 @@
                     <div class="dropdown-divider"></div>
 
                     <!-- 댓글 -->
-                    <div id="writeReplyForm" class="detailArticle-reply-style">
-                        <textarea id="write_content" name="write_content" placeholder="댓글을 입력해주세요."></textarea>
+
+                    <div th:if="${#authorization.expr('isAuthenticated()')}" id="writeReplyForm" class="detailArticle-reply-style">
+						<textarea id="write_content" name="write_content" rwos="10"
+                                  cols="75" placeholder="댓글을 입력해주세요."></textarea>
+
 
                         <button type="button" id="write_reply_btn">등록</button>
                     </div>
