@@ -32,7 +32,7 @@ public interface BoardService {
 	
 	public Integer retrieveDuplicatedBoard(String boardName);
 
-	public List<BoardVO> retrieveBoardNameList();
+	//public List<BoardVO> retrieveBoardNameList();
 
 	public void registerLikeBoard(int memberNo, int boardNo);
 
