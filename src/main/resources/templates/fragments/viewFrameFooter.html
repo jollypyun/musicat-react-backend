@@ -69,13 +69,16 @@
                                     <button id="playlist-close"><span class="material-icons">close</span></button>
                                 </div>
                             </div>
-                            <ul id = "currentPlayList_ul" style="overflow-y : auto;">
-<!--                                <button type="button" onclick="testinggg()">테스트트</button>-->
-<!--                                <li th:each = "music : ${curPlaylist}">-->
+                            <ul id="currentPlayList_ul" style="overflow-y : auto">
+                                <!--                                <button type="button" onclick="testinggg()">테스트트</button>-->
+<!--                                <li th:each="music : ${curPlaylist}">-->
 <!--                                    <div class="playlist-dropUp-content-inner">-->
-<!--                                        <div class="dropUp-inner-info">-->
+<!--                                        <div class="dropUp-inner-info position-relative">-->
 <!--                                            <img th:src="${curPlaylist.links[0].href}"/>-->
-<!--                                            <input type="button"><span class="material-icons">play_circle</span></input>-->
+<!--                                            <label class="playlist-dropUp-content-playBtn position-absolute">-->
+<!--                                                <input type="button">-->
+<!--                                                <span class="material-icons position-absolute" >play_circle</span>-->
+<!--                                            </label>-->
 <!--                                            <div class="dropUp-inner-info-text">-->
 <!--                                                <span></span>-->
 <!--                                                <span></span>-->
@@ -83,10 +86,11 @@
 <!--                                        </div>-->
 <!--                                        <div class="dropUp-inner-time">-->
 <!--                                            <span>2:06</span>-->
-<!--                                            <button id="song-addInfo"><span class="material-icons">dehaze</span></button>-->
+<!--                                            <button id="song-addInfo"><span class="material-icons">dehaze</span>-->
+<!--                                            </button>-->
 <!--                                            <div id="songInfo-dropbox">-->
-<!--                                                <button >삭제</button>-->
-<!--                                                <button >플레이리스트 추가</button>-->
+<!--                                                <button>삭제</button>-->
+<!--                                                <button>플레이리스트 추가</button>-->
 <!--                                            </div>-->
 <!--                                        </div>-->
 <!--                                    </div>-->
@@ -105,11 +109,12 @@
         </div>
     </div>
     <th:block th:if="${#authorization.expr('isAuthenticated()')}">
-    <span id = "userNoForPlaylist" th:text = "${#authentication.principal.getMemberVo().getNo()}" style="display: none"></span>
+        <span id="userNoForPlaylist" th:text="${#authentication.principal.getMemberVo().getNo()}"
+              style="display: none"></span>
     </th:block>
-<!--    <th:block th:if="${#authorization.expr('isAuthenticated()') == false"}>-->
-<!--        <span id = "userNoForPlaylist" style="display: none">-1</span>-->
-<!--    </th:block>-->
+    <!--    <th:block th:if="${#authorization.expr('isAuthenticated()') == false"}>-->
+    <!--        <span id = "userNoForPlaylist" style="display: none">-1</span>-->
+    <!--    </th:block>-->
 </footer>
 
 </html>
