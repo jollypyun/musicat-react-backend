@@ -69,39 +69,52 @@
                                     <button id="playlist-close"><span class="material-icons">close</span></button>
                                 </div>
                             </div>
-                            <ul>
-                                <li>
-                                    <div class="playlist-dropUp-content-inner">
-                                        <div class="dropUp-inner-info">
-                                            <img src="upload/main-4.jpg"/>
-                                            <button><span class="material-icons">play_circle</span></button>
-                                            <div class="dropUp-inner-info-text">
-                                                <span>90sFlaasadadadadadsdadasdaday</span>
-                                                <span>Callassdasdasdasdadsaadsdassdame</span>
-                                            </div>
-                                        </div>
-                                        <div class="dropUp-inner-time">
-                                            <span>2:06</span>
-                                            <button id="song-addInfo"><span class="material-icons">dehaze</span></button>
-                                            <div id="songInfo-dropbox">
-                                                <button >삭제</button>
-                                                <button >플레이리스트 추가</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                            <ul id="currentPlayList_ul" style="overflow-y : auto">
+                                <!--                                <button type="button" onclick="testinggg()">테스트트</button>-->
+<!--                                <li th:each="music : ${curPlaylist}">-->
+<!--                                    <div class="playlist-dropUp-content-inner">-->
+<!--                                        <div class="dropUp-inner-info position-relative">-->
+<!--                                            <img th:src="${curPlaylist.links[0].href}"/>-->
+<!--                                            <label class="playlist-dropUp-content-playBtn position-absolute">-->
+<!--                                                <input type="button">-->
+<!--                                                <span class="material-icons position-absolute" >play_circle</span>-->
+<!--                                            </label>-->
+<!--                                            <div class="dropUp-inner-info-text">-->
+<!--                                                <span></span>-->
+<!--                                                <span></span>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="dropUp-inner-time">-->
+<!--                                            <span>2:06</span>-->
+<!--                                            <button id="song-addInfo"><span class="material-icons">dehaze</span>-->
+<!--                                            </button>-->
+<!--                                            <div id="songInfo-dropbox">-->
+<!--                                                <button>삭제</button>-->
+<!--                                                <button>플레이리스트 추가</button>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </li>-->
                             </ul>
                         </div>
                     </div>
                 </div>
 
 
-                <audio style="display: none" id="audio" controls>
-                    <source src="https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" type="audio/mp3">
+<!--                <iframe src = "https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" allow="autoplay" id="audio"></iframe>-->
+                <audio style="display: none" id="audio" controls src="https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" >
+<!--                    <source type="audio/mp3">-->
                 </audio>
             </div>
         </div>
     </div>
+    <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+        <span id="userNoForPlaylist" th:text="${#authentication.principal.getMemberVo().getNo()}"
+              style="display: none"></span>
+    </th:block>
+    <!--    <th:block th:if="${#authorization.expr('isAuthenticated()') == false"}>-->
+    <!--        <span id = "userNoForPlaylist" style="display: none">-1</span>-->
+    <!--    </th:block>-->
 </footer>
 
 </html>
