@@ -186,6 +186,7 @@ footer{
 .dropUp-inner-info{
     display: flex;
     width: 80%;
+    position: relative;
 }
 
 .dropUp-inner-info button{
