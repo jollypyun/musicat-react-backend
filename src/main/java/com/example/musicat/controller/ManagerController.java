@@ -25,13 +25,13 @@ public class ManagerController {
 	@Autowired
 	TotalStatisticsServiceImpl totalServiceImpl;
 
-	@GetMapping("/manager")
-	public String manager(Model model) {
-		model.addAttribute("managerContent", "fragments/MemberContent");
-		return "view/home/viewManagerTemplate";
-	}
+//	@GetMapping("/manager")
+//	public String manager(Model model) {
+//		model.addAttribute("managerContent", "fragments/MemberContent");
+//		return "view/home/viewManagerTemplate";
+//	}
 
-	@GetMapping("/manager/daily")
+	@GetMapping("/daily")
 	public String managerDaily(Model model) {
 
 		dailyServiceImpl.registerAndmodifyDaily();
@@ -74,7 +74,7 @@ public class ManagerController {
 		return "view/home/viewManagerTemplate";
 	}
 
-	@GetMapping("/manager/total")
+	@GetMapping("/total")
 	public String managerTotal(Model model) {
 
 		totalServiceImpl.registerAndmodifyTotal();

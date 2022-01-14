@@ -19,7 +19,7 @@ public interface MemberMapper {
 
 	public MemberVO selectMember_byIDPwd(String email, String password) throws Exception;
 
-	public void updateLastDdate(int no) throws Exception;
+	public void updateLastDate(int no) ;
 
 	public MemberVO test();
 
@@ -103,6 +103,9 @@ public interface MemberMapper {
 	// 멤버의 팔로잉 리스트
 	List<MemberVO> selectFollowingList(int memberNo);
 
-	// 멤버의 파로우 리스트
+	// 멤버의 팔로우 리스트
 	List<MemberVO> selectFollowedList(int memberNo);
+
+	String selectMemberPassword(int memberNo);
+
 }

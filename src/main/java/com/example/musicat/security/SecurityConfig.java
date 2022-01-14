@@ -1,8 +1,6 @@
 package com.example.musicat.security;
 
 import com.example.musicat.domain.member.MemberVO;
-import com.example.musicat.websocket.manager.NotifyManager;
-import com.example.musicat.websocket.manager.StompHandler;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -25,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -45,7 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-
     //비밀번호 암호화
     @Bean
     public BCryptPasswordEncoder encodePwd() {
@@ -64,8 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         });
     }
 
-
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
@@ -83,12 +79,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        //http
+                //.addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class)
 
         http
                 .csrf().disable();
 
-        http    //DB resource 테이블 만들어서 처리하는 게 편할 거라고 하심(url 변경 되어도 따로 처리 안 해줘도 돼서)
-                //강사님께서 코드 짜보고 계시고 완성되면 주시겠다고...
+        http
                 .authorizeRequests()
                 //인증된 사용자이면 접근 가능한 페이지
                 .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated() //
@@ -98,7 +95,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 //그 외 요청은 모두 허용 ex) /main, /musicatlogin 등
                 .anyRequest().permitAll();
-
 
         http
                 .formLogin() //로그인 페이지 설정
@@ -112,14 +108,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         //인증 성공 시 인증 결과를 담은 인증 객체를 파라미터로 받음 (인증 요청하지 않은 사용자의 정보는 HomController(/main)에서 처리해줌
                         MemberVO member = ((MemberAccount) authentication.getPrincipal()).getMemberVo();
                         log.info("principal : " + member.toString());
-
-
-
-
-//                        HttpSession session = request.getSession();
-//                        session.setAttribute("loginUser", member);
-//                        log.info("인증 성공 - no " + member.getNo() + " email " + member.getEmail() + " grade " +  member.getGrade() + " gradeNo " +  member.getGradeNo() + " pwd " +  member.getPassword());
-
 
                         //사용자 요청페이지 저장
                         RequestCache requestCache = new HttpSessionRequestCache();
@@ -144,7 +132,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         //로그인 실패 예외 발생 시 처리
 
                         if (exception instanceof UsernameNotFoundException) { //DB에 일치하는 email이 없는 경우
-                            request.setAttribute("loginFailMessage", "아이디 또는 비밀번asdfasdfsf호를 잘못 입력하였습니다.");
+                            request.setAttribute("loginFailMessage", "아이디 또는 비밀번호를 잘못 입력하였습니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
                         } else if (exception instanceof BadCredentialsException) { //비밀번호가 틀린 경우
                             request.setAttribute("loginFailMessage", "아이디 또는 비밀번호를 잘못 입력하였습니다.");
@@ -155,7 +143,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         } else if (exception instanceof AccountExpiredException) { //isMember 1인 경우
                             request.setAttribute("loginFailMessage", "탈퇴처리 된 계정입니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
+                        } else if (exception instanceof SessionAuthenticationException) {
+                            request.setAttribute("loginFailMessage", "로그인 불가~~.");
                         }
+
+
 
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/musicatlogin");
                         dispatcher.forward(request, response);
@@ -174,7 +166,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .sessionManagement() //세션 관리
                 .sessionFixation().changeSessionId() //세션 고정 보호. 세션 조작을 통한 보안 공격 방지를 위해, 인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지 (security가 기본으로 제공해주기 때문에 별도로 설정해줄 필요 없음)
-                .maximumSessions(3) //최대 세션 개수
+                .maximumSessions(2) //최대 세션 개수
                 .expiredUrl("/expiredUrl") //session 만료 시 이동 페이지
                 .maxSessionsPreventsLogin(true); //false : 이전에 로그인한 세션 만료, true : 나중에 로그인 시도하는 세션 생성 불가(로그인 불가)
 

@@ -18,6 +18,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectBoard" parameterType="Integer" statementType="CALLABLE" resultType="articleVo" resultMap="articleVOResult">
 		{ CALL sp_article_select_board(#{boardNo}) }
 	</select>
+
+	<!-- paging -->
+	<select id="selectBoardList" parameterType="hashMap" statementType="CALLABLE" resultType="articleVo" resultMap="articleVOResult">
+		{ CALL sp_article_select_board_pag(#{boardNo}, #{offset}) }
+	</select>
+
+	<select id="boardTotalCount" parameterType="int" statementType="CALLABLE" resultType="int">
+		{ CALL sp_article_select_board_totalcount(${boardNo}) }
+	</select>
+
 	
 	<select id="selectAllArticle" resultType="articleVo" resultMap="articleVOResult">
 		SELECT * FROM article ORDER BY writedate DESC
@@ -174,6 +184,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</where>
 		ORDER BY writedate DESC
+		LIMIT 12 OFFSET ${offset}
 	</select>
 
 	<!--베스트 글-->
@@ -242,5 +253,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE ac.member_no = #{memberNo}
 		ORDER BY recommend_no
 	</select>
+
+
+
+
 
 </mapper>

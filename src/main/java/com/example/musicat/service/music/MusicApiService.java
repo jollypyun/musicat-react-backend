@@ -36,6 +36,7 @@ public class MusicApiService {
     private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/push";
     private final String URI_PLAYLIST_CHANGE = "http://13.124.245.202:20000/api/playlists/update";
     private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
+
     private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/playlists/detail/{playlistKey}";
     private final String URI_MUSICS_TEST = "http://13.124.245.202:20000/api/posttest";
 
@@ -130,9 +131,11 @@ public class MusicApiService {
     }
 
     public List<Music> retrieveMusics(int articleNo){
-        ResponseEntity<List> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
 
+        ResponseEntity<List> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
+       
         log.info("response body : " + response.getBody());
+
 
         List<Music> musicList = response.getBody();
 //        HttpHeaders headers = new HttpHeaders();
@@ -186,7 +189,9 @@ public class MusicApiService {
         map.put("memberNo", memberNo);
         map.put("playlistKey", playlistKey);
         log.info("map : " + map);
+
         restTemplate.delete("http://13.124.245.202:20000/api/playlists/delete/{memberNo}/{playlistKey}" , map);
+
     }
 
     // 특정 플레이리스트 안에 곡 넣기
@@ -203,13 +208,18 @@ public class MusicApiService {
     public void pullMusic(List<Integer> musicNos, String playlistKey) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
-        map.put("playlistNo", playlistKey);
-        restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistKey}/{musicNos}", map);
+
+        map.put("playlistKey", playlistKey);
+
+        restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
+
     }
 
     // 플레이리스트 정보 가져오기
     public Playlist getOnePlaylist(String playlistKey) {
+
         ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistKey}", Playlist.class, playlistKey);
+
         return response.getBody();
     }
 
@@ -250,7 +260,10 @@ public class MusicApiService {
         ResponseEntity<List> pl = restTemplate.getForEntity(URI_PLAYLIST_ID, List.class, memberNo);
         //log.info(pl.toString());
         List<Playlist> list = pl.getBody();
-        list.remove(0);
+        if(list.size() != 0) {
+            list.remove(0);
+        }
+
         System.out.println(list);
         return pl.getBody();
     }

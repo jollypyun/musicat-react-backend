@@ -34,8 +34,7 @@ public class ProfileController {
     // 프로필 페이지 이동, session 정보를 가져와서 이동할 예정. 기능 구현을 위해서 임시 처리
     @GetMapping("/profile")
     public String chooseProfile(Model model) throws Exception{
-        MemberVO member = new MemberVO();
-        member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
+        MemberVO member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         //MemberVO member = memberService.retrieveMemberByManager(2);
         log.info("member : " + member);
         try {
@@ -78,8 +77,7 @@ public class ProfileController {
         log.info("update 시작");
         log.info("flag : " + flag);
         log.info("null : " + importAttachFile.getOriginalFilename().isEmpty());
-        MemberVO member = new MemberVO();
-        member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
+        MemberVO member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         log.info("mul : " + importAttachFile.getOriginalFilename());
         try {
             if(!importAttachFile.getOriginalFilename().isEmpty()){
@@ -99,7 +97,7 @@ public class ProfileController {
                 }
             }
             profileService.modifyBio(no, bio);
-            return "redirect:/profile";
+            return "redirect:/myPage/Playlist/"+no;
         } catch(Exception e) {
             e.printStackTrace();
 //            return "error";

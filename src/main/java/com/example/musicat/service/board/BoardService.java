@@ -15,6 +15,8 @@ public interface BoardService {
 	public ArrayList<BoardVO> retrieveBoardkind();
 	
 	public int retrieveConnectArticle(int boardNo);
+
+	public int checkWriteGrade(int boardNo, int gradeNo);
 	
 	public void removeBoard(int boardNo);
 	
@@ -30,7 +32,9 @@ public interface BoardService {
 	
 	public Integer retrieveDuplicatedBoard(String boardName);
 
-	public List<BoardVO> retrieveBoardNameList();
+
+//	public List<BoardVO> retrieveBoardNameList();
+
 
 	public void registerLikeBoard(int memberNo, int boardNo);
 

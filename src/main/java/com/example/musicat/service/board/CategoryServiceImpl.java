@@ -23,7 +23,6 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public void registerCategory(String categoryName) {
 		this.categoryDao.insertCategory(categoryName);
-
 	}
 
 	@Override
@@ -32,20 +31,22 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public int retrieveConnectBoard(int categoryNo) {
-		int checkConnectBoard = this.categoryDao.selectConnectBoard(categoryNo);
-		return checkConnectBoard;
-	}
-
-	@Override
 	public void removeCategory(int categoryNo) {
-		log.info("removeCategory-----------");
 		this.categoryDao.deleteCategory(categoryNo);
 	}
 
+	@Override
+	public int retrieveConnectBoard(int categoryNo) {
+		return this.categoryDao.selectConnectBoard(categoryNo);
+	}
+
+	@Override
+	public CategoryVO retrieveOneCategory(int categoryNo) {
+		return this.categoryDao.selectOneCategory(categoryNo);
+	}
+
 	public ArrayList<CategoryVO> retrieveCategoryList() {
-		ArrayList<CategoryVO> categoryList = this.categoryDao.selectCategoryList();
-		return categoryList;
+		return this.categoryDao.selectCategoryList();
 	}
 
 	// 카테고리 + 게시판 목록 조회
@@ -72,25 +73,14 @@ public class CategoryServiceImpl implements CategoryService {
 				category.addBoardList(new BoardVO(temp.getBoardVo().getBoardNo(), temp.getBoardVo().getBoardName(), temp.getBoardVo().getBoardkind()));
 		}
 		return categoryList;
-
-	}
-
-	@Override
-	public CategoryVO retrieveOneCategory(int categoryNo) {
-		CategoryVO categoryVo = this.categoryDao.selectOneCategory(categoryNo);
-		return categoryVo;
 	}
 
 	@Override
 	public Integer retrieveDuplicatedCategory(String categoryName) {
-		Integer duplicatedCategory = this.categoryDao.selectDuplicatedCategory(categoryName);
-		return duplicatedCategory;
+		return this.categoryDao.selectDuplicatedCategory(categoryName);
 	}
-//
-//	@Override
-//	public ArrayList<CategoryVO> retrieveCategoryList() {
-//		ArrayList<CategoryVO> categoryList = this.categoryDao.selectCategoryList();
-//		return categoryList;
-//	}
+
+
+
 
 }

@@ -111,13 +111,15 @@ public class MusicController {
     }
 
     // 특정 플레이리스트 안의 곡 빼기
-    @DeleteMapping("/pullmusic/{playlistNo}")
-    public void deleteMusicFromPlaylist(HttpServletRequest req, @PathVariable String playlistNo, @RequestParam(name = "musicNos") List<Integer> musicNos) {
+
+    @DeleteMapping("/pullmusic/{playlistKey}")
+    public void deleteMusicFromPlaylist(HttpServletRequest req, @PathVariable String playlistKey, @RequestParam(name = "musicNos") List<Integer> musicNos) {
+
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
         int memberNo = 6;
         log.info("musicNos : " + musicNos);
-        log.info("playlistNo : " + playlistNo);
-        musicApiService.pullMusic(musicNos, playlistNo);
+        log.info("playlistKey : " + playlistKey);
+        musicApiService.pullMusic(musicNos, playlistKey);
     }
 
     // 플레이리스트 수정

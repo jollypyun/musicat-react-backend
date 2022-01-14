@@ -1,11 +1,9 @@
 package com.example.musicat.service.board;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.example.musicat.domain.board.*;
+import com.example.musicat.domain.paging.Criteria;
 import com.example.musicat.mapper.board.ArticleMapper;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.board.ArticleDao;
@@ -25,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
 
+	private final BoardService boardService;
 	private final MusicApiService musicApiService;
 	private final ArticleMapper articleMapper;
 	private final ArticleDao articleDao;
@@ -61,9 +60,34 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<ArticleVO> retrieveBoard(int boardNo) { // 게시판 목록 조회
+	public List<ArticleVO> retrieveBoard(int boardNo) {
 		return this.articleDao.selectBoard(boardNo);
 	}
+
+	@Override
+	public List<ArticleVO> selectBoardList(int boardNo, int currentNo){
+		HashMap<String, Object> map = new HashMap<>();
+		Criteria cre = Criteria.getThumbnailPaging(currentNo, 1);
+		int offset = cre.getPageStart();
+		log.info("cre: {}", cre.toString());
+		log.info("currentNo: {}", currentNo);
+		log.info("offset: {}", offset);
+		map.put("boardNo", boardNo);
+		map.put("offset", offset);
+		return this.articleDao.selectBoardList(map);
+	}
+
+
+
+
+
+	@Override
+	public int boardTotalCount(int boardNo){
+		// end Page
+		return this.articleMapper.boardTotalCount(boardNo);
+	}
+
+
 
 	// 게시글 추가
 	@Override

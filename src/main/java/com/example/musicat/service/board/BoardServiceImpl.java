@@ -21,6 +21,11 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao boardDao;
 
+//	@Override
+//	public List<BoardVO> retrieveBoardNameList() {
+//		return null;
+//	}
+
 	// 게시판 추가(기본정보 + 등급)
 	@Override
 	@Transactional
@@ -33,16 +38,25 @@ public class BoardServiceImpl implements BoardService {
 	// 게시판 종류 조회
 	@Override
 	public ArrayList<BoardVO> retrieveBoardkind() {
-		ArrayList<BoardVO> boardkindList = this.boardDao.selectBoardkind();
-		return boardkindList;
+		return this.boardDao.selectBoardkind();
+
 	}
 
 	// 연결된 게시글 조회
 	@Override
 	public int retrieveConnectArticle(int boardNo) {
-		int connectArticle = this.boardDao.selectConnectArticle(boardNo);
-		return connectArticle;
+		return this.boardDao.selectConnectArticle(boardNo);
 	}
+
+	@Override
+	public int checkWriteGrade(int boardNo, int gradeNo) {
+		BoardBoardGradeVO boardBoardGradeVO = boardDao.selectOneBoard(boardNo);
+		int writeGrade = boardBoardGradeVO.getBoardGradeVo().getWriteGrade();
+		int bgCheck = (writeGrade >= gradeNo)? 1 : 0;
+		return bgCheck;
+	}
+
+
 
 	// 게시판 삭제
 	@Override
@@ -55,29 +69,24 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public void modifyBoard(BoardVO boardVo, BoardGradeVO boardGradeVo) {
 		this.boardDao.updateBoard(boardVo, boardGradeVo);
-		log.info("-------------Modiservice" + boardVo.toString());
-		log.info("-------------Modiservice" + boardGradeVo.toString());
 	}
 
 	// 게시판 정보 조회
 	@Override
 	public BoardBoardGradeVO retrieveOneBoard(int boardNo) {
-		BoardBoardGradeVO boardGradeVo = this.boardDao.selectOneBoard(boardNo);
-		return boardGradeVo;
+		return this.boardDao.selectOneBoard(boardNo);
 	}
 
 	// 게시판 정보 조회 (전체)
 	@Override
 	public ArrayList<BoardBoardGradeVO> retrieveAllBoard() {
-		ArrayList<BoardBoardGradeVO> boardAndGradeList = this.boardDao.selectAllBoard();
-		return boardAndGradeList;
+		return this.boardDao.selectAllBoard();
 	}
 
 	//게시판 이름 중복 여부 조회
 	@Override
 	public Integer retrieveDuplicatedBoard(String boardName) {
-		Integer duplicatedBoard = this.boardDao.selectDuplicatedBoard(boardName);
-		return duplicatedBoard;
+		return this.boardDao.selectDuplicatedBoard(boardName);
 	}
 
 	@Override
@@ -112,10 +121,10 @@ public class BoardServiceImpl implements BoardService {
 
 	}
 
-	@Override
-	public List<BoardVO> retrieveBoardNameList() {
-		return this.boardDao.selectBoardNameList();
-	}
+//	@Override
+//	public List<BoardVO> retrieveBoardNameList() {
+//		return this.boardDao.selectBoardNameList();
+//	}
 
 	//즐겨찾기 게시판 추가
 	@Override
@@ -129,6 +138,7 @@ public class BoardServiceImpl implements BoardService {
 		this.boardDao.deleteLikeBoard(memberNo, boardNo);
 	}
 
+	//해당 게시판이 회원의 즐겨찾기 게시판 목록에 존재하는지 확인
 	@Override
 	public int retrieveLikeBoard(int memberNo, int boardNo) {
 		return this.boardDao.selectLikeBoard(memberNo, boardNo);
@@ -137,7 +147,6 @@ public class BoardServiceImpl implements BoardService {
 	//즐겨찾기 게시판 조회
 	@Override
 	public ArrayList<BoardVO> retrieveLikeBoardList(int memberNo) {
-		ArrayList<BoardVO> likeBoardList = this.boardDao.selectLikeBoardList(memberNo);
-		return likeBoardList;
+		return this.boardDao.selectLikeBoardList(memberNo);
 	}
 }
