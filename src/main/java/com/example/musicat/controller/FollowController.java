@@ -5,12 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -51,7 +50,24 @@ public class FollowController {
     }
 
     @ResponseBody
-    @PostMapping("/follow/{followedNo}")
-    public void followSomeone(@PathVariable int followedNo) {
+    @PostMapping("/follow")
+    public Map<String, Integer> followSomeone(@RequestParam("opponent") int opponent, @RequestParam("my") int my) {
+        this.followService.addFollow(my, opponent);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("opponent", opponent);
+        map.put("my", my);
+        map.put("checkFollow", 1);
+        return map;
+    }
+
+    @ResponseBody
+    @PostMapping("/followCancel")
+    public Map<String, Integer> cancelSomeone(@RequestParam("opponent") int opponent, @RequestParam("my") int my) {
+        this.followService.removeFollow(my, opponent);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("opponent", opponent);
+        map.put("my", my);
+        map.put("checkFollow", 0);
+        return map;
     }
 }
