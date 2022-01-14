@@ -296,7 +296,7 @@ const getCurrentPlayAjax = function (url, musicNos) {
 
 async function requestCurrentPlay(url) {
     try {
-        console.log("재생목록 받아오기 ajax 실행");
+        console.log("재생목록 받아오기 ajax 실행 url : " + url);
         const result = await getCurrentPlayAjax(url);
         $("#currentPlayList_ul").empty();
         result.forEach(function(e){
@@ -323,4 +323,11 @@ async function requestCurrentPlay(url) {
 //     //$("#audio").attr("src");
 //
 //     // 이후 requestCurrentPlay 에서 audio 셋팅해줘야할듯
+// });
+
+// $(window).on("load", function(event){
+//     if( $("#userNoForPlaylist").text() != -1) {
+//         console.log("로그인 회원, 재생 목록 받아오기 " + $("#userNoForPlaylist").text() + "pl1");
+//         requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
+//     }
 // });
