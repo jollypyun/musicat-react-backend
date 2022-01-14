@@ -304,5 +304,9 @@
 		</where>
 	</select>
 
+	<select id="selectMemberPassword" parameterType="int" resultType="String">
+		SELECT password FROM member WHERE member_no = #{memberNO}
+	</select>
+
 
 </mapper>

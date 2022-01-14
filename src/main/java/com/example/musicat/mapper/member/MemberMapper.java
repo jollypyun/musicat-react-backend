@@ -105,4 +105,7 @@ public interface MemberMapper {
 
 	// 멤버의 팔로우 리스트
 	List<MemberVO> selectFollowedList(int memberNo);
+
+	String selectMemberPassword(int memberNo);
+
 }
