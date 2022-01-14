@@ -155,33 +155,6 @@ public class HomeController {
 
   }
 
-        //로그인하지 않은 사용자일 경우 ( 로그인한 사용자 정보 처리는 SecurityConfig.java에서 )
-//        String auth = SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString();
-//		if (auth.equals("[ROLE_ANONYMOUS]")) {
-//
-//            //익명 사용자에게 gradeNo 부여 ( 게시판 접근 시 필요 )
-//            int gradeNo = gradeService.retrieveGradeNo(auth);
-//            log.info("auth : " + auth + " gradeNo : " + gradeNo);
-//
-//            MemberVO member = new MemberVO();
-//            member.setGrade(auth);
-//            member.setGradeNo(gradeNo);
-//
-//            session.setAttribute("loginUser", member);
-//            log.info("익명 사용자 - grade : " + member.getGrade() + " gradeNo : " + member.getGradeNo());
-
-
-      //MemberVO member = new MemberVO();
-      //MemberVO member = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      MemberVO member = checkMemberNo();
-
-      List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
-      model.addAttribute("likeBoardList", likeBoardList);
-
-      return "view/home/viewHomeTemplate";
-    }
-
-
 	@GetMapping("/join1")
 	public String join(Model model) {
 		//MemberVO mVo = new MemberVO(); //MemberVO라는 빈칸 양식 종이를 새로 가져올때마다 new 선언
