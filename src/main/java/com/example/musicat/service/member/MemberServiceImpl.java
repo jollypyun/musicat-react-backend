@@ -187,4 +187,8 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
+	@Override
+	public void modifyLastDate(int no) {
+		this.memberdao.updateLastDate(no);
+	}
 }
