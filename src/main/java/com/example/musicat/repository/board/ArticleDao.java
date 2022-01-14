@@ -16,8 +16,13 @@ public interface ArticleDao {
 	//앞 뒤 게시글 조회
 	List<ArticleVO> selectSubArticle(int articleNo);
 
-	//게시판 별 게시글 목록 조회
 	List<ArticleVO> selectBoard(int boardNo);
+
+	//게시판 별 게시글 목록 조회
+	List<ArticleVO>selectBoardList(Map<String, Object> map);
+
+	int boardTotalCount(int boardNo);
+
 
 	//게시글 등록
 	void insertArticle(ArticleVO article);
@@ -90,4 +95,6 @@ public interface ArticleDao {
 
 	//추천 누른 게시글 조회
 	List<ArticleVO> selectMyLikeArticle(int memberNo);
+
+
 }

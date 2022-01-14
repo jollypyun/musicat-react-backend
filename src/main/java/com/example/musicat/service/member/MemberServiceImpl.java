@@ -10,6 +10,7 @@ import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.member.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -22,6 +23,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	private MemberDao memberdao;// memberDao랑 연결해주겠다
+//	@Autowired
+//	private BCryptPasswordEncoder encodePwd;
 
 	@Qualifier("memberMapper")
 	@Autowired
@@ -40,6 +43,7 @@ public class MemberServiceImpl implements MemberService {
 	public void registerMember(MemberVO mVo) {
 		this.memberdao.insertMember(mVo); //this를 적어주는 이유는 @Autowired 연결 선언해준 memberDao랑 같은 애라는걸 알려주려고 적는 거임 (얘가 얘다)
 		this.memberdao.insertMemberGrade(mVo.getNo()); //membergrade insert
+		// rest에 MemberNo 넘기면된다.
 	}
 
 	@Override
@@ -52,7 +56,13 @@ public class MemberServiceImpl implements MemberService {
 		memberdao.updateMember(memberNo, password);	//@Autowired해서 memberdao로 씀.
 
 	}
-	
+
+	@Override
+	public String passwordCheck(int memberNo) {
+		String password = this.memberMapper.selectMemberPassword(memberNo);
+		return password;
+	}
+
 	@Override //비밀번호 재설정
 	@Transactional
 	public void modifyPassword(int memNo, String newPassword) throws Exception{

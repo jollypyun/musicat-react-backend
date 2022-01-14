@@ -43,6 +43,16 @@ public class BoardServiceImpl implements BoardService {
 		return this.boardDao.selectConnectArticle(boardNo);
 	}
 
+	@Override
+	public int checkWriteGrade(int boardNo, int gradeNo) {
+		BoardBoardGradeVO boardBoardGradeVO = boardDao.selectOneBoard(boardNo);
+		int writeGrade = boardBoardGradeVO.getBoardGradeVo().getWriteGrade();
+		int bgCheck = (writeGrade >= gradeNo)? 1 : 0;
+		return bgCheck;
+	}
+
+
+
 	// 게시판 삭제
 	@Override
 	public void removeBoard(int boardNo) {

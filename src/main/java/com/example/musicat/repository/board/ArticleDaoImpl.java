@@ -36,6 +36,16 @@ public class ArticleDaoImpl implements ArticleDao {
 	}
 
 	@Override
+	public List<ArticleVO>selectBoardList(Map<String, Object> map){
+		return this.articleMapper.selectBoardList(map);
+	}
+
+	@Override
+	public int boardTotalCount(int boardNo){
+		return this.articleMapper.boardTotalCount(boardNo);
+	}
+
+	@Override
 	public void insertArticle(ArticleVO article) {
 		this.articleMapper.insertArticle(article);
 	}
