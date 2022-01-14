@@ -21,6 +21,11 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao boardDao;
 
+//	@Override
+//	public List<BoardVO> retrieveBoardNameList() {
+//		return null;
+//	}
+
 	// 게시판 추가(기본정보 + 등급)
 	@Override
 	@Transactional

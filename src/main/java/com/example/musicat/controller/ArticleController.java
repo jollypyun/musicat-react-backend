@@ -314,7 +314,7 @@ public class ArticleController {
 		return mv;
 	}
 
-	@PostMapping("/remove/{articleNo}")
+	@GetMapping("/remove/{articleNo}")
 	public RedirectView removeArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req) {
 		RedirectView redirectView = new RedirectView();
