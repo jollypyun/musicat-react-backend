@@ -328,9 +328,9 @@ public class HomeController {
         List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
         model.addAttribute("likeBoardList", likeBoardList);
 
-        List<BoardVO> boardNameList = this.boardService.retrieveBoardNameList();
-        model.addAttribute("boardNameList", boardNameList);
-        log.info(boardNameList.toString());
+//         List<BoardVO> boardNameList = this.boardService.retrieveBoardNameList();
+//         model.addAttribute("boardNameList", boardNameList);
+//         log.info(boardNameList.toString());
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
