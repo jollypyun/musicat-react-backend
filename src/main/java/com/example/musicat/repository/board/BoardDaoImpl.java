@@ -88,10 +88,10 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	//게시판 이름 목록 조회
-	@Override
-	public List<BoardVO> selectBoardNameList() {
-		return this.boardMapper.selectBoardNameList();
-	}
+//	@Override
+// 	public List<BoardVO> selectBoardNameList() {
+// 		return this.boardMapper.selectBoardNameList();
+// 	}
 
 	//즐겨찾기 게시판 추가
 	@Override
