@@ -133,6 +133,8 @@ public class MemberDaoImpl implements MemberDao { // @Autowired가 속해 있는
 		return null;
 	}
 
-
-
+	@Override
+	public String selectMemberPassword(int memberNo) {
+		return this.selectMemberPassword(memberNo);
+	}
 }

@@ -27,18 +27,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+`
 @Slf4j
 @Service
 public class MusicApiService {
-    private final String URI_MUSICS_ID = "http://localhost:20000/api/musics/find/{id}";
-    private final String URI_MUSICS_UPLOAD = "http://localhost:20000/api/musics/uploadFile";
-    private final String URI_PLAYLIST_CREATE = "http://localhost:20000/api/playlists/create";
-    private final String URI_PLAYLIST_PUSH = "http://localhost:20000/api/playlists/push";
-    private final String URI_PLAYLIST_CHANGE = "http://localhost:20000/api/playlists/update";
-    private final String URI_PLAYLIST_ID = "http://localhost:20000/api/playlists/{memberNo}";
-    private final String URI_PLAYLIST_DETAIL = "http://localhost:20000/api/playlists/detail/{playlistNo}";
-    private final String URI_MUSICS_TEST = "http://localhost:20000/api/posttest";
+    private final String URI_MUSICS_ID = "http://13.124.245.202:20000/api/musics/find/{id}";
+    private final String URI_MUSICS_UPLOAD = "http://13.124.245.202:20000/api/musics/uploadFile";
+    private final String URI_PLAYLIST_CREATE = "http://13.124.245.202:20000/api/playlists/create";
+    private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/push";
+    private final String URI_PLAYLIST_CHANGE = "http://13.124.245.202:20000/api/playlists/update";
+    private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
+    private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/playlists/detail/{playlistNo}";
+    private final String URI_MUSICS_TEST = "http://13.124.245.202:20000/api/posttest";
 
     private final RestTemplate restTemplate;
 
@@ -113,13 +113,13 @@ public class MusicApiService {
     public void deleteMusicByArticleNo(int articleNo) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put("articleNo", articleNo);
-        restTemplate.delete("http://localhost:20000/api/musics/deleteByArticleNo/{articleNo}", params);
+        restTemplate.delete("http://13.124.245.202:20000/api/musics/deleteByArticleNo/{articleNo}", params);
     }
 
     public void deleteByMusicId(Long musicId) {
         Map<String, Long> params = new HashMap<String, Long>();
         params.put("musicId", musicId);
-        restTemplate.delete("http://localhost:20000/api/musics/deleteById/{musicId}", params);
+        restTemplate.delete("http://13.124.245.202:20000/api/musics/deleteById/{musicId}", params);
     }
 
     public void connectToArticle(Long musicId, int articleNo) {
@@ -127,11 +127,11 @@ public class MusicApiService {
         params.put("musicId", musicId);
         params.put("articleNo", articleNo);
         log.info(params.toString());
-        restTemplate.put("http://localhost:20000/api/musics/connectToArticle/{musicId}/{articleNo}",String.class, params);
+        restTemplate.put("http://13.124.245.202:20000/api/musics/connectToArticle/{musicId}/{articleNo}",String.class, params);
     }
 
     public List<Music> retrieveMusics(int articleNo){
-        ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
+        ResponseEntity<List> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
         List<Music> musicList = response.getBody();
 
         log.info(musicList.toString());
@@ -151,7 +151,7 @@ public class MusicApiService {
         map.put("memberNo", memberNo);
         map.put("playlistNo", playlistNo);
         log.info("map : " + map);
-        restTemplate.delete("http://localhost:20000/api/playlists/delete/{memberNo}/{playlistNo}" , map);
+        restTemplate.delete("http://13.124.245.202:20000/api/playlists/delete/{memberNo}/{playlistNo}" , map);
     }
 
     // 특정 플레이리스트 안에 곡 넣기
@@ -168,12 +168,12 @@ public class MusicApiService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
         map.put("playlistNo", playlistNo);
-        restTemplate.delete("http://localhost:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
+        restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
     }
 
     // 플레이리스트 정보 가져오기
     public Playlist getOnePlaylist(int playlistNo) {
-        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://localhost:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistNo);
+        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistNo);
         return response.getBody();
     }
 

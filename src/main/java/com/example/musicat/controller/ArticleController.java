@@ -63,7 +63,6 @@ public class ArticleController {
 	 * @param model
 	 * @return
 	 */
-
 	@GetMapping("/{articleNo}")
 	public String detailArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req
@@ -99,8 +98,9 @@ public class ArticleController {
 			model.addAttribute("subArticles", subArticle);
 
 			// audio 파일
-			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
-			model.addAttribute("musicList", musicList);
+//			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
+//			log.info("mm: {}" ,musicList.get(0));
+//			model.addAttribute("musicList", musicList);
 //				log.info(musicList.toString());
 
 
@@ -359,6 +359,7 @@ public class ArticleController {
 			,Model model){
 
 		HashMap<String, Object> searchMap = new HashMap<>();
+		searchMap.put("offset", 0);
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
 		List<ArticleVO> articles = articleService.search(searchMap);

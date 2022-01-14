@@ -15,9 +15,15 @@ public interface ArticleService {
 
 	//앞 뒤 게시글 조회
 	List<ArticleVO> selectSubArticle(int articleNo);
-	
+
+	public List<ArticleVO>retrieveBoard(int boardNo);
+
+
 	//게시판 별 게시글 목록 조회
-	List<ArticleVO> retrieveBoard(int boardNo); 
+	public List<ArticleVO>selectBoardList(int boardNo, int currentNo);
+
+	public int boardTotalCount(int boardNo);
+
 	
 	//게시글 작성
 	void registerArticle(ArticleVO article, Long audioNo);
