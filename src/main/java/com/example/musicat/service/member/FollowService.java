@@ -11,4 +11,7 @@ public interface FollowService {
     int countFollowed(int no);
     List<MemberVO> retrieveFollowingList(int no);
     List<MemberVO> retrieveFollowedList(int no);
+    int checkFollow(int myNo, int opNo);
+    void addFollow(int myNo, int opNo);
+    void removeFollow(int myNo, int opNo);
 }

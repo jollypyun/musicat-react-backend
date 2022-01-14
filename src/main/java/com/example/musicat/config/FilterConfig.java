@@ -1,4 +1,3 @@
-
 package com.example.musicat.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +16,5 @@ public class FilterConfig {
 //
 //		return filterbean;
 //	}
-
-//}
-
 
 }

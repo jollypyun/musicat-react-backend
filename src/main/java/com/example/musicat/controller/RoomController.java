@@ -3,6 +3,7 @@ package com.example.musicat.controller;
 import com.example.musicat.repository.etc.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(value = "/chat")
@@ -34,24 +36,33 @@ public class RoomController {
 
     //채팅방 개설
     @PostMapping(value = "/room")
-    public String create(@RequestParam String name, RedirectAttributes rttr){
+    public String createRoom(@RequestParam String name, RedirectAttributes rttr){
 
-        //log.info("# Create Chat Room , name: " + name);
-        System.out.println("# Create Chat Room , name: " + name);
+        log.info("# Create Chat Room , name: " + name);
+        //System.out.println("# Create Chat Room , name: " + name);
         rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(name).getName());
         return "redirect:/chat/rooms";
     }
 
+    //채팅방 삭제
+    @PostMapping(value="/room/delete")
+    public String deleteRoom(@RequestParam String name, RedirectAttributes rttr) {
+
+        log.info("# Delete Chat Room, name : " + name);
+        rttr.addFlashAttribute("deleteSuccess", repository.deleteChatRoom(name));
+
+        return "redirect:/chat/rooms";
+    }
     //채팅방 조회
     @GetMapping("/room")
-    public String getRoom(@RequestParam String roomId, @RequestParam String username, Model model){
-    //public String getRoom(@RequestParam String roomId, Model model){
+    //public String getRoom(@RequestParam String roomId, @RequestParam String username, Model model){
+    public String getRoom(@RequestParam String roomId, Model model){
 
-        //log.info("# get Chat Room, roomID : " + roomId);
-        System.out.println("# get Chat Room, roomID : " + roomId);
-        System.out.println("# get username, username : " + username);
+        log.info("# get Chat Room, roomID : " + roomId);
+        //System.out.println("# get Chat Room, roomID : " + roomId);
+        //System.out.println("# get username, username : " + username);
         model.addAttribute("room", repository.findRoomById(roomId));
-        model.addAttribute("username", username);
+        //model.addAttribute("username", username);
         return "view/member/room";
     }
 }

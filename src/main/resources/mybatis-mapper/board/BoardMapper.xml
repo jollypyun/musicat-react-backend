@@ -18,8 +18,7 @@
 	
 	<!-- 게시판 등급 추가 -->
 	<insert id="insertBoardGrade" statementType="CALLABLE">
-		<!-- {call sp_insert_board_grade_mapper(#{readGrade}, #{writeGrade}) } -->
-		{ call sp_insert_board_grade(#{boardNo}, #{readGrade}, #{writeGrade}) }
+		{ CALL sp_insert_board_grade(#{boardNo}, #{readGrade}, #{writeGrade}) }
 	</insert>
 
 
