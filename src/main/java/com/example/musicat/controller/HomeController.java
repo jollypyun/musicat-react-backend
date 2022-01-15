@@ -346,7 +346,9 @@ public class HomeController {
 
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
+
 	      model.addAttribute("checkFollow", checkFollow);
+
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";
 

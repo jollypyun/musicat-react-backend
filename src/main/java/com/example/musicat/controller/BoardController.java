@@ -7,6 +7,7 @@ import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.paging.Criteria;
 import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.board.FileService;
+import com.example.musicat.service.music.MusicApiService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,17 +37,16 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
-
 	@Autowired
 	private CategoryService categoryService;
-	
 	@Autowired
 	private GradeService gradeService;
 	@Autowired
-	ArticleService articleService;
-
+	private ArticleService articleService;
 	@Autowired
-	FileService fileService;
+	private FileService fileService;
+	@Autowired
+	private MusicApiService musicApiService;
 
 	// 메인화면 사이드바
 	@GetMapping("/board")
@@ -360,21 +360,25 @@ public class BoardController {
 		log.info("startPage: {}, pageSize: {}, totalCount: {}, endPage: {}",startPage,creitea.getPageSize(),totalCount,creitea.getEndPage());
 		// bind
 		FileVO file = new FileVO();
-		for (ArticleVO article : articles) {
-			// Html 변환
-			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
-			article.setSubject(escapeSubject);
+		if(boardkind != 2){
+			for (ArticleVO article : articles) {
+				// Html 변환
+				String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
+				article.setSubject(escapeSubject);
 
-			file.setArticleNo(article.getNo());
-			file.setFileType(1);
-			FileVO thumbFile = this.fileService.retrieveThumbFile(file);
-			if(thumbFile != null) {
-				article.setThumbnail(thumbFile);
-			} else {
-				FileVO noFile = new FileVO();
-				noFile.setSystemFileName("noimage.png");
-				article.setThumbnail(noFile);
+				file.setArticleNo(article.getNo());
+				file.setFileType(1);
+				FileVO thumbFile = this.fileService.retrieveThumbFile(file);
+				if(thumbFile != null) {
+					article.setThumbnail(thumbFile);
+				} else {
+					FileVO noFile = new FileVO();
+					noFile.setSystemFileName("noimage.png");
+					article.setThumbnail(noFile);
+				}
 			}
+		} else { //오디오 게시판 썸네일 설정
+			setAudioBoardThumbnail(articles);
 		}
 
 
@@ -401,6 +405,18 @@ public class BoardController {
 		// ~ 양
 
 		return "/view/home/viewBoardTemplate";
+	}
+
+	//오디오 게시판 썸네일 설정
+	private void setAudioBoardThumbnail(List<ArticleVO> articles) {
+		for (ArticleVO article : articles) {
+			Map<String, Object> mmap = (Map<String, Object>) musicApiService.retrieveMusics(article.getNo()).get(0);
+			List<Map<String, Object>> resmap = (List<Map<String, Object>>) mmap.get("links");
+			Map<String, Object> aMap = resmap.get(1);
+			FileVO fileVO = new FileVO();
+			fileVO.setSystemFileName((String) aMap.get("href"));
+			article.setThumbnail(fileVO);
+		}
 	}
 
 //	@ResponseBody
