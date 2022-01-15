@@ -54,14 +54,14 @@ $(document).ready(function () {
 
     }
 
-    audio.oncanplaythrough = function() {
-
-        if(audio.currentTime < 10)
-            audio.currentTime=10
-
-        console.log("oncanplaythrough");
-        audio.play();
-    }
+    // audio.oncanplaythrough = function() {
+    //
+    //     if(audio.currentTime < 10)
+    //         audio.currentTime=10
+    //
+    //     console.log("oncanplaythrough");
+    //     audio.play();
+    // }
 
     // 사운드 시간 바뀔때 current 값 수정
     timeProgress.addEventListener('change', function () {
@@ -250,28 +250,10 @@ function playAudio(btn) {
 
     $("#audio").attr("src", $(btn).attr("id"));
 
-    //$("#audio").trigger("play");
+    $("#audio").trigger("play");
     // $("#audio").currentTime=10;
     // console.log($("#audio").currentTime);
 }
-// $(function(){
-//     $('audio').bind('canplay', function(){
-//         console.log("canplay", $(this)[0].currentTime);
-//         if($(this)[0].currentTime < 10){
-//             $(this)[0].currentTime = 10;
-//         } else {
-//             $(this)[0].play();
-//         }
-//     });
-// });
-
-
-// $('#audio').bind('canplay', function() {
-//     //this.currentTime = 10;
-//     console.log(this.currentTime);
-//     console.log("canplay");
-//     $("#audio").trigger("play");
-// });
 
 const getCurrentPlayAjax = function (url, musicNos) {
     return new Promise((resolve, reject) => {
@@ -323,11 +305,4 @@ async function requestCurrentPlay(url) {
 //     //$("#audio").attr("src");
 //
 //     // 이후 requestCurrentPlay 에서 audio 셋팅해줘야할듯
-// });
-
-// $(window).on("load", function(event){
-//     if( $("#userNoForPlaylist").text() != -1) {
-//         console.log("로그인 회원, 재생 목록 받아오기 " + $("#userNoForPlaylist").text() + "pl1");
-//         requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
-//     }
 // });

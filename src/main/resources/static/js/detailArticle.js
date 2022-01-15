@@ -277,12 +277,3 @@ $(document).ready(function () {
 
 });
 
-// $(".addToPlay").on('click', function (e) {
-//     var children = $(e.currentTarget).children();
-//     console.log(children.val());
-//     console.log(children.innerText);
-//     //var playlistNo = [[${#authentication.principal.getNickname()}]] + "pl1";
-//     //var musicNos = [];
-//     // musicNos[0] =
-//     //requestProcessAddToPlay("/pushmusic/", playlistNo, musicNos);
-// });

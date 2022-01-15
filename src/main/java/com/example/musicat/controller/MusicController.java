@@ -1,9 +1,16 @@
 package com.example.musicat.controller;
 
+import com.example.musicat.domain.music.Link;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
 import com.example.musicat.service.music.MusicApiService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.javassist.expr.Instanceof;
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +22,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Validated
@@ -166,7 +170,7 @@ public class MusicController {
     @GetMapping("retrieveMusics/{articleNo}")
     public List<Music> retrieveMusics(@PathVariable(name="articleNo") int articleNo){
         List<Music> musicList = musicApiService.retrieveMusics(articleNo);
-        log.info(musicList.toString());
+
         return musicList;
     }
 
