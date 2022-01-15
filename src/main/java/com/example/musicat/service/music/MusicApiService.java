@@ -208,13 +208,20 @@ public class MusicApiService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
 
-        map.put("playlistNo", playlistKey);
+
+        map.put("playlistKey", playlistKey);
+
         restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
     }
 
     // 플레이리스트 정보 가져오기
+<<<<<<< HEAD
     public Playlist getOnePlaylist(String playlistNo) {
         ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistNo);
+=======
+    public Playlist getOnePlaylist(String playlistKey) {
+        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistKey);
+>>>>>>> cad78995b319d4bdff8fd6bde27046cb53cf30f2
         return response.getBody();
     }
 

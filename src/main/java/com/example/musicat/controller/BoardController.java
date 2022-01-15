@@ -381,6 +381,9 @@ public class BoardController {
 			setAudioBoardThumbnail(articles);
 		}
 
+
+		//MemberVO member = HomeController.checkMemberNo();
+    
 		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
 		model.addAttribute("likeBoardList", likeBoardList);
 
