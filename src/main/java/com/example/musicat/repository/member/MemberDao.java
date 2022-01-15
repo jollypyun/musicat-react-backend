@@ -51,4 +51,7 @@ public interface MemberDao {
 
 	int updateTempPassword(MemberVO mVo) throws Exception;
 
+
+	String selectMemberPassword(int memberNo);
+
 }

@@ -88,5 +88,4 @@ public class ArticleVO {
 
     public ArticleVO() {
     }
-
 }

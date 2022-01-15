@@ -5,12 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -18,6 +17,7 @@ public class FollowController {
     @Autowired
     private FollowService followService;
 
+    // Following 수 세기
     @ResponseBody
     @GetMapping("/followingCount/{memberNo}")
     public int followingCount(@PathVariable int memberNo) {
@@ -26,12 +26,15 @@ public class FollowController {
         return this.followService.countFollowing(memberNo);
     }
 
+    // Followed 수 세기
     @ResponseBody
     @GetMapping("/followedCount/{memberNo}")
     public int followedCount(@PathVariable int memberNo) {
         return this.followService.countFollowed(memberNo);
     }
 
+
+    // Following 목록
     @GetMapping("/followingList/{memberNo}")
     public String followingList(@PathVariable int memberNo, Model model) {
         int flag = 0;
@@ -41,6 +44,7 @@ public class FollowController {
         return "view/member/listAboutFollow";
     }
 
+    // Followed 목록
     @GetMapping("/followedList/{memberNo}")
     public String followedList(@PathVariable int memberNo, Model model) {
         int flag = 1;
@@ -50,8 +54,26 @@ public class FollowController {
         return "view/member/listAboutFollow";
     }
 
+
     @ResponseBody
-    @PostMapping("/follow/{followedNo}")
-    public void followSomeone(@PathVariable int followedNo) {
+    @PostMapping("/follow")
+    public Map<String, Integer> followSomeone(@RequestParam("opponent") int opponent, @RequestParam("my") int my) {
+        this.followService.addFollow(my, opponent);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("opponent", opponent);
+        map.put("my", my);
+        map.put("checkFollow", 1);
+        return map;
+    }
+
+    @ResponseBody
+    @PostMapping("/followCancel")
+    public Map<String, Integer> cancelSomeone(@RequestParam("opponent") int opponent, @RequestParam("my") int my) {
+        this.followService.removeFollow(my, opponent);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("opponent", opponent);
+        map.put("my", my);
+        map.put("checkFollow", 0);
+        return map;
     }
 }

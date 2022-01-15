@@ -39,4 +39,21 @@ public class FollowServiceImpl implements FollowService{
     public List<MemberVO> retrieveFollowedList(int no) {
         return this.memberMapper.selectFollowedList(no);
     }
+
+    @Override
+    public int checkFollow(int myNo, int opNo) {
+        return this.followMapper.existFollow(myNo, opNo);
+    }
+
+    @Override
+    @Transactional
+    public void addFollow(int myNo, int opNo) {
+        this.followMapper.insertFollow(myNo, opNo);
+    }
+
+    @Override
+    @Transactional
+    public void removeFollow(int myNo, int opNo) {
+        this.followMapper.deleteFollow(myNo, opNo);
+    }
 }

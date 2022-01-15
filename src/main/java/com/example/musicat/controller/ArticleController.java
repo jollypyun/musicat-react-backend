@@ -71,7 +71,6 @@ public class ArticleController {
 	 * @param model
 	 * @return
 	 */
-
 	@GetMapping("/{articleNo}")
 	public String detailArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req
@@ -95,6 +94,8 @@ public class ArticleController {
 		List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
 		model.addAttribute("categoryBoardList", categoryList);
 
+		BoardBoardGradeVO bbg = this.boardService.retrieveOneBoard(boardNo);
+		model.addAttribute("boardName",bbg.getBoardVo().getBoardName());
 		if (grade) {
 			log.info("sidebar");
 			int memberNo = member.getNo();
@@ -109,10 +110,11 @@ public class ArticleController {
 			List<ArticleVO> subArticle = this.articleService.selectSubArticle(articleNo);
 			model.addAttribute("subArticles", subArticle);
 
-			// audio 파일 -- 주석 풀어야 함 ~
-//			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
-//			model.addAttribute("musicList", musicList);
-//				log.info(musicList.toString());
+
+			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
+			model.addAttribute("musicList", musicList);
+			log.info("article controller musiclist : " + musicList.toString());
+
 
 
 			// xss 처리 Html tag로 변환
@@ -175,7 +177,7 @@ public class ArticleController {
 			,BindingResult result
 			,@ModelAttribute FileFormVO form
 			,@RequestParam("tags") String tags
-			,@RequestParam("audioNo") Long audioNo
+			,@RequestParam(value = "audioNo", required = false) Long audioNo
 			,HttpServletRequest req) throws IOException {
 		ModelAndView mv = new ModelAndView();
 		log.info("audioNo= {}",audioNo);
@@ -312,7 +314,7 @@ public class ArticleController {
 		return mv;
 	}
 
-	@PostMapping("/remove/{articleNo}")
+	@GetMapping("/remove/{articleNo}")
 	public RedirectView removeArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req) {
 		RedirectView redirectView = new RedirectView();
@@ -380,6 +382,7 @@ public class ArticleController {
 			,Model model){
 
 		HashMap<String, Object> searchMap = new HashMap<>();
+		searchMap.put("offset", 0);
 		searchMap.put("keyword", keyword);
 		searchMap.put("content", content);
 		List<ArticleVO> articles = articleService.search(searchMap);

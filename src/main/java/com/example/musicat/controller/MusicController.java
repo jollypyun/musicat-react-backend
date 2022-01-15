@@ -1,13 +1,10 @@
 package com.example.musicat.controller;
 
-import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
 import com.example.musicat.service.music.MusicApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -16,17 +13,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Min;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Validated
 @RestController
-@Slf4j
 public class MusicController {
 
     private final MusicApiService musicApiService;
@@ -78,56 +74,62 @@ public class MusicController {
 
     // 플레이리스트 추가
     @PostMapping("/addplaylist")
-    public ModelAndView addPlaylist(HttpServletRequest req, @RequestParam(name = "title") String title, @RequestParam(name = "id") int memberNo) {
+    public ModelAndView addPlaylist(@RequestParam(name = "title") String title, @RequestParam(name = "id") int memberNo, @RequestParam("image") MultipartFile file) {
         ModelAndView mv =  new ModelAndView();
         log.info("title : " + title);
         Playlist playlist = new Playlist();
         playlist.setMemberNo(memberNo); playlist.setPlaylistName(title);
         log.info("playlist : " + playlist.getPlaylistName());
-        musicApiService.createPlaylist(playlist);
+        musicApiService.createPlaylist(playlist, file);
         mv.setView(new RedirectView("/myPage/Playlist/" + memberNo));
         return mv;
     }
 
     // 플레이리스트 삭제
-    @DeleteMapping("deleteplaylist/{memberNo}/{playNo}")
-    public ModelAndView removePlaylist(HttpServletRequest req, @PathVariable(name = "playNo") int playNo, @PathVariable(name = "memberNo")Integer memberNo) {
+    @DeleteMapping("deleteplaylist/{memberNo}/{playlistKey}")
+    public ModelAndView removePlaylist(HttpServletRequest req, @PathVariable(name = "playKey") String playlistKey, @PathVariable(name = "memberNo")Integer memberNo) {
         ModelAndView mv = new ModelAndView();
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
-        log.info("no : " + playNo);
-        musicApiService.deletePlaylist(memberNo, playNo);
+        log.info("no : " + playlistKey);
+        musicApiService.deletePlaylist(memberNo, playlistKey);
         mv.setView(new RedirectView("/myPage/Playlist/" + memberNo));
         return mv;
     }
 
     // 특정 플레이리스트 안에 곡 넣기
-    @PostMapping("/pushmusic/{playlistNo}")
-    public void insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name = "musicNos") List<Integer> musicNos, @PathVariable int playlistNo) {
-        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
-        int memberNo = 6; // 임시방편
+    @PostMapping("/pushmusic/{playlistKey}")
+    public List<Music> insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name="musicNos") int musicNos/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistKey) {
+        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); //이게 제대로 된 방법
+        //int memberNo = 6; // 임시방편
+        log.info("playlistKey : " + playlistKey);
         log.info("musicNo : " + musicNos);
-        log.info("playlistNo : " + playlistNo);
-        musicApiService.pushMusic(musicNos, playlistNo);
+        List<Integer> m = new ArrayList<Integer>();
+        m.add(musicNos);
+        List<Music> musics = musicApiService.pushMusic(m, playlistKey);
+        //log.info("1 : " + musics.get(1).getLinks().get(1));
+        return musics;
     }
 
     // 특정 플레이리스트 안의 곡 빼기
-    @DeleteMapping("/pullmusic/{playlistNo}")
-    public void deleteMusicFromPlaylist(HttpServletRequest req, @PathVariable int playlistNo, @RequestParam(name = "musicNos") List<Integer> musicNos) {
+
+    @DeleteMapping("/pullmusic/{playlistKey}")
+    public void deleteMusicFromPlaylist(HttpServletRequest req, @PathVariable String playlistKey, @RequestParam(name = "musicNos") List<Integer> musicNos) {
+
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
         int memberNo = 6;
         log.info("musicNos : " + musicNos);
-        log.info("playlistNo : " + playlistNo);
-        musicApiService.pullMusic(musicNos, playlistNo);
+        log.info("playlistKey : " + playlistKey);
+        musicApiService.pullMusic(musicNos, playlistKey);
     }
 
     // 플레이리스트 수정
-    @PostMapping("/changeplaylist/{playlistNo}")
-    public ModelAndView changePlaylistName(@PathVariable int playlistNo, @RequestParam(name = "title") String title, @RequestParam(name="image") MultipartFile image) {
+    @PostMapping("/changeplaylist/{playlistKey}")
+    public ModelAndView changePlaylistName(@PathVariable String playlistKey, @RequestParam(name = "title") String title, @RequestParam(name="image") MultipartFile image) {
         ModelAndView mv = new ModelAndView();
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
         //int memberNo = 6;
-        log.info("playlistNo : " + playlistNo);
-        Playlist playlist = musicApiService.updatePlaylistName(playlistNo, title, image);
+        log.info("playlistKey : " + playlistKey);
+        Playlist playlist = musicApiService.updatePlaylistName(playlistKey, title, image);
         int memberNo = playlist.getMemberNo();
         mv.setView(new RedirectView("/myPage/Playlist/" + memberNo));
         return mv;
@@ -140,17 +142,17 @@ public class MusicController {
         List<Playlist> list = musicApiService.showPlaylist(memberNo);
         return list;
     }
-//
-//    // 플레이리스트 상세 불러오기
-//    @GetMapping("getDetailPlaylist/{playlistNo}")
-//    public void getDetailPlaylist(@PathVariable int playlistNo) {
-//        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
-//        String str = musicApiService.showDetailPlaylist(playlistNo);
-//    }
+
+    // 플레이리스트 상세 불러오기
+    @GetMapping("getDetailPlaylist/{playlistKey}")
+    public void getDetailPlaylist(@PathVariable String playlistKey) {
+        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); 이게 제대로 된 방법
+        //String str = musicApiService.showDetailPlaylist(playlistNo);
+    }
 
     // 플레이리스트 썸네일 미리보기 이미지 가져오기
     @GetMapping("/playlistTempImage/")
-    public void getThumbnailImage(@RequestParam(name = "playlistNos") List<Integer> playlistNos){
+    public void getThumbnailImage(@RequestParam(name = "playlistNos") List<String> playlistNos){
     }
 
     @PutMapping("musicConnectArticle/{musicId}/{articleNo}")
@@ -166,5 +168,13 @@ public class MusicController {
         List<Music> musicList = musicApiService.retrieveMusics(articleNo);
         log.info(musicList.toString());
         return musicList;
+    }
+
+    @GetMapping("retrieveMusicList/{playlistKey}")
+    public List<Music> retrieveMusicList(@PathVariable(name="playlistKey") String playlistKey){
+        List<Music> musics = musicApiService.showDetailPlaylist(playlistKey);
+
+        log.info("retireve music list : " + musics.toString());
+        return musics;
     }
 }

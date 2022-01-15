@@ -15,6 +15,8 @@ public interface BoardService {
 	public ArrayList<BoardVO> retrieveBoardkind();
 	
 	public int retrieveConnectArticle(int boardNo);
+
+	public int checkWriteGrade(int boardNo, int gradeNo);
 	
 	public void removeBoard(int boardNo);
 	

@@ -84,6 +84,7 @@ public class BoardDaoImpl implements BoardDao {
 //		return this.boardMapper.selectBoardNameList();
 //	}
 
+
 	//즐겨찾기 게시판 추가
 	@Override
 	public void insertLikeBoard(int memberNo, int boardNo) {

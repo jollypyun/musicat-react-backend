@@ -21,6 +21,11 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao boardDao;
 
+//	@Override
+//	public List<BoardVO> retrieveBoardNameList() {
+//		return null;
+//	}
+
 	// 게시판 추가(기본정보 + 등급)
 	@Override
 	@Transactional
@@ -42,6 +47,16 @@ public class BoardServiceImpl implements BoardService {
 	public int retrieveConnectArticle(int boardNo) {
 		return this.boardDao.selectConnectArticle(boardNo);
 	}
+
+	@Override
+	public int checkWriteGrade(int boardNo, int gradeNo) {
+		BoardBoardGradeVO boardBoardGradeVO = boardDao.selectOneBoard(boardNo);
+		int writeGrade = boardBoardGradeVO.getBoardGradeVo().getWriteGrade();
+		int bgCheck = (writeGrade >= gradeNo)? 1 : 0;
+		return bgCheck;
+	}
+
+
 
 	// 게시판 삭제
 	@Override

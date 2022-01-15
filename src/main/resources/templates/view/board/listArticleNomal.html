@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <meta charset="UTF-8"/>
 <link th:href="@{/css/listNomalStyle.css}" rel="stylesheet" />
@@ -86,10 +86,12 @@
                     </div>
 
                     <div class="write_article_btn ">
-                        <button th:if="${#authorization.expr('isAuthenticated()')}" id="writeForm_btn"
-                                th:onclick="|location.href='@{/articles/insert}'|"
-                                type="button" class="btn btn-primary">글쓰기
-                        </button>
+                        <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+                            <button th:if="${writeCheck == 1}" id="writeForm_btn"
+                                    th:onclick="|location.href='@{/articles/insert}'|"
+                                    type="button" class="btn btn-primary">글쓰기
+                            </button>
+                        </th:block>
                     </div>
                 </div>
 

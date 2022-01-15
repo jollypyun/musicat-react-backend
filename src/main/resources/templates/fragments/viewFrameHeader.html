@@ -7,13 +7,12 @@
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-4 fw-bold" href="/main">Musicat</a>
 
-    <!-- 예나 테스트 -->
-    <button id = "notifyTestBtn" type="button"></button>
     <!-- Sidebar Toggle-->
     <button
       class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
       id="sidebarToggle"
       href="#!"
+      style="display: none"
     >
       <i class="fas fa-bars"></i>
     </button>
@@ -119,7 +118,7 @@
           </li>
 
           <li><hr class="dropdown-divider" /></li>
-          <li><a class="dropdown-item" href="/ChangePwd">비밀번호 변경</a></li>
+          <li><a class="dropdown-item" href="/passwordCheck">비밀번호 변경</a></li>
           <li><a class="dropdown-item" href="/outForm">회원 탈퇴</a></li>
         </ul>
       </li>
@@ -133,7 +132,7 @@
                 aria-expanded="false"
         ><i class="fas fa-bell fa-lg"></i>
         <span id="noticeCount" class="position-absolute top-0 end-0">0</span></a>
-        <ul id = "noticeList" class="dropdown-menu dropdown-menu-end"
+        <ul id = "noticeList" class="dropdown-menu dropdown-menu-end notify-ul-style"
                 aria-labelledby="navbarDropdown">
           <li>새로운 알림이 없습니다.</li>
         </ul>
@@ -190,6 +189,7 @@
               let nIcon = document.createElement("span");
               nIcon.innerText = "n";
 
+              li.setAttribute("class","notify-li-style")
               a.setAttribute("id", "notify" + content[i].notify_no);
               a.setAttribute("href", "/notifyRead/" + content[i].notify_no);
               a.innerText = content[i].content;
@@ -220,7 +220,7 @@
       window.open(
               "/chat/rooms",
               "Chattings",
-              "width=570, height=350"
+              "width=400, height=700"
       );
     }
 
