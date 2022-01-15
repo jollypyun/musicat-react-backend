@@ -197,7 +197,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 
 	<insert id="insertBestArticle" parameterType="hashMap">
-		INSERT INTO bestarticle (article_no, subject, likecount) VALUES (#{articleNo}, #{subject}, #{likecount})
+		INSERT INTO bestarticle (article_no, subject, likecount, systemfilename) VALUES (#{articleNo}, #{subject}, #{likecount}, #{systemFileName})
 	</insert>
 
 	<!--베스트글 업데이트-->
@@ -220,6 +220,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="articleNo" javaType="int" column="article_no" jdbcType="INTEGER"/>
 		<result property="subject" javaType="String" column="subject" jdbcType="VARCHAR"/>
 		<result property="likecount" javaType="int" column="likecount" jdbcType="INTEGER"/>
+		<result property="systemFileName" javaType="String" column="systemfilename" jdbcType="VARCHAR"/>
 	</resultMap>
 
 	<!-- 메인 page 출력 용 -->
