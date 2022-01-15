@@ -213,7 +213,7 @@ public class MusicApiService {
     }
 
     // 플레이리스트 정보 가져오기
-    public Playlist getOnePlaylist(int playlistNo) {
+    public Playlist getOnePlaylist(String playlistNo) {
         ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistNo);
         return response.getBody();
     }

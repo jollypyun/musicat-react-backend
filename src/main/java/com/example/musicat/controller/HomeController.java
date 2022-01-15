@@ -378,7 +378,7 @@ public class HomeController {
 
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
-	model.addAttribute("checkFollow", checkFollow);
+	    model.addAttribute("checkFollow", checkFollow);
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";
 
@@ -399,7 +399,7 @@ public class HomeController {
 
     // 플레이리스트 수정 폼 요청
     @GetMapping("/changePlaylistForm/{id}")
-    public String changePlaylist(Model model, @PathVariable("id") int id) {
+    public String changePlaylist(Model model, @PathVariable("id") String id) {
         Playlist playlist = musicApiService.getOnePlaylist(id);
         log.info("playlist : " + playlist.getPlaylistImage().getId());
         model.addAttribute("playlist", playlist);

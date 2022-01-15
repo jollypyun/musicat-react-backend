@@ -153,13 +153,16 @@ $(document).ready(function () {
 	$(document).on('click', '.depth_reply_btn', function () {
 		console.log("답글 폼 입장")
 		const no = $(this).parents('.reply-style').attr('id');
+		console.log('no::::::::::', no);
 		var grpCheck = $('#write_depth_reply_form').find('grp_no');
 		if (grpCheck != null){
 			$('#write_depth_reply_form').find('#grp_no').remove();
 		}
 		var $input = $('<input type="hidden" id="grp_no" value=' + no + '>');
 		$('#write_depth_reply_form').append($input);
+		console.log('input');
 		$('#write_depth_reply_form').insertAfter('#' + no);
+		console.log('insertAfter');
 		$('#write_depth_reply_form').show();
 	});
 
