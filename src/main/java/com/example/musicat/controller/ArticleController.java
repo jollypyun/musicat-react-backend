@@ -116,7 +116,6 @@ public class ArticleController {
 			log.info("article controller musiclist : " + musicList.toString());
 
 
-
 			// xss 처리 Html tag로 변환
 //			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
 //			article.setSubject(escapeSubject);
@@ -314,7 +313,7 @@ public class ArticleController {
 		return mv;
 	}
 
-	@PostMapping("/remove/{articleNo}")
+	@GetMapping("/remove/{articleNo}")
 	public RedirectView removeArticle(@PathVariable("articleNo") int articleNo
 			,HttpServletRequest req) {
 		RedirectView redirectView = new RedirectView();

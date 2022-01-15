@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Playlist {
-    private Long id;
+    private String id;
     private Integer memberNo;
     private String playlistName;
     private List<PlaylistNode> playlistNodes = new ArrayList<>();
