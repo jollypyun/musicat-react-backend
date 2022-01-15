@@ -109,9 +109,9 @@ public class ArticleController {
 			List<ArticleVO> subArticle = this.articleService.selectSubArticle(articleNo);
 			model.addAttribute("subArticles", subArticle);
 
-			// audio 파일
-			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
-			model.addAttribute("musicList", musicList);
+			// audio 파일 -- 주석 풀어야 함 ~
+//			List<Music> musicList = musicApiService.retrieveMusics(articleNo);
+//			model.addAttribute("musicList", musicList);
 //				log.info(musicList.toString());
 
 
@@ -125,7 +125,7 @@ public class ArticleController {
 			log.info("detailArticle: {}", result.toString());
 			model.addAttribute("HomeContent", "/view/board/detailArticle");
 		} else {
-			model.addAttribute("HomeContent", "/view/board/accessDenied");
+			model.addAttribute("HomeContent", "/view/security/accessDenideGrade");
 		}
 		return "view/home/viewHomeTemplate";
 	}

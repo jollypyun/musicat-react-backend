@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 
 @Log
 //인증에 대한 커스텀은 여기서 함
-//UserDetailsService(CustomMemberDetailsService)에서 정보를 담은 memberContext를 AuthenticationManager에 넣기 위한 클래스(AuthenticationProvider 구현체)
+//UserDetailsService(CustomMemberDetailsService)에서 정보를 담은 memberAccount를 AuthenticationManager에 넣기 위한 클래스(AuthenticationProvider 구현체)
 public class CustomAutheticationProvider implements AuthenticationProvider {
 
     @Autowired
@@ -31,9 +31,6 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         String email = authentication.getName();
         String password = (String) authentication.getCredentials(); //Credentials : 비밀번호
 
-        //log.info("Authentication getPrincipal : " + authentication.getPrincipal());
-
-
         //loadUserByUsername : username(email) DB에 존재하는지 검증
         MemberAccount memberAccount = (MemberAccount) userDetailsService.loadUserByUsername(email);
 
@@ -44,13 +41,11 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
 
         //활동정지 회원 여부 (DisabledException : 계정 비활성화)
         if(!memberAccount.getMemberVo().getBan().equals("")) {
-            log.info("ban : " + memberAccount.getMemberVo().getBan());
             throw new DisabledException("DisabledException");
         }
 
         //탈퇴 회원 여부 (AccountExpiredException : 계정만료)
         if(memberAccount.getMemberVo().getIsMember() != 0) {
-            System.out.println("ismember : " + memberAccount.getMemberVo().getIsMember());
             throw new AccountExpiredException("AccountExpiredException");
         }
 
@@ -65,9 +60,6 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
 //        }
 
 
-
-
-        
         //인증 모두 완료될 경우 토큰 생성
         //인증 성공 시 authenticationToken에 회원 정보(비밀번호 제외한 회원 정보)를 담아 AuthenticationProvider를 호출한 AuthenticationManager에 전달
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberAccount, null, memberAccount.getAuthorities());

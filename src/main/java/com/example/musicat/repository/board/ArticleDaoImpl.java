@@ -150,8 +150,7 @@ public class ArticleDaoImpl implements ArticleDao {
 	//작성한 게시글 조회
 	@Override
 	public List<ArticleVO> selectMyArticle(int memberNo) {
-		List<ArticleVO> myArticleList = this.articleMapper.selectMyArticle(memberNo);
-		return myArticleList;
+		return this.articleMapper.selectMyArticle(memberNo);
 	}
 
 	@Override

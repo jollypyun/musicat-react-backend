@@ -225,7 +225,6 @@
 						success: function (data) {
 							let category = null;
 							category = data;
-							console.log(category);
 							let modifyCategoryForm = "";
 							let categoryNo = $(e).closest("tr").attr("id");
 
@@ -234,7 +233,6 @@
 							modifyCategoryForm += "<tr>";
 							modifyCategoryForm += "<td>카테고리 이름:</td>";
 							modifyCategoryForm += "<td><input id='modifyCategoryName' name='categoryName' type='text' value='" + category.categoryName + "' maxlength='20'></td>";
-							console.log("category.categoryName : ", category.categoryName);
 							modifyCategoryForm += "</tr>";
 							modifyCategoryForm += "</tbody></table>";
 
@@ -694,6 +692,11 @@
 			} else {
 			}
 		}
+
+		// $(window).on('beforeunload', function () {
+		// 	return "나가게?";
+		// })
+
 
 
 	</script>

@@ -13,9 +13,7 @@
                         <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>
                     </div>
                     <div class="myPage-top-profile">
-                        <span>NickName</span>
-
-                        <span th:text="${#authorization.expr('isAuthenticated()')}"></span>
+                        <span th:text="${member.getNickname()}"></span>
                         <th:block th:if = "${#authorization.expr('isAuthenticated()')}">
                             <button onclick="location.href='/ChangePwd'" th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">비밀번호 변경</button>
                             <button onclick="" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()}">Follow</button>
@@ -27,25 +25,28 @@
                     <a th:href="@{'/myPage/Playlist/' + ${member.getNo()}}">Playlist</a>
                     <a th:href="@{'/myPage/Board/' + ${member.getNo()}}">글</a>
                     <a th:href="@{'/myPage/Reply/' + ${member.getNo()}}">댓글</a>
-
-                    <th:block th:if="${#authorization.expr('isAuthenticated()')} != false">
+                    <th:block th:if="${#authorization.expr('isAuthenticated()')}">
                     <span th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
-                        <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">좋아요</a>
+                        <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">추천한 게시글</a>
                     </span>
                     </th:block>
                 </div>
-          
-                <div th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
-                    <form method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
-                        <button type="submit">추가</button>
-                    </form>
-                </div>
 
+                <th:block th:if="${#authorization.expr('isAuthenticated()')}">
                 <div th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                     <form method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
                         <button type="submit">추가</button>
                     </form>
                 </div>
+                </th:block>
+
+                <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+                <div th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
+                    <form method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
+                        <button type="submit">추가</button>
+                    </form>
+                </div>
+                </th:block>
 
                 <div class="myPage-content">
                     <div class="myPage-content-left" th:each="playlist : ${playlists}" th:object="${playlist}">
@@ -122,5 +123,6 @@
         </div>
     </main>
 </div>
+
 </html>
 
