@@ -58,20 +58,33 @@
 
 										<td class="category-board-style">
 
-
-
 											<div th:if="${board.boardkind == 0}">
 												<span> <i class="far fa-list-alt"></i> </span>
-												 <a th:text="${board.boardName}"
-													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
+												<a th:text="${board.boardName}"
+												   th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
 											</div>
-											<div th:unless="${board.boardkind == 0}">
+											<div th:if="${board.boardkind == 1}">
 												<span> <i class="far fa-image"></i>
 												</span> <a th:text="${board.boardName}"
-													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
+														   th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
+											</div>
+											<div th:if="${board.boardkind == 2}">
+												<span> <i class="fas fa-music"></i>
+												</span> <a th:text="${board.boardName}"
+														   th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
 											</div>
 
-										
+<!--											<div th:if="${board.boardkind == 0}">-->
+<!--												<span> <i class="far fa-list-alt"></i> </span>-->
+<!--												 <a th:text="${board.boardName}"-->
+<!--													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>-->
+<!--											</div>-->
+<!--											<div th:unless="${board.boardkind == 0}">-->
+<!--												<span> <i class="far fa-image"></i>-->
+<!--												</span> <a th:text="${board.boardName}"-->
+<!--													th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>-->
+<!--											</div>-->
+
 									</tr>
 								</th:block>
 							</th:block>
