@@ -6,8 +6,10 @@
 <link rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.12.1/css/all.css"
       crossorigin="anonymous">
+
 <!--<link th:href="@{/css/detailAudioArticle.css}" rel="stylesheet"/>-->
 <link th:href="@{/css/detailArticleStyle.css}" rel="stylesheet"/>
+
 
 
 <div id="layoutSidenav_content">
@@ -28,6 +30,7 @@
                             <input type="hidden" id="board_no" th:value="${article.boardNo}">
                         </h1>
                         <form id="detailContent" class="detail-content-style" th:object="${article}" name="article">
+
                             <div class="mb-3">
                                 <span th:text="${article.subject}" th:field="*{subject}"
                                       class="content-title-style"></span>
@@ -74,6 +77,7 @@
                                     <div class="content-file-style">
                                         <div th:each=" imageFile : ${article.fileList}">
                                             <th:block th:if="${imageFile.fileType == 2}">
+
                                                 <video width="320" controls>
                                                     <source th:src="|/images/${imageFile.getSystemFileName()}|"
                                                             type="video/mp4">
@@ -90,40 +94,18 @@
                                 </th:block>
 
 
-                                <td colspan="3">
-                                    <div class="detailArticle-btn-style">
-                                        <div class="detailArticle-function-style">
-                                            <button th:if="${#authorization.expr('isAuthenticated()')}"
-                                                    id="writeForm_btn" onclick="writeForm()" type="button">글쓰기
-                                            </button>
-                                            <input type="button" onclick="history.back()" value="목록"/>
-                                            <!--th:onclick="|location.href='@{/board/{boardNo}/articles(boardNo=${article.boardNo})}'|"-->
-                                        </div>
-                                        <div id="like_area" class="detailArticle-like-style">
-                                            <div th:if="${article.likeCheck eq 0}">
-                                                <button type="button" id="add_like_btn" value="추천"/>
-                                                <i class="far fa-heart"></i>
-                                                </button>
-                                            </div>
-                                            <div th:unless="${article.likeCheck eq 0}">
-                                                <button type="button" id="del_like_btn">
-                                                    <i class="fas fa-heart"></i>
-                                                </button>
-                                            </div>
+                                <th:block th:if="${not #strings.isEmpty(musicList)}">
+                                    <div class="mt-4 content-audioList-style">
+                                        <span class="material-icons md-36 float-end">playlist_add</span>
 
 
-                                            <th:block th:if="${not #strings.isEmpty(musicList)}">
-                                                <div class="mt-4 content-audioList-style">
-                                                    <span class="material-icons md-36 float-end">playlist_add</span>
-
-
-                                                    <div th:each="music : ${musicList}" class="mb-2">
-                                                        <div class="detail-audio-part-style">
-                                                            <img id="detailAudioImg" th:src="${music.links[1].href}"
-                                                                 alt=""
-                                                                 srcset="">
-                                                            <div id="audioDiv" class="detail-audioDiv-style">
-                                                                <div id="audioInfoDiv" class="detail-audioInfo-style">
+                                        <div th:each="music : ${musicList}" class="mb-2">
+                                            <div class="detail-audio-part-style">
+                                                <img id="detailAudioImg" th:src="${music.links[1].href}"
+                                                     alt=""
+                                                     srcset="">
+                                                <div id="audioDiv" class="detail-audioDiv-style">
+                                                    <div id="audioInfoDiv" class="detail-audioInfo-style">
 
                                                     <span id="audioTitle" class="audioTitle"
                                                           th:text="${music.title}"></span>
@@ -132,19 +114,18 @@
                                                                             onclick="detailPlayAudio()">
                                                         <span id="audioPlayIcon"
                                                               class="material-icons md-36">add</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="detail-audioControls-style"
-                                                                     style="display: none">
-                                                                    <!--            <div id="waveform"></div>-->
-                                                                    <!--            <p id="audioResource" style="display: none"></p>-->
-                                                                    <audio th:src="${music.links[0].href}"
-                                                                           id="detail-audio"
-                                                                           controls=""></audio>
-                                                                    <!--              style="display: none"-->
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
+                                                        </button>
+                                                    </div>
+                                                    <div class="detail-audioControls-style"
+                                                         style="display: none">
+                                                        <!--            <div id="waveform"></div>-->
+                                                        <!--            <p id="audioResource" style="display: none"></p>-->
+                                                        <audio th:src="${music.links[0].href}"
+                                                               id="detail-audio"
+                                                               controls=""></audio>
+                                                        <!--              style="display: none"-->
+
                                                     </div>
 
                                                     <div class="dropdown-divider"></div>
@@ -157,19 +138,12 @@
 
                                         <div class="dropdown-divider"></div>
 
-                                        <div class="detailArticle-btn-style">
-                                            <div id="like_area" class="detailArticle-like-style">
-                                                <div th:if="${article.likeCheck eq 0}">
-                                                    <button type="button" id="add_like_btn" value="추천"/>
-                                                    <i class="far fa-heart fa-lg"></i>
-                                                    </button>
-                                                </div>
-                                                <div th:unless="${article.likeCheck eq 0}">
-                                                    <button type="button" id="del_like_btn">
-                                                        <i class="fas fa-heart fa-lg"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                    </div>
+                                </th:block>
+                                <p class="content-text-style" th:text="${article.content}"
+                                   th:field="*{content}"></p>
+                            </div>
+
 
                                             <div class="detailArticle-function-style">
                                                 <button th:if="${#authorization.expr('isAuthenticated()')}"
@@ -193,27 +167,35 @@
                                             </div>
                                         </div>
 
-                                        <div class="dropdown-divider"></div>
+                                <div class="detailArticle-function-style">
+                                    <button th:if="${#authorization.expr('isAuthenticated()')}"
+                                            id="writeForm_btn"
+                                            onclick="writeForm()" type="button">글쓰기
+                                    </button>
+                                </div>
 
-<<<<<<< HEAD
-                                        <!--Tag 출력 부분-->
-                                        <div id="tag_area" class="detailArticle-tag-style mt-3">
-                                            <ul id="tag-list" class="tag-ul">
-                                                <div th:each="tag : ${article.getSelectTags()}"
-                                                     style="display: inline-block">
-                                                    <li class='tag-item' th:text="${tag.name}"></li>
-                                                </div>
-                                            </ul>
-                                        </div>
+                                <!--본인만 가능-->
+                                <div class="detail-userCheck-style me-3"
+                                     th:if="${loginMemberNo == article.memberNo}"
+                                     style="float: right;">
+                                    <div class="detail-userBtn-style">
+                                        <input type="button"
+                                               th:onclick="|location.href='@{/articles/update/{articleNo}(articleNo=${article.no})}'|"
+                                               value="수정"/>
+                                        <input type="button"
+                                               th:onclick="|location.href='@{/articles/remove/{articleNo}(articleNo=${article.no})}'|"
+                                               value="삭제"/>
+
                                     </div>
                                 </td>
                             </div>
-=======
+
                             <!--Tag 출력 부분-->
                             <th:block th:if="${not #strings.isEmpty(article.getSelectTags())}">
                                 <div id="tag_area" class="detailArticle-tag-style mt-3">
                                     <ul id="tag-list" class="tag-ul">
-                                        <div th:each="tag : ${article.getSelectTags()}" style="display: inline-block">
+                                        <div th:each="tag : ${article.getSelectTags()}"
+                                             style="display: inline-block">
                                             <li class='tag-item' th:text="${tag.name}"></li>
                                         </div>
                                     </ul>
@@ -221,12 +203,8 @@
                                 <div class="dropdown-divider"></div>
                             </th:block>
 
->>>>>>> cad78995b319d4bdff8fd6bde27046cb53cf30f2
                         </form>
                     </div>
-
-
-
 
                     <div id="sub_article_area" class="sub_article_area-style mb-3 mt-3">
                         <div th:each="subArticle : ${subArticles}" class="mb-3">
@@ -368,8 +346,10 @@
                     <div id="modify_reply_form" style="display: none;"
                          class="detailArticle-replyModify-style">
                         <div id="updateReplyForm">
+
                             <input type="hidden" id="no"/>
                             <textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
+
                             <button class="modify_cancle">취소</button>
                             <button class="modify_reply_btn">수정</button>
                         </div>
@@ -381,4 +361,52 @@
         </div>
     </main>
 </div>
+
+<!--<script th:inline="javascript">-->
+
+<!--    function onAddtoPlayClick(btn) {-->
+<!--        var playlistNo = [[${#authentication.principal.getNo}]];-->
+<!--        var playlistNo = playlistNo + "pl1";-->
+<!--        var musicNos = $(btn).children().text();-->
+<!--        console.log("playlistNo : ", playlistNo);-->
+<!--        console.log("musicNos : ", musicNos);-->
+<!--        requestProcessAddToPlay("/pushmusic/" + playlistNo, musicNos);-->
+<!--    }-->
+<!--    const getAjaxAddToPlay = function (url, musicNos) {-->
+<!--        // var objParams = {-->
+<!--        //     "playlistNo": playlistNo,-->
+<!--        //     "musicNos" : musicNos-->
+<!--        // };-->
+<!--        //console.log(objParams);-->
+<!--        return new Promise((resolve, reject) => {-->
+<!--            $.ajax({-->
+<!--                url: url,-->
+<!--                method: "POST",-->
+<!--                dataType: "json",-->
+<!--                data: {-->
+<!--                    musicNos:musicNos-->
+<!--                },-->
+<!--                success: function (data) {-->
+<!--                    // 비동기 작업 성공 시 호출-->
+<!--                    resolve(data);-->
+<!--                },-->
+<!--                error: function (e) {-->
+<!--                    // 비동기 작업 실패 시 호출-->
+<!--                    reject(e);-->
+<!--                },-->
+<!--            });-->
+<!--        });-->
+<!--    };-->
+
+<!--    async function requestProcessAddToPlay(url, musicNos) {-->
+<!--        try {-->
+<!--            // await 다음에는 비동기 처리 작업이 와야함.-->
+<!--            //const result = await getAjaxAddToPlay(url, playlistNo, musicNos);-->
+<!--            await getAjaxAddToPlay(url, musicNos);-->
+<!--        } catch (error) {-->
+<!--            console.log("error : ", error);-->
+<!--        }-->
+<!--    }-->
+
+<!--</script>-->
 </html>
