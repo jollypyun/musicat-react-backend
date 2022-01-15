@@ -30,34 +30,35 @@
                     <a th:href="@{'/myPage/Reply/' + ${member.getNo()}}">댓글</a>
                     <th:block th:if="${#authorization.expr('isAuthenticated()')} != false">
                         <span th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
-                            <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">추천한 게시글</a></span>
+                            <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">추천한 게시글</a>
+                        </span>
                     </th:block>
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">
                         <table id="datatablesSimple"  class="list-normal-table">
                             <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>제목</th>
-                                <th>날짜</th>
-                                <th>조회수</th>
-                                <th>추천</th>
-                            </tr>
+                                <tr>
+                                    <th>No</th>
+                                    <th>제목</th>
+                                    <th>날짜</th>
+                                    <th>조회수</th>
+                                    <th>추천</th>
+                                </tr>
                             </thead>
 
                             <tbody>
-                            <tr th:each="article : ${articles}">
-                                <td th:text="${article.no}"></td>
-                                <td>
-                                    <a th:text="${article.subject}"
-                                       th:href="|/articles/${article.no}|"></a>
-                                </td>
-                                <td th:text="${article.writeDate}"></td>
-                                <td th:text="${article.viewcount}"></td>
-                                <td th:text="${article.likecount}"></td>
+                                <tr th:each="article : ${articles}">
+                                    <td th:text="${article.no}"></td>
+                                    <td>
+                                        <a th:text="${article.subject}"
+                                           th:href="|/articles/${article.no}|"></a>
+                                    </td>
+                                    <td th:text="${article.writeDate}"></td>
+                                    <td th:text="${article.viewcount}"></td>
+                                    <td th:text="${article.likecount}"></td>
 
-                            </tr>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

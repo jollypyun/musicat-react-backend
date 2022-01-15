@@ -20,9 +20,9 @@
                                 <button th:onclick="'cancel(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 1">Cancel</button>
                             </div>
                         </th:block>
-
                     </div>
                 </div>
+
                 <div class="mt-4 mb-4 myPage-nav">
                     <a th:href="@{'/myPage/Playlist/' + ${member.getNo()}}">Playlist</a>
                     <a th:href="@{'/myPage/Board/' + ${member.getNo()}}">글</a>
@@ -44,13 +44,26 @@
                                     <th>작성날짜</th>
                                 </tr>
                             </thead>
+<!--                            <div class="reply_list" th:each="reply : ${replyListOneMember}">-->
+<!--                                <tbody>-->
+<!--                                    <td class="Content" th:text="${reply.no}"></td>-->
+<!--&lt;!&ndash;                                    <td class="Content" th:text="${게시판이름....}}"></td>&ndash;&gt;-->
+<!--                                    <td><a class="Content"  th:text="${reply.content}"-->
+<!--                                       th:href="|/articles/${reply.articleNo}|"></a></td>-->
+<!--                                    <td class="Content" th:text="${reply.writeDate}"></td>-->
+<!--                                </tbody>-->
+<!--                            </div>-->
                             <div class="reply_list" th:each="reply : ${replyListOneMember}">
                                 <tbody>
-                                    <td class="Content" th:text="${reply.no}"></td>
-<!--                                    <td class="Content" th:text="${게시판이름....}}"></td>-->
-                                    <td><a class="Content"  th:text="${reply.content}"
-                                       th:href="|/articles/${reply.articleNo}|"></a></td>
-                                    <td class="Content" th:text="${reply.writeDate}"></td>
+                                    <tr th:each="reply : ${replyListOneMember}">
+                                        <td th:text="${reply.no}"></td>
+                                        <!--                                    <td class="Content" th:text="${게시판이름....}}"></td>-->
+                                        <td>
+                                            <a th:text="${reply.content}"
+                                               th:href="|/articles/${reply.articleNo}|"></a>
+                                        </td>
+                                        <td th:text="${reply.writeDate}"></td>
+                                    </tr>
                                 </tbody>
                             </div>
                         </table>
