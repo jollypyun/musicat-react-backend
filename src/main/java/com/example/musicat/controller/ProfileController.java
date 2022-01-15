@@ -97,7 +97,7 @@ public class ProfileController {
                 }
             }
             profileService.modifyBio(no, bio);
-            return "redirect:/profile";
+            return "redirect:/myPage/Playlist/"+no;
         } catch(Exception e) {
             e.printStackTrace();
 //            return "error";

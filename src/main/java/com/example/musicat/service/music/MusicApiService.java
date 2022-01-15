@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-`
+
 @Slf4j
 @Service
 public class MusicApiService {
@@ -36,7 +36,8 @@ public class MusicApiService {
     private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/push";
     private final String URI_PLAYLIST_CHANGE = "http://13.124.245.202:20000/api/playlists/update";
     private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
-    private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/playlists/detail/{playlistNo}";
+
+    private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/playlists/detail/{playlistKey}";
     private final String URI_MUSICS_TEST = "http://13.124.245.202:20000/api/posttest";
 
     private final RestTemplate restTemplate;
@@ -189,7 +190,7 @@ public class MusicApiService {
         map.put("playlistKey", playlistKey);
         log.info("map : " + map);
 
-        restTemplate.delete("http://13.124.245.202:20000/api/playlists/delete/{memberNo}/{playlistNo}" , map);
+        restTemplate.delete("http://13.124.245.202:20000/api/playlists/delete/{memberNo}/{playlistKey}" , map);
 
     }
 
@@ -208,13 +209,17 @@ public class MusicApiService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("musicNos", musicNos);
 
-        map.put("playlistNo", playlistNo);
+        map.put("playlistKey", playlistKey);
+
         restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
+
     }
 
     // 플레이리스트 정보 가져오기
-    public Playlist getOnePlaylist(int playlistNo) {
-        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistNo);
+    public Playlist getOnePlaylist(String playlistKey) {
+
+        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistKey}", Playlist.class, playlistKey);
+
         return response.getBody();
     }
 
@@ -258,6 +263,7 @@ public class MusicApiService {
         if(list.size() != 0) {
             list.remove(0);
         }
+
         System.out.println(list);
         return pl.getBody();
     }
