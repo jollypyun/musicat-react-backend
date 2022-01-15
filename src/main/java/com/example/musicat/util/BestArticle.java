@@ -19,8 +19,8 @@ import java.util.Map;
 @Component
 public class BestArticle {
 
-    @Autowired ArticleDao articleDao;
-    @Autowired MusicApiService musicApiService;
+    @Autowired private ArticleDao articleDao;
+    @Autowired private MusicApiService musicApiService;
 
     public void insertBestArticle(List<ArticleVO> bestArticles) {
         HashMap<String, Object> map = new HashMap<>();
@@ -32,12 +32,10 @@ public class BestArticle {
             // 임시로 차단(data가 안 맞음)
             Map<String, Object> mmap = (Map<String, Object>) musicApiService.retrieveMusics(bestArticle.getNo()).get(0);
             List<Map<String, Object>> resmap = (List<Map<String, Object>>) mmap.get("links");
-            Map<String, Object> aMap = resmap.get(0);
+            Map<String, Object> aMap = resmap.get(1);
+
             log.info("resMape1: {}", aMap.get("href"));
-
-//            systemFileName = musicApiService.retrieveMusics(bestArticle.getNo()).get(0).getLinks().get(0).getHref();
-
-//            map.put("systemFileName", systemFileName);
+            map.put("systemFileName", aMap.get("href"));
 
             this.articleDao.insertBestArticle(map);
             map.remove("articleNo");
