@@ -3,6 +3,7 @@ package com.example.musicat.controller;
 import com.example.musicat.domain.music.Link;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
+import com.example.musicat.exception.customException.EmptyFileException;
 import com.example.musicat.service.music.MusicApiService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.*;
 
@@ -50,14 +53,22 @@ public class MusicController {
 //    }
 
     @PostMapping("musicpost")
-    public ModelAndView upload(@RequestParam(value = "audio") MultipartFile file, @RequestParam(value = "image") MultipartFile imagefile,
-                               @RequestParam(value = "title") @Size(min = 1, max = 1) String title
+    public ModelAndView upload(@RequestParam(value = "audio") @NotNull MultipartFile file, @RequestParam(value = "image") @NotNull MultipartFile imagefile,
+                               @RequestParam(value = "title") @Size(min = 1, max = 100, message="제목을 입력해주세요.") String title
             , @RequestParam(value = "memberNo") int memberNo) throws HttpClientErrorException {
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("view/board/musicRegisterCheck");
 
+
+        if(file.isEmpty())
+            throw new EmptyFileException("음악 파일이 없습니다.");
+        if(imagefile.isEmpty())
+            throw new EmptyFileException("이미지 파일이 없습니다.");
+
         Music music = musicApiService.registerMusic(file, imagefile, title, memberNo);
         mv.addObject("music", music);
+
         return mv;
     }
 
