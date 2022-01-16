@@ -11,13 +11,6 @@ function getLength(value) {
 $(document).ready(function () {
 
 
-    //$("#audio").attr("src", "https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3");
-    //$("#audio").play();
-    if( $("#userNoForPlaylist").text() != -1) {
-          console.log("로그인 회원, 재생 목록 받아오기 " + $("#userNoForPlaylist").text() + "pl1");
-          //requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
-    }
-
     document.getElementById("playlist-prev").addEventListener("click", playlistPrev);
     document.getElementById("playlist-pause").addEventListener("click", playlistPause);
     document.getElementById("playlist-play").addEventListener("click", playlistPlay);
