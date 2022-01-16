@@ -70,8 +70,8 @@ public class FollowController {
 
         // 구독 알림 보내기
         MemberAccount user = (MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        notifyManager.addNotify(new NotifyVO(opponent,  user.getMemberVo().getNickname()+ "님이 나를 팔로우 했습니다.", "myPage/Playlist/"+user.getMemberVo().getNo()));
-        log.info("follow add notify !!!");
+        notifyManager.addNotify(new NotifyVO(opponent,  user.getMemberVo().getNickname()+ "님이 나를 팔로우 했습니다.",
+                "myPage/Playlist/"+user.getMemberVo().getNo()));
 
         Map<String, Integer> map = new HashMap<>();
         map.put("opponent", opponent);
