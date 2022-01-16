@@ -216,10 +216,9 @@ public class MusicApiService {
     }
 
     // 플레이리스트 정보 가져오기
+
     public Playlist getOnePlaylist(String playlistKey) {
-
         ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistKey}", Playlist.class, playlistKey);
-
         return response.getBody();
     }
 
