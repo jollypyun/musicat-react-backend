@@ -18,5 +18,6 @@ public class BestArticleVO {
 	private int articleNo;
 	private String subject;
 	private int likecount;
+	private String systemFileName;
 	private int rank; // 순위
 }

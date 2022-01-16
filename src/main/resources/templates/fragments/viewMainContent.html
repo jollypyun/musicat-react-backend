@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 
 <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
 <link th:href="@{/css/homeContentsStyle.css}" rel="stylesheet"/>
@@ -54,7 +54,8 @@
                             <table>
                                 <tbody>
                                 <tr th:each="bestArticle : ${bestArticles}">
-                                    <td><img src="https://swiperjs.com/demos/images/nature-1.jpg"></td>
+<!--                                    <td><img src="http://13.124.245.202:20000/api/musics/78ba0de4-7f75-4282-8b57-aac68198770c.audio"></td>-->
+                                    <td><img th:src="${bestArticle.systemFileName}"></td>
                                     <td th:text="${bestArticle.rank}"></td>
                                     <td style="display: inline-block">
                                         <a th:text="${bestArticle.subject}"

@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
 
-	private final BoardService boardService;
+//	private final BoardService boardService;
 	private final MusicApiService musicApiService;
 	private final ArticleMapper articleMapper;
 	private final ArticleDao articleDao;
@@ -77,17 +77,11 @@ public class ArticleServiceImpl implements ArticleService {
 		return this.articleDao.selectBoardList(map);
 	}
 
-
-
-
-
 	@Override
 	public int boardTotalCount(int boardNo){
 		// end Page
 		return this.articleMapper.boardTotalCount(boardNo);
 	}
-
-
 
 	// 게시글 추가
 	@Override
@@ -117,6 +111,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public int removeArticle(int articleNo, int memberNo) {
+		this.musicApiService.deleteMusicByArticleNo(articleNo); // 음악 삭제
 		this.memberMapper.minusMemberDocs(memberNo);
 		int boardNo = this.articleDao.selectArticle(articleNo).get(0).getArticle().getBoardNo();
 		boolean check = this.articleDao.checkBestArticle(articleNo);
