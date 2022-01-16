@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.musicat.mapper.member.ResourceMapper">
+
+
+	<!--	resources table teset-->
+	<resultMap id="selectResourceListResultMap" type="resourceVo">
+		<result property="resourceNo" javaType="int" column="resource_no" jdbcType="INTEGER" />
+		<result property="resourceName" javaType="string" column="resource_name" jdbcType="VARCHAR" />
+		<result property="resourceType" javaType="string" column="resource_type" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="selectResourceList" resultType="resourceVo" resultMap="selectResourceListResultMap">
+		SELECT resource_no, resource_name, resource_type
+		FROM resource
+	</select>
+
+
+	<!-- ~ 양	-->
+
+</mapper>

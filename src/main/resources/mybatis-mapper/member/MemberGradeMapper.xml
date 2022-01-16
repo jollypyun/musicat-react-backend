@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.musicat.mapper.member.MemberGradeMapper">
+
+
+	<!--	resources table teset-->
+	<resultMap id="selectMemberGradeListResultMap" type="memberGradeVo">
+		<result property="memberNo" javaType="int" column="memberNo" jdbcType="INTEGER" />
+		<result property="grade" javaType="string" column="auth" jdbcType="VARCHAR" />
+		<result property="resourceName" javaType="string" column="resourceName" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="selectMemberGradeList" resultType="memberGradeVo" resultMap="selectMemberGradeListResultMap">
+		SELECT mg.member_no AS memberNo, g.auth AS grade, r.resource_name AS resourceName
+		FROM member_grade mg INNER JOIN grade g INNER JOIN grade_resource gs INNER JOIN resource r
+		ON mg.grade_no = g.grade_no AND g.grade_no = gs.grade_no AND gs.resource_no = r.resource_no
+		WHERE mg.member_no = (select member_no from member where email = #{email})
+	</select>
+
+
+	<!-- ~ 양	-->
+
+</mapper>
