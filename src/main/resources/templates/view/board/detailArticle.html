@@ -110,11 +110,11 @@
                                                     <span id="audioTitle" class="audioTitle"
                                                           th:text="${music.title}"></span>
 
-                                                                    <button id="audioPlayBtn" class="audioPlayBtn"
-                                                                            onclick="detailPlayAudio()">
+                                                        <button type = "button" id="audioPlayBtn" class="audioPlayBtn"
+                                                                onclick="onAddtoPlayClick(this)">
                                                         <span id="audioPlayIcon"
                                                               class="material-icons md-36">add</span>
-
+                                                        <input type="hidden" th:value="${music.id}"
                                                         </button>
                                                     </div>
                                                     <div class="detail-audioControls-style"
@@ -348,7 +348,7 @@
                         <div id="updateReplyForm">
 
                             <input type="hidden" id="no"/>
-                            <textarea id="reply_content" rwos="5" cols="50" placeholder=""></textarea>
+                            <textarea id="reply_content" rows="5" cols="50" placeholder=""></textarea>
 
                             <button class="modify_cancle">취소</button>
                             <button class="modify_reply_btn">수정</button>
