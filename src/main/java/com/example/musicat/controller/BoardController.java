@@ -7,6 +7,8 @@ import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.paging.Criteria;
 import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.board.FileService;
+
+import com.example.musicat.util.TemplateModelFactory;
 import com.example.musicat.service.music.MusicApiService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,10 @@ public class BoardController {
 	private FileService fileService;
 	@Autowired
 	private MusicApiService musicApiService;
+
+	@Autowired
+	private TemplateModelFactory templateModelFactory;
+
 
 	// 메인화면 사이드바
 	@GetMapping("/board")
@@ -403,6 +409,9 @@ public class BoardController {
 //		log.info("목록조회하는 게시판의 즐찾 추가된 거 여부 : " + likeBoard);
 //		model.addAttribute("likeBorad", likeBoard);
 		// ~ 양
+
+		templateModelFactory.setCurPlaylistModel(model);
+
 
 		return "/view/home/viewBoardTemplate";
 	}
