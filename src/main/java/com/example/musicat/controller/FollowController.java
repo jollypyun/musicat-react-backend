@@ -1,8 +1,13 @@
 package com.example.musicat.controller;
 
+import com.example.musicat.domain.etc.NotifyVO;
+import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.security.MemberAccount;
 import com.example.musicat.service.member.FollowService;
+import com.example.musicat.websocket.manager.NotifyManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +21,9 @@ import java.util.Map;
 public class FollowController {
     @Autowired
     private FollowService followService;
+
+    @Autowired
+    private NotifyManager notifyManager;
 
     // Following 수 세기
     @ResponseBody
@@ -59,6 +67,12 @@ public class FollowController {
     @PostMapping("/follow")
     public Map<String, Integer> followSomeone(@RequestParam("opponent") int opponent, @RequestParam("my") int my) {
         this.followService.addFollow(my, opponent);
+
+        // 구독 알림 보내기
+        MemberAccount user = (MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        notifyManager.addNotify(new NotifyVO(opponent,  user.getMemberVo().getNickname()+ "님이 나를 팔로우 했습니다.", "myPage/Playlist/"+user.getMemberVo().getNo()));
+        log.info("follow add notify !!!");
+
         Map<String, Integer> map = new HashMap<>();
         map.put("opponent", opponent);
         map.put("my", my);
