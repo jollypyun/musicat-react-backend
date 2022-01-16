@@ -15,7 +15,7 @@ $(document).ready(function () {
     //$("#audio").play();
     if( $("#userNoForPlaylist").text() != -1) {
           console.log("로그인 회원, 재생 목록 받아오기 " + $("#userNoForPlaylist").text() + "pl1");
-          requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
+          //requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
     }
 
     document.getElementById("playlist-prev").addEventListener("click", playlistPrev);
@@ -152,7 +152,6 @@ $(document).ready(function () {
             audio.volume = 1;
         }
 
-
     }
 
     function playlistHeartEmpty() {
@@ -190,9 +189,9 @@ function onAddtoPlayClick(btn) {
 
     var playlistNo = $("#userNoForPlaylist").text();
     playlistNo = playlistNo + "pl1";
-    var musicNos = $(btn).children().text();
-    //console.log("playlistNo : ", playlistNo);
-    //console.log("musicNos : ", musicNos);
+    var musicNos = $(btn).children("input").val();
+    console.log("playlistNo : ", playlistNo);
+    console.log("musicNos : ", musicNos);
     requestProcessAddToPlay("/pushmusic/" + playlistNo, musicNos);
 }
 
@@ -227,17 +226,20 @@ async function requestProcessAddToPlay(url, musicNos) {
         // await 다음에는 비동기 처리 작업이 와야함.
         //const result = await getAjaxAddToPlay(url, playlistNo, musicNos);
         const result = await getAjaxAddToPlay(url, musicNos);
+        console.log(result);
         //localStorage.setItem("musics", JSON.stringify(result));
         //console.log(JSON.parse(localStorage.getItem("musics")));
 
-        //console.log(result[0].links[1].href);
+        $("#currentPlayList_ul").empty(); // 만약 spa 방식으로 한다면 마지막에 추가한 1개만 리턴해서 갱신하는게 더 좋을 듯
         result.forEach(function(e){
             $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
-                + '"/> <button id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons">play_circle</span></button><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><span>30:30</span><button class="song-addInfo"><span class="material-icons">dehaze</span></button><div class="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
-            $("#audioTime").text(getLength(audioCurrent));
+                + '"/> <label class="playlist-dropUp-content-playBtn position-absolute"> <input type="button" id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
+             // $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
+             //     + '"/> <button id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons">play_circle</span></button><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><span>30:30</span><button class="song-addInfo"><span class="material-icons">dehaze</span></button><div class="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
+             // $("#audioTime").text(getLength(audioCurrent));
         });
-        $("#audio").attr("src", result[0].links[0].href);
-        $("#audio").trigger("play");
+        //$("#audio").attr("src", result[0].links[0].href);
+        //$("#audio").trigger("play");
 
 
     } catch (error) {

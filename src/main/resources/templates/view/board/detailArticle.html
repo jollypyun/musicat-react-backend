@@ -110,10 +110,11 @@
                                                     <span id="audioTitle" class="audioTitle"
                                                           th:text="${music.title}"></span>
 
-                                                        <button id="audioPlayBtn" class="audioPlayBtn"
+                                                        <button type = "button" id="audioPlayBtn" class="audioPlayBtn"
                                                                 onclick="onAddtoPlayClick(this)">
                                                         <span id="audioPlayIcon"
                                                               class="material-icons md-36">add</span>
+                                                        <input type="hidden" th:value="${music.id}"
                                                         </button>
                                                     </div>
                                                     <div class="detail-audioControls-style"

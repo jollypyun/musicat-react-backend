@@ -133,8 +133,7 @@ public class HomeController {
       model.addAttribute("likeBoardList", likeBoardList);
 
 
-//      templateModelFactory.setCurPlaylistModel(model);
-//      log.info("setted music : " + model.getAttribute("curPlaylist"));
+      templateModelFactory.setCurPlaylistModel(model);
 
       //musicApiService.showDetailPlaylist()
 

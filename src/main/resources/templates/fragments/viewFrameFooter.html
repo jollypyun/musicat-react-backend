@@ -10,10 +10,10 @@
 
                 <!-- 오디오 재생 관련 버튼 -->
                 <div class="playListBar-inner-play-btn">
-                    <button id="playlist-prev"><span class="material-icons">skip_previous</span></button>
-                    <button id="playlist-pause" style="display: none"><span class="material-icons">pause</span></button>
-                    <button id="playlist-play"><span class="material-icons">play_arrow</span></button>
-                    <button id="playlist-next"><span class="material-icons">skip_next</span></button>
+                    <button type="button" id="playlist-prev"><span class="material-icons">skip_previous</span></button>
+                    <button type="button" id="playlist-pause" style="display: none"><span class="material-icons">pause</span></button>
+                    <button type="button" id="playlist-play"><span class="material-icons">play_arrow</span></button>
+                    <button type="button" id="playlist-next"><span class="material-icons">skip_next</span></button>
                 </div>
 
                 <!-- 오디오 시간 관련 -->
@@ -26,7 +26,7 @@
 
                 <!-- 오디오 볼륨 관련 -->
                 <div class="playListBar-inner-volume">
-                    <button class="volume-mute-btn" id="volume-mute">
+                    <button type="button" class="volume-mute-btn" id="volume-mute">
                         <span class="material-icons" id="volume-mute-off">volume_up</span>
                         <span class="material-icons" id="volume-mute-on" style="display: none">volume_off</span>
                     </button>
@@ -54,47 +54,47 @@
                 </div>
 
                 <div class="playListBar-inner-func-btn">
-                    <button id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>
-                    <button id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>
+                    <button type="button" id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>
+                    <button type="button" id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>
                     </button>
-                    <button id="playlist-personAdd"><span class="material-icons">person_add</span></button>
+                    <button type="button" id="playlist-personAdd"><span class="material-icons">person_add</span></button>
                     <div class="playlist-dropUp">
-                        <button id="playlist-songList" class="playlist-dropUp-btn"><span class="material-icons">queue_music</span>
+                        <button type="button" id="playlist-songList" class="playlist-dropUp-btn"><span class="material-icons">queue_music</span>
                         </button>
                         <div id="playlist-dropUp-content" class="playlist-dropUp-content">
                             <div class="dropUp-inner-title">
                                 <h4>playList</h4>
                                 <div>
-                                    <button><span class="material-icons">delete</span></button>
-                                    <button id="playlist-close"><span class="material-icons">close</span></button>
+                                    <button type="button"><span class="material-icons">delete</span></button>
+                                    <button id="playlist-close" type="button"><span class="material-icons">close</span></button>
                                 </div>
                             </div>
                             <ul id="currentPlayList_ul" style="overflow-y : auto">
                                 <!--                                <button type="button" onclick="testinggg()">테스트트</button>-->
-<!--                                <li th:each="music : ${curPlaylist}">-->
-<!--                                    <div class="playlist-dropUp-content-inner">-->
-<!--                                        <div class="dropUp-inner-info position-relative">-->
-<!--                                            <img th:src="${curPlaylist.links[0].href}"/>-->
-<!--                                            <label class="playlist-dropUp-content-playBtn position-absolute">-->
-<!--                                                <input type="button">-->
-<!--                                                <span class="material-icons position-absolute" >play_circle</span>-->
-<!--                                            </label>-->
-<!--                                            <div class="dropUp-inner-info-text">-->
-<!--                                                <span></span>-->
-<!--                                                <span></span>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="dropUp-inner-time">-->
-<!--                                            <span>2:06</span>-->
-<!--                                            <button id="song-addInfo"><span class="material-icons">dehaze</span>-->
-<!--                                            </button>-->
-<!--                                            <div id="songInfo-dropbox">-->
-<!--                                                <button>삭제</button>-->
-<!--                                                <button>플레이리스트 추가</button>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </li>-->
+                                <li th:each="music : ${curPlaylist}">
+                                    <div class="playlist-dropUp-content-inner">
+                                        <div class="dropUp-inner-info position-relative">
+                                            <img th:src="${music.links[1].href}"/>
+                                            <label class="playlist-dropUp-content-playBtn position-absolute">
+                                                <input type="button" th:id="${music.links[0].href}" onclick="playAudio(this)">
+                                                <span class="material-icons position-absolute" >play_circle</span>
+                                            </label>
+                                            <div class="dropUp-inner-info-text">
+                                                <span></span>
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                        <div class="dropUp-inner-time">
+                                            <span>2:06</span>
+                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>
+                                            </button>
+                                            <div id="songInfo-dropbox">
+                                                <button type="button">삭제</button>
+                                                <button type="button">플레이리스트 추가</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>
