@@ -112,18 +112,7 @@ $(document).ready(function () {
     }
 
 
-    function playlistPause() {
-        audio.pause();
-        document.getElementById("playlist-pause").style.display = "none";
-        document.getElementById("playlist-play").style.display = "inline-block";
-    }
 
-    function playlistPlay() {
-        audio.play();
-        document.getElementById("playlist-play").style.display = "none";
-        document.getElementById("playlist-pause").style.display = "inline-block";
-
-    }
 
     function playlistNext() {
         alert("다음 노래 재생 버튼");
@@ -176,6 +165,18 @@ $(document).ready(function () {
     }
 });
 
+function playlistPause() {
+    audio.pause();
+    document.getElementById("playlist-pause").style.display = "none";
+    document.getElementById("playlist-play").style.display = "inline-block";
+}
+
+function playlistPlay() {
+    audio.play();
+    document.getElementById("playlist-play").style.display = "none";
+    document.getElementById("playlist-pause").style.display = "inline-block";
+
+}
 
 function onAddtoPlayClick(btn) {
     //var playlistNo = [[${#authentication.principal.getNo}]];
@@ -246,6 +247,9 @@ function playAudio(btn) {
     $("#audio").attr("src", $(btn).attr("id"));
 
     $("#audio").trigger("play");
+
+    playlistPlay();
+
     // $("#audio").currentTime=10;
     // console.log($("#audio").currentTime);
 }
