@@ -389,7 +389,8 @@ public class HomeController {
     public String selectPlaylistForm(Model model, @PathVariable("musicNo") int musicNo, @PathVariable("memberNo") int memberNo) {
         log.info("controller 도달");
         List<Playlist> playlists = this.musicApiService.showPlaylist(memberNo);
-        model.addAttribute("list", playlists);
+        log.info("playlist들의 정보 : " + playlists.toString());
+        model.addAttribute("playlistsByMember", playlists);
         model.addAttribute("musicNo", musicNo);
         return "view/etc/addMusicToPlaylist";
     }
