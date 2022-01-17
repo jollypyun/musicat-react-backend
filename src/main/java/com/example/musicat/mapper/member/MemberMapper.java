@@ -108,4 +108,6 @@ public interface MemberMapper {
 
 	String selectMemberPassword(int memberNo);
 
+	// 등급조정
+	void updateGrade(int no, int gradeNo);
 }

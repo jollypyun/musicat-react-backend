@@ -63,4 +63,7 @@ public interface MemberService {
 
   String passwordCheck(int memberNo);
 
+  // 등급조정
+    void modifyGrade(int no, String grade);
+
 }
