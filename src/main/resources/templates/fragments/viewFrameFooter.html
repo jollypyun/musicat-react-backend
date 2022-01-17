@@ -54,10 +54,10 @@
                 </div>
 
                 <div class="playListBar-inner-func-btn">
-                    <button type="button" id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>
-                    <button type="button" id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>
-                    </button>
-                    <button type="button" id="playlist-personAdd"><span class="material-icons">person_add</span></button>
+<!--                    <button type="button" id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>-->
+<!--                    <button type="button" id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>-->
+<!--                    </button>-->
+<!--                    <button type="button" id="playlist-personAdd"><span class="material-icons">person_add</span></button>-->
                     <div class="playlist-dropUp">
                         <button type="button" id="playlist-songList" class="playlist-dropUp-btn"><span class="material-icons">queue_music</span>
                         </button>
@@ -81,17 +81,18 @@
                                             </label>
                                             <div class="dropUp-inner-info-text">
                                                 <span th:text="${music.title}"></span>
-                                                <span></span>
                                             </div>
                                         </div>
                                         <div class="dropUp-inner-time">
-                                            <span>2:06</span>
-                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>
-                                            </button>
-                                            <div id="songInfo-dropbox">
-                                                <button type="button">삭제</button>
-                                                <button type="button">플레이리스트 추가</button>
-                                            </div>
+<!--                                            <span>2:06</span>-->
+                                            <button type="button"><span class="material-icons">playlist_add</span></button>
+                                            <button type="button"><span class="material-icons">close</span></button>
+<!--                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>-->
+<!--                                            </button>-->
+<!--                                            <div id="songInfo-dropbox">-->
+<!--                                                <button type="button">삭제</button>-->
+<!--                                                <button type="button">플레이리스트 추가</button>-->
+<!--                                            </div>-->
                                         </div>
                                     </div>
                                 </li>
