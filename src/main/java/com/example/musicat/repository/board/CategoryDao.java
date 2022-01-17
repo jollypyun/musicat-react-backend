@@ -12,16 +12,16 @@ public interface CategoryDao {
 	
 	public void updateCategory(int categoryNo, String categoryName);
 	
-	public int selectConnectBoard(int categoryNo);
-	
 	public void deleteCategory(int categoryNo);
+
+	public int selectConnectBoard(int categoryNo);
+
+	public CategoryVO selectOneCategory(int categoryNo);
 	
 	public ArrayList<CategoryVO> selectCategoryList();
 	
 	public ArrayList<CategoryBoardVO> selectCategoryBoardList();
-	
-	public CategoryVO selectOneCategory(int categoryNo);
-	
+
 	public Integer selectDuplicatedCategory(String categoryName);
 	
 

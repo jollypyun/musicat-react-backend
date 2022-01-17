@@ -16,9 +16,9 @@ $(document).ready(function () {
     document.getElementById("playlist-play").addEventListener("click", playlistPlay);
     document.getElementById("playlist-next").addEventListener("click", playlistNext);
     document.getElementById("volume-mute").addEventListener("click", volumeMute);
-    document.getElementById("playlist-heartEmpty").addEventListener("click", playlistHeartEmpty);
-    document.getElementById("playlist-heart").addEventListener("click", playlistHeart);
-    document.getElementById("playlist-personAdd").addEventListener("click", playlistPersonAdd);
+    // document.getElementById("playlist-heartEmpty").addEventListener("click", playlistHeartEmpty);
+    // document.getElementById("playlist-heart").addEventListener("click", playlistHeart);
+    // document.getElementById("playlist-personAdd").addEventListener("click", playlistPersonAdd);
     document.getElementById("playlist-songList").addEventListener("click", songList);
 
 
@@ -26,7 +26,7 @@ $(document).ready(function () {
     let volumeMuteOn = document.getElementById("volume-mute-on");
     let volumeProgress = document.getElementById("volume-progress");
     let timeProgress = document.getElementById("time-progress");
-    let songAddInfo = document.getElementsByClassName(".song-addInfo");
+    // let songAddInfo = document.getElementsByClassName(".song-addInfo");
     let playlistClose = document.getElementById("playlist-close");
 
 
@@ -76,6 +76,9 @@ $(document).ready(function () {
         timeProgress.value = audio.currentTime;
         $('.playListBar-time-current').text(getLength(audio.currentTime));
 
+        audioCurrent = audio.currentTime;
+        sessionStorage.setItem("audioTime", Math.floor(this.currentTime) + "");
+        sessionStorage.setItem("audioSrc",  audio.currentSrc);
 
     })
 
@@ -98,13 +101,13 @@ $(document).ready(function () {
     })
 
 
-    songAddInfo.addEventListener('click', function () {
-        if ($(".songInfo-dropbox").css("display") === "none") {
-            document.getElementsByClassName("songInfo-dropbox").style.display = "flex";
-        } else {
-            document.getElementsByClassName("songInfo-dropbox").style.display = "none";
-        }
-    })
+    // songAddInfo.addEventListener('click', function () {
+    //     if ($(".songInfo-dropbox").css("display") === "none") {
+    //         document.getElementsByClassName("songInfo-dropbox").style.display = "flex";
+    //     } else {
+    //         document.getElementsByClassName("songInfo-dropbox").style.display = "none";
+    //     }
+    // })
 
 
     function playlistPrev() {
@@ -136,19 +139,19 @@ $(document).ready(function () {
 
     }
 
-    function playlistHeartEmpty() {
-        document.getElementById("playlist-heartEmpty").style.display = "none";
-        document.getElementById("playlist-heart").style.display = "inline-block";
-    }
-
-    function playlistHeart() {
-        document.getElementById("playlist-heartEmpty").style.display = "inline-block";
-        document.getElementById("playlist-heart").style.display = "none";
-    }
-
-    function playlistPersonAdd() {
-        alert("노래 올린 사람 구독");
-    }
+    // function playlistHeartEmpty() {
+    //     document.getElementById("playlist-heartEmpty").style.display = "none";
+    //     document.getElementById("playlist-heart").style.display = "inline-block";
+    // }
+    //
+    // function playlistHeart() {
+    //     document.getElementById("playlist-heartEmpty").style.display = "inline-block";
+    //     document.getElementById("playlist-heart").style.display = "none";
+    // }
+    //
+    // function playlistPersonAdd() {
+    //     alert("노래 올린 사람 구독");
+    // }
 
     function songList() {
 
