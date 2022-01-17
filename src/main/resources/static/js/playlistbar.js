@@ -110,6 +110,19 @@ $(document).ready(function () {
 
     function playlistPrev() {
         //alert("이전 노래 재생 버튼");
+
+        let index = $(".playListBar-title-index").text();
+
+        let id = Number(index.substr(3, index.length)) - Number("1");
+        console.log(id);
+
+        index = "cpl" + id;
+        $("#audio").attr("src",$("#"+index).children().children().children("label").children("input").attr("id"));
+        $(".playListBar-title-song").text($("#"+index).children().children().children("label").children("input").parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__title").text());
+        $(".playListBar-title-singer").text($("#"+index).children().children().children("label").children("input").parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__artist").text());
+        $(".playListBar-inner-img").children("img").attr("src", $("#"+index).children().children().children("label").children("input").parent().parent().children("img").attr("src"));
+        $(".playListBar-title-index").text($("#"+index).children().children().children("label").children("input").closest("li").attr("id"));
+        $("#audio").trigger("play");
     }
 
 
@@ -117,7 +130,19 @@ $(document).ready(function () {
 
     function playlistNext() {
         //alert("다음 노래 재생 버튼");
-        //$('')
+        let index = $(".playListBar-title-index").text();
+
+        let id = Number(index.substr(3, index.length)) + Number("1");
+        console.log(id);
+
+        index = "cpl" + id;
+        $("#audio").attr("src",$("#"+index).children().children().children("label").children("input").attr("id"));
+        $(".playListBar-title-song").text($("#"+index).children().children().children("label").children("input").parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__title").text());
+        $(".playListBar-title-singer").text($("#"+index).children().children().children("label").children("input").parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__artist").text());
+        $(".playListBar-inner-img").children("img").attr("src", $("#"+index).children().children().children("label").children("input").parent().parent().children("img").attr("src"));
+        $(".playListBar-title-index").text($("#"+index).children().children().children("label").children("input").closest("li").attr("id"));
+        $("#audio").trigger("play");
+        //playlistPlay();
     }
 
     function volumeMute() {
@@ -252,7 +277,7 @@ function playAudio(btn) {
     $(".playListBar-title-song").text($(btn).parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__title").text());
     $(".playListBar-title-singer").text($(btn).parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__artist").text());
     $(".playListBar-inner-img").children("img").attr("src", $(btn).parent().parent().children("img").attr("src"));
-
+    $(".playListBar-title-index").text($(btn).closest("li").attr("id"));
     $("#audio").trigger("play");
 
     audio.currentTime = sessionStorage.getItem("audioTime");
