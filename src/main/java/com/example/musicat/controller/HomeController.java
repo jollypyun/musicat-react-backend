@@ -213,7 +213,7 @@ public class HomeController {
         FollowVO follow = new FollowVO();
 
         List<Music> musics = null;
-
+        int i = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
@@ -252,7 +252,7 @@ public class HomeController {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	          checkFollow = followService.checkFollow(member.getNo(), userNo);
+            checkFollow = followService.checkFollow(member.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -377,7 +377,6 @@ public class HomeController {
 
     // 플레이리스트 수정 폼 요청
     @GetMapping("/changePlaylistForm/{id}")
-
     public String changePlaylist(Model model, @PathVariable("id") String id) {
         Playlist playlist = musicApiService.getOnePlaylist(id);
         log.info("playlist : " + playlist.getPlaylistImage());
@@ -385,4 +384,13 @@ public class HomeController {
         return "view/etc/changePlaylist";
     }
 
+    // 곡 넣을 플레이리스트 선택 폼 요청
+    @GetMapping("/selectPlaylist/{musicNo}/{memberNo}")
+    public String selectPlaylistForm(Model model, @PathVariable("musicNo") int musicNo, @PathVariable("memberNo") int memberNo) {
+        log.info("controller 도달");
+        List<Playlist> playlists = this.musicApiService.showPlaylist(memberNo);
+        model.addAttribute("list", playlists);
+        model.addAttribute("musicNo", musicNo);
+        return "view/etc/addMusicToPlaylist";
+    }
 }
