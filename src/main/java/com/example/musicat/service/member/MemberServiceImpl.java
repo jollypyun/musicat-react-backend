@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service("memberService") // 얘는 서비스다
-@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
 
 	@Autowired
