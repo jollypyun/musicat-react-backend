@@ -230,7 +230,7 @@ async function requestProcessAddToPlay(url, musicNos) {
         result.forEach(function(e, index) {
             $("#currentPlayList_ul").append('<li id=\"cpl' + index +'\"><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
                 + '"/> <label class="playlist-dropUp-content-playBtn position-absolute"> <input type="button" id = \"'
-                + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
+                + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span class = \"dropUp-inner-info-text__title\">'+ e.title +'</span><span class = \"dropUp-inner-info-text__artist\">' + e.memberNickname + '</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
 
         });
         let lastIndex = result.length-1;
@@ -292,7 +292,9 @@ async function requestCurrentPlay(url) {
             // audioObject.src=e.links[0].href;
             // console.log("ajaxtime : "+audioObject.duration);
             $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
-                + '"/> <label class="playlist-dropUp-content-playBtn position-absolute"> <input type="button" id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
+                + '"/> <label class="playlist-dropUp-content-playBtn position-absolute"> <input type="button" id = \"' + e.links[0].href
+                + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span>'+ e.title
+                +'</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
         });
     } catch (error) {
         console.log("error : ", error);
