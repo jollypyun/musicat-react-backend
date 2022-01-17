@@ -1,62 +1,49 @@
 package com.example.musicat.controller;
 
-import java.lang.reflect.Member;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-import java.util.*;
-import java.util.function.Supplier;
+import com.example.musicat.controller.form.JoinForm;
+import com.example.musicat.domain.board.*;
+import com.example.musicat.domain.member.FollowVO;
+import com.example.musicat.domain.member.MemberVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 
 import com.example.musicat.controller.form.JoinForm;
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.FollowVO;
-import com.example.musicat.domain.member.GradeVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
-
-import com.example.musicat.domain.board.BestArticleVO;
-
 import com.example.musicat.security.MemberAccount;
+import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.board.BoardService;
+import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.board.ReplyService;
 import com.example.musicat.service.member.FollowService;
 import com.example.musicat.service.member.GradeService;
-import com.example.musicat.service.music.MusicApiService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.method.P;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-//import com.example.musicat.config.SessionConfig;
-import com.example.musicat.service.board.ArticleService;
-import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.member.MemberService;
-import com.example.musicat.domain.member.MemberVO;
+import com.example.musicat.service.music.MusicApiService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.java.Log;
+import com.example.musicat.util.TemplateModelFactory;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -90,6 +77,8 @@ public class HomeController {
     @Autowired
     private static AuthenticationManager authenticationManager;
 
+    @Autowired
+    private TemplateModelFactory templateModelFactory;
 
     @GetMapping("/")
     public String mainPage(){
@@ -152,9 +141,14 @@ public class HomeController {
       model.addAttribute("likeBoardList", likeBoardList);
 
 
+      templateModelFactory.setCurPlaylistModel(model);
+
+      //musicApiService.showDetailPlaylist()
+
       return "view/home/viewHomeTemplate";
 
   }
+
 
 	@GetMapping("/join1")
 	public String join(Model model) {
@@ -217,7 +211,9 @@ public class HomeController {
     public String myPagePlaylistDetail(Model model, @PathVariable(name = "playlistKey") String playlistKey, @PathVariable(name = "userNo") int userNo) {
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
-        List<Music> musics = new ArrayList<>();
+
+        List<Music> musics = null;
+
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
@@ -251,12 +247,12 @@ public class HomeController {
         MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
-	int checkFollow = 0;
+	      int checkFollow = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	        checkFollow = followService.checkFollow(me.getNo(), userNo);
+	          checkFollow = followService.checkFollow(member.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -275,7 +271,7 @@ public class HomeController {
 
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
-	model.addAttribute("checkFollow", checkFollow);
+	      model.addAttribute("checkFollow", checkFollow);
         log.info("대체 뭐가 문젠데 Board " + member.getNo());
         model.addAttribute("HomeContent", "fragments/viewMyPageBoard");
         return "view/home/viewHomeTemplate";
@@ -288,12 +284,12 @@ public class HomeController {
         MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
-	int checkFollow = 0;
+	      int checkFollow = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	        checkFollow = followService.checkFollow(me.getNo(), userNo);
+	          checkFollow = followService.checkFollow(member.getNo(), userNo);
             log.info("대체 뭐가 문젠데 Reply " + member.getNo());
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,9 +302,12 @@ public class HomeController {
         List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
         model.addAttribute("likeBoardList", likeBoardList);
 
+
+
 //         List<BoardVO> boardNameList = this.boardService.retrieveBoardNameList();
 //         model.addAttribute("boardNameList", boardNameList);
 //         log.info(boardNameList.toString());
+
 
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
@@ -319,8 +318,8 @@ public class HomeController {
         model.addAttribute("member", member);
 
         model.addAttribute("follow", follow);
-	    
-	    model.addAttribute("checkFollow", checkFollow);
+      
+	      model.addAttribute("checkFollow", checkFollow);
 
         model.addAttribute("HomeContent", "fragments/viewMyPageReply");
         return "view/home/viewHomeTemplate";
@@ -333,12 +332,12 @@ public class HomeController {
         MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
-	int checkFollow = 0;
+	      int checkFollow = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	    checkFollow = followService.checkFollow(me.getNo(), userNo);
+	          checkFollow = followService.checkFollow(member.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -357,7 +356,7 @@ public class HomeController {
 
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
-	    model.addAttribute("checkFollow", checkFollow);
+	      model.addAttribute("checkFollow", checkFollow);
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";
 
@@ -378,10 +377,12 @@ public class HomeController {
 
     // 플레이리스트 수정 폼 요청
     @GetMapping("/changePlaylistForm/{id}")
+
     public String changePlaylist(Model model, @PathVariable("id") String id) {
         Playlist playlist = musicApiService.getOnePlaylist(id);
         log.info("playlist : " + playlist.getPlaylistImage());
         model.addAttribute("playlist", playlist);
         return "view/etc/changePlaylist";
     }
+
 }

@@ -7,10 +7,14 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.vote.AffirmativeBased;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
+import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -21,6 +25,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
@@ -34,6 +42,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Log
 @Configuration
@@ -50,8 +61,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//        return new CustomAutheticationProvider();
+//    }
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider customAutheticationProvider() {
         return new CustomAutheticationProvider();
     }
 
@@ -62,9 +77,64 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         });
     }
 
+   // 인가 - DB연동 및 권한 계층 부여를 위한 작업
+   //----------------------------------------------------------------------------------------------
+    @Bean
+    public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
+        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+        filterSecurityInterceptor.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
+        filterSecurityInterceptor.setAccessDecisionManager(accessDecisionManager()); //AccessDecisionManager에 권한 검사 위임
+        filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
+        return filterSecurityInterceptor;
+    }
+
+    @Bean
+    public FilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
+        return new UrlFilterInvocationSecurityMetadataSource();
+    }
+
+    // 인증 매니저
+    //AuthenticationManager를 외부에서 사용 하기 위해 AuthenticationManagerBean을 이용해 spring security 밖으로 AuthenticationManager 빼 내야 함 무슨말이야
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    // 권한 계층 설정
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_MANAGER > ROLE_USER > ROLE_ANONYMOUS");
+        log.info("1 roleHierarchy ----- " + roleHierarchy);
+        return roleHierarchy;
+    }
+
+    // 권한 계층 부여
+    @Bean
+    public AffirmativeBased accessDecisionManager() {
+        List<AccessDecisionVoter<?>> decisionVoters = new ArrayList<>();
+
+        //RoleHierarchyVoter : 계층형 Role 지원
+        RoleVoter roleVoter = new RoleHierarchyVoter(roleHierarchy());
+        roleVoter.setRolePrefix("");
+        log.info("2 roleVoter.getRolePrefix() ----- " + roleVoter.getRolePrefix());
+
+        decisionVoters.add(roleVoter); //security filter default
+        log.info("3 decisionVoters ----- " + decisionVoters);
+
+        AffirmativeBased affirm = new AffirmativeBased(decisionVoters);
+        affirm.setAllowIfAllAbstainDecisions(true);
+        //affirmativeBased : 하나라도 승인이 있으면 승인 처리
+        //ConsensusBased   : 승인과 거부의 개수를 따져서 다수결 쪽으로 처리
+        //UnanimousBased   : 하나라도 거부가 있으면 거부 처리
+        log.info("4 affirm ----- " + affirm.getDecisionVoters());
+
+        return affirm;
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
+        auth.authenticationProvider(customAutheticationProvider());
     }
 
     //필요 없는 인증처리 방지를 위한 정적파일 ignoring 처리 : ignoring 처리하지 않으면 permitAll에 포함되므로 static에 있는 파일들도 인증처리를 거치게 됨
@@ -79,22 +149,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        //http
-                //.addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class)
+        //권한 계층 설정 필터를 먼저 실행하도록
+        http
+                .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class);
 
         http
                 .csrf().disable();
 
-        http
-                .authorizeRequests()
-                //인증된 사용자이면 접근 가능한 페이지
-                .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated() //
-                //매니저 + root(admin) 부터 접근 가능한 페이지
-                .antMatchers("/manager/**", "/members/**", "/boardManager/**").access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')" )
-                //root(admin)만 접근 개능한 페이지
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                //그 외 요청은 모두 허용 ex) /main, /musicatlogin 등
-                .anyRequest().permitAll();
+//        http
+//                .authorizeRequests()
+//                //인증된 사용자이면 접근 가능한 페이지
+//                .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated() //
+//                //매니저 + root(admin) 부터 접근 가능한 페이지
+//                .antMatchers("/manager/**", "/members/**", "/boardManager/**").access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')" )
+//                //root(admin)만 접근 개능한 페이지
+//                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+//                //그 외 요청은 모두 허용 ex) /main, /musicatlogin 등
+//                .anyRequest().permitAll();
 
         http
                 .formLogin() //로그인 페이지 설정
@@ -130,7 +201,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         log.info("email : " + request.getParameter("email"));
 
                         //로그인 실패 예외 발생 시 처리
-
                         if (exception instanceof UsernameNotFoundException) { //DB에 일치하는 email이 없는 경우
                             request.setAttribute("loginFailMessage", "아이디 또는 비밀번호를 잘못 입력하였습니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
@@ -144,10 +214,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             request.setAttribute("loginFailMessage", "탈퇴처리 된 계정입니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
                         } else if (exception instanceof SessionAuthenticationException) {
-                            request.setAttribute("loginFailMessage", "로그인 불가~~.");
+                            request.setAttribute("loginFailMessage", "최대 로그인 가능 어쩌구저쩌구 세션 개수를 초과해서 로그인 안 되는 거거든요?  멘트 추천좀 부탁드려요");
                         }
-
-
 
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/musicatlogin");
                         dispatcher.forward(request, response);
@@ -166,7 +234,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .sessionManagement() //세션 관리
                 .sessionFixation().changeSessionId() //세션 고정 보호. 세션 조작을 통한 보안 공격 방지를 위해, 인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지 (security가 기본으로 제공해주기 때문에 별도로 설정해줄 필요 없음)
-                .maximumSessions(1) //최대 세션 개수
+                .maximumSessions(2) //최대 세션 개수
                 .expiredUrl("/expiredUrl") //session 만료 시 이동 페이지
                 .maxSessionsPreventsLogin(true); //false : 이전에 로그인한 세션 만료, true : 나중에 로그인 시도하는 세션 생성 불가(로그인 불가)
 

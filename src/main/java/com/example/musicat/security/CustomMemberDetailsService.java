@@ -25,6 +25,9 @@ public class CustomMemberDetailsService implements UserDetailsService {
     @Autowired
     private NotifyManager notifyManager;
 
+//    @Autowired
+//    private MemberGradeMapper memberGradeMapper;
+
     //loadUserByUsername : 인증을 시도하는 사용자의 ID(username)가 DB에 있는지 확인
     //UserDetails 타입으로 member 정보 반환해야 함(Session > spring session > authenticate 객체 안에 들어갈 수 있는 타입은 2가지
     //authenticate 객체 안에 들어갈 수 있는 타입은 2가지 1. UserDetails(일반 로그인), 2. OAuth2User(OAuth 로그인)
@@ -45,9 +48,33 @@ public class CustomMemberDetailsService implements UserDetailsService {
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority(memberVo.getGrade())); //role
 
+//        List<MemberGradeVO> memberGradeList = memberGradeMapper.selectMemberGradeList(email);
+//
+//        List<String> roles = new ArrayList<>();
+//        for (MemberGradeVO memberGrade : memberGradeList) {
+//            roles.add(memberGrade.getGrade());
+//        }
+
+        log.info("roles : " + roles);
+
+//        return org.springframework.security.core.userdetails.User.builder()
+//                .username(memberVo.getEmail())
+//                .password(memberVo.getPassword())
+//                .roles(roles.toArray(new String[roles.size()]))
+//                .build();
+
+
+
         // 예나 - notify 임시 id set
         memberVo.setNotifyId(memberVo.getNo() + memberVo.getEmail());
         notifyManager.addToNotifyList(memberVo.getNo(), memberVo.getNotifyId());
+
+        //마지막 방문일 업데이트
+        memberService.modifyLastDate(memberVo.getNo());
+        log.info("modifyLastDate");
+
+        log.info("test MemberAccount memberVo : " + memberVo);
+        log.info("test MemberAccount roles : " + roles);
 
         return new MemberAccount(memberVo, roles);
     }

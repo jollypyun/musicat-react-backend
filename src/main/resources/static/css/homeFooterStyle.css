@@ -130,6 +130,7 @@ footer{
     position: absolute;
     bottom: 60px;
     left: -370px;
+    height: 300px;
     background-color: #f6eee1;
     min-width: 400px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -144,6 +145,8 @@ footer{
     margin: 10px 0px;
     width: 100%;
     vertical-align: center;
+    overflow-y : auto;
+    height: 70%;
 }
 
 
@@ -183,6 +186,7 @@ footer{
 .dropUp-inner-info{
     display: flex;
     width: 80%;
+    position: relative;
 }
 
 .dropUp-inner-info button{
@@ -196,16 +200,22 @@ footer{
     width: 100%;
 }
 
+.dropUp-inner-info-text{
+    padding-left: 10px;
+}
+
 .dropUp-inner-info-text span{
     display: block;
     width: 80%;
     overflow-x: hidden;
+    font-size: 1rem;
+
 }
 
-.dropUp-inner-info-text span:last-child{
-    color: #afafaf;
-    font-size: 12px;
-}
+/*.dropUp-inner-info-text span:last-child{*/
+/*    color: #afafaf;*/
+/*    font-size: 12px;*/
+/*}*/
 
 .dropUp-inner-time{
     display: flex;
@@ -221,7 +231,7 @@ footer{
 
 .dropUp-inner-title{
     display: flex;
-    margin: 10px 20px 70px 20px;
+    margin: 10px 20px 20px 20px;
     justify-content: space-between;
 
     vertical-align: center;
@@ -273,4 +283,21 @@ footer{
 
 #songInfo-dropbox button:last-child{
     margin: 0 0 10px 0;
+}
+
+
+
+.playlist-dropUp-content-playBtn:hover span{
+    cursor: pointer;
+    color: #0b5ed7;
+}
+
+.playlist-dropUp-content-playBtn input{
+    border: none;
+    background-color: transparent;
+}
+
+.playlist-dropUp-content-playBtn span{
+    left: 2px;
+    top: 2px;
 }

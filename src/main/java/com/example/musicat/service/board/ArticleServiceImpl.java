@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
 
-	private final BoardService boardService;
+//	private final BoardService boardService;
 	private final MusicApiService musicApiService;
 	private final ArticleMapper articleMapper;
 	private final ArticleDao articleDao;
@@ -36,7 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ArticleVO retrieveArticle(int articleNo) {
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
-		List<TagVO> tags = articleMapper.selectArticleTags(articleNo);
+		List<TagVO> tags = this.articleMapper.selectArticleTags(articleNo);
 		System.out.println("ArticleServiceImpl.retrieveArticle: results : " + results.size());
 
 		ArticleVO article = results.get(0).getArticle(); // 게시글 정보 출력
@@ -77,17 +77,11 @@ public class ArticleServiceImpl implements ArticleService {
 		return this.articleDao.selectBoardList(map);
 	}
 
-
-
-
-
 	@Override
 	public int boardTotalCount(int boardNo){
 		// end Page
 		return this.articleMapper.boardTotalCount(boardNo);
 	}
-
-
 
 	// 게시글 추가
 	@Override
@@ -100,7 +94,7 @@ public class ArticleServiceImpl implements ArticleService {
 			this.articleDao.insertTags(article.getNo(), article.getTagList());	
 		}
 		if (audioNo != null) {
-			musicApiService.connectToArticle(audioNo, article.getNo());
+			this.musicApiService.connectToArticle(audioNo, article.getNo());
 		}
 	}
 
@@ -117,6 +111,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
 	public int removeArticle(int articleNo, int memberNo) {
+		this.musicApiService.deleteMusicByArticleNo(articleNo); // 음악 삭제
 		this.memberMapper.minusMemberDocs(memberNo);
 		int boardNo = this.articleDao.selectArticle(articleNo).get(0).getArticle().getBoardNo();
 		boolean check = this.articleDao.checkBestArticle(articleNo);
@@ -223,7 +218,7 @@ public class ArticleServiceImpl implements ArticleService {
 		// best table 날리기
 		this.articleDao.deleteAllBestArticle();
 		// find articles insert
-		bestArticleUtil.insertBestArticle(findBestArticles);
+		this.bestArticleUtil.insertBestArticle(findBestArticles);
 	}
 
 	//작성한 게시글 조회

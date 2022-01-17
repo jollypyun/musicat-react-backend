@@ -12,7 +12,7 @@
                     <div class="articleVO-header card-header">
                         <i class="fas fa-table me-1"></i>
                         <span class="board-name" th:text="${boardName}">게시판 이름</span>
-<!--                        양 -->
+
                             <th:block th:if="${#authorization.expr('isAuthenticated()')}">
                                 <button type="button" id="insertLikeBoard" th:value="${#authentication.principal.getMemberVo.getNo}">즐겨찾기</button>
                             </th:block>
@@ -196,22 +196,19 @@
                 window.open('writenote?memberNo=' + memberNo, '쪽지작성창', 'width=500px', 'height=500px');
         } */
 
-    // 양 ---------------------------------------------------------------------------------------------------  비회원 게시판 즐겨찾기
+    //비회원 게시판 즐겨찾기
     $('#insertLikeBoardAnonymous').on('click', function () {
-        console.log("비회원 즐겨찾기 시도")
         alert("로그인 후 이용 가능합니다.");
         return false;
     });
 
-
-    // 양 ---------------------------------------------------------------------------------------------------  회원 게시판 즐겨찾기
+    //회원 게시판 즐겨찾기
     $('#insertLikeBoard').on('click', function () {
         const memberNo = $('#insertLikeBoard').val();
         const boardNo = $('#boardNo').val();
         console.log(memberNo, " ", boardNo);
         requestInsertLikeBoard('/likeBoard', memberNo, boardNo);
     });
-
     const insertLikeBoardAjax = function (url, memberNo, boardNo) {
         return new Promise( (resolve, reject ) => {
             $.ajax({
@@ -233,7 +230,6 @@
             });
         });
     }
-
     async function requestInsertLikeBoard(url, memberNo, boardNo) {
         console.log(memberNo, " ", boardNo, " ", url);
         try {
