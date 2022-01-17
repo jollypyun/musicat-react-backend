@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.musicat.mapper.member.GradeResourceMapper">
+
+
+	<!--	resources table test-->
+	<resultMap id="selectGradeResourceListResultMap" type="gradeResourceVo">
+		<!--		<result property="resourceNo" javaType="int" column="resourceNo" jdbcType="INTEGER" />-->
+		<result property="resourceName" javaType="string" column="resourceName" jdbcType="VARCHAR" />
+		<result property="resourceType" javaType="string" column="resourceType" jdbcType="VARCHAR" />
+		<result property="grade" javaType="string" column="grade" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="selectGradeResourceList" resultType="gradeResourceVo" resultMap="selectGradeResourceListResultMap">
+		SELECT r.resource_name AS resourceName,  r.resource_type AS resourceType, g.auth AS grade
+		FROM grade_resource gr INNER JOIN grade g INNER JOIN resource r
+															 ON gr.grade_no = g.grade_no AND gr.resource_no = r.resource_no
+	</select>
+	<!--	gr.resource_no AS resourceNo, 	-->
+
+	<insert id="insertGradeResource" parameterType="gradeResourceVo">
+		{ CALL sp_insert_grade_resource(#{resourceName}, #{resourceType}, #{gradeNo}) }
+	</insert>
+
+	<!-- ~ 양	-->
+
+</mapper>

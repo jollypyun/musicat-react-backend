@@ -31,44 +31,35 @@ public class CategoryDaoImpl implements CategoryDao {
 	public void updateCategory(int categoryNo, String categoryName) {
 		this.categoryMapper.updateCategory(categoryNo, categoryName);	
 	}
-	
-	@Override
-	public int selectConnectBoard(int categoryNo) {
-		int checkConnectBoard = this.categoryMapper.selectConnectBoard(categoryNo);
-		return checkConnectBoard;
-	}
 
 	@Override
 	public void deleteCategory(int categoryNo) {
 		this.categoryMapper.deleteCategory(categoryNo);
 	}
+	
+	@Override
+	public int selectConnectBoard(int categoryNo) {
+		return this.categoryMapper.selectConnectBoard(categoryNo);
+	}
+
+	@Override
+	public CategoryVO selectOneCategory(int categoryNo) {
+		return this.categoryMapper.selectOneCategory(categoryNo);
+	}
 
 	@Override
 	public ArrayList<CategoryVO> selectCategoryList() {
-		ArrayList<CategoryVO> categoryList = this.categoryMapper.selectCategoryList();
-		return categoryList;
+		return this.categoryMapper.selectCategoryList();
 	}
 	
 	//카테고리 + 게시판 목록 조회
 	@Override
 	public ArrayList<CategoryBoardVO> selectCategoryBoardList() {
-		ArrayList<CategoryBoardVO> categoryBoardList = this.categoryMapper.selectCategoryBoardList();
-		return categoryBoardList;
-	}
-	
-	@Override
-	public CategoryVO selectOneCategory(int categoryNo) {
-		CategoryVO categoryVo = this.categoryMapper.selectOneCategory(categoryNo);
-		return categoryVo;
+		return this.categoryMapper.selectCategoryBoardList();
 	}
 
 	@Override
 	public Integer selectDuplicatedCategory(String categoryName) {
-		Integer duplicatedCategory = this.categoryMapper.selectDuplicatedCategory(categoryName);
-		return duplicatedCategory;
+		return this.categoryMapper.selectDuplicatedCategory(categoryName);
 	}
-
-
-
-
 }

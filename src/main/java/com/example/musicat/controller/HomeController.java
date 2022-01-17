@@ -1,6 +1,11 @@
 package com.example.musicat.controller;
 
 
+import com.example.musicat.controller.form.JoinForm;
+import com.example.musicat.domain.board.*;
+import com.example.musicat.domain.member.FollowVO;
+import com.example.musicat.domain.member.MemberVO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,30 +17,30 @@ import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.FollowVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
-
-import com.example.musicat.domain.board.BestArticleVO;
-
 import com.example.musicat.security.MemberAccount;
+import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.board.BoardService;
+import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.board.ReplyService;
 import com.example.musicat.service.member.FollowService;
 import com.example.musicat.service.member.GradeService;
+import com.example.musicat.service.member.MemberService;
 import com.example.musicat.service.music.MusicApiService;
+import lombok.extern.java.Log;
 import com.example.musicat.util.TemplateModelFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-//import com.example.musicat.config.SessionConfig;
-import com.example.musicat.service.board.ArticleService;
-import com.example.musicat.service.board.CategoryService;
-import com.example.musicat.service.member.MemberService;
-import com.example.musicat.domain.member.MemberVO;
-
-import lombok.extern.java.Log;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -291,6 +296,7 @@ public class HomeController {
 
         List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
         model.addAttribute("likeBoardList", likeBoardList);
+
 
 
 //         List<BoardVO> boardNameList = this.boardService.retrieveBoardNameList();
