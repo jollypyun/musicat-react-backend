@@ -104,5 +104,4 @@
 		ORDER BY grade_no DESC
 	</select>
 <!-- ~ 양	-->
-	
 </mapper>
