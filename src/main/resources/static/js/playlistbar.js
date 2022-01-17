@@ -208,7 +208,7 @@ const getAjaxAddToPlay = function (url, musicNos) {
         });
     });
 };
-
+// 현재 재생목록에 추가
 async function requestProcessAddToPlay(url, musicNos) {
     try {
         // await 다음에는 비동기 처리 작업이 와야함.
@@ -276,6 +276,7 @@ const getCurrentPlayAjax = function (url, musicNos) {
     });
 };
 
+// 현재 재생목록 받아오기
 async function requestCurrentPlay(url) {
     try {
         console.log("재생목록 받아오기 ajax 실행 url : " + url);
@@ -291,4 +292,27 @@ async function requestCurrentPlay(url) {
     } catch (error) {
         console.log("error : ", error);
     }
+}
+
+function addMusicToPlaylist(a, b) {
+
+}
+
+function deleteMusicFromNow(musicNos, memberNo) {
+    let url = "/pullmusic/" + memberNo + "pl1";
+    $.ajax({
+        url: url,
+        method: "DELETE",
+        dataType: "text",
+        data: {
+            musicNos : musicNos,
+            memberNo : memberNo
+        },
+        success: function (data) {
+            $("#" + musicNos).remove();
+        },
+        error: function (e) {
+            console.log(e);
+        },
+    });
 }

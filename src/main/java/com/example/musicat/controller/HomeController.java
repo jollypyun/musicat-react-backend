@@ -213,7 +213,7 @@ public class HomeController {
         FollowVO follow = new FollowVO();
 
         List<Music> musics = null;
-
+        int i = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
@@ -252,7 +252,7 @@ public class HomeController {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	          checkFollow = followService.checkFollow(member.getNo(), userNo);
+            checkFollow = followService.checkFollow(member.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }

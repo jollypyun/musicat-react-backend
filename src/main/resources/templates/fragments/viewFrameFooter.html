@@ -71,7 +71,7 @@
                             </div>
                             <ul id="currentPlayList_ul" style="overflow-y : auto">
                                 <!--                                <button type="button" onclick="testinggg()">테스트트</button>-->
-                                <li th:each="music : ${curPlaylist}">
+                                <li th:each="music : ${curPlaylist}" th:id = "${music.id}">
                                     <div class="playlist-dropUp-content-inner">
                                         <div class="dropUp-inner-info position-relative">
                                             <img th:src="${music.links[1].href}"/>
@@ -86,8 +86,8 @@
                                         </div>
                                         <div class="dropUp-inner-time">
 <!--                                            <span>2:06</span>-->
-                                            <button type="button"><span class="material-icons">playlist_add</span></button>
-                                            <button type="button"><span class="material-icons">close</span></button>
+                                            <button type="button"><span class="material-icons" th:onclick="'addMusicToPlaylist(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'">playlist_add</span></button>
+                                            <button type="button" th:onclick="'deleteMusicFromNow(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">close</span></button>
 <!--                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>-->
 <!--                                            </button>-->
 <!--                                            <div id="songInfo-dropbox">-->
