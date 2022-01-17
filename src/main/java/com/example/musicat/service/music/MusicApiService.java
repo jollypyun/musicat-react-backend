@@ -31,25 +31,25 @@ import java.util.Map;
 @Slf4j
 @Service
 public class MusicApiService {
-    private final String URI_MUSICS_ID = "http://localhost:20000/api/musics/find/{id}";
-    private final String URI_MUSICS_UPLOAD = "http://localhost:20000/api/musics/uploadFile";
-    private final String URI_PLAYLIST_CREATE = "http://localhost:20000/api/playlists/create";
-    private final String URI_PLAYLIST_PUSH = "http://localhost:20000/api/playlists/push";
-    private final String URI_PLAYLIST_PUSHNOW = "http://localhost:20000/api/playlists/pushNow";
-    private final String URI_PLAYLIST_CHANGE = "http://localhost:20000/api/playlists/update";
-    private final String URI_PLAYLIST_ID = "http://localhost:20000/api/playlists/{memberNo}";
-    private final String URI_PLAYLIST_DETAIL = "http://localhost:20000/api/playlists/detail/{playlistKey}";
-    private final String URI_MUSICS_TEST = "http://localhost:20000/api/posttest";
+//    private final String URI_MUSICS_ID = "http://localhost:20000/api/musics/find/{id}";
+//    private final String URI_MUSICS_UPLOAD = "http://localhost:20000/api/musics/uploadFile";
+//    private final String URI_PLAYLIST_CREATE = "http://localhost:20000/api/playlists/create";
+//    private final String URI_PLAYLIST_PUSH = "http://localhost:20000/api/playlists/push";
+//    private final String URI_PLAYLIST_PUSHNOW = "http://localhost:20000/api/playlists/pushNow";
+//    private final String URI_PLAYLIST_CHANGE = "http://localhost:20000/api/playlists/update";
+//    private final String URI_PLAYLIST_ID = "http://localhost:20000/api/playlists/{memberNo}";
+//    private final String URI_PLAYLIST_DETAIL = "http://localhost:20000/api/playlists/detail/{playlistKey}";
+//    private final String URI_MUSICS_TEST = "http://localhost:20000/api/posttest";
 
-//    private final String URI_MUSICS_ID = "http://13.124.245.202:20000/api/musics/find/{id}";
-//    private final String URI_MUSICS_UPLOAD = "http://13.124.245.202:20000/api/musics/uploadFile";
-//    private final String URI_PLAYLIST_CREATE = "http://13.124.245.202:20000/api/playlists/create";
-//    private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/push";
-//    private final String URI_PLAYLIST_PUSHNOW = "http://13.124.245.202:20000/api/playlists/pushNow";
-//    private final String URI_PLAYLIST_CHANGE = "http://13.124.245.202:20000/api/playlists/update";
-//    private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
-//    private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/playlists/detail/{playlistKey}";
-//    private final String URI_MUSICS_TEST = "http://13.124.245.202:20000/api/posttest";
+    private final String URI_MUSICS_ID = "http://13.124.245.202:20000/api/musics/find/{id}";
+    private final String URI_MUSICS_UPLOAD = "http://13.124.245.202:20000/api/musics/uploadFile";
+    private final String URI_PLAYLIST_CREATE = "http://13.124.245.202:20000/api/playlists/create";
+    private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/push";
+    private final String URI_PLAYLIST_PUSHNOW = "http://13.124.245.202:20000/api/playlists/pushNow";
+    private final String URI_PLAYLIST_CHANGE = "http://13.124.245.202:20000/api/playlists/update";
+    private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
+    private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/playlists/detail/{playlistKey}";
+    private final String URI_MUSICS_TEST = "http://13.124.245.202:20000/api/posttest";
 
     private final RestTemplate restTemplate;
 
@@ -205,8 +205,8 @@ public class MusicApiService {
         map.put("playlistKey", playlistKey);
         log.info("map : " + map);
 
-        restTemplate.delete("http://localhost:20000/api/playlists/delete/{memberNo}/{playlistKey}" , map);
-//        restTemplate.delete("http://13.124.245.202:20000/api/playlists/delete/{memberNo}/{playlistKey}" , map);
+        //restTemplate.delete("http://localhost:20000/api/playlists/delete/{memberNo}/{playlistKey}" , map);
+        restTemplate.delete("http://13.124.245.202:20000/api/playlists/delete/{memberNo}/{playlistKey}" , map);
 
     }
 
@@ -237,8 +237,8 @@ public class MusicApiService {
 
         map.put("playlistKey", playlistKey);
       
-        restTemplate.delete("http://localhost:20000/api/playlists/pull/{playlistKey}/{musicNos}", map);
-//        restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
+        //restTemplate.delete("http://localhost:20000/api/playlists/pull/{playlistKey}/{musicNos}", map);
+        restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
     }
 
     // 플레이리스트 정보 가져오기
