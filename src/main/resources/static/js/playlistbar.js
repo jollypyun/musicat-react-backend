@@ -61,15 +61,22 @@ $(document).ready(function () {
         audio.volume = volume;
     })
 
+    window.onbeforeunload = function () {
+        // sessionStorage.setItem("audioTime", audioCurrent);
+        sessionStorage.setItem("audioSrc",  audio.currentSrc);
+    }
+
     // 오디오 시간 업데이트
     audio.addEventListener('timeupdate', function () {
 
-        timeProgress.value = audio.currentTime;
-        $('.playListBar-time-current').text(getLength(audio.currentTime));
-
+        // let sessionAudioTime = sessionStorage.getItem("audioTime");
         audioCurrent = audio.currentTime;
-        sessionStorage.setItem("audioTime", Math.floor(this.currentTime) + "");
-        sessionStorage.setItem("audioSrc",  audio.currentSrc);
+        timeProgress.value = audioCurrent;
+        $('.playListBar-time-current').text(getLength(audioCurrent));
+
+        audioCurrent = Math.floor(this.currentTime) + "";
+
+
 
     })
 
@@ -248,6 +255,8 @@ function playAudio(btn) {
     //console.log($(btn).parent().parent().children("img"));
 
     $("#audio").trigger("play");
+
+    audio.currentTime = sessionStorage.getItem("audioTime");
 
     playlistPlay();
 
