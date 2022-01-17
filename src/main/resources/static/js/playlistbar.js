@@ -76,6 +76,9 @@ $(document).ready(function () {
         timeProgress.value = audio.currentTime;
         $('.playListBar-time-current').text(getLength(audio.currentTime));
 
+        audioCurrent = audio.currentTime;
+        sessionStorage.setItem("audioTime", Math.floor(this.currentTime) + "");
+        sessionStorage.setItem("audioSrc",  audio.currentSrc);
 
     })
 
