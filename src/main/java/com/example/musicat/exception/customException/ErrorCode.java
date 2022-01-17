@@ -16,7 +16,8 @@ public enum ErrorCode {
     EMAIL_DUPLICATION(400, "Email is Duplication"),
     LOGIN_INPUT_INVALID(400, "Login input is invalid"),
     INTERNAL_SERVER_ERROR(500, "Internal Server error"),
-    INVALID_NOTIFY(400, "No Such Notify");
+    INVALID_NOTIFY(400, "No Such Notify"),
+    EMPTY_FILE(400, "Empty MultipartFile");
 
     private int statusCode;
     private final String message;

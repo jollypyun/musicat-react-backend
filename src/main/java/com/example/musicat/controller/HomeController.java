@@ -133,8 +133,7 @@ public class HomeController {
       model.addAttribute("likeBoardList", likeBoardList);
 
 
-//      templateModelFactory.setCurPlaylistModel(model);
-//      log.info("setted music : " + model.getAttribute("curPlaylist"));
+      templateModelFactory.setCurPlaylistModel(model);
 
       //musicApiService.showDetailPlaylist()
 
@@ -319,7 +318,7 @@ public class HomeController {
     //추천 누른 게시글 조회
     @GetMapping("/myPage/Like/{userNo}")
     public String myPageLike(Model model, @PathVariable int userNo) {
-	MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
+	    MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
 	      int checkFollow = 0;
@@ -346,7 +345,9 @@ public class HomeController {
 
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
+
 	      model.addAttribute("checkFollow", checkFollow);
+
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";
 
