@@ -152,7 +152,7 @@ public class ArticleController {
 		ArticleForm form = new ArticleForm(); // 변경
 
 		// bind    
-    MemberVO member = HomeController.checkMemberNo();
+    	MemberVO member = HomeController.checkMemberNo();
 		model.addAttribute("memberNo", member.getNo());
 		
 		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
