@@ -66,6 +66,7 @@ public class TemplateModelFactory {
         }
         model.addAttribute("curPlaylist", musics);
         log.info("setted music : " + model.getAttribute("curPlaylist"));
+
         return model;
     }
 

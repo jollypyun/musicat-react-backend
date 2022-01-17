@@ -296,17 +296,3 @@ async function requestCurrentPlay(url) {
         console.log("error : ", error);
     }
 }
-
-//     //이 페이지에서 뒤로가기 하거나, 목록을 누를때 그리고 새로고침을 할 때 이벤트 발생
-// $(window).on("beforeunload", function (event) {
-//     event.preventDefault();
-//     //requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
-//     // ajax
-//
-//     // 현재 시간이랑
-//     //$("#audio").currentTime;
-//     // 현재 음악의... 정보? 를 ajax로 넘겨서 security principal에 저장하고
-//     //$("#audio").attr("src");
-//
-//     // 이후 requestCurrentPlay 에서 audio 셋팅해줘야할듯
-// });
