@@ -73,9 +73,9 @@ $(document).ready(function () {
 				if(replyList[i].depth == 1){
 					htmlStr.push('<div class="reply-style ps-5" id=' + replyList[i].no + '>');
 				}else{
-					htmlStr.push('<div class="reply-style" id=' + replyList[i].no + '>');
+					htmlStr.push('<div class="reply-style" id=' + replyList[i].groupNo + '>');
 				}
-				htmlStr.push('<div class="reply-style" id=' + replyList[i].no + '>');
+				htmlStr.push('<div class="reply-style" id=' + replyList[i].groupNo + '>');
 				htmlStr.push('<div class="reply-info-style">');
 				htmlStr.push('<div>');
 				htmlStr.push('<span class="me-3 dropdown">');
@@ -136,14 +136,22 @@ $(document).ready(function () {
 		console.log("답글 폼 입장")
 		const no = $(this).parents('.reply-style').attr('id');
 		console.log('no::::::::::', no);
-		var grpCheck = $('#write_depth_reply_form').find('grp_no');
+		// var grpCheck = $('#write_depth_reply_form').find('grp_no');
+
+        var grpCheck = $('#grp_no').val();
+        console.log('grpCheck',grpCheck);
 		if (grpCheck != null){
-			$('#write_depth_reply_form').find('#grp_no').remove();
+
 		}
-		var $input = $('<input type="hidden" id="grp_no" value=' + no + '>');
-		$('#write_depth_reply_form').append($input);
-		console.log('input');
-		$('#write_depth_reply_form').insertAfter('#' + no);
+
+        $(this).parents('div').find('#grp_no').attr('value', no);
+		console.log(111, $('#grp_no').val());
+        $(this).parents('div').find('#grp_no').val(no);
+        console.log(222, $('#grp_no').val());
+        $('input[name=grp_no]').attr('value', no);
+        console.log(333, $('#grp_no').val());
+		// $('#write_depth_reply_form').insertAfter('#' + no);
+        $('#write_depth_reply_form').insertAfter($(this).parents('.reply-style'));
 		console.log('insertAfter');
 		$('#write_depth_reply_form').show();
 	});
@@ -151,7 +159,8 @@ $(document).ready(function () {
     //답글 작성
     $('#write_depth_reply_btn').on('click', function () {
         // const no = $(this).find('.grp_no').val(); // grp 값
-        const no = $('#write_depth_reply_form').find('#grp_no').val();
+        // const no = $('#write_depth_reply_form').find('#grp_no').val();
+        const no = $('#grp_no').val();
         console.log('no값', no);
         const content = $('#write_depth_content').val();
         const depth = 1; // 답글은 depth:1
@@ -162,10 +171,11 @@ $(document).ready(function () {
         }
         console.log('ajax전');
         requestProcess('/insertReply', no, content, depth);
-        $('#write_depth_reply_form').hide(); // 폼 닫기
         $("#write_depth_content").val(""); // textarea 비우기
         $('#write_depth_content').removeClass('changeplaceholder');
         $("#write_depth_content").attr('placeholder', '댓글을 입력해주세요');
+        $('#write_depth_reply_form').insertAfter('#depth_reply_write_form_area');
+        $('#write_depth_reply_form').hide(); // 폼 닫기
         console.log('ajax후');
     });
 

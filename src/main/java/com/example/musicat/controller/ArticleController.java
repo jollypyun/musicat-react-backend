@@ -428,9 +428,11 @@ public class ArticleController {
 
 	@PostMapping("/insert/grade")
 	public ModelAndView writeGradeArticle(@ModelAttribute("GradeArticleVO") GradeArticleVO gradeArticleVO) throws Exception{
+		log.info("Post insert grade");
 		ModelAndView mv = new ModelAndView();
 		log.info(gradeArticleVO.toString());
 		this.articleService.insertGradeArtilce(gradeArticleVO);
+		log.info("Post insert grade2");
 		mv.setView(new RedirectView("/board/76/articles"));
 		return mv;
 	}

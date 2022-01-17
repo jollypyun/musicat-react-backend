@@ -29,20 +29,22 @@
                         <input type="hidden" id="boardNo" th:value="${boardNo}">
                         <input type="hidden" id="allSearchKeyword" th:value="${keyword}">
                         <input type="hidden" id="allSearchContent" th:value="${content}">
-                        <table id="write_form_table" style="display: none">
-                            <thead>
-                            <th>신청자</th>
-                            <th>신청등급</th>
-                            <th>현재등급</th>
-                            <th>방문수</th>
-                            <th>게시글수</th>
-                            <th>댓글수</th>
-                            <th>가입일</th>
-                            </thead>
-                            <tbody id="write-form-tbody">
 
-                            </tbody>
-                        </table>
+                        <form id="write_grade_article_form" action="/articles/insert/grade" method="post">
+                            <table id="write_form_table" style="display: none">
+                                <thead>
+                                <th>신청자</th>
+                                <th>신청등급</th>
+                                <th>현재등급</th>
+                                <th>방문수</th>
+                                <th>게시글수</th>
+                                <th>댓글수</th>
+                                <th>가입일</th>
+                                </thead>
+                                <tbody id="write-form-tbody">
+                                </tbody>
+                            </table>
+                        </form>
 
                         <form id="grade_insert_from" method="GET" action="/update/member/grade">
                         <table id="list_table">
@@ -129,25 +131,23 @@
                 },
                 success: function (data) {
                     var htmlStr = "";
-                    htmlStr += '<form action="/articles/insert/grade" method="post">';
-                    htmlStr += '<input type="hidden" name="memberNo" value=' + memberNo + 'readonly>';
+                    htmlStr += '<input type="hidden" name="memberNo" value="' + memberNo + '">';
                     htmlStr += '<tr>';
-                    htmlStr += '<td><input type="text" name="nickname" value="' + data.nickname + '"readonly></td>';
+                    htmlStr += '<td><input type="text" name="nickname" value="' + data.nickname + '"></td>';
                     htmlStr += '<td>';
                     htmlStr += '<select id="prograde" name="proGrade">';
                     htmlStr += '<option value=" ">등급 선택</option>';
                     htmlStr += '<option value="MANAGER">매니저</option>';
                     htmlStr += '</select>';
                     htmlStr += '</td>';
-                    htmlStr += '<td><input type="text" name="nowGrade" value="' +  data.grade + '"readonly/>';
-                    htmlStr += '<td><input type="text" name="visits" value="' +  data.visits + '"readonly/>';
-                    htmlStr += '<td><input type="text" name="docs" value="' +  data.docs + '"readonly/>';
-                    htmlStr += '<td><input type="text" name="comms" value="' +  data.comms + '"readonly/>';
-                    htmlStr += '<td><input type="text" name="regdate" value="' +  data.regDate + '"readonly/>';
+                    htmlStr += '<td><input type="text" name="nowGrade" value="' +  data.grade + '"/>';
+                    htmlStr += '<td><input type="text" name="visits" value="' +  data.visits + '"/>';
+                    htmlStr += '<td><input type="text" name="docs" value="' +  data.docs + '"/>';
+                    htmlStr += '<td><input type="text" name="comms" value="' +  data.comms + '"/>';
+                    htmlStr += '<td><input type="text" name="regdate" value="' +  data.regDate + '"/>';
                     htmlStr += '</tr>';
                     htmlStr += '<tr><td colspan="7"><input type="textarea" class="w-100" name="content" placeholder="내용을 입력하세요."/></td></tr>';
-                    htmlStr += '<input type="submit" id="grade_write_btn" value="신청">';
-                    htmlStr += '</form>';
+                    htmlStr += '<input type="button" id="grade_write_btn" value="신청">';
                     $('#write-form-tbody').html(htmlStr);
                     $('#write_form_table').show();
                 },
@@ -157,6 +157,20 @@
                 }
             });
         });
+
+        $(document).on('click', '#update_grade_btn', function (){
+            $('#grade_insert_from').submit();
+        });
+
+        $(document).on('click', '#grade_write_btn', function (){
+            var prograde = $('#prograde').val();
+            if(prograde === " "){
+                alert('등급을 선택하세요');
+                return false;
+            }
+            $('#write_grade_article_form').submit();
+        });
+
 
         $('#update_grade_btn').on('click', function (){
             var resultArr = new Array();
