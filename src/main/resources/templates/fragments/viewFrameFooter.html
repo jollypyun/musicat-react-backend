@@ -54,10 +54,10 @@
                 </div>
 
                 <div class="playListBar-inner-func-btn">
-                    <button type="button" id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>
-                    <button type="button" id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>
-                    </button>
-                    <button type="button" id="playlist-personAdd"><span class="material-icons">person_add</span></button>
+<!--                    <button type="button" id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>-->
+<!--                    <button type="button" id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>-->
+<!--                    </button>-->
+<!--                    <button type="button" id="playlist-personAdd"><span class="material-icons">person_add</span></button>-->
                     <div class="playlist-dropUp">
                         <button type="button" id="playlist-songList" class="playlist-dropUp-btn"><span class="material-icons">queue_music</span>
                         </button>
@@ -80,18 +80,20 @@
                                                 <span class="material-icons position-absolute" >play_circle</span>
                                             </label>
                                             <div class="dropUp-inner-info-text">
-                                                <span th:text="${music.title}"></span>
-                                                <span></span>
+                                                <span class = "dropUp-inner-info-text__title" th:text="${music.title}"></span>
+                                                <span class = "dropUp-inner-info-text__artist" th:text="${music.memberNickname}"></span>
                                             </div>
                                         </div>
                                         <div class="dropUp-inner-time">
-                                            <span>2:06</span>
-                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>
-                                            </button>
-                                            <div id="songInfo-dropbox">
-                                                <button type="button">삭제</button>
-                                                <button type="button">플레이리스트 추가</button>
-                                            </div>
+<!--                                            <span>2:06</span>-->
+                                            <button type="button"><span class="material-icons">playlist_add</span></button>
+                                            <button type="button"><span class="material-icons">close</span></button>
+<!--                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>-->
+<!--                                            </button>-->
+<!--                                            <div id="songInfo-dropbox">-->
+<!--                                                <button type="button">삭제</button>-->
+<!--                                                <button type="button">플레이리스트 추가</button>-->
+<!--                                            </div>-->
                                         </div>
                                     </div>
                                 </li>
@@ -102,7 +104,7 @@
 
 
 <!--                <iframe src = "https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" allow="autoplay" id="audio"></iframe>-->
-                <audio style="display: none" id="audio" controls src="https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" >
+                <audio style="display: none" id="audio" muted autoplay controls src="https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" >
 <!--                    <source type="audio/mp3">-->
                 </audio>
             </div>

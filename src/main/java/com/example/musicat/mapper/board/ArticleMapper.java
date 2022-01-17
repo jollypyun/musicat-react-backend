@@ -100,4 +100,7 @@ public interface ArticleMapper {
 	List<ArticleVO> selectMyLikeArticle(int memberNo);
 
 
+	void inserGradeArticle(GradeArticleVO gradeArticleVO);
+
+	void deleteGradeArticle(Integer articleNo);
 }

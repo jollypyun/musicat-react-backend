@@ -13,6 +13,7 @@ import org.apache.ibatis.type.Alias;
 public class GradeArticleVO {
 
     private int no;
+    private int memberNo;
     private String nickname;
     private String proGrade;
     private String nowGrade;
@@ -22,4 +23,4 @@ public class GradeArticleVO {
     private String regdate;
     private String writedate;
     private String content;
-}
+} 

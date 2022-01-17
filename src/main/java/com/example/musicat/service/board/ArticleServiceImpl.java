@@ -88,6 +88,16 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleMapper.selectGradeArticles();
 	}
 
+	@Override
+	public void insertGradeArtilce(GradeArticleVO gradeArticleVO) {
+		this.articleDao.insertGradeArticle(gradeArticleVO);
+	}
+
+	@Override
+	public void removeGradeArticle(Integer articleNo) {
+		this.articleDao.deleteGradeArticle(articleNo);
+	}
+
 	// 게시글 추가
 	@Override
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)

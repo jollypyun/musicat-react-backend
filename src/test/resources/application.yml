@@ -34,7 +34,8 @@ spring:
             trust: smtp.naver.com
 
 file:
-  dir: D:/SpringBootHome/petopia2/src/main/resources/static/upload/
+#  dir: /upload/
+  dir: D:/SpringBootHome/musicat/src/main/resources/static/upload/
 
 # hibernate가 생성하는 SQL이 모두 보인다.
 logging:

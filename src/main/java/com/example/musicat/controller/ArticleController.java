@@ -427,9 +427,12 @@ public class ArticleController {
 	}
 
 	@PostMapping("/insert/grade")
-	public String writeGradeArticle(@RequestParam("prograde") int prograde, @RequestParam("memberNo") int memberNo) throws Exception{
-//		return memberVO;
-		return null;
+	public ModelAndView writeGradeArticle(@ModelAttribute("GradeArticleVO") GradeArticleVO gradeArticleVO) throws Exception{
+		ModelAndView mv = new ModelAndView();
+		log.info(gradeArticleVO.toString());
+		this.articleService.insertGradeArtilce(gradeArticleVO);
+		mv.setView(new RedirectView("/board/76/articles"));
+		return mv;
 	}
 
 }

@@ -26,6 +26,9 @@ import com.example.musicat.service.member.FollowService;
 import com.example.musicat.service.member.GradeService;
 import com.example.musicat.service.member.MemberService;
 import com.example.musicat.service.music.MusicApiService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.extern.java.Log;
 import com.example.musicat.util.TemplateModelFactory;
 
@@ -198,6 +201,8 @@ public class HomeController {
         model.addAttribute("checkFollow", checkFollow);
         log.info("before html playlists : " + playlists);
 
+
+
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylist");
         return "view/home/viewHomeTemplate";
 
@@ -230,7 +235,7 @@ public class HomeController {
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
         model.addAttribute("musics", musics);
-
+        model.addAttribute("playlistKey", playlistKey);
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylistDetail");
         return "view/home/viewHomeTemplate";
 
@@ -352,9 +357,7 @@ public class HomeController {
 
         model.addAttribute("member", member);
         model.addAttribute("follow", follow);
-
 	      model.addAttribute("checkFollow", checkFollow);
-
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
         return "view/home/viewHomeTemplate";
 
@@ -375,9 +378,10 @@ public class HomeController {
 
     // 플레이리스트 수정 폼 요청
     @GetMapping("/changePlaylistForm/{id}")
+
     public String changePlaylist(Model model, @PathVariable("id") String id) {
         Playlist playlist = musicApiService.getOnePlaylist(id);
-        log.info("playlist : " + playlist.getPlaylistImage().getId());
+        log.info("playlist : " + playlist.getPlaylistImage());
         model.addAttribute("playlist", playlist);
         return "view/etc/changePlaylist";
     }

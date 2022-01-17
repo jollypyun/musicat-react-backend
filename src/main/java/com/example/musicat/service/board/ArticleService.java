@@ -28,6 +28,8 @@ public interface ArticleService {
 	//등급 게시판 조회
 	List<GradeArticleVO> selectGradeArticles();
 
+	void insertGradeArtilce(GradeArticleVO gradeArticleVO);
+
 	//게시글 작성
 	void registerArticle(ArticleVO article, Long audioNo);
 	
@@ -69,4 +71,7 @@ public interface ArticleService {
 
 	//추천 누른 게시글 조회
 	List<ArticleVO> retrieveMyLikeArticle(int memberNo);
+
+	//GradeArticle 삭제
+	void removeGradeArticle(Integer articleNo);
 }
