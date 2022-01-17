@@ -48,8 +48,9 @@
 
                 <div class="playListBar-inner-title">
                     <div class="playListBar-inner-title-div">
-                        <span class="playListBar-title-song">사랑해(feat 유리상자 '박승화')</span>
-                        <span class="playListBar-title-singer">SG워너비</span>
+                        <span class="playListBar-title-song"></span>
+                        <span class="playListBar-title-singer"></span>
+                        <span class="playListBar-title-index" style="display:none"></span>
                     </div>
                 </div>
 
@@ -71,32 +72,34 @@
                             </div>
                             <ul id="currentPlayList_ul" style="overflow-y : auto">
                                 <!--                                <button type="button" onclick="testinggg()">테스트트</button>-->
-                                <li th:each="music : ${curPlaylist}" th:id = "${music.id}">
-                                    <div class="playlist-dropUp-content-inner">
-                                        <div class="dropUp-inner-info position-relative">
-                                            <img th:src="${music.links[1].href}"/>
-                                            <label class="playlist-dropUp-content-playBtn position-absolute">
-                                                <input type="button" th:id="${music.links[0].href}" onclick="playAudio(this)">
-                                                <span class="material-icons position-absolute" >play_circle</span>
-                                            </label>
-                                            <div class="dropUp-inner-info-text">
-                                                <span class = "dropUp-inner-info-text__title" th:text="${music.title}"></span>
-                                                <span class = "dropUp-inner-info-text__artist" th:text="${music.memberNickname}"></span>
+                                <th:block th:each="music , index : ${curPlaylist}">
+                                    <li th:id="'cpl' + ${index.index}">
+                                        <div class="playlist-dropUp-content-inner">
+                                            <div class="dropUp-inner-info position-relative">
+                                                <img th:src="${music.links[1].href}"/>
+                                                <label class="playlist-dropUp-content-playBtn position-absolute">
+                                                    <input type="button" th:id="${music.links[0].href}" onclick="playAudio(this)">
+                                                    <span class="material-icons position-absolute" >play_circle</span>
+                                                </label>
+                                                <div class="dropUp-inner-info-text">
+                                                    <span class = "dropUp-inner-info-text__title" th:text="${music.title}"></span>
+                                                    <span class = "dropUp-inner-info-text__artist" th:text="${music.memberNickname}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="dropUp-inner-time">
+                                                <!--                                            <span>2:06</span>-->
+                                                 <button type="button" th:onclick="'addMusicToPlaylist(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">playlist_add</span></button>
+                                                 <button type="button" th:onclick="'deleteMusicFromNow(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">close</span></button>
+                                                <!--                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>-->
+                                                <!--                                            </button>-->
+                                                <!--                                            <div id="songInfo-dropbox">-->
+                                                <!--                                                <button type="button">삭제</button>-->
+                                                <!--                                                <button type="button">플레이리스트 추가</button>-->
+                                                <!--                                            </div>-->
                                             </div>
                                         </div>
-                                        <div class="dropUp-inner-time">
-<!--                                            <span>2:06</span>-->
-                                            <button type="button" th:onclick="'addMusicToPlaylist(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">playlist_add</span></button>
-                                            <button type="button" th:onclick="'deleteMusicFromNow(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">close</span></button>
-<!--                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>-->
-<!--                                            </button>-->
-<!--                                            <div id="songInfo-dropbox">-->
-<!--                                                <button type="button">삭제</button>-->
-<!--                                                <button type="button">플레이리스트 추가</button>-->
-<!--                                            </div>-->
-                                        </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                </th:block>
                             </ul>
                         </div>
                     </div>
