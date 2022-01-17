@@ -48,9 +48,9 @@
                     </th:block>
                 </div>
 
-                <th:block th:if="${#authorization.expr('isAuthenticated()')}">
-                <div th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
-                    <form method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
+                <div class="myPage-btn-style" th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
+                    <form class="me-3" method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
+
                         <button type="submit">추가</button>
                     </form>
                     <form
@@ -98,7 +98,7 @@
                             </table>
                             <div class="myPage-content-left-playlist-btn">
                                 <button>전체 재생</button>
-                                <form th:action="|/changePlaylistForm/*{id}|" method="get">
+                                <form class="mx-3" th:action="|/changePlaylistForm/*{id}|" method="get">
                                     <button type="submit">편집...</button>
                                 </form>
                                 <form th:action="|/deleteplaylist/*{memberNo}/*{id}|" method="POST">
