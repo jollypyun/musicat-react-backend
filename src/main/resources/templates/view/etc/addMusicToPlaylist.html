@@ -7,9 +7,10 @@
     <table>
         <tr th:each="playlist : ${list}" th:object="${playlist}">
             <td th:text="*{playlistName}"></td>
-            <td><button type="button" th:value="*{id}" onclick="addToPlaylist(this.val())">Add</button></td>
+            <td><button type="button" th:onclick="'addToPlaylist('+ *{id} +')'">Add</button></td>
         </tr>
     </table>
+    <input type="hidden" th:value="${musicNo}">
 </body>
 </html>
 
@@ -17,6 +18,6 @@
 <script th:inline>
     function addToPlaylist(a) {
         log.info(a);
-        location.href="pushmusic/" + a;
+        location.href="/pushmusic/" + a;
     }
 </script>

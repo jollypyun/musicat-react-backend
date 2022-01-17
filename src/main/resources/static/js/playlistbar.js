@@ -295,7 +295,7 @@ async function requestCurrentPlay(url) {
 }
 
 function addMusicToPlaylist(a, b) {
-
+    location.href="/selectPlaylist/"+ a + "/" + b;
 }
 
 function deleteMusicFromNow(musicNos, memberNo) {

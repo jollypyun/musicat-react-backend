@@ -144,7 +144,6 @@ public class MusicController {
     }
 
     // 특정 플레이리스트 안의 곡 빼기
-
     @DeleteMapping("/pullmusic/{playlistKey}")
     public ModelAndView deleteMusicFromPlaylist(@PathVariable String playlistKey, @RequestParam(name = "musicNos") List<Integer> musicNos, @RequestParam(name = "memberNo") int memberNo) {
         ModelAndView mav = new ModelAndView();
