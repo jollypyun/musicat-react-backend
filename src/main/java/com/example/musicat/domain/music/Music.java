@@ -27,6 +27,8 @@ public class Music {
 
     private List<Link> links;
 
+    private String memberName;
+
 
     public Music(MetaFile file, Thumbnail thumbnail, String title, int memberNo, int articleNo) {
         this.file = file;

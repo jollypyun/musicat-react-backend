@@ -47,15 +47,6 @@ $(document).ready(function () {
 
     }
 
-    // audio.oncanplaythrough = function() {
-    //
-    //     if(audio.currentTime < 10)
-    //         audio.currentTime=10
-    //
-    //     console.log("oncanplaythrough");
-    //     audio.play();
-    // }
-
     // 사운드 시간 바뀔때 current 값 수정
     timeProgress.addEventListener('change', function () {
         audioCurrent = timeProgress.value;
@@ -238,7 +229,8 @@ async function requestProcessAddToPlay(url, musicNos) {
         let lastIndex = result.length-1;
         $("#audio").attr("src", result[lastIndex].links[0].href);
         $("#audio").trigger("play");
-        $(".playListBar-title-song").text(result[lastIndex].title)
+        $(".playListBar-title-song").text(result[lastIndex].title);
+        $(".playListBar-title-singer").text(result[lastIndex].memberNickname);
         $(".playListBar-inner-img").children("img").attr("src", result[lastIndex].links[1].href);
 
     } catch (error) {
@@ -250,7 +242,8 @@ function playAudio(btn) {
 
     $("#audio").attr("src", $(btn).attr("id"));
     //console.log($(btn).parent().parent().children(".dropUp-inner-info-text").text());
-    $(".playListBar-title-song").text($(btn).parent().parent().children(".dropUp-inner-info-text").text());
+    $(".playListBar-title-song").text($(btn).parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__title").text());
+    $(".playListBar-title-singer").text($(btn).parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__artist").text());
     $(".playListBar-inner-img").children("img").attr("src", $(btn).parent().parent().children("img").attr("src"));
     //console.log($(btn).parent().parent().children("img"));
 
