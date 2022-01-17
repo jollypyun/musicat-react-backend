@@ -124,13 +124,13 @@ public class MusicApiService {
     public void deleteMusicByArticleNo(int articleNo) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put("articleNo", articleNo);
-        restTemplate.delete("http://localhost:20000/api/musics/deleteByArticleNo/{articleNo}", params);
+        restTemplate.delete("http://13.124.245.202:20000/api/musics/deleteByArticleNo/{articleNo}", params);
     }
 
     public void deleteByMusicId(Long musicId) {
         Map<String, Long> params = new HashMap<String, Long>();
         params.put("musicId", musicId);
-        restTemplate.delete("http://localhost:20000/api/musics/deleteById/{musicId}", params);
+        restTemplate.delete("http://13.124.245.202:20000/api/musics/deleteById/{musicId}", params);
     }
 
     public void connectToArticle(Long musicId, int articleNo) {
@@ -138,12 +138,12 @@ public class MusicApiService {
         params.put("musicId", musicId);
         params.put("articleNo", articleNo);
         log.info(params.toString());
-        restTemplate.put("http://localhost:20000/api/musics/connectToArticle/{musicId}/{articleNo}",String.class, params);
+        restTemplate.put("http://13.124.245.202:20000/api/musics/connectToArticle/{musicId}/{articleNo}",String.class, params);
     }
 
     public List<Music> retrieveMusics(int articleNo){
 
-        ResponseEntity<List> response = restTemplate.getForEntity("http://localhost:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
+        ResponseEntity<List> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
        
         log.info("response body : " + response.getBody());
 

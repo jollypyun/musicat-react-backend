@@ -78,41 +78,45 @@
   function setParentText() {
     let musicHref = document.getElementById("musiclink").innerText;
     let imageHref = document.getElementById("imagelink").innerText;
-    // console.log(musicHref);
-    // console.log(imageHref);
+    console.log(musicHref);
+    console.log(imageHref);
+
 
     // 오디오 썸네일
     // createImage.setAttribute("src", imageHref);
     opener.document.getElementById("detailAudioImg").setAttribute("src", imageHref);
-
+    console.log("imagehref");
     //오디오 제목
     // createTitle.innerText = document.getElementById("musictitle").innerText;
     opener.document.getElementById("audioTitle").innerText = document.getElementById("musictitle").innerText;
-
+    console.log("musictitle");
     //오디오 파일 경로 및 제어 설정
     // createAudio.setAttribute("src", musicHref);
     opener.document.getElementById("detail-audio").setAttribute("src", musicHref);
     opener.document.getElementById("detail-audio").load();
-
+    console.log("detail-audio");
     //삭제버튼
     // createInput.setAttribute(
     //         "id",
     //         document.getElementById("musicId").innerText
     // );
-    opener.document.getElementById("audioDelBtn").setAttribute(
+    var delBtn = opener.document.getElementsByClassName("audioDelBtn");
+    delBtn[0].setAttribute(
             "id",
             document.getElementById("musicId").innerText
     );
+    console.log("audioDelBtn");
 
     opener.document.getElementById("audioNo").setAttribute(
             "value",
             document.getElementById("musicId").innerText
     );
+    console.log("audioNo");
 
     // opener.document.getElementById("audioResource").innerText = musicHref;
 
     opener.document.getElementById("receive").setAttribute("style", "display=\"\"");
-
+    console.log("receive");
 
     window.close();
   }
