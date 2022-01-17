@@ -112,6 +112,7 @@ public class MusicController {
         return mv;
     }
 
+
     // 특정 플레이리스트 안에 곡 넣기
     @PostMapping("/pushmusic/{playlistKey}")
     public List<Map<String, Object>> insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name="musicNos") int musicNos,@PathVariable String playlistKey) {
@@ -143,15 +144,19 @@ public class MusicController {
     }
 
     // 특정 플레이리스트 안의 곡 빼기
-
     @DeleteMapping("/pullmusic/{playlistKey}")
-    public ModelAndView deleteMusicFromPlaylist(@PathVariable String playlistKey, @RequestParam(name = "musicNos") List<Integer> musicNos) {
+    public ModelAndView deleteMusicFromPlaylist(@PathVariable String playlistKey, @RequestParam(name = "musicNos") List<Integer> musicNos, @RequestParam(name = "memberNo") int memberNo) {
         ModelAndView mav = new ModelAndView();
         log.info("musicNos : " + musicNos);
         log.info("playlistKey : " + playlistKey);
         musicApiService.pullMusic(musicNos, playlistKey);
-        //mav.setView(new RedirectView("/myPage/Playlist/" + memberNo + play));
-        return null;
+        if (!playlistKey.equals(memberNo+"pl1")) {
+            mav.setView(new RedirectView("/myPage/Playlist/" + memberNo + playlistKey));
+            return mav;
+        }
+        else {
+            return null;
+        }
     }
 
     // 플레이리스트 수정
