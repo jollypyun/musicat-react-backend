@@ -13,7 +13,7 @@
 					</button>
 				</div>
 				<div class="memberdetail-form-style">
-					<form method="POST" th:action="@{'/memberBan/' + ${member.no}}">
+					<form method="POST" th:action="@{'/memberMode/' + ${member.no}}">
 						<div class="memberdetail-content-style" th:object="${member}">
 							<table>
 								<colgroup>
@@ -26,7 +26,11 @@
 									<td class="title">ID</td>
 									<td class="val" th:text="*{email}"></td>
 									<td class="title">등급</td>
-									<td class="val" th:text="*{grade}"></td>
+									<td class="val" th:placeholder="*{grade}">
+										<select name="gradeSelect" id="gr">
+											<option value="MANAGER">MANAGER</option>
+											<option value="USER">USER</option>
+									</td>
 								</tr>
 
 								<tr>
@@ -53,6 +57,7 @@
 								<tr>
 									<td class="title">정지 해제 날짜<select name="banSelect"
 										id="ban">
+											<option value="no">미정</option>
 											<option value="7d">7일</option>
 											<option value="1d">1일</option>
 											<option value="1m">1분</option>

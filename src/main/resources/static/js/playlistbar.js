@@ -47,15 +47,6 @@ $(document).ready(function () {
 
     }
 
-    // audio.oncanplaythrough = function() {
-    //
-    //     if(audio.currentTime < 10)
-    //         audio.currentTime=10
-    //
-    //     console.log("oncanplaythrough");
-    //     audio.play();
-    // }
-
     // 사운드 시간 바뀔때 current 값 수정
     timeProgress.addEventListener('change', function () {
         audioCurrent = timeProgress.value;
@@ -242,19 +233,26 @@ async function requestProcessAddToPlay(url, musicNos) {
              //     + '"/> <button id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons">play_circle</span></button><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><span>30:30</span><button class="song-addInfo"><span class="material-icons">dehaze</span></button><div class="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
              // $("#audioTime").text(getLength(audioCurrent));
         });
-        //$("#audio").attr("src", result[0].links[0].href);
-        //$("#audio").trigger("play");
-
+        let lastIndex = result.length-1;
+        $("#audio").attr("src", result[lastIndex].links[0].href);
+        $("#audio").trigger("play");
+        $(".playListBar-title-song").text(result[lastIndex].title);
+        $(".playListBar-title-singer").text(result[lastIndex].memberNickname);
+        $(".playListBar-inner-img").children("img").attr("src", result[lastIndex].links[1].href);
 
     } catch (error) {
         console.log("error : ", error);
     }
 }
-
 function playAudio(btn) {
     //console.log($(btn).attr("id"));
 
     $("#audio").attr("src", $(btn).attr("id"));
+    //console.log($(btn).parent().parent().children(".dropUp-inner-info-text").text());
+    $(".playListBar-title-song").text($(btn).parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__title").text());
+    $(".playListBar-title-singer").text($(btn).parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__artist").text());
+    $(".playListBar-inner-img").children("img").attr("src", $(btn).parent().parent().children("img").attr("src"));
+    //console.log($(btn).parent().parent().children("img"));
 
     $("#audio").trigger("play");
 
@@ -303,17 +301,3 @@ async function requestCurrentPlay(url) {
         console.log("error : ", error);
     }
 }
-
-//     //이 페이지에서 뒤로가기 하거나, 목록을 누를때 그리고 새로고침을 할 때 이벤트 발생
-// $(window).on("beforeunload", function (event) {
-//     event.preventDefault();
-//     //requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
-//     // ajax
-//
-//     // 현재 시간이랑
-//     //$("#audio").currentTime;
-//     // 현재 음악의... 정보? 를 ajax로 넘겨서 security principal에 저장하고
-//     //$("#audio").attr("src");
-//
-//     // 이후 requestCurrentPlay 에서 audio 셋팅해줘야할듯
-// });

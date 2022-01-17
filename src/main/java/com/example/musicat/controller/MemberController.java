@@ -172,10 +172,15 @@ public class MemberController {
 	}
 
 	// 회원 활동 정지
-	@PostMapping("/memberBan/{no}")
-	public String updateBanDate(@PathVariable int no, @RequestParam String banSelect) throws Exception{
+	@PostMapping("/memberMode/{no}")
+	public String updateBanDate(@PathVariable int no, @RequestParam(name = "banSelect") String banSelect, @RequestParam(name = "gradeSelect") String grade) throws Exception{
+		log.info("ban = " + banSelect);
+		log.info("grade = " + grade);
 		try {
-			this.memberService.modifyBan(banSelect, no);
+			if(!banSelect.equals("no")) {
+				this.memberService.modifyBan(banSelect, no);
+			}
+			this.memberService.modifyGrade(no,grade);
 			return "redirect:/members";
 		} catch (Exception e) {
 			e.printStackTrace();
