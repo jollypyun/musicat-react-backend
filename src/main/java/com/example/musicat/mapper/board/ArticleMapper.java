@@ -23,6 +23,9 @@ public interface ArticleMapper {
 
 	int boardTotalCount(int boardNo);
 
+	//등급 게시판 조회
+	List<GradeArticleVO> selectGradeArticles();
+
 
 	//게시글 등록
 	void insertArticle(ArticleVO article);

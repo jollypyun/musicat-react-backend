@@ -85,8 +85,8 @@
                             <a th:id="${num}"  class="page_num"  th:text="${num}"></a>
                         </th:block>
                     </div>
-                    <a th:id="${startPage + pageSize}" th:if="${endPage > pageSize}" class="page_num" th:text=">"></a>
-                    <a th:id="${endPage}" th:if="${endPage > pageSize}" class="page_num" th:text=">>"></a>
+                    <a th:id="${startPage + pageSize}" class="page_num" th:text=">"></a>
+                    <a th:id="${endPage}" class="page_num" th:text=">>"></a>
                 </th:block>
 
             </th:block>

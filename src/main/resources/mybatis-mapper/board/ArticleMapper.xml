@@ -28,7 +28,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		{ CALL sp_article_select_board_totalcount(${boardNo}) }
 	</select>
 
-	
+
+	<resultMap id="gradaArticleMap" type="gradeArticleVo">
+		<result property="no" javaType="int" column="no" jdbcType="INTEGER" />
+		<result property="nickname" javaType="String" column="nickname" jdbcType="VARCHAR" />
+		<result property="proGrade" javaType="String" column="prograde" jdbcType="VARCHAR" />
+		<result property="nowGrade" javaType="String" column="nowgrade" jdbcType="VARCHAR" />
+		<result property="visits" javaType="int" column="visits" jdbcType="INTEGER" />
+		<result property="docs" javaType="int" column="docs" jdbcType="INTEGER" />
+		<result property="comms" javaType="int" column="comms" jdbcType="INTEGER" />
+		<result property="regdate" javaType="String" column="regdate" jdbcType="VARCHAR" />
+		<result property="writedate" javaType="String" column="writedate" jdbcType="VARCHAR" />
+		<result property="content" javaType="String" column="content" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 등업 게시판 -->
+	<select id="selectGradeArticles" resultType="gradeArticleVo" resultMap="gradaArticleMap">
+		SELECT * FROM grade_article ORDER BY writedate DESC
+	</select>
+
 	<select id="selectAllArticle" resultType="articleVo" resultMap="articleVOResult">
 		SELECT * FROM article ORDER BY writedate DESC
 	</select>

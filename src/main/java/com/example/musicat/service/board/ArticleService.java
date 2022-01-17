@@ -2,6 +2,7 @@ package com.example.musicat.service.board;
 
 import com.example.musicat.domain.board.ArticleVO;
 import com.example.musicat.domain.board.BestArticleVO;
+import com.example.musicat.domain.board.GradeArticleVO;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +25,9 @@ public interface ArticleService {
 
 	public int boardTotalCount(int boardNo);
 
-	
+	//등급 게시판 조회
+	List<GradeArticleVO> selectGradeArticles();
+
 	//게시글 작성
 	void registerArticle(ArticleVO article, Long audioNo);
 	

@@ -1,0 +1,145 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<meta charset="UTF-8" />
+<link th:href="@{/css/listNomalStyle.css}" rel="stylesheet" />
+<link>
+<div id="layoutSidenav_content" class="mb-5">
+    <main>
+        <div class="container-fluid px-4">
+
+            <div class="row mt-3 mb-5">
+                <div class="articleList card" style="padding-left: 0px;padding-right: 0px;">
+                    <div class="articleVO-header card-header">
+                        <i class="fas fa-table me-1"></i>
+                        <span class="board-name" th:text="${boardName}">게시판 이름</span>
+
+                        <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+                            <button type="button" id="insertLikeBoard"
+                                    th:value="${#authentication.principal.getMemberVo.getNo}">즐겨찾기</button>
+                        </th:block>
+                        <th:block th:if="${#authorization.expr('isAnonymous()')}">
+                            <button type="button" id="insertLikeBoardAnonymous">즐겨찾기</button>
+                        </th:block>
+                    </div>
+                    <input type="hidden" id="memberNo" name="memberNo" th:value="${memberNo}">
+
+                    <!-- 등업신청하기 -->
+                    <div><input type="button" id="write_btn" name="write_btn" value="등업 신청하기" /></div>
+                    <div class="articleVOS card-body">
+                        <input type="hidden" id="boardNo" th:value="${boardNo}">
+                        <input type="hidden" id="allSearchKeyword" th:value="${keyword}">
+                        <input type="hidden" id="allSearchContent" th:value="${content}">
+
+
+                        <table>
+                            <thead>
+                            <th>신청자</th>
+                            <th>신청등급</th>
+                            <th>현재등급</th>
+                            <th>방문수</th>
+                            <th>게시글수</th>
+                            <th>댓글수</th>
+                            <th>가입일</th>
+                            <th>신청일</th>
+                            </thead>
+                            <tbody id="article_list">
+                            <div th:each="article : ${articles}">
+                                <tr>
+                                    <td rowspan="2" th:text="${article.nickname}">신청자</td>
+                                    <td th:text="${article.proGrade}">신청등급</td>
+                                    <td th:text="${article.nowGrade}">현재등급</td>
+                                    <td th:text="${article.visits}">방문수</td>
+                                    <td th:text="${article.docs}">게시글수</td>
+                                    <td th:text="${article.comms}">댓글수</td>
+                                    <td th:text="${article.regdate}">가입일</td>
+                                    <td th:text="${article.writedate}">신청일</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" th:text="${article.content}">신청내용</td>
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="dataTable-bottom"></div>
+                </div>
+
+                <div id="write-gradearticle-area"></div>
+
+
+                <div class="nomalList-func">
+                    <div id="search_area" class="search_area-style">
+                        <!--						<form id="search_form" action="/board/search" method="get">-->
+                        <select id="board_keyword" name="board_keyword" class="btn btn-primary">
+                            <option value="subject">제목</option>
+                            <option value="nickname">작성자</option>
+                            <option value="tagname">태그</option>
+                        </select>
+                        <input type="text" id="board_search_content" name="board_content" placeholder="검색어를 입력해 주세요."
+                               class="nomalList-search">
+                        <input type="button" id="search_by_board_btn" class="btn btn-primary" value="검색">
+                        <!--						</form>-->
+                    </div>
+
+                    <div class="write_article_btn ">
+                        <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+                            <button th:if="${writeCheck == 1}" id="writeForm_btn"
+                                    th:onclick="|location.href='@{/articles/insert}'|" type="button"
+                                    class="btn btn-primary">글쓰기
+                            </button>
+                        </th:block>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+<script>
+
+    $(document).ready(function(){
+
+        $('#write_btn').on('click', function(){
+            $('#article_list').html("")
+            var memberNo = $('#memberNo').val();
+            $.ajax({
+                url: '/articles/insert/grade',
+                method: 'GET',
+                dataType: 'json',
+                data: {
+                    memberNo: memberNo,
+                },
+                success: function (data) {
+                    var htmlStr = "";
+                    htmlStr += '<form action="/articles/insert/grade" method="post">';
+                    htmlStr += '<input type="hidden" name="member_no" value=' + memberNo + '>';
+                    htmlStr += '<td>' + data.nickname + '</td>';
+                    htmlStr += '<td>';
+                    htmlStr += '<select id="prograde" name="prograde">';
+                    htmlStr += '<option value="0">등급 선택</option>';
+                    htmlStr += '<option value="2">매니저</option>';
+                    htmlStr += '</select>';
+                    htmlStr += '</td>';
+                    htmlStr += '<td>' + data.grade +'</td>';
+                    htmlStr += '<td>' + data.visits +'</td>';
+                    htmlStr += '<td>' + data.docs  +'</td>';
+                    htmlStr += '<td>' + data.comms + '</td>';
+                    htmlStr += '<td>' + data.regDate + '</td>';
+                    htmlStr += '<input type="submit" id="grade_write_btn" value="신청">';
+                    htmlStr += '</form>';
+                    $('#write-gradearticle-area').html(htmlStr);
+                    $('#article_list').insertAfter('#write-gradearticle-area');
+                },
+                error: function (e) {
+                    console.trace();
+                    reject(e);
+                }
+            });
+        });
+
+    });
+
+</script>
+
+</html>

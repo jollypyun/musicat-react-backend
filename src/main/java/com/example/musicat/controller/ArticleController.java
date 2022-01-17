@@ -20,6 +20,7 @@ import com.example.musicat.repository.board.ArticleDao;
 
 import com.example.musicat.security.MemberAccount;
 
+import com.example.musicat.service.member.MemberService;
 import com.example.musicat.service.music.MusicApiService;
 
 import com.example.musicat.util.FileManager;
@@ -54,6 +55,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("articles")
 public class ArticleController {
 
+	private final MemberService memberService;
 	private final ArticleService articleService;
 	private final FileManager fileManager;
 	private final FileService fileService;
@@ -417,7 +419,17 @@ public class ArticleController {
 		return "/view/board/musicRegister";
 	}
 
+	@ResponseBody
+	@GetMapping("/insert/grade")
+	public MemberVO writeGradeArticleForm(@RequestParam("memberNo") int memberNo) throws Exception{
+		MemberVO memberVO = this.memberService.retrieveMemberByManager(memberNo);
+		return memberVO;
+	}
 
-
+	@PostMapping("/insert/grade")
+	public String writeGradeArticle(@RequestParam("prograde") int prograde, @RequestParam("memberNo") int memberNo) throws Exception{
+//		return memberVO;
+		return null;
+	}
 
 }

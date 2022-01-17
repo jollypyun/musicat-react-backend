@@ -52,6 +52,12 @@
 		<th:block layout:fragment="viewMainContent"
 			th:include="@{/view/board/listArticleMusic}"></th:block>
 		</div>
+
+		<div th:if="${boardkind == 3}" class="mb-5" style="width: 100%">
+			<th:block layout:fragment="viewMainContent"
+					  th:include="@{/view/board/listArticleGrade}"></th:block>
+		</div>
+
 <!-- 양 ~		-->
 <!--		<div>-->
 <!--			<th:block layout:fragment="viewMainContent"-->

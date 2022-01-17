@@ -341,50 +341,59 @@ public class BoardController {
 		BoardBoardGradeVO bbgVO = this.boardService.retrieveOneBoard(boardNo);
 		String boardName = bbgVO.getBoardVo().getBoardName();
 		int boardkind = bbgVO.getBoardVo().getBoardkind();
-		List<ArticleVO> articles = new ArrayList<>();
-		int startPage = 1;
-
 		MemberVO member = HomeController.checkMemberNo();
+		model.addAttribute("memberNo", member.getNo());
 		int gradeNo = member.getGradeNo();
 
-		int writeCheck = boardService.checkWriteGrade(boardNo, gradeNo);
-		model.addAttribute("writeCheck", writeCheck);
+		if(boardkind == 3) {
+			List<GradeArticleVO> articles = this.articleService.selectGradeArticles();
+			model.addAttribute("articles", articles); // 게시글 정보 전송
+		} else{
+			List<ArticleVO> articles = new ArrayList<>();
+			int startPage = 1;
 
-		if(boardkind == 0){ //일반 게시판
-			articles = this.articleService.retrieveBoard(boardNo);
-		} else { // 썸네일 보드
-			articles = this.articleService.selectBoardList(boardNo, startPage);
-		}
+			int writeCheck = boardService.checkWriteGrade(boardNo, gradeNo);
+			model.addAttribute("writeCheck", writeCheck);
 
-		int totalCount = this.articleService.boardTotalCount(boardNo);
-		Criteria creitea = Criteria.getThumbnailPaging(1, totalCount);
-
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("pageSize", creitea.getPageSize());
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("endPage", creitea.getEndPage());
-		log.info("startPage: {}, pageSize: {}, totalCount: {}, endPage: {}",startPage,creitea.getPageSize(),totalCount,creitea.getEndPage());
-		// bind
-		FileVO file = new FileVO();
-		if(boardkind != 2){
-			for (ArticleVO article : articles) {
-				// Html 변환
-				String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
-				article.setSubject(escapeSubject);
-
-				file.setArticleNo(article.getNo());
-				file.setFileType(1);
-				FileVO thumbFile = this.fileService.retrieveThumbFile(file);
-				if(thumbFile != null) {
-					article.setThumbnail(thumbFile);
-				} else {
-					FileVO noFile = new FileVO();
-					noFile.setSystemFileName("noimage.png");
-					article.setThumbnail(noFile);
-				}
+			if(boardkind == 0){ //일반 게시판
+				articles = this.articleService.retrieveBoard(boardNo);
+			} else { // 썸네일 보드
+				articles = this.articleService.selectBoardList(boardNo, startPage);
 			}
-		} else { //오디오 게시판 썸네일 설정
-			setAudioBoardThumbnail(articles);
+
+			int totalCount = this.articleService.boardTotalCount(boardNo);
+			Criteria creitea = Criteria.getThumbnailPaging(1, totalCount);
+
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("pageSize", creitea.getPageSize());
+			model.addAttribute("totalCount", totalCount);
+			model.addAttribute("endPage", creitea.getEndPage());
+			log.info("startPage: {}, pageSize: {}, totalCount: {}, endPage: {}",startPage,creitea.getPageSize(),totalCount,creitea.getEndPage());
+			// bind
+			FileVO file = new FileVO();
+			if(boardkind != 2){
+				for (ArticleVO article : articles) {
+					// Html 변환
+					String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
+					article.setSubject(escapeSubject);
+
+					file.setArticleNo(article.getNo());
+					file.setFileType(1);
+					FileVO thumbFile = this.fileService.retrieveThumbFile(file);
+					if(thumbFile != null) {
+						article.setThumbnail(thumbFile);
+					} else {
+						FileVO noFile = new FileVO();
+						noFile.setSystemFileName("noimage.png");
+						article.setThumbnail(noFile);
+					}
+				}
+			} else { //오디오 게시판 썸네일 설정
+				setAudioBoardThumbnail(articles);
+			}
+
+			model.addAttribute("articles", articles); // 게시글 정보 전송
+
 		}
 
 
@@ -400,7 +409,6 @@ public class BoardController {
 		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
-		model.addAttribute("articles", articles); // 게시글 정보 전송
 		model.addAttribute("boardkind", boardkind); // 게시글 유형
 
 		// 양 ~
@@ -411,7 +419,7 @@ public class BoardController {
 		// ~ 양
 
 		templateModelFactory.setCurPlaylistModel(model);
-
+		log.info("boardKind: {}", boardkind);
 
 		return "/view/home/viewBoardTemplate";
 	}
