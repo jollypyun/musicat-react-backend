@@ -119,6 +119,7 @@ public class ArticleController {
 			log.info("article controller musiclist : " + musicList.toString());
 
 
+
 			// xss 처리 Html tag로 변환
 //			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
 //			article.setSubject(escapeSubject);
@@ -129,7 +130,7 @@ public class ArticleController {
 			log.info("detailArticle: {}", result.toString());
 			model.addAttribute("HomeContent", "/view/board/detailArticle");
 		} else {
-			model.addAttribute("HomeContent", "/view/board/accessDenied");
+			model.addAttribute("HomeContent", "/view/security/accessDenideGrade");
 		}
 
 		templateModelFactory.setCurPlaylistModel(model);
