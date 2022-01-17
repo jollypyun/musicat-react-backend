@@ -36,7 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ArticleVO retrieveArticle(int articleNo) {
 		List<SelectArticleVO> results = this.articleDao.selectArticle(articleNo);
-		List<TagVO> tags = articleMapper.selectArticleTags(articleNo);
+		List<TagVO> tags = this.articleMapper.selectArticleTags(articleNo);
 		System.out.println("ArticleServiceImpl.retrieveArticle: results : " + results.size());
 
 		ArticleVO article = results.get(0).getArticle(); // 게시글 정보 출력
@@ -94,7 +94,7 @@ public class ArticleServiceImpl implements ArticleService {
 			this.articleDao.insertTags(article.getNo(), article.getTagList());	
 		}
 		if (audioNo != null) {
-			musicApiService.connectToArticle(audioNo, article.getNo());
+			this.musicApiService.connectToArticle(audioNo, article.getNo());
 		}
 	}
 
@@ -218,7 +218,7 @@ public class ArticleServiceImpl implements ArticleService {
 		// best table 날리기
 		this.articleDao.deleteAllBestArticle();
 		// find articles insert
-		bestArticleUtil.insertBestArticle(findBestArticles);
+		this.bestArticleUtil.insertBestArticle(findBestArticles);
 	}
 
 	//작성한 게시글 조회

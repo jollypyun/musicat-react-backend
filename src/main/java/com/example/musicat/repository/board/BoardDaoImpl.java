@@ -28,8 +28,7 @@ public class BoardDaoImpl implements BoardDao {
 
 	@Override
 	public int selectLastInsertBoardNo() {
-		int boardNo = this.boardMapper.selectLastInsertBoardNo();
-		return boardNo;
+		return this.boardMapper.selectLastInsertBoardNo();
 	}
 
 	@Override
@@ -40,58 +39,51 @@ public class BoardDaoImpl implements BoardDao {
 	//게시판 종류 조회
 	@Override
 	public ArrayList<BoardVO> selectBoardkind() {
-		ArrayList<BoardVO> boardkindList = this.boardMapper.selectBoardkind();
-		return boardkindList;
+		return this.boardMapper.selectBoardkind();
 	}
 	
 	//연결된 게시글 조회
 	@Override
 	public int selectConnectArticle(int boardNo) {
-		int connectArticle = this.boardMapper.selectConnectArticle(boardNo);
-		return connectArticle;
+		return this.boardMapper.selectConnectArticle(boardNo);
 	}
 
 	//게시판 삭제
 	@Override
 	public void deleteBoard(int boardNo) {
 		this.boardMapper.deleteBoard(boardNo);
-		
 	}
 
 	//게시판 수정
 	@Override
 	public void updateBoard(BoardVO boardVo, BoardGradeVO boardGradeVo) {
-		this.boardMapper.updateBoard(boardVo, boardGradeVo);		
-		log.info("-------------moddao" + boardVo.toString());
-		log.info("-------------dao" + boardGradeVo.toString());
+		this.boardMapper.updateBoard(boardVo, boardGradeVo);
 	}
 
 	//게시판 정보 조회
 	@Override
 	public BoardBoardGradeVO selectOneBoard(int boardNo) {
-		BoardBoardGradeVO boardBoardGradeVo = this.boardMapper.selectOneBoard(boardNo);
-		return boardBoardGradeVo;
+		return this.boardMapper.selectOneBoard(boardNo);
 	}
 	
 	//게시판 정보 조회(전체)
 	@Override
 	public ArrayList<BoardBoardGradeVO> selectAllBoard() {
-		ArrayList<BoardBoardGradeVO> boardAndGradeList = this.boardMapper.selectAllBoard();
-		return boardAndGradeList;
+		return this.boardMapper.selectAllBoard();
 	}
 
 	//게시판 이름 중복 검사
 	@Override
 	public Integer selectDuplicatedBoard(String boardName) {
-		Integer duplicatedBoard = this.boardMapper.selectDuplicatedBoard(boardName);
-		return duplicatedBoard;
+		return this.boardMapper.selectDuplicatedBoard(boardName);
 	}
 
 	//게시판 이름 목록 조회
 //	@Override
-// 	public List<BoardVO> selectBoardNameList() {
-// 		return this.boardMapper.selectBoardNameList();
-// 	}
+//	public List<BoardVO> selectBoardNameList() {
+//		return this.boardMapper.selectBoardNameList();
+//	}
+
 
 	//즐겨찾기 게시판 추가
 	@Override
@@ -106,6 +98,7 @@ public class BoardDaoImpl implements BoardDao {
 		this.boardMapper.deleteLikeBoard(memberNo, boardNo);
 	}
 
+	//해당 게시판이 회원의 즐겨찾기 게시판 목록에 존재하는지 확인
 	@Override
 	public int selectLikeBoard(int memberNo, int boardNo) {
 		return this.boardMapper.selectLikeBoard(memberNo, boardNo);
@@ -114,8 +107,7 @@ public class BoardDaoImpl implements BoardDao {
 	//즐겨찾기 게시판 조회
 	@Override
 	public ArrayList<BoardVO> selectLikeBoardList(int no) {
-		ArrayList<BoardVO> likeBoardList = this.boardMapper.selectLikeBoardList(no);
-		return likeBoardList;
+		return this.boardMapper.selectLikeBoardList(no);
 	}
 
 
