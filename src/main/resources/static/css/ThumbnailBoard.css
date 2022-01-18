@@ -110,3 +110,21 @@
 .fixed_img_col{
     width: 900px;
 }
+
+.write_article_btn{
+    width: 900px;
+}
+
+.write_article_btn button{
+    width: 100px;
+    height: 30px;
+    /*font-size: 18px;*/
+    /*border-radius: 5px;*/
+    /*border: 0;*/
+    /*background-color: #0B5ED7;*/
+    /*color: white;*/
+}
+
+#paging_area a:hover{
+    cursor: pointer;
+}

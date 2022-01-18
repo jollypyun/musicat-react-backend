@@ -15,4 +15,5 @@ public class Playlist {
     private String playlistName;
     private List<PlaylistNode> playlistNodes = new ArrayList<>();
     private PlaylistImage playlistImage;
+    private List<Link> links;
 }
