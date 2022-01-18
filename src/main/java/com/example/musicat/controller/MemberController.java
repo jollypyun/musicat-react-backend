@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import com.example.musicat.controller.form.JoinForm;
 import com.example.musicat.service.member.ProfileService;
+import com.example.musicat.service.music.MusicApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,9 @@ public class MemberController {
 	@Autowired
 	private ProfileService profileService;
 
+	@Autowired
+	private MusicApiService musicApiService;
+
 //	회원가입
 //	@PostMapping("/join") // 이걸 실행하는 값의 주소
 //	public String joinMember(MemberVO mVo) {
@@ -86,6 +90,9 @@ public class MemberController {
 		String encodePassword = encodePwd.encode(form.getPassword()); //비밀번호 암호화
 		MemberVO mvo = MemberVO.joinMember(form.getEmail(), encodePassword, form.getNickname());
 		this.memberService.registerMember(mvo);
+		mvo = this.memberService.retrieveMemberByEmail(mvo.getEmail());
+		log.info("방금 가입한 멤버 넘버 : " + mvo.getNo());
+		this.musicApiService.makeNowPlaying(mvo);
 //		this.profileService.addProfile(mvo.getNo());
 
 //		return "redirect:/musicatlogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
