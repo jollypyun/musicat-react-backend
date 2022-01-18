@@ -227,7 +227,7 @@
 
                             <th:block th:if="${reply.hide == 0}">
                                 <th:block th:if="${reply.depth == 1}">
-                                    <div class="reply-style ps-5" th:id="${reply.groupNo}">
+                                    <div class="reply-style ps-5" th:id="${reply.no}">
                                         <div class="reply-info-style">
                                             <div>
                                                 <span class="me-3 dropdown">
@@ -245,7 +245,7 @@
                                             </div>
                                             <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
-                                        <div class="mt-2 detail-replyBtn-style">
+                                        <div class="mt-2 detail-replyBtn-style" th:id="${reply.groupNo}">
                                             <input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>
 
                                             <th:block th:if="${loginMemberNo == reply.memberNo}">
@@ -257,7 +257,7 @@
                                 </th:block>
 
                                 <th:block th:unless="${reply.depth == 1}">
-                                    <div class="reply-style" th:id="${reply.groupNo}">
+                                    <div class="reply-style" th:id="${reply.no}">
                                         <div class="reply-info-style">
                                             <div>
                                             <span class="me-3 dropdown">
@@ -276,7 +276,7 @@
                                             <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
 
-                                        <div class="mt-2 detail-replyBtn-style">
+                                        <div class="mt-2 detail-replyBtn-style" th:id="${reply.groupNo}">
                                             <input th:if="${#authorization.expr('isAuthenticated()')}" type="button"
                                                    class="depth_reply_btn me-2" value="답글쓰기"/>
 
