@@ -9,9 +9,15 @@
                 <div class="myPage-top">
                     <div class="myPage-top-image">
                         <!--                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>-->
-                        <button style="border: none;outline: none; background-color: transparent;" onclick="openProfile()">
+                        <button style="border: none;outline: none; background-color: transparent;" onclick="openProfile()" th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                             <img th:src="|/profileImage/${member.getNo()}|"/>
                         </button>
+                        <th:block th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} != ${member.getNo()}">
+                            <img th:src="|/profileImage/${member.getNo()}|"/>
+                        </th:block>
+                        <th:block th:if="${!#authorization.expr('isAuthenticated()')}">
+                            <img th:src="|/profileImage/${member.getNo()}|"/>
+                        </th:block>
                         <div id="profileModalHolder"></div>
                     </div>
                     <div class="myPage-top-profile">
@@ -48,7 +54,7 @@
                     </th:block>
                 </div>
 
-                <div class="myPage-btn-style" th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
+                <div class="myPage-btn-style" th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                     <form class="me-3" method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
                         <button type="submit">추가</button>
                     </form>
@@ -136,6 +142,7 @@
                     </div>
                 </div>
             </div>
+    </main>
         </div>
 </div>
 </div>
