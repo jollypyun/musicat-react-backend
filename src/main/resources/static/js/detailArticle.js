@@ -73,9 +73,9 @@ $(document).ready(function () {
 				if(replyList[i].depth == 1){
 					htmlStr.push('<div class="reply-style ps-5" id=' + replyList[i].no + '>');
 				}else{
-					htmlStr.push('<div class="reply-style" id=' + replyList[i].groupNo + '>');
+					htmlStr.push('<div class="reply-style" id=' + replyList[i].no + '>');
 				}
-				htmlStr.push('<div class="reply-style" id=' + replyList[i].groupNo + '>');
+				htmlStr.push('<div class="reply-style" id=' + replyList[i].no + '>');
 				htmlStr.push('<div class="reply-info-style">');
 				htmlStr.push('<div>');
 				htmlStr.push('<span class="me-3 dropdown">');
@@ -89,7 +89,7 @@ $(document).ready(function () {
 				htmlStr.push('</div>');
 				htmlStr.push('<span class="Content reply-text-style">'+replyList[i].content+'</span>');
 				htmlStr.push('</div>');
-				htmlStr.push('<div class="mt-2 detail-replyBtn-style">');
+				htmlStr.push('<div class="mt-2 detail-replyBtn-style id="' + replyList[i].groupNo +'>');
 				htmlStr.push('<input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>');
 				if (replyList[i].memberNo == $('#login_no').val()) {
 					htmlStr.push('<input type="button" class="modify_Reply_Form_Btn me-2" value="수정" />');
