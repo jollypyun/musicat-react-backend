@@ -7,6 +7,7 @@
           rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
+
         .card {
             box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 
@@ -44,6 +45,7 @@
         }
     </style>
 </head>
+<body class="bg-primary">
 <button class="btn" onclick="history.back()"><span class="material-icons md-36">arrow_circle_left</span></button>
 <h2 style="text-align:center" th:if="${flag} == 0">Following</h2>
 <h2 style="text-align:center" th:if="${flag} == 1">Followers</h2>
@@ -78,4 +80,5 @@
 <!--        <p th:text="${followed.nickname}"/>-->
 <!--    </div>-->
 <!--</div>-->
+</body>
 </html>
