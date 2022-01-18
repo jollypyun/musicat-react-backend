@@ -23,7 +23,7 @@
 
                     <div class="detailArticle-table-style">
                         <h1>
-                            <input type="hidden" id="grp_no" value="">
+                            <input type="hidden" id="grp_no" name="grp_no" value="">
                             <input type="hidden" id="login_no" th:value="${loginMemberNo}">
                             <input type="hidden" id="member_no" th:value="${article.memberNo}">
                             <input type="hidden" id="article_no" th:value="${article.no}">
@@ -100,7 +100,9 @@
 
 
                                         <div th:each="music : ${musicList}" class="mb-2">
+
                                             <div class="detail-audio-part-style mb-4">
+
                                                 <img id="detailAudioImg" th:src="${music.links[1].href}"
                                                      alt=""
                                                      srcset="">
@@ -127,24 +129,17 @@
                                                         <!--              style="display: none"-->
 
                                                     </div>
-
-                                                    <!--                                                    <div class="dropdown-divider"></div>-->
-
                                                 </div>
 
                                             </div>
-
                                             <div class="dropdown-divider"></div>
                                             <p class="content-text-style" th:text="${article.content}"
                                                th:field="*{content}"></p>
                                         </div>
                                     </div>
                                 </th:block>
-
                             </div>
-
                             <div class="dropdown-divider"></div>
-
 
                             <div class="detailArticle-function-style">
                                 <div id="like_area" class="detailArticle-like-style">
@@ -175,7 +170,6 @@
                                 </div>
                             </div>
 
-
                             <!--Tag 출력 부분-->
                             <th:block th:if="${not #strings.isEmpty(article.getSelectTags())}">
                                 <div class="dropdown-divider"></div>
@@ -189,7 +183,6 @@
                                 </div>
                                 <div class="dropdown-divider"></div>
                             </th:block>
-
                         </form>
                     </div>
 
@@ -235,7 +228,6 @@
 						<textarea id="write_content" name="write_content" rwos="10"
                                   cols="75" placeholder="댓글을 입력해주세요."></textarea>
 
-
                         <button type="button" id="write_reply_btn">등록</button>
                     </div>
 
@@ -247,9 +239,9 @@
                             </th:block>
 
                             <th:block th:if="${reply.hide == 0}">
-
                                 <th:block th:if="${reply.depth == 1}">
-                                    <div class="reply-style ps-5" th:id="${reply.getNo()}">
+                                    <div class="reply-style ps-5" th:id="${reply.no}">
+
                                         <div class="reply-info-style">
                                             <div>
                                                 <span class="me-3 dropdown">
@@ -267,7 +259,9 @@
                                             </div>
                                             <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
-                                        <div class="mt-2 detail-replyBtn-style">
+
+                                        <div class="mt-2 detail-replyBtn-style" th:id="${reply.groupNo}">
+
                                             <input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>
 
                                             <th:block th:if="${loginMemberNo == reply.memberNo}">
@@ -279,7 +273,9 @@
                                 </th:block>
 
                                 <th:block th:unless="${reply.depth == 1}">
-                                    <div class="reply-style" th:id="${reply.getNo()}">
+
+                                    <div class="reply-style" th:id="${reply.no}">
+
                                         <div class="reply-info-style">
                                             <div>
                                             <span class="me-3 dropdown">
@@ -298,10 +294,10 @@
                                             <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
 
-                                        <div class="mt-2 detail-replyBtn-style">
+
+                                        <div class="mt-2 detail-replyBtn-style" th:id="${reply.groupNo}">
                                             <input th:if="${#authorization.expr('isAuthenticated()')}" type="button"
                                                    class="depth_reply_btn me-2" value="답글쓰기"/>
-
 
                                             <th:block th:if="${loginMemberNo == reply.memberNo}">
                                                 <input type="button" class="modify_Reply_Form_Btn me-2" value="수정"/>
@@ -321,7 +317,6 @@
                         <div id="writeDepthReplyForm" class="detailArticle-reply-style">
 							<textarea id="write_depth_content" name="write_content" rwos="10"
                                       cols="75" placeholder="댓글을 입력해주세요."></textarea>
-
                             <div class="detailArticle-replyBtn-style">
                                 <button type="button" id="write_depth_reply_btn">등록</button>
                                 <button type="button" class="depth_reply_cancle_btn mt-2">취소</button>
@@ -336,13 +331,10 @@
 
                             <input type="hidden" id="no"/>
                             <textarea id="reply_content" rows="5" cols="50" placeholder=""></textarea>
-
                             <button class="modify_cancle">취소</button>
                             <button class="modify_reply_btn">수정</button>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
