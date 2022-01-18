@@ -144,8 +144,8 @@
 //-------------------------------------------------------- 카테고리 추가 공백 + 중복 검사
 
 		$('#writeCategory').keypress(function(event) {
-			if(event.which == 13) {
-				$('#writeCategoryBtn').click();
+			 if(event.which == 13) {
+				 event.preventDefault();
 			}
 		});
 
@@ -236,7 +236,7 @@
 		// ------------------------------------------------------------- 카테고리 수정 공백 + 중복 검사
 		$('#modifyCategory').keypress(function(event) {
 			if(event.which == 13) {
-				$('#modifyCategoryBtn').click();
+				event.preventDefault();
 			}
 		});
 
@@ -595,7 +595,7 @@
 		// ------------------------------------------------------------- 게시판 수정 공백 + 중복 검사
 	$('#modifyBoard').keypress(function(event) {
 		if(event.which == 13) {
-			$('#modifyBoardBtn').click();
+			event.preventDefault();
 		}
 	});
 
