@@ -283,9 +283,12 @@ public class ArticleController {
 			,BindingResult result
 			,@ModelAttribute FileFormVO form
 			,@RequestParam("tags") String tags
-			,@PathVariable("articleNo") int articleNo)
+			,@PathVariable("articleNo") int articleNo
+			,@RequestParam(value = "audioNo", required = false) Long audioNo)
 			throws IOException {
 		log.info("update접근");
+
+		log.info("update audioNo : {}", audioNo);
 
 		ModelAndView mv = new ModelAndView();
 		if (result.hasErrors()){
@@ -319,11 +322,13 @@ public class ArticleController {
 		}
 		// bind
 		ArticleVO.updateArticle(article, articleNo, articleForm, attacheFile,imageFiles);
-		this.articleService.modifyArticle(article);
+		this.articleService.modifyArticle(article, audioNo);
 		// view
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/articles/" + articleNo);
 		mv.setView(redirectView);
+
+
 		return mv;
 	}
 

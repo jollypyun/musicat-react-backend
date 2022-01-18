@@ -79,6 +79,10 @@
 								</div>
 								<div id="image_container">
 								</div>
+								<label class="write-audio-style" for="write-audiofile-upload">
+									<i class="fas fa-file-audio fa-2x"></i>
+								</label>
+								<input type="button" value="노래 등록" onclick="openChild()" id="write-audiofile-upload"/><br />
 							</div>
 
                             <!-- 음악 등록 칸 -->
@@ -103,8 +107,8 @@
 
                                                     <span id="audioTitle_thymeleaf" class="audioTitle"
                                                           th:text="${music.title}">제목입니다~</span>
-                                                    <input type="hidden" id="audioNo_thymeleaf" name="audioNo"
-                                                           value=""/>
+<!--                                                    <input type="hidden" id="audioNo_thymeleaf" name="audioNo"-->
+<!--                                                           value=""/>-->
                                                     <button type="button" th:id = "${music.id}" class="audioDelBtn" onclick="alter_delete(this)">
                                                         <span id="audioDelIcon_thymeleaf"
                                                               class="material-icons">close</span>
