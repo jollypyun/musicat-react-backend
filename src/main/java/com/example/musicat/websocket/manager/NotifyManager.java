@@ -38,6 +38,11 @@ public class NotifyManager {
         notifyMap.put(memberNo, notifyId);
     }
 
+    public void deleteFromNotifyList(int memberNo) {
+        log.info("deleteNotify : " + memberNo);
+        notifyMap.remove(memberNo);
+    }
+
     public String getNotifyId(int memberNo) {
         return notifyMap.get(memberNo);
     }
