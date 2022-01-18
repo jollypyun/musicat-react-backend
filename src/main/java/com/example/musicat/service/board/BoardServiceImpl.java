@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service("boardService")
+@Transactional
 public class BoardServiceImpl implements BoardService {
 
 	@Autowired
@@ -28,7 +29,6 @@ public class BoardServiceImpl implements BoardService {
 
 	// 게시판 추가(기본정보 + 등급)
 	@Override
-	@Transactional
 	public void registerBoard(BoardVO boardVo, BoardGradeVO boardGradeVo) {
 		this.boardDao.insertBoard(boardVo);
 		boardGradeVo.setBoardNo(this.boardDao.selectLastInsertBoardNo());
@@ -37,6 +37,7 @@ public class BoardServiceImpl implements BoardService {
 
 	// 게시판 종류 조회
 	@Override
+	@Transactional(readOnly = true)
 	public ArrayList<BoardVO> retrieveBoardkind() {
 		return this.boardDao.selectBoardkind();
 
@@ -44,6 +45,7 @@ public class BoardServiceImpl implements BoardService {
 
 	// 연결된 게시글 조회
 	@Override
+	@Transactional(readOnly = true)
 	public int retrieveConnectArticle(int boardNo) {
 		return this.boardDao.selectConnectArticle(boardNo);
 	}
@@ -73,23 +75,27 @@ public class BoardServiceImpl implements BoardService {
 
 	// 게시판 정보 조회
 	@Override
+	@Transactional(readOnly = true)
 	public BoardBoardGradeVO retrieveOneBoard(int boardNo) {
 		return this.boardDao.selectOneBoard(boardNo);
 	}
 
 	// 게시판 정보 조회 (전체)
 	@Override
+	@Transactional(readOnly = true)
 	public ArrayList<BoardBoardGradeVO> retrieveAllBoard() {
 		return this.boardDao.selectAllBoard();
 	}
 
 	//게시판 이름 중복 여부 조회
 	@Override
+	@Transactional(readOnly = true)
 	public Integer retrieveDuplicatedBoard(String boardName) {
 		return this.boardDao.selectDuplicatedBoard(boardName);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<BoardVO> retrieveAllWriteBoard(int gradeNo) {
 		ArrayList<BoardBoardGradeVO> boardAndGradeList = this.boardDao.selectAllBoard();
 		List<BoardBoardGradeVO> writeBoardList = new ArrayList<>();
@@ -140,12 +146,14 @@ public class BoardServiceImpl implements BoardService {
 
 	//해당 게시판이 회원의 즐겨찾기 게시판 목록에 존재하는지 확인
 	@Override
+	@Transactional(readOnly = true)
 	public int retrieveLikeBoard(int memberNo, int boardNo) {
 		return this.boardDao.selectLikeBoard(memberNo, boardNo);
 	}
 
 	//즐겨찾기 게시판 조회
 	@Override
+	@Transactional(readOnly = true)
 	public ArrayList<BoardVO> retrieveLikeBoardList(int memberNo) {
 		return this.boardDao.selectLikeBoardList(memberNo);
 	}

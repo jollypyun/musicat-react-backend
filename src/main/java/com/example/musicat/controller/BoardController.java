@@ -123,7 +123,7 @@ public class BoardController {
 	// 카테고리 수정
 	@ResponseBody
 	@PostMapping("/modifyCategory")
-	public Map<String, Integer> modifyCategory ( @Valid @ModelAttribute("categoryVo") CategoryVO categoryVo) {
+	public Map<String, Integer> modifyCategory ( @ModelAttribute("categoryVo") CategoryVO categoryVo) {
 		Map<String, Integer> map = new HashMap<>();
 
 		int categoryNo = categoryVo.getCategoryNo();
@@ -133,33 +133,16 @@ public class BoardController {
 		Integer duplicatedCategory = this.categoryService.retrieveDuplicatedCategory(categoryName);
 		if (duplicatedCategory == null) { //중복 x
 			map.put("result", 0);
-			log.info("----------------------------1 ");
 			this.categoryService.modifyCategory(categoryNo, categoryName);
 		} else { //중복 o
 			if(duplicatedCategory == categoryNo) {
 				map.put("result", 0); //해당 카테고리면 저장o
-				log.info("----------------------------2 ");
 			} else {
 				map.put("result", 1); //다른 카테고리면 저장x
 			}
 		}
 
 		return map;
-//
-//
-//		if (count != 0) {
-//			//log.info("수정 불가");
-//			//int duplicatedCategory = 1;
-//			map.put("result", 1);
-//		} else {
-//			//log.info("수정 가능");
-//			//int duplicatedCategory = 0;
-//			map.put("result", 0);
-//			this.categoryService.modifyCategory(categoryNo, categoryName);
-//			//this.categoryService.registerCategory(categoryVo.getCategoryName());
-//		}
-//		log.info("/modifyCategory-----------------------");
-//		return map;
 	}
 
 
@@ -170,7 +153,6 @@ public class BoardController {
 
 		int categoryNo = categoryVo.getCategoryNo();
 		int count = categoryService.retrieveConnectBoard(categoryNo);
-		log.info("count count count {}", count);
 
 		Map<String, Integer> map = new HashMap<>();
 		if (count != 0) {
@@ -263,7 +245,6 @@ public class BoardController {
 	}
 
 	// 게시판 수정
-	//-------------------------------------------------------------------트랜잭션.. 걸어야되니..?
 	@ResponseBody
 	@PostMapping("/modifyBoard")
 	public Map<String, Integer> modifyBoard(

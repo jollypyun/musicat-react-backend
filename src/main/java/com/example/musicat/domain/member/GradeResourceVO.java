@@ -10,8 +10,11 @@ import org.apache.ibatis.type.Alias;
 @NoArgsConstructor
 @Alias("gradeResourceVo")
 public class GradeResourceVO {
+    private int gradeResourceNo;
+    private int resourceNo;
     private String resourceName;
     private String resourceType;
     private int gradeNo;
     private String grade;
+    private String gradeName;
 }
