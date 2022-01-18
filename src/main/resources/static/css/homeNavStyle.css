@@ -40,12 +40,12 @@
 }
 
 .section::-webkit-scrollbar-track {
-    background-color: #A2B2FF;
+    background-color: #d290f8;
     /*border-radius: 10px;*/
 }
 
 .section::-webkit-scrollbar-thumb {
-    background-color: #6550ff;
+    background-color: #ad34fd;
     /*border-radius: 10px;*/
 }
 

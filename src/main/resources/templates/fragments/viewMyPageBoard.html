@@ -9,18 +9,47 @@
         <div class="container-fluid px-4">
             <div class="row mt-3 mb-5">
                 <div class="myPage-top">
-                    <div class="myPage-top-image" th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
-                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>
+                    <div class="myPage-top-image">
+                        <button style="border: none;outline: none; background-color: transparent;" onclick="openProfile()" th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
+                            <img th:src="|/profileImage/${member.getNo()}|"/>
+                        </button>
+                        <th:block th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} != ${member.getNo()}">
+                            <img th:src="|/profileImage/${member.getNo()}|"/>
+                        </th:block>
+                        <th:block th:if="${!#authorization.expr('isAuthenticated()')}">
+                            <img th:src="|/profileImage/${member.getNo()}|"/>
+                        </th:block>
                     </div>
                     <div class="myPage-top-profile">
-                        <span th:text="${member.getNickname()}"></span>
-                        <th:block th:if = "${#authorization.expr('isAuthenticated()')}">
-                            <button onclick="location.href='/ChangePwd'" th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">비밀번호 변경</button>
-                            <div id="ezy">
-                                <button th:onclick="'follow(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 0">Follow</button>
-                                <button th:onclick="'cancel(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'" th:if = "${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 1">Cancel</button>
+                        <div class="myPage-top-profile-info">
+                            <span th:text="${member.getNickname()}"></span>
+                            <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+                                <button onclick="location.href='/ChangePwd'"
+                                        th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">비밀번호
+                                    변경
+                                </button>
+                                <div id="ezy">
+                                    <button th:onclick="'follow(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'"
+                                            th:if="${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 0">
+                                        Follow
+                                    </button>
+                                    <button th:onclick="'cancel(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'"
+                                            th:if="${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 1">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </th:block>
+                        </div>
+                        <div class="myPage-top-profile-follow">
+                            <div>
+                                <a th:href="|/followedList/${member.getNo()}|" class="me-2">Followers</a>
+                                <a th:href="|/followingList/${member.getNo()}|">Following</a>
                             </div>
-                        </th:block>
+                            <div>
+                                <span th:text="${follow.followed}" class="me-2"></span>
+                                <span th:text="${follow.following}"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -36,60 +65,33 @@
                 </div>
                 <div class="myPage-content">
                     <div class="myPage-content-left">
-                        <table id="datatablesSimple"  class="list-normal-table">
+                        <table id="datatablesSimple" class="list-normal-table">
                             <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>제목</th>
-                                    <th>날짜</th>
-                                    <th>조회수</th>
-                                    <th>추천</th>
-                                </tr>
+                            <tr>
+                                <th>No</th>
+                                <th>제목</th>
+                                <th>날짜</th>
+                                <th>조회수</th>
+                                <th>추천</th>
+                            </tr>
                             </thead>
 
                             <tbody>
-                                <tr th:each="article : ${articles}">
-                                    <td th:text="${article.no}"></td>
-                                    <td>
-                                        <a th:text="${article.subject}"
-                                           th:href="|/articles/${article.no}|"></a>
-                                    </td>
-                                    <td th:text="${article.writeDate}"></td>
-                                    <td th:text="${article.viewcount}"></td>
-                                    <td th:text="${article.likecount}"></td>
+                            <tr th:each="article : ${articles}">
+                                <td th:text="${article.no}"></td>
+                                <td>
+                                    <a th:text="${article.subject}"
+                                       th:href="|/articles/${article.no}|"></a>
+                                </td>
+                                <td th:text="${article.writeDate}"></td>
+                                <td th:text="${article.viewcount}"></td>
+                                <td th:text="${article.likecount}"></td>
 
-                                </tr>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="myPage-content-right">
-                        <div class="myPage-content-right-top">
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <a th:href="|/followedList/${member.getNo()}|">Followers</a>
-                                    </th>
-                                    <th>
-                                        <a th:href="|/followingList/${member.getNo()}|">Following</a>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <td th:text = "${follow.followed}"></td>
-                                <td th:text = "${follow.following}"></td>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="myPage-content-right-bottom">
-                            <ul>
-                                <li>1</li>
-                                <li>2</li>
-                                <li>3</li>
-                                <li>4</li>
-                            </ul>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -98,6 +100,33 @@
 </html>
 <script th:src="@{../js/jquery-3.6.0.min.js}"></script>
 <script th:inline="javascript">
+    // $(function () {
+    //     $.ajax({
+    //         url: "/profile",
+    //         success: function (data) {
+    //             $("#profileModalHolder").html(data);
+    //         },
+    //     });
+    // });
+
+    function openProfile() {
+        // $.ajax({
+        //     url: "/profile",
+        //     success: function (data) {
+        //         $("#modal-profile").modal("show");
+        //         console.log("모달 열어");
+        //     },
+        // });
+        // window.name = "부모창 이름";
+        window.name = "MyPage";
+        // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+        openWin = window.open(
+            "/profile",
+            "profile-edit",
+            "width=570, height=450, resizable = no, scrollbars = no"
+        );
+    }
+
     function follow(opponent, my) {
         $.ajax({
             url: "/follow",
@@ -107,7 +136,7 @@
                 opponent: opponent,
                 my: my
             },
-            success: function(data) {
+            success: function (data) {
                 console.log(data.checkFollow);
                 console.log(data.opponent);
                 console.log(data.my);
@@ -117,13 +146,13 @@
                 a += '<button onclick="cancel(' + data.opponent + ',' + data.my + ')" >Cancel</button>';
                 $('#ezy').html(a);
             },
-            error: function(err) {
+            error: function (err) {
                 console.trace(err);
             }
         });
     }
 
-    function cancel(opponent, my){
+    function cancel(opponent, my) {
         $.ajax({
             url: "/followCancel",
             method: "POST",
@@ -132,7 +161,7 @@
                 opponent: opponent,
                 my: my
             },
-            success: function(data) {
+            success: function (data) {
                 console.log(data.checkFollow);
                 console.log(data.opponent);
                 console.log(data.my);
@@ -142,7 +171,7 @@
                 a += '<button onclick="follow(' + data.opponent + ',' + data.my + ')" >Follow</button>';
                 $('#ezy').html(a);
             },
-            error: function(err) {
+            error: function (err) {
                 console.trace(err);
             }
         });

@@ -54,11 +54,13 @@
 
     <!-- admin Toggle-->
 
+<!--    th:onclick="|location.href='@{/members}'|"-->
+
     <button
       sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')"
       class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 icon-gray"
       id="adminToggle"
-      th:onclick="|location.href='@{/members}'|"
+      th:onclick="|location.href='@{/daily}'|"
     >
       <i class="fas fa-cog fa-lg"></i>
     </button>
@@ -219,7 +221,7 @@
       window.open(
               "/chat/rooms",
               "Chattings",
-              "width=400, height=700"
+              "width=600, height=700"
       );
     }
 
