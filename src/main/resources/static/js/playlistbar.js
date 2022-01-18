@@ -328,7 +328,18 @@ async function requestCurrentPlay(url) {
 }
 
 function addMusicToPlaylist(a, b) {
-    location.href="/selectPlaylist/"+ a + "/" + b;
+    window.name = "MyPage";
+    // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+    openWin = window.open(
+        "/selectPlaylist/"+ a + "/" + b,
+        "profile-edit",
+        "width=570, height=450, resizable = no, scrollbars = no"
+    );
+    // location.href="/selectPlaylist/"+ a + "/" + b;
+}
+
+function openAddMusic() {
+    
 }
 
 function deleteMusicFromNow(musicNos, memberNo) {
