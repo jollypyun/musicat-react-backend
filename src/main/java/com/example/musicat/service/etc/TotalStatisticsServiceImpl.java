@@ -14,7 +14,7 @@ public class TotalStatisticsServiceImpl implements TotalStatisticsService {
 	@Autowired
 	private TotalStatisticsDaoImpl totalDaoImpl;
 
-	@Transactional(readOnly = true)
+	//	@Transactional(readOnly = true)
 	@Override
 	public TotalStatisticsVO retrieve() {
 		return this.totalDaoImpl.selectTotal();
