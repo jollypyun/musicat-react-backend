@@ -73,6 +73,12 @@
 												</span> <a th:text="${board.boardName}"
 														   th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
 											</div>
+											<div th:if="${board.boardkind == 3}">
+												<span><i class="far fa-sticky-note"></i>
+												</span> <a th:text="${board.boardName}"
+														   th:href="@{/board/{boardNo}/articles(boardNo = ${board.boardNo})}"></a>
+											</div>
+
 
 <!--											<div th:if="${board.boardkind == 0}">-->
 <!--												<span> <i class="far fa-list-alt"></i> </span>-->
