@@ -266,6 +266,11 @@ public class ArticleController {
 		model.addAttribute("article", article);
 		model.addAttribute("gradeNo", gradeNo); // 나중에 seesion member에 접근해서 grade_no 받아올 것
 		model.addAttribute("HomeContent", "/view/board/updateArticleForm");
+
+		// 게시글 수정 - 음악 받아오기
+		List<Music> musics = musicApiService.retrieveMusics(articleNo);
+		model.addAttribute("musics", musics);
+
 		return "view/home/viewHomeTemplate";
 	}
 
