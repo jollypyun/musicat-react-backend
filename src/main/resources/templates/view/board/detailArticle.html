@@ -21,6 +21,7 @@
 
                     <div class="detailArticle-table-style">
                         <h1>
+                            <input type="hidden" id="grp_no" value="">
                             <input type="hidden" id="login_no" th:value="${loginMemberNo}">
                             <input type="hidden" id="member_no" th:value="${article.memberNo}">
                             <input type="hidden" id="article_no" th:value="${article.no}">
@@ -110,7 +111,7 @@
                                                                 onclick="onAddtoPlayClick(this)">
                                                             <span id="audioPlayIcon"
                                                                   class="material-icons md-36">add</span>
-                                                            <input type="hidden" th:value="${music.id}" </button>
+                                                            <input type="hidden" th:value="${music.id}"> </button>
                                                     </div>
                                                     <div class="detail-audioControls-style" style="display: none">
                                                         <!--            <div id="waveform"></div>-->
@@ -118,18 +119,20 @@
                                                         <audio th:src="${music.links[0].href}" id="detail-audio"
                                                                controls=""></audio>
                                                         <!--              style="display: none"-->
-
                                                     </div>
 
                                                     <div class="dropdown-divider"></div>
 
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </th:block>
                                 <p class="content-text-style" th:text="${article.content}" th:field="*{content}"></p>
                             </div>
 
                             <div class="dropdown-divider"></div>
-
+                        </form>
                     </div>
                     </th:block>
                     <p class="content-text-style" th:text="${article.content}" th:field="*{content}"></p>
@@ -155,29 +158,6 @@
                     </div>
                 </div>
             </div>
-
-            <!--                                <div class="detailArticle-function-style">-->
-            <!--                                    <button th:if="${#authorization.expr('isAuthenticated()')}"-->
-            <!--                                            id="writeForm_btn"-->
-            <!--                                            onclick="writeForm()" type="button">글쓰기-->
-            <!--                                    </button>-->
-            <!--                                </div>-->
-
-            <!--                                &lt;!&ndash;본인만 가능&ndash;&gt;-->
-            <!--                                <div class="detail-userCheck-style me-3"-->
-            <!--                                     th:if="${loginMemberNo == article.memberNo}"-->
-            <!--                                     style="float: right;">-->
-            <!--                                    <div class="detail-userBtn-style">-->
-            <!--                                        <input type="button"-->
-            <!--                                               th:onclick="|location.href='@{/articles/update/{articleNo}(articleNo=${article.no})}'|"-->
-            <!--                                               value="수정"/>-->
-            <!--                                        <input type="button"-->
-            <!--                                               th:onclick="|location.href='@{/articles/remove/{articleNo}(articleNo=${article.no})}'|"-->
-            <!--                                               value="삭제"/>-->
-
-            <!--                                    </div>-->
-            <!--                                </td>-->
-            <!-- </div> -->
 
             <!--Tag 출력 부분-->
             <th:block th:if="${not #strings.isEmpty(article.getSelectTags())}">
@@ -315,6 +295,9 @@
         </div>
 
         <!-- 답글 폼 -->
+        <div id="depth_reply_write_form_area">
+
+        </div>
         <div id="write_depth_reply_form" style="display: none">
             <div id="writeDepthReplyForm" class="detailArticle-reply-style">
                 <textarea id="write_depth_content" name="write_content" rwos="10" cols="75"

@@ -137,20 +137,14 @@ $(document).ready(function () {
 		const no = $(this).parents('.reply-style').attr('id');
 		console.log('no::::::::::', no);
 		// var grpCheck = $('#write_depth_reply_form').find('grp_no');
-
         var grpCheck = $('#grp_no').val();
         console.log('grpCheck',grpCheck);
 		if (grpCheck != null){
-
+            $('#grp_no').empty();
 		}
-
-        $(this).parents('div').find('#grp_no').attr('value', no);
-		console.log(111, $('#grp_no').val());
-        $(this).parents('div').find('#grp_no').val(no);
-        console.log(222, $('#grp_no').val());
-        $('input[name=grp_no]').attr('value', no);
+        $('#grp_no').val(no);
         console.log(333, $('#grp_no').val());
-		// $('#write_depth_reply_form').insertAfter('#' + no);
+
         $('#write_depth_reply_form').insertAfter($(this).parents('.reply-style'));
 		console.log('insertAfter');
 		$('#write_depth_reply_form').show();
@@ -174,8 +168,10 @@ $(document).ready(function () {
         $("#write_depth_content").val(""); // textarea 비우기
         $('#write_depth_content').removeClass('changeplaceholder');
         $("#write_depth_content").attr('placeholder', '댓글을 입력해주세요');
-        $('#write_depth_reply_form').insertAfter('#depth_reply_write_form_area');
-        $('#write_depth_reply_form').hide(); // 폼 닫기
+        // $('#write_depth_reply_form').insertAfter('#depth_reply_write_form_area');
+        $('#write_depth_reply_form').insertAfter('#writeReplyForm');
+        $('#write_depth_reply_form').hide();
+        $('#write_depth_reply_form').html();
         console.log('ajax후');
     });
 
