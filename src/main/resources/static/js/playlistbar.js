@@ -16,9 +16,9 @@ $(document).ready(function () {
     document.getElementById("playlist-play").addEventListener("click", playlistPlay);
     document.getElementById("playlist-next").addEventListener("click", playlistNext);
     document.getElementById("volume-mute").addEventListener("click", volumeMute);
-    document.getElementById("playlist-heartEmpty").addEventListener("click", playlistHeartEmpty);
-    document.getElementById("playlist-heart").addEventListener("click", playlistHeart);
-    document.getElementById("playlist-personAdd").addEventListener("click", playlistPersonAdd);
+    // document.getElementById("playlist-heartEmpty").addEventListener("click", playlistHeartEmpty);
+    // document.getElementById("playlist-heart").addEventListener("click", playlistHeart);
+    // document.getElementById("playlist-personAdd").addEventListener("click", playlistPersonAdd);
     document.getElementById("playlist-songList").addEventListener("click", songList);
 
 
@@ -26,7 +26,7 @@ $(document).ready(function () {
     let volumeMuteOn = document.getElementById("volume-mute-on");
     let volumeProgress = document.getElementById("volume-progress");
     let timeProgress = document.getElementById("time-progress");
-    let songAddInfo = document.getElementsByClassName(".song-addInfo");
+    // let songAddInfo = document.getElementsByClassName(".song-addInfo");
     let playlistClose = document.getElementById("playlist-close");
 
 
@@ -47,15 +47,6 @@ $(document).ready(function () {
 
     }
 
-    // audio.oncanplaythrough = function() {
-    //
-    //     if(audio.currentTime < 10)
-    //         audio.currentTime=10
-    //
-    //     console.log("oncanplaythrough");
-    //     audio.play();
-    // }
-
     // 사운드 시간 바뀔때 current 값 수정
     timeProgress.addEventListener('change', function () {
         audioCurrent = timeProgress.value;
@@ -70,11 +61,21 @@ $(document).ready(function () {
         audio.volume = volume;
     })
 
+    window.onbeforeunload = function () {
+        // sessionStorage.setItem("audioTime", audioCurrent);
+        sessionStorage.setItem("audioSrc",  audio.currentSrc);
+    }
+
     // 오디오 시간 업데이트
     audio.addEventListener('timeupdate', function () {
 
-        timeProgress.value = audio.currentTime;
-        $('.playListBar-time-current').text(getLength(audio.currentTime));
+        // let sessionAudioTime = sessionStorage.getItem("audioTime");
+        audioCurrent = audio.currentTime;
+        timeProgress.value = audioCurrent;
+        $('.playListBar-time-current').text(getLength(audioCurrent));
+
+        audioCurrent = Math.floor(this.currentTime) + "";
+
 
 
     })
@@ -98,24 +99,50 @@ $(document).ready(function () {
     })
 
 
-    songAddInfo.addEventListener('click', function () {
-        if ($(".songInfo-dropbox").css("display") === "none") {
-            document.getElementsByClassName("songInfo-dropbox").style.display = "flex";
-        } else {
-            document.getElementsByClassName("songInfo-dropbox").style.display = "none";
-        }
-    })
+    // songAddInfo.addEventListener('click', function () {
+    //     if ($(".songInfo-dropbox").css("display") === "none") {
+    //         document.getElementsByClassName("songInfo-dropbox").style.display = "flex";
+    //     } else {
+    //         document.getElementsByClassName("songInfo-dropbox").style.display = "none";
+    //     }
+    // })
 
 
     function playlistPrev() {
-        alert("이전 노래 재생 버튼");
+        //alert("이전 노래 재생 버튼");
+
+        let index = $(".playListBar-title-index").text();
+
+        let id = Number(index.substr(3, index.length)) - Number("1");
+        console.log(id);
+
+        index = "cpl" + id;
+        $("#audio").attr("src",$("#"+index).children().children().children("label").children("input").attr("id"));
+        $(".playListBar-title-song").text($("#"+index).children().children().children("label").children("input").parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__title").text());
+        $(".playListBar-title-singer").text($("#"+index).children().children().children("label").children("input").parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__artist").text());
+        $(".playListBar-inner-img").children("img").attr("src", $("#"+index).children().children().children("label").children("input").parent().parent().children("img").attr("src"));
+        $(".playListBar-title-index").text($("#"+index).children().children().children("label").children("input").closest("li").attr("id"));
+        $("#audio").trigger("play");
     }
 
 
 
 
     function playlistNext() {
-        alert("다음 노래 재생 버튼");
+        //alert("다음 노래 재생 버튼");
+        let index = $(".playListBar-title-index").text();
+
+        let id = Number(index.substr(3, index.length)) + Number("1");
+        console.log(id);
+
+        index = "cpl" + id;
+        $("#audio").attr("src",$("#"+index).children().children().children("label").children("input").attr("id"));
+        $(".playListBar-title-song").text($("#"+index).children().children().children("label").children("input").parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__title").text());
+        $(".playListBar-title-singer").text($("#"+index).children().children().children("label").children("input").parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__artist").text());
+        $(".playListBar-inner-img").children("img").attr("src", $("#"+index).children().children().children("label").children("input").parent().parent().children("img").attr("src"));
+        $(".playListBar-title-index").text($("#"+index).children().children().children("label").children("input").closest("li").attr("id"));
+        $("#audio").trigger("play");
+        //playlistPlay();
     }
 
     function volumeMute() {
@@ -136,19 +163,19 @@ $(document).ready(function () {
 
     }
 
-    function playlistHeartEmpty() {
-        document.getElementById("playlist-heartEmpty").style.display = "none";
-        document.getElementById("playlist-heart").style.display = "inline-block";
-    }
-
-    function playlistHeart() {
-        document.getElementById("playlist-heartEmpty").style.display = "inline-block";
-        document.getElementById("playlist-heart").style.display = "none";
-    }
-
-    function playlistPersonAdd() {
-        alert("노래 올린 사람 구독");
-    }
+    // function playlistHeartEmpty() {
+    //     document.getElementById("playlist-heartEmpty").style.display = "none";
+    //     document.getElementById("playlist-heart").style.display = "inline-block";
+    // }
+    //
+    // function playlistHeart() {
+    //     document.getElementById("playlist-heartEmpty").style.display = "inline-block";
+    //     document.getElementById("playlist-heart").style.display = "none";
+    // }
+    //
+    // function playlistPersonAdd() {
+    //     alert("노래 올린 사람 구독");
+    // }
 
     function songList() {
 
@@ -214,7 +241,7 @@ const getAjaxAddToPlay = function (url, musicNos) {
         });
     });
 };
-
+// 현재 재생목록에 추가
 async function requestProcessAddToPlay(url, musicNos) {
     try {
         // await 다음에는 비동기 처리 작업이 와야함.
@@ -225,16 +252,18 @@ async function requestProcessAddToPlay(url, musicNos) {
         //console.log(JSON.parse(localStorage.getItem("musics")));
 
         $("#currentPlayList_ul").empty(); // 만약 spa 방식으로 한다면 마지막에 추가한 1개만 리턴해서 갱신하는게 더 좋을 듯
-        result.forEach(function(e){
-            $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
-                + '"/> <label class="playlist-dropUp-content-playBtn position-absolute"> <input type="button" id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
-             // $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
-             //     + '"/> <button id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons">play_circle</span></button><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><span>30:30</span><button class="song-addInfo"><span class="material-icons">dehaze</span></button><div class="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
-             // $("#audioTime").text(getLength(audioCurrent));
-        });
-        //$("#audio").attr("src", result[0].links[0].href);
-        //$("#audio").trigger("play");
+        result.forEach(function(e, index) {
+            $("#currentPlayList_ul").append('<li id=\"cpl' + index +'\"><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
+                + '"/> <label class="playlist-dropUp-content-playBtn position-absolute"> <input type="button" id = \"'
+                + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span class = \"dropUp-inner-info-text__title\">'+ e.title +'</span><span class = \"dropUp-inner-info-text__artist\">' + e.memberNickname + '</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
 
+        });
+        let lastIndex = result.length-1;
+        $("#audio").attr("src", result[lastIndex].links[0].href);
+        $("#audio").trigger("play");
+        $(".playListBar-title-song").text(result[lastIndex].title);
+        $(".playListBar-title-singer").text(result[lastIndex].memberNickname);
+        $(".playListBar-inner-img").children("img").attr("src", result[lastIndex].links[1].href);
 
     } catch (error) {
         console.log("error : ", error);
@@ -245,13 +274,16 @@ function playAudio(btn) {
     //console.log($(btn).attr("id"));
 
     $("#audio").attr("src", $(btn).attr("id"));
-
+    $(".playListBar-title-song").text($(btn).parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__title").text());
+    $(".playListBar-title-singer").text($(btn).parent().parent().children(".dropUp-inner-info-text").children(".dropUp-inner-info-text__artist").text());
+    $(".playListBar-inner-img").children("img").attr("src", $(btn).parent().parent().children("img").attr("src"));
+    $(".playListBar-title-index").text($(btn).closest("li").attr("id"));
     $("#audio").trigger("play");
+
+    audio.currentTime = sessionStorage.getItem("audioTime");
 
     playlistPlay();
 
-    // $("#audio").currentTime=10;
-    // console.log($("#audio").currentTime);
 }
 
 const getCurrentPlayAjax = function (url, musicNos) {
@@ -275,6 +307,7 @@ const getCurrentPlayAjax = function (url, musicNos) {
     });
 };
 
+// 현재 재생목록 받아오기
 async function requestCurrentPlay(url) {
     try {
         console.log("재생목록 받아오기 ajax 실행 url : " + url);
@@ -285,23 +318,34 @@ async function requestCurrentPlay(url) {
             // audioObject.src=e.links[0].href;
             // console.log("ajaxtime : "+audioObject.duration);
             $("#currentPlayList_ul").append('<li><div class=\"playlist-dropUp-content-inner\"><div class=\"dropUp-inner-info\"><img src=\"' + e.links[1].href
-                + '"/> <label class="playlist-dropUp-content-playBtn position-absolute"> <input type="button" id = \"' + e.links[0].href + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span>'+ e.title +'</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
+                + '"/> <label class="playlist-dropUp-content-playBtn position-absolute"> <input type="button" id = \"' + e.links[0].href
+                + '\" onclick = \"playAudio(this)\"><span class="material-icons position-absolute">play_circle</span></label><div class="dropUp-inner-info-text"><span>'+ e.title
+                +'</span></div></div><div class="dropUp-inner-time"><button id="song-addInfo"><span class="material-icons">dehaze</span></button><div id="songInfo-dropbox"><button >삭제</button><button >플레이리스트 추가</button></div></div></div><div></div></li>');
         });
     } catch (error) {
         console.log("error : ", error);
     }
 }
 
-//     //이 페이지에서 뒤로가기 하거나, 목록을 누를때 그리고 새로고침을 할 때 이벤트 발생
-// $(window).on("beforeunload", function (event) {
-//     event.preventDefault();
-//     //requestCurrentPlay("retrieveMusicList/" + $("#userNoForPlaylist").text() + "pl1");
-//     // ajax
-//
-//     // 현재 시간이랑
-//     //$("#audio").currentTime;
-//     // 현재 음악의... 정보? 를 ajax로 넘겨서 security principal에 저장하고
-//     //$("#audio").attr("src");
-//
-//     // 이후 requestCurrentPlay 에서 audio 셋팅해줘야할듯
-// });
+function addMusicToPlaylist(a, b) {
+    location.href="/selectPlaylist/"+ a + "/" + b;
+}
+
+function deleteMusicFromNow(musicNos, memberNo) {
+    let url = "/pullmusic/" + memberNo + "pl1";
+    $.ajax({
+        url: url,
+        method: "DELETE",
+        dataType: "text",
+        data: {
+            musicNos : musicNos,
+            memberNo : memberNo
+        },
+        success: function (data) {
+            $("." + musicNos).remove();
+        },
+        error: function (e) {
+            console.log(e);
+        },
+    });
+}

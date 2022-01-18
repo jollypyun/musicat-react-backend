@@ -40,4 +40,9 @@
 
 .myPage-content-left-playlist-btn{
     margin-top: 10px;
+    display: flex;
+}
+
+.myPage-btn-style{
+    display: flex;
 }

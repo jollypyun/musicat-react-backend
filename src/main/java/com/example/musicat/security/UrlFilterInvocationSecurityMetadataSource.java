@@ -38,8 +38,6 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
                     Arrays.asList(new SecurityConfig(gradeResource.getGrade())));
         }
 
-//        log.info("9 request ----- " + request.getRequestURI());
-//        log.info("10 requestMap ----- " + requestMap);
 
         //해당 url의 권한 리스트를 리턴
 //        if(requestMap != null) {
