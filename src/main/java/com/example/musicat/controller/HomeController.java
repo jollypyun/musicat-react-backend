@@ -213,7 +213,6 @@ public class HomeController {
         FollowVO follow = new FollowVO();
 
         List<Music> musics = null;
-        int i = 0;
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
