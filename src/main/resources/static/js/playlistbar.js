@@ -342,7 +342,7 @@ function deleteMusicFromNow(musicNos, memberNo) {
             memberNo : memberNo
         },
         success: function (data) {
-            $("#" + musicNos).remove();
+            $("." + musicNos).remove();
         },
         error: function (e) {
             console.log(e);
