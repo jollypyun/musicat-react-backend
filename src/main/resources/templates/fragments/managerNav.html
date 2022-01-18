@@ -19,6 +19,35 @@
             <div class="nav">
                 <div class="sb-sidenav-menu-heading ">관리자</div>
                 <div class="collapsed">
+                    <!-- 통계 시작 -->
+                    <a
+                            class="nav-link collapsed fw-bold"
+                            th:href="@{/daily}"
+                    >
+                        <div class="sb-nav-link-icon">
+                            <i class="fas fa-columns"></i>
+                        </div>
+                        <span>통계</span>
+                        <div class="sb-sidenav-collapse-arrow">
+                            <i class="fas fa-angle-down"></i>
+                        </div>
+                    </a>
+                    <!-- 통계 끝 -->
+                    <!-- 게시글 관리 시작 -->
+                    <a
+                            class="nav-link collapsed fw-bold"
+                            href="/boardManager"
+                    >
+                        <div class="sb-nav-link-icon">
+                            <i class="fas fa-columns"></i>
+                        </div>
+                        <span>게시글 관리</span>
+                        <div class="sb-sidenav-collapse-arrow">
+                            <i class="fas fa-angle-down"></i>
+                        </div>
+                    </a>
+                    <!-- 게시글 관리 끝 -->
+
                     <!-- 회원 관리 시작 -->
                     <a
                             class="nav-link collapsed fw-bold"
@@ -49,20 +78,21 @@
 <!--                    </a>-->
                     <!-- 등급 관리 끝 -->
 
-                    <!-- 게시글 관리 시작 -->
+
+
+                    <!-- 리소스 관리 시작 -->
                     <a
                             class="nav-link collapsed fw-bold"
-                            href="/boardManager"
+                            href="/resourceManager"
                     >
                         <div class="sb-nav-link-icon">
                             <i class="fas fa-columns"></i>
                         </div>
-                        <span>게시글 관리</span>
+                        <span>리소스 관리</span>
                         <div class="sb-sidenav-collapse-arrow">
                             <i class="fas fa-angle-down"></i>
                         </div>
                     </a>
-                    <!-- 게시글 관리 끝 -->
 
                     <!--           꾸미기 시작
                               <a
@@ -79,20 +109,7 @@
                               </a>
                               꾸미기 끝 -->
 
-                    <!-- 통계 시작 -->
-                    <a
-                            class="nav-link collapsed fw-bold"
-                            th:href="@{/daily}"
-                    >
-                        <div class="sb-nav-link-icon">
-                            <i class="fas fa-columns"></i>
-                        </div>
-                        <span>통계</span>
-                        <div class="sb-sidenav-collapse-arrow">
-                            <i class="fas fa-angle-down"></i>
-                        </div>
-                    </a>
-                    <!-- 통계 끝 -->
+
 
                 </div>
             </div>

@@ -123,7 +123,7 @@ public class BoardController {
 	// 카테고리 수정
 	@ResponseBody
 	@PostMapping("/modifyCategory")
-	public Map<String, Integer> modifyCategory ( @Valid @ModelAttribute("categoryVo") CategoryVO categoryVo) {
+	public Map<String, Integer> modifyCategory ( @ModelAttribute("categoryVo") CategoryVO categoryVo) {
 		Map<String, Integer> map = new HashMap<>();
 
 		int categoryNo = categoryVo.getCategoryNo();
@@ -133,33 +133,16 @@ public class BoardController {
 		Integer duplicatedCategory = this.categoryService.retrieveDuplicatedCategory(categoryName);
 		if (duplicatedCategory == null) { //중복 x
 			map.put("result", 0);
-			log.info("----------------------------1 ");
 			this.categoryService.modifyCategory(categoryNo, categoryName);
 		} else { //중복 o
 			if(duplicatedCategory == categoryNo) {
 				map.put("result", 0); //해당 카테고리면 저장o
-				log.info("----------------------------2 ");
 			} else {
 				map.put("result", 1); //다른 카테고리면 저장x
 			}
 		}
 
 		return map;
-//
-//
-//		if (count != 0) {
-//			//log.info("수정 불가");
-//			//int duplicatedCategory = 1;
-//			map.put("result", 1);
-//		} else {
-//			//log.info("수정 가능");
-//			//int duplicatedCategory = 0;
-//			map.put("result", 0);
-//			this.categoryService.modifyCategory(categoryNo, categoryName);
-//			//this.categoryService.registerCategory(categoryVo.getCategoryName());
-//		}
-//		log.info("/modifyCategory-----------------------");
-//		return map;
 	}
 
 
@@ -170,7 +153,6 @@ public class BoardController {
 
 		int categoryNo = categoryVo.getCategoryNo();
 		int count = categoryService.retrieveConnectBoard(categoryNo);
-		log.info("count count count {}", count);
 
 		Map<String, Integer> map = new HashMap<>();
 		if (count != 0) {
@@ -263,7 +245,6 @@ public class BoardController {
 	}
 
 	// 게시판 수정
-	//-------------------------------------------------------------------트랜잭션.. 걸어야되니..?
 	@ResponseBody
 	@PostMapping("/modifyBoard")
 	public Map<String, Integer> modifyBoard(
@@ -341,50 +322,59 @@ public class BoardController {
 		BoardBoardGradeVO bbgVO = this.boardService.retrieveOneBoard(boardNo);
 		String boardName = bbgVO.getBoardVo().getBoardName();
 		int boardkind = bbgVO.getBoardVo().getBoardkind();
-		List<ArticleVO> articles = new ArrayList<>();
-		int startPage = 1;
-
 		MemberVO member = HomeController.checkMemberNo();
+		model.addAttribute("memberNo", member.getNo());
 		int gradeNo = member.getGradeNo();
 
-		int writeCheck = boardService.checkWriteGrade(boardNo, gradeNo);
-		model.addAttribute("writeCheck", writeCheck);
+		if(boardkind == 3) {
+			List<GradeArticleVO> articles = this.articleService.selectGradeArticles();
+			model.addAttribute("articles", articles); // 게시글 정보 전송
+		} else{
+			List<ArticleVO> articles = new ArrayList<>();
+			int startPage = 1;
 
-		if(boardkind == 0){ //일반 게시판
-			articles = this.articleService.retrieveBoard(boardNo);
-		} else { // 썸네일 보드
-			articles = this.articleService.selectBoardList(boardNo, startPage);
-		}
+			int writeCheck = boardService.checkWriteGrade(boardNo, gradeNo);
+			model.addAttribute("writeCheck", writeCheck);
 
-		int totalCount = this.articleService.boardTotalCount(boardNo);
-		Criteria creitea = Criteria.getThumbnailPaging(1, totalCount);
-
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("pageSize", creitea.getPageSize());
-		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("endPage", creitea.getEndPage());
-		log.info("startPage: {}, pageSize: {}, totalCount: {}, endPage: {}",startPage,creitea.getPageSize(),totalCount,creitea.getEndPage());
-		// bind
-		FileVO file = new FileVO();
-		if(boardkind != 2){
-			for (ArticleVO article : articles) {
-				// Html 변환
-				String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
-				article.setSubject(escapeSubject);
-
-				file.setArticleNo(article.getNo());
-				file.setFileType(1);
-				FileVO thumbFile = this.fileService.retrieveThumbFile(file);
-				if(thumbFile != null) {
-					article.setThumbnail(thumbFile);
-				} else {
-					FileVO noFile = new FileVO();
-					noFile.setSystemFileName("noimage.png");
-					article.setThumbnail(noFile);
-				}
+			if(boardkind == 0){ //일반 게시판
+				articles = this.articleService.retrieveBoard(boardNo);
+			} else { // 썸네일 보드
+				articles = this.articleService.selectBoardList(boardNo, startPage);
 			}
-		} else { //오디오 게시판 썸네일 설정
-			setAudioBoardThumbnail(articles);
+
+			int totalCount = this.articleService.boardTotalCount(boardNo);
+			Criteria creitea = Criteria.getThumbnailPaging(1, totalCount);
+
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("pageSize", creitea.getPageSize());
+			model.addAttribute("totalCount", totalCount);
+			model.addAttribute("endPage", creitea.getEndPage());
+			log.info("startPage: {}, pageSize: {}, totalCount: {}, endPage: {}",startPage,creitea.getPageSize(),totalCount,creitea.getEndPage());
+			// bind
+			FileVO file = new FileVO();
+			if(boardkind != 2){
+				for (ArticleVO article : articles) {
+					// Html 변환
+					String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
+					article.setSubject(escapeSubject);
+
+					file.setArticleNo(article.getNo());
+					file.setFileType(1);
+					FileVO thumbFile = this.fileService.retrieveThumbFile(file);
+					if(thumbFile != null) {
+						article.setThumbnail(thumbFile);
+					} else {
+						FileVO noFile = new FileVO();
+						noFile.setSystemFileName("noimage.png");
+						article.setThumbnail(noFile);
+					}
+				}
+			} else { //오디오 게시판 썸네일 설정
+				setAudioBoardThumbnail(articles);
+			}
+
+			model.addAttribute("articles", articles); // 게시글 정보 전송
+
 		}
 
 
@@ -400,7 +390,6 @@ public class BoardController {
 		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
-		model.addAttribute("articles", articles); // 게시글 정보 전송
 		model.addAttribute("boardkind", boardkind); // 게시글 유형
 
 		// 양 ~
@@ -411,7 +400,7 @@ public class BoardController {
 		// ~ 양
 
 		templateModelFactory.setCurPlaylistModel(model);
-
+		log.info("boardKind: {}", boardkind);
 
 		return "/view/home/viewBoardTemplate";
 	}

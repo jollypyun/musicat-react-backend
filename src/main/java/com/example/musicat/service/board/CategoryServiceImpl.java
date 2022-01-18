@@ -12,9 +12,11 @@ import org.springframework.stereotype.Repository;
 
 
 import lombok.extern.java.Log;
+import org.springframework.transaction.annotation.Transactional;
 
 @Log
 @Repository("categoryService")
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
@@ -36,21 +38,26 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public int retrieveConnectBoard(int categoryNo) {
 		return this.categoryDao.selectConnectBoard(categoryNo);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public CategoryVO retrieveOneCategory(int categoryNo) {
 		return this.categoryDao.selectOneCategory(categoryNo);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
 	public ArrayList<CategoryVO> retrieveCategoryList() {
 		return this.categoryDao.selectCategoryList();
 	}
 
 	// 카테고리 + 게시판 목록 조회
 	@Override
+	@Transactional(readOnly = true)
 	public ArrayList<CategoryVO> retrieveCategoryBoardList() {
 		ArrayList<CategoryBoardVO> list = this.categoryDao.selectCategoryBoardList();
 
@@ -76,6 +83,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Integer retrieveDuplicatedCategory(String categoryName) {
 		return this.categoryDao.selectDuplicatedCategory(categoryName);
 	}

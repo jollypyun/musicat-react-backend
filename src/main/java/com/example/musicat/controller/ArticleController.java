@@ -20,6 +20,7 @@ import com.example.musicat.repository.board.ArticleDao;
 
 import com.example.musicat.security.MemberAccount;
 
+import com.example.musicat.service.member.MemberService;
 import com.example.musicat.service.music.MusicApiService;
 
 import com.example.musicat.util.FileManager;
@@ -54,6 +55,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("articles")
 public class ArticleController {
 
+	private final MemberService memberService;
 	private final ArticleService articleService;
 	private final FileManager fileManager;
 	private final FileService fileService;
@@ -150,7 +152,7 @@ public class ArticleController {
 		ArticleForm form = new ArticleForm(); // 변경
 
 		// bind    
-    MemberVO member = HomeController.checkMemberNo();
+    	MemberVO member = HomeController.checkMemberNo();
 		model.addAttribute("memberNo", member.getNo());
 		
 		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
@@ -422,7 +424,22 @@ public class ArticleController {
 		return "/view/board/musicRegister";
 	}
 
+	@ResponseBody
+	@GetMapping("/insert/grade")
+	public MemberVO writeGradeArticleForm(@RequestParam("memberNo") int memberNo) throws Exception{
+		MemberVO memberVO = this.memberService.retrieveMemberByManager(memberNo);
+		return memberVO;
+	}
 
-
+	@PostMapping("/insert/grade")
+	public ModelAndView writeGradeArticle(@ModelAttribute("GradeArticleVO") GradeArticleVO gradeArticleVO) throws Exception{
+		log.info("Post insert grade");
+		ModelAndView mv = new ModelAndView();
+		log.info(gradeArticleVO.toString());
+		this.articleService.insertGradeArtilce(gradeArticleVO);
+		log.info("Post insert grade2");
+		mv.setView(new RedirectView("/board/76/articles"));
+		return mv;
+	}
 
 }

@@ -1,7 +1,7 @@
 package com.example.musicat.security;
 
 import com.example.musicat.domain.member.GradeResourceVO;
-import com.example.musicat.mapper.member.GradeResourceMapper;
+import com.example.musicat.mapper.member.ResourceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    private GradeResourceMapper gradeResourceMapper;
+    private ResourceMapper resourceMapper;
 
     private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<>();
 
@@ -29,7 +29,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         HttpServletRequest request = ((FilterInvocation) object).getRequest();
 
         //DB에서 url과 권한 정보 가져오기
-        List<GradeResourceVO> gradeResourceList = gradeResourceMapper.selectGradeResourceList();
+        List<GradeResourceVO> gradeResourceList = resourceMapper.selectGradeResourceList();
         //log.info("8 gradeResourceList ----- " + gradeResourceList.toString());
 
         //url에 권한 리스트 매칭
@@ -38,8 +38,6 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
                     Arrays.asList(new SecurityConfig(gradeResource.getGrade())));
         }
 
-        //log.info("9 request ----- " + request.getRequestURI());
-        //log.info("10 requestMap ----- " + requestMap);
 
         //해당 url의 권한 리스트를 리턴
 //        if(requestMap != null) {

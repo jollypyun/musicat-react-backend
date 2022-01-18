@@ -1,4 +1,3 @@
-
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8"/>
@@ -276,10 +275,8 @@
 		}
 
 		async function requestModifyCategory(url, categoryNo, categoryName) {
-			console.log(categoryName, " ", categoryNo, " ", url);
 			try {
 				let result = await modifyCategoryAjax(url, categoryNo, categoryName);
-				console.log("result : ", result);
 				if (result == 0) {
 					location.href = "boardManager";
 				} else if (result == 1) {
@@ -498,7 +495,7 @@
 							let modifyBoardForm = "";
 							let boardNo = $(e).closest("tr").attr("id");
 
-							modifyBoardForm += "<input id='modifyBoardNo' name='boardNo' type='hidden' value="+ boardNo + "  maxlength='20'>";
+							modifyBoardForm += "<input id='modifyBoardNo' name='boardNo' type='hidden' value='"+ boardNo + "'  maxlength='20'>";
 							modifyBoardForm += "<table>";
 							modifyBoardForm += "<tbody>";
 							modifyBoardForm += "<tr>";
@@ -692,12 +689,6 @@
 			} else {
 			}
 		}
-
-		// $(window).on('beforeunload', function () {
-		// 	return "나가게?";
-		// })
-
-
 
 	</script>
 

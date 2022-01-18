@@ -4,9 +4,11 @@
 
 .myPage-top{
     display: flex;
-    background-image: url( "/images/banner-img.jpg" );
+    background-color: whitesmoke;
     height: 200px;
     align-items: center;
+    border-top: 1px solid #666666;
+    border-bottom: 1px solid #666666;
 
 }
 .myPage-top-image{
@@ -23,13 +25,44 @@
 
 .myPage-top-profile{
     display: flex;
+    width: 80%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.myPage-top-profile span{
+    margin-bottom: 10px;
+}
+
+.myPage-top-profile-info{
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
 }
 
-.myPage-top-profile span{
-    margin-bottom: 10px;
+.myPage-top-profile-follow{
+    display: flex;
+    flex-direction: column;
+
+    width: 30%;
+    font-size: 18px;
+    border: 1px solid #666666;
+}
+
+.myPage-top-profile-follow a{
+    text-decoration: none;
+    color: #666666;
+}
+.myPage-top-profile-follow a:hover{
+    cursor: pointer;
+    color: black;
+}
+
+.myPage-top-profile-follow div{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
 }
 
 .myPage-nav{
@@ -37,7 +70,9 @@
     justify-content: flex-start;
     align-items: center;
     padding: 10px 20px;
-    border: 1px solid #666666;
+    background-color: whitesmoke;
+    border-top: 1px solid #666666;
+    border-bottom: 1px solid #666666;
 }
 .myPage-nav a{
     margin-right: 40px;

@@ -34,7 +34,11 @@ public class ProfileController {
     // 프로필 페이지 이동, session 정보를 가져와서 이동할 예정. 기능 구현을 위해서 임시 처리
     @GetMapping("/profile")
     public String chooseProfile(Model model) throws Exception{
-        MemberVO member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
+        // 양 ~
+        MemberVO member = HomeController.checkMemberNo();
+        // ~ 양
+
+        //MemberVO member = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
         //MemberVO member = memberService.retrieveMemberByManager(2);
         log.info("member : " + member);
         try {
