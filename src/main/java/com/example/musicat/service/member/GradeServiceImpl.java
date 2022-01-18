@@ -10,15 +10,18 @@ import com.example.musicat.mapper.member.GradeMapper;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Log
 @Service("gradeService")
+@Transactional
 public class GradeServiceImpl implements GradeService{
 	@Autowired private GradeMapper gradeMapper;
 
 	// 양 ~
 
 	@Override
+	@Transactional(readOnly = true)
 	public Integer retrieveGradeNo(String auth) {
 		auth = auth.replace("[", "");
 		auth = auth.replace("]", "");
@@ -28,6 +31,7 @@ public class GradeServiceImpl implements GradeService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ArrayList<GradeVO> retrieveGradeList() throws Exception {
 		return this.gradeMapper.selectGradeList();
 	}

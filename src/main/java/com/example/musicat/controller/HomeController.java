@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.java.Log;
 import com.example.musicat.util.TemplateModelFactory;
 
+import org.apache.catalina.session.StandardSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,7 +171,13 @@ public class HomeController {
     @GetMapping("/myPage/Playlist/{userNo}")
     public String myPage(Model model, @PathVariable int userNo) {
         //MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
+<<<<<<< HEAD
         MemberVO me = checkMemberNo();
+=======
+
+        MemberVO me = checkMemberNo();
+
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
         List<Playlist> playlists = new ArrayList<>();
@@ -214,7 +222,6 @@ public class HomeController {
         FollowVO follow = new FollowVO();
 
         List<Music> musics = null;
-
         try {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
@@ -245,7 +252,10 @@ public class HomeController {
     //작성한 게시글 조회 ------------------- 게시글별 댓글 수 추가하면 좋겠다
     @GetMapping("/myPage/Board/{userNo}")
     public String myPageBoard(Model model, @PathVariable int userNo) {
+<<<<<<< HEAD
 	//MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
+=======
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
 	      int checkFollow = 0;
@@ -253,7 +263,7 @@ public class HomeController {
             member = memberService.retrieveMemberByManager(userNo);
             follow.setFollowing(followService.countFollowing(userNo));
             follow.setFollowed(followService.countFollowed(userNo));
-	          checkFollow = followService.checkFollow(member.getNo(), userNo);
+            checkFollow = followService.checkFollow(member.getNo(), userNo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -282,7 +292,11 @@ public class HomeController {
     //작성한 댓글 조회--------------------- 작성자 이름에 링크, 게시글 제목 띄우기
     @GetMapping("/myPage/Reply/{userNo}")
     public String myPageReply(Model model, @PathVariable int userNo) {
+<<<<<<< HEAD
 	//MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
+=======
+
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
 	      int checkFollow = 0;
@@ -330,7 +344,11 @@ public class HomeController {
     //추천 누른 게시글 조회
     @GetMapping("/myPage/Like/{userNo}")
     public String myPageLike(Model model, @PathVariable int userNo) {
+<<<<<<< HEAD
 	    //MemberVO me = ((MemberAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getMemberVo();
+=======
+      
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
 	      int checkFollow = 0;
@@ -378,7 +396,6 @@ public class HomeController {
 
     // 플레이리스트 수정 폼 요청
     @GetMapping("/changePlaylistForm/{id}")
-
     public String changePlaylist(Model model, @PathVariable("id") String id) {
         Playlist playlist = musicApiService.getOnePlaylist(id);
         log.info("playlist : " + playlist.getPlaylistImage());
@@ -386,4 +403,14 @@ public class HomeController {
         return "view/etc/changePlaylist";
     }
 
+    // 곡 넣을 플레이리스트 선택 폼 요청
+    @GetMapping("/selectPlaylist/{musicNo}/{memberNo}")
+    public String selectPlaylistForm(Model model, @PathVariable("musicNo") int musicNo, @PathVariable("memberNo") int memberNo) {
+        log.info("controller 도달");
+        List<Playlist> playlists = this.musicApiService.showPlaylist(memberNo);
+        log.info("playlist들의 정보 : " + playlists.toString());
+        model.addAttribute("playlistsByMember", playlists);
+        model.addAttribute("musicNo", musicNo);
+        return "view/etc/addMusicToPlaylist";
+    }
 }

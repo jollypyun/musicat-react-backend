@@ -210,7 +210,7 @@ async function requestProcessMusic(url, musicId) {
         const result = await getAjaxMusic(url, musicId);
         console.log("ajax")
         if (result.success == 1) {
-            $("#receive").empty();
+            //$("#receive").empty();
             $("#receive").hide();
             console.log("success");
         } else {

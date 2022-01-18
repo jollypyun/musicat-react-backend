@@ -110,8 +110,7 @@
 	<!-- 즐겨찾기 게시판 삭제 -->
 	<delete id="deleteLikeBoard">
 		 DELETE FROM likeboard
-		 WHERE member_no = #{memberNo}
-		   AND board_no = #{boardNo};
+		 WHERE member_no = #{memberNo} AND board_no = #{boardNo};
 	</delete>
 
 	<!-- 즐겨찾기 게시판 여부 조회 -->

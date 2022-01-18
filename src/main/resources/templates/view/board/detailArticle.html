@@ -8,7 +8,6 @@
 <link th:href="@{/css/detailArticleStyle.css}" rel="stylesheet" />
 
 
-
 <div id="layoutSidenav_content">
     <main>
         <div class="container-fluid px-4">
@@ -109,9 +108,16 @@
 
                                                         <button type="button" id="audioPlayBtn" class="audioPlayBtn"
                                                                 onclick="onAddtoPlayClick(this)">
+<<<<<<< HEAD
                                                             <span id="audioPlayIcon"
                                                                   class="material-icons md-36">add</span>
                                                             <input type="hidden" th:value="${music.id}"> </button>
+=======
+                                                        <span id="audioPlayIcon"
+                                                              class="material-icons md-36">add</span>
+                                                            <input type="hidden" th:value="${music.id}"
+                                                        </button>
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
                                                     </div>
                                                     <div class="detail-audioControls-style" style="display: none">
                                                         <!--            <div id="waveform"></div>-->
@@ -121,9 +127,10 @@
                                                         <!--              style="display: none"-->
                                                     </div>
 
-                                                    <div class="dropdown-divider"></div>
+<!--                                                    <div class="dropdown-divider"></div>-->
 
                                                 </div>
+<<<<<<< HEAD
                                             </div>
                                         </div>
                                     </div>
@@ -132,6 +139,58 @@
                             </div>
 
                             <div class="dropdown-divider"></div>
+=======
+
+                                            </div>
+
+                                            <div class="dropdown-divider"></div>
+                                            <p class="content-text-style" th:text="${article.content}"
+                                               th:field="*{content}"></p>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                            </div>
+
+                            <div class="dropdown-divider"></div>
+
+
+                            <div class="detailArticle-function-style">
+                                <button th:if="${#authorization.expr('isAuthenticated()')}"
+                                        id="writeForm_btn"
+                                        onclick="writeForm()" type="button" class="btn">글쓰기
+                                </button>
+                                <!--본인만 가능-->
+                                <div class="detail-userCheck-style mx-3"
+                                     th:if="${loginMemberNo == article.memberNo}"
+                                     style="float: right;">
+                                    <div class="detail-userBtn-style">
+                                        <input type="button"
+                                               th:onclick="|location.href='@{/articles/update/{articleNo}(articleNo=${article.no})}'|"
+                                               value="수정" class="btn me-3"/>
+                                        <input type="button"
+                                               th:onclick="|location.href='@{/articles/remove/{articleNo}(articleNo=${article.no})}'|"
+                                               value="삭제" class="btn"/>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--Tag 출력 부분-->
+                            <th:block th:if="${not #strings.isEmpty(article.getSelectTags())}">
+                                <div class="dropdown-divider"></div>
+                                <div id="tag_area" class="detailArticle-tag-style mt-3">
+                                    <ul id="tag-list" class="tag-ul">
+                                        <div th:each="tag : ${article.getSelectTags()}"
+                                             style="display: inline-block">
+                                            <li class='tag-item' th:text="${tag.name}"></li>
+                                        </div>
+                                    </ul>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                            </th:block>
+
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
                         </form>
                     </div>
                     </th:block>
@@ -214,8 +273,14 @@
             <textarea id="write_content" name="write_content" rwos="10" cols="75" placeholder="댓글을 입력해주세요."></textarea>
 
 
+<<<<<<< HEAD
             <button type="button" id="write_reply_btn">등록</button>
         </div>
+=======
+                                        <div class="mt-2 detail-replyBtn-style">
+                                            <input th:if="${#authorization.expr('isAuthenticated()')}" type="button"
+                                                   class="depth_reply_btn me-2" value="답글쓰기"/>
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
 
         <div id="replys" class="mt-2">
             <div class="reply_list" th:each="reply : ${article.getReplyList()}">
