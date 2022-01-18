@@ -15,7 +15,9 @@
                         <!-- Swiper -->
                         <div class="swiper mySwiper">
                             <div class="swiper-wrapper" th:each="bestArticle : ${bestArticles}">
-                                <div class="swiper-slide"><img th:src="${bestArticle.systemFileName}"></div>
+                                <th:block th:each="bestArticle : ${bestArticles}">
+                                    <div class="swiper-slide"><img th:src="${bestArticle.systemFileName}"></div>
+                                </th:block>
                             </div>
                             <div class="swiper-button-next"></div>
                             <div class="swiper-button-prev"></div>
