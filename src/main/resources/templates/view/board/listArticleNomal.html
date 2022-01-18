@@ -11,14 +11,17 @@
                 <div class="articleList card" style="padding-left: 0px;padding-right: 0px;">
                     <div class="articleVO-header card-header">
                         <i class="fas fa-table me-1"></i>
-                        <span class="board-name" th:text="${boardName}">게시판 이름</span>
+                        <span class="board-name" th:text="${boardName}"></span>
 
-                            <th:block th:if="${#authorization.expr('isAuthenticated()')}">
-                                <button type="button" id="insertLikeBoard" th:value="${#authentication.principal.getMemberVo.getNo}">즐겨찾기</button>
-                            </th:block>
-                            <th:block th:if="${#authorization.expr('isAnonymous()')}">
-                                <button type="button" id="insertLikeBoardAnonymous" >즐겨찾기</button>
-                            </th:block>
+                        <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+                            <button class="border-0 bg-transparent" type="button" id="insertLikeBoard"
+                                    th:value="${#authentication.principal.getMemberVo.getNo}"><span class="material-icons">star</span>
+                            </button>
+                        </th:block>
+                        <th:block th:if="${#authorization.expr('isAnonymous()')}">
+                            <button class="border-0 bg-transparent" type="button" id="insertLikeBoardAnonymous"><span
+                                    class="material-icons">star</span></button>
+                        </th:block>
                     </div>
                     <div class="articleVOS card-body">
                         <input type="hidden" id="boardNo" th:value="${boardNo}">
