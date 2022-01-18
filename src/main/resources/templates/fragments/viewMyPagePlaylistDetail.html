@@ -15,7 +15,18 @@
                     </div>
                     <div class="myPage-top-profile">
                         <span>PlayList Name</span>
+                        <div class="myPage-top-profile-follow">
+                            <div>
+                                <a th:href="|/followedList/${member.getNo()}|" class="me-2">Followers</a>
+                                <a th:href="|/followingList/${member.getNo()}|">Following</a>
+                            </div>
+                            <div>
+                                <span th:text="${follow.followed}" class="me-2"></span>
+                                <span th:text="${follow.following}"></span>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
                 <div class="mt-4 mb-4 myPage-nav">
                     <a th:href="@{'/myPage/Playlist/' + ${member.getNo()}}">Playlist</a>
@@ -31,9 +42,9 @@
                 <div class="myPage-content">
                     <div class="myPage-content-left">
                         <div class="myPage-content-left-btn">
-                            <button>링크 복사</button>
+                            <button class="me-3 btn btn-primary">링크 복사</button>
                             <form th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}" method="POST" th:action="|/deleteplaylist/${member.getNo}/${playlistKey}|">
-                                <button type="submit">삭제</button>
+                                <button class="btn btn-primary" type="submit">삭제</button>
                             </form>
                         </div>
                         <div class="myPage-content-left-playlist" th:each = "music : ${musics}" th:object="${music}">
@@ -50,16 +61,16 @@
                                         <td width="20%" th:text="*{title}"></td>
                                         <td width="15%" th:text="*{links[0].href.length}"></td> <!-- Playtime -->
                                         <td width="10%">
-                                            <button th:src="@{'/pushmusic' + *{memberNo} + 'pl1'}">재생</button>
+                                            <button class="btn btn-primary" th:src="@{'/pushmusic' + *{memberNo} + 'pl1'}">재생</button>
                                         </td>
                                         <td width="10%">
-                                            <button>좋아요</button>
+                                            <button class="btn btn-primary">좋아요</button>
                                         </td>
                                         <td width="10%" >
                                             <form th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}" th:action="|/pullmusic/${playlistKey}|" method="post">
                                                 <input type="hidden" name = "musicNos" th:value="*{id}">
                                                 <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit">삭제</button>
+                                                <button class="btn btn-primary" type="submit">삭제</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -69,30 +80,30 @@
                             </div>
                         </div>
                     </div>
-                    <div class="myPage-content-right">
-                        <div class="myPage-content-right-top">
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th><a th:href="|/followedList/${member.getNo()}|">Followers</a></th>
-                                    <th><a th:href="|/followingList/${member.getNo()}|">Following</a></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <td th:text = "${follow.followed}"></td>
-                                <td th:text = "${follow.following}"></td>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="myPage-content-right-bottom">
-                            <ul>
-                                <li>1</li>
-                                <li>2</li>
-                                <li>3</li>
-                                <li>4</li>
-                            </ul>
-                        </div>
-                    </div>
+<!--                    <div class="myPage-content-right">-->
+<!--                        <div class="myPage-content-right-top">-->
+<!--                            <table>-->
+<!--                                <thead>-->
+<!--                                <tr>-->
+<!--                                    <th><a th:href="|/followedList/${member.getNo()}|">Followers</a></th>-->
+<!--                                    <th><a th:href="|/followingList/${member.getNo()}|">Following</a></th>-->
+<!--                                </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                <td th:text = "${follow.followed}"></td>-->
+<!--                                <td th:text = "${follow.following}"></td>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                        <div class="myPage-content-right-bottom">-->
+<!--                            <ul>-->
+<!--                                <li>1</li>-->
+<!--                                <li>2</li>-->
+<!--                                <li>3</li>-->
+<!--                                <li>4</li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
