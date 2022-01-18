@@ -96,11 +96,13 @@
 
                                 <th:block th:if="${not #strings.isEmpty(musicList)}">
                                     <div class="mt-4 content-audioList-style">
-                                        <span class="material-icons md-36 float-end">playlist_add</span>
+                                        <!--                                        <span class="material-icons md-36 float-end">playlist_add</span>-->
 
 
                                         <div th:each="music : ${musicList}" class="mb-2">
-                                            <div class="detail-audio-part-style">
+
+                                            <div class="detail-audio-part-style mb-4">
+
                                                 <img id="detailAudioImg" th:src="${music.links[1].href}"
                                                      alt=""
                                                      srcset="">
@@ -125,9 +127,10 @@
                                                                id="detail-audio"
                                                                controls=""></audio>
                                                         <!--              style="display: none"-->
+
                                                     </div>
-                                                    <!--                                                    <div class="dropdown-divider"></div>-->
                                                 </div>
+
                                             </div>
                                             <div class="dropdown-divider"></div>
                                             <p class="content-text-style" th:text="${article.content}"
@@ -139,6 +142,15 @@
                             <div class="dropdown-divider"></div>
 
                             <div class="detailArticle-function-style">
+                                <div id="like_area" class="detailArticle-like-style">
+                                    <div th:if="${article.likeCheck eq 0}">
+                                        <button type='button' id='add_like_btn'><i class='far fa-heart fa-lg'></i></button>
+                                    </div>
+                                    <div th:unless="${article.likeCheck eq 0}">
+                                        <button type='button' id='del_like_btn'><i class='fas fa-heart fa-lg'></i> </button>
+                                    </div>
+
+                                </div>
                                 <button th:if="${#authorization.expr('isAuthenticated()')}"
                                         id="writeForm_btn"
                                         onclick="writeForm()" type="button" class="btn">글쓰기
@@ -205,11 +217,13 @@
                             <!--                            <span th:text="${subArticle.viewcount}">조회수</span>-->
                             <!--                            <span th:text="${subArticle.likecount}">추천</span>-->
                         </div>
+
                     </div>
 
                     <div class="dropdown-divider"></div>
 
                     <!-- 댓글 -->
+
                     <div th:if="${#authorization.expr('isAuthenticated()')}" id="writeReplyForm"
                          class="detailArticle-reply-style">
 						<textarea id="write_content" name="write_content" rwos="10"
@@ -227,7 +241,8 @@
 
                             <th:block th:if="${reply.hide == 0}">
                                 <th:block th:if="${reply.depth == 1}">
-                                    <div class="reply-style ps-5" th:id="${reply.groupNo}">
+                                    <div class="reply-style ps-5" th:id="${reply.no}">
+
                                         <div class="reply-info-style">
                                             <div>
                                                 <span class="me-3 dropdown">
@@ -245,7 +260,9 @@
                                             </div>
                                             <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
-                                        <div class="mt-2 detail-replyBtn-style">
+
+                                        <div class="mt-2 detail-replyBtn-style" th:id="${reply.groupNo}">
+
                                             <input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>
 
                                             <th:block th:if="${loginMemberNo == reply.memberNo}">
@@ -255,6 +272,29 @@
                                         </div>
                                     </div>
                                 </th:block>
+
+                                <th:block th:unless="${reply.depth == 1}">
+
+                                    <div class="reply-style" th:id="${reply.no}">
+
+                                        <div class="reply-info-style">
+                                            <div>
+                                            <span class="me-3 dropdown">
+<!--                                                <span class="fw-bold fs-5" th:text="${reply.nickname}"></span>-->
+                                                <a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown"
+                                                   th:text="${reply.nickname}">
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item"
+                                                           th:href="|/myPage/Playlist/${reply.memberNo}|">MyPage</a></li>
+                                                    <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                                </ul>
+                                            </span>
+                                                <span th:text="${reply.writeDate}"></span>
+                                            </div>
+                                            <span class="Content reply-text-style" th:text="${reply.content}"></span>
+                                        </div>
+
 
                                 <th:block th:unless="${reply.depth == 1}">
                                     <div class="reply-style" th:id="${reply.groupNo}">
@@ -276,7 +316,9 @@
                                             <span class="Content reply-text-style" th:text="${reply.content}"></span>
                                         </div>
 
-                                        <div class="mt-2 detail-replyBtn-style">
+
+                                        <div class="mt-2 detail-replyBtn-style" th:id="${reply.groupNo}">
+
                                             <input th:if="${#authorization.expr('isAuthenticated()')}" type="button"
                                                    class="depth_reply_btn me-2" value="답글쓰기"/>
 

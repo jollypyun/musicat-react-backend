@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="/css/reset.css" />
     <link rel="stylesheet" href="/css/chatRoomInner.css" />
+    <link th:href="@{/css/theme_styles.css}" rel="stylesheet"/>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"
       crossorigin="anonymous"
@@ -20,7 +21,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="col-6">
+      <div>
         <h1 class="chat-title">[[${room.name}]]</h1>
       </div>
 <!--      <div class="forID" th:id="${username}"></div>-->
@@ -41,12 +42,12 @@
 
           <!-- 여기는 테스트 -->
         </div>
-        <div class="col-6 chat-btn">
+        <div class="chat-btn">
           <div class="chat-btn-content">
             <input type="text" id="msg" class="form-control chat-input" />
             <div class="chat-btn-div">
               <button
-                class="btn btn-outline-secondary"
+
                 type="button"
                 id="button-send"
               >
@@ -87,20 +88,20 @@
 
                   console.log(content);
                   if(content.system == true){
-                    str = "<div class = 'col-6'>";
+                    str = "<div class = 'mb-2'>";
                     str += "<div class = 'alert alert-secondary'>";
                     str += "<b>" + " 시스템 : " + message + "</b>";
                     str += "</div></div>";
                   }
                   else if(writer === username) {
-                      str = "<div class = 'col-6 myChat'>";
+                      str = "<div class = 'myChat mb-2'>";
                       str += "<div class = 'myChat-right chat-style'>";
                       str += "<b>" + content.writer + " : " + message + "</b>";
                       str += "</div></div>";
                       //$("#msgArea").append(str);
                   }
                   else {
-                      str = "<div class = 'col-6 otherChat'>";
+                      str = "<div class = 'otherChat mb-2'>";
                       str += "<div class = 'otherChat-left chat-style'>";
                       str += "<b>" + writer + " : " + message + "</b>";
                       str += "</div></div>";

@@ -15,34 +15,17 @@
                         <!-- Swiper -->
                         <div class="swiper mySwiper">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-1.jpg"/>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-2.jpg"/>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-3.jpg"/>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-4.jpg"/>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-5.jpg"/>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-6.jpg"/>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-7.jpg"/>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-8.jpg"/>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="https://swiperjs.com/demos/images/nature-9.jpg"/>
-                                </div>
+                                <th:block th:each="bestArticle : ${bestArticles}">
+                                    <div class="swiper-slide">
+                                        <a th:href="|/articles/${bestArticle.articleNo}|">
+                                            <img style="width:500px; height:350px; object-fit: cover;" th:src="${bestArticle.systemFileName}">
+                                        </a>
+                                    </div>
+                                </th:block>
+
                             </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
                             <div class="swiper-pagination"></div>
                         </div>
                     </div>
@@ -54,7 +37,7 @@
                             <table>
                                 <tbody>
                                 <tr th:each="bestArticle : ${bestArticles}">
-<!--                                    <td><img src="http://13.124.245.202:20000/api/musics/78ba0de4-7f75-4282-8b57-aac68198770c.audio"></td>-->
+                                    <!--                                    <td><img src="http://13.124.245.202:20000/api/musics/78ba0de4-7f75-4282-8b57-aac68198770c.audio"></td>-->
                                     <td><img th:src="${bestArticle.systemFileName}"></td>
                                     <td th:text="${bestArticle.rank}"></td>
                                     <td style="display: inline-block">
@@ -131,19 +114,16 @@
 <!-- Initialize Swiper -->
 <script>
     var swiper = new Swiper(".mySwiper", {
-        effect: "coverflow",
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: "auto",
-        coverflowEffect: {
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true,
-        },
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
         pagination: {
             el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
         },
     });
 </script>
