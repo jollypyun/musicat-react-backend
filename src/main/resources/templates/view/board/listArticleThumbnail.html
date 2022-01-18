@@ -94,8 +94,7 @@
                            th:text=">"></a>
                         <a th:id="${endPage}" th:if="${endPage > pageSize}" class="page_num" th:text=">>"></a>
                     </th:block>
-
-<<<<<<< HEAD
+                    
                 <th:block th:if="${endPage < pageSize}">
                     <div class="board_pagging">
                         <th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
@@ -113,8 +112,6 @@
                     </div>
                     <a th:id="${startPage + pageSize}" class="page_num" th:text=">"></a>
                     <a th:id="${endPage}" class="page_num" th:text=">>"></a>
-=======
->>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
                 </th:block>
             </div>
             <div id="search_area" class="search_area-style d-flex mt-3">
@@ -443,11 +440,6 @@
     //                     $('#paging_area').html(a);
     // // >>>>>>> 9bf3a4dc964e52d5bb8b90b647e7dda9156661b7
     //
-    // // <<<<<<< HEAD
-    //
-    //
-    // // =======
-    //
     //
     //         $('#search_by_board_btn').on('click', function () {
     //             const content = $('#board_search_content').val();
@@ -573,7 +565,6 @@
     //             location.href = "/articles/insert";
     //         }
     //     });
-    // // >>>>>>> 9bf3a4dc964e52d5bb8b90b647e7dda9156661b7
 </script>
 
 </html>
