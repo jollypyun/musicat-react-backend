@@ -24,6 +24,7 @@ import com.example.musicat.service.music.MusicApiService;
 
 import com.example.musicat.util.FileManager;
 
+import com.example.musicat.util.TemplateModelFactory;
 import com.example.musicat.websocket.manager.NotifyManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,8 @@ public class ArticleController {
 	private final MusicApiService musicApiService;
 
 	private final NotifyManager notifyManager;
+
+	private final TemplateModelFactory templateModelFactory;
 
 	/**
 	 * 세부 조회
@@ -116,6 +119,7 @@ public class ArticleController {
 			log.info("article controller musiclist : " + musicList.toString());
 
 
+
 			// xss 처리 Html tag로 변환
 //			String escapeSubject = StringEscapeUtils.unescapeHtml4(article.getSubject());
 //			article.setSubject(escapeSubject);
@@ -126,8 +130,11 @@ public class ArticleController {
 			log.info("detailArticle: {}", result.toString());
 			model.addAttribute("HomeContent", "/view/board/detailArticle");
 		} else {
-			model.addAttribute("HomeContent", "/view/board/accessDenied");
+			model.addAttribute("HomeContent", "/view/security/accessDenideGrade");
 		}
+
+		templateModelFactory.setCurPlaylistModel(model);
+
 		return "view/home/viewHomeTemplate";
 	}
 

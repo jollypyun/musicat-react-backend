@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.paging.Criteria;
+import com.example.musicat.mapper.member.GradeMapper;
 import com.example.musicat.mapper.member.MemberMapper;
 import com.example.musicat.repository.member.MemberDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ public class MemberServiceImpl implements MemberService {
 
 	//email로 회원 정보 조회
 	@Override
-	@Transactional(readOnly = true)
 	public MemberVO retrieveMemberByEmail(String email) {
 		MemberVO memberVo = memberdao.selectMemberByEmail(email);
 		return memberVo;
@@ -47,11 +47,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public int joinCheck(Map<String, Object> map) {
 		return this.memberdao.joinCheck(map);
 	}
 
 	@Override //회원 자진 탈퇴
+	@Transactional
 	public void modifyMember(int memberNo, String password) {
 		memberdao.updateMember(memberNo, password);	//@Autowired해서 memberdao로 씀.
 
@@ -80,19 +82,16 @@ public class MemberServiceImpl implements MemberService {
 //	}
 
 	@Override // 회원 목록 조회
-	@Transactional(readOnly = true)
 	public ArrayList<MemberVO> retrieveMemberList(Criteria crt) throws Exception {
 		return this.memberMapper.selectMemberList(crt);
 	}
 
 	@Override // 회원의 총 수
-	@Transactional(readOnly = true)
 	public int retrieveTotalMember() throws Exception {
 		return this.memberMapper.selectTotalMember();
 	}
 
 	@Override // 회원 상세 조회
-	@Transactional(readOnly = true)
 	public MemberVO retrieveMemberByManager(int no) throws Exception {
 		return this.memberMapper.selectMemberByManager(no);
 	}
@@ -100,7 +99,6 @@ public class MemberServiceImpl implements MemberService {
 
 
 	@Override // 회원 검색 조회
-	@Transactional(readOnly = true)
 	public ArrayList<MemberVO> retrieveSearchMember(String keyfield, String keyword, Criteria crt) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 	
@@ -115,7 +113,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override // 회원 검색 총 수
-	@Transactional(readOnly = true)
 	public int retrieveTotalSearchMember(String keyfield, String keyword) throws Exception{
 		if(keyfield.equals("email")) {
 			return this.memberMapper.selectTotalSearchMemberByEmail(keyword);
@@ -126,7 +123,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override // 회원의 정지기간 업데이트
-	@Transactional(readOnly = true)
+	@Transactional
 	public void modifyBan(String banSelect, int no) throws Exception{
 		if (banSelect.equals("7d")) {
 			this.memberMapper.updateBan7days(no);
@@ -144,21 +141,25 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override // 회원의 게시글 +1
+	@Transactional
 	public void upMemberDocs(int no) {
 		this.memberMapper.plusMemberDocs(no);
 	}
 
 	@Override // 회원의 게시글 -1
+	@Transactional
 	public void downMemberDocs(int no) {
 		this.memberMapper.minusMemberDocs(no);
 	}
 
 	@Override // 회원의 댓글 +1
+	@Transactional
 	public void upMemberComms(int no) {
 		this.memberMapper.plusMemberComms(no);
 	}
 
 	@Override // 회원의 댓글 -1
+	@Transactional
 	public void downMemberComms(int no) {
 		this.memberMapper.minusMemberComms(no);
 	}
@@ -179,11 +180,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public void updatePassword(MemberVO memberVo) {
 		// TODO Auto-generated method stub
 		this.memberdao.updatePassword(memberVo);
   }
-  
+
+	@Transactional
 	public int updateTempPassword(MemberVO mVo) {
 		// TODO Auto-generated method stub
 		
@@ -198,7 +201,23 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public void modifyLastDate(int no) {
 		this.memberdao.updateLastDate(no);
+	}
+
+	@Override
+	@Transactional
+	public void modifyGrade(int no, String grade) {
+		int gradeNo = 0;
+		if(grade.equals("MANAGER")){
+			log.info("manager");
+			gradeNo = 2;
+		}
+		else if (grade.equals("USER")){
+			log.info("user");
+			gradeNo = 3;
+		}
+		this.memberMapper.updateGrade(no, gradeNo);
 	}
 }

@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 footer{
-    height: 100px;
+    height: 140px;
     width: 100%;
     font-size: 10px;
 }
@@ -200,16 +200,22 @@ footer{
     width: 100%;
 }
 
+.dropUp-inner-info-text{
+    padding-left: 10px;
+}
+
 .dropUp-inner-info-text span{
     display: block;
     width: 80%;
     overflow-x: hidden;
+    font-size: 1rem;
+
 }
 
-.dropUp-inner-info-text span:last-child{
-    color: #afafaf;
-    font-size: 12px;
-}
+/*.dropUp-inner-info-text span:last-child{*/
+/*    color: #afafaf;*/
+/*    font-size: 12px;*/
+/*}*/
 
 .dropUp-inner-time{
     display: flex;

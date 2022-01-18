@@ -8,12 +8,11 @@
         <div class="container-fluid px-4">
             <div class="row mt-3 mb-5">
                 <div class="myPage-top">
-                    <div class="myPage-top-image">
+                    <div class="myPage-top-image" th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                         <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>
                     </div>
                     <div class="myPage-top-profile">
-                        <span>NickName</span>
-                        <span th:text="${#authorization.expr('isAuthenticated()')}"></span>
+                        <span th:text="${member.getNickname()}"></span>
                         <th:block th:if = "${#authorization.expr('isAuthenticated()')}">
                             <button onclick="location.href='/ChangePwd'" th:if = "${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">비밀번호 변경</button>
                             <div id="ezy">
@@ -30,7 +29,7 @@
                     <a th:href="@{'/myPage/Reply/' + ${member.getNo()}}">댓글</a>
                     <th:block th:if="${#authorization.expr('isAuthenticated()')} != false">
                     <span th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
-                        <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">좋아요</a>
+                        <a th:href="@{'/myPage/Like/' + ${member.getNo()}}">추천한 게시글</a>
                     </span>
                     </th:block>
                 </div>
