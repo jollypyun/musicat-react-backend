@@ -1,7 +1,7 @@
 package com.example.musicat.security;
 
 import com.example.musicat.domain.member.GradeResourceVO;
-import com.example.musicat.mapper.member.GradeResourceMapper;
+import com.example.musicat.mapper.member.ResourceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    private GradeResourceMapper gradeResourceMapper;
+    private ResourceMapper resourceMapper;
 
     private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap = new LinkedHashMap<>();
 
@@ -29,8 +29,8 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         HttpServletRequest request = ((FilterInvocation) object).getRequest();
 
         //DB에서 url과 권한 정보 가져오기
-        List<GradeResourceVO> gradeResourceList = gradeResourceMapper.selectGradeResourceList();
-        log.info("8 gradeResourceList ----- " + gradeResourceList.toString());
+        List<GradeResourceVO> gradeResourceList = resourceMapper.selectGradeResourceList();
+        //log.info("8 gradeResourceList ----- " + gradeResourceList.toString());
 
         //url에 권한 리스트 매칭
         for(GradeResourceVO gradeResource : gradeResourceList) {
@@ -38,8 +38,8 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
                     Arrays.asList(new SecurityConfig(gradeResource.getGrade())));
         }
 
-        log.info("9 request ----- " + request.getRequestURI());
-        log.info("10 requestMap ----- " + requestMap);
+//        log.info("9 request ----- " + request.getRequestURI());
+//        log.info("10 requestMap ----- " + requestMap);
 
         //해당 url의 권한 리스트를 리턴
 //        if(requestMap != null) {
@@ -55,9 +55,9 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         if(requestMap != null) {
             for(Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap.entrySet()) {
                 RequestMatcher matcher = entry.getKey();
-                log.info("matcher ----- " + matcher);
+                //log.info("matcher ----- " + matcher);
                 if(matcher.matches(request)) {
-                    log.info("entry.getValue() ----- " + entry.getValue());
+                    //log.info("entry.getValue() ----- " + entry.getValue());
                     return entry.getValue();
                 }
             }
@@ -69,7 +69,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
     @Override
     //모든 권한 리스트 가져오기
     public Collection<ConfigAttribute> getAllConfigAttributes() {
-        log.info("12 getAllConfigAttributes() ----- " + requestMap.values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
+        //log.info("12 getAllConfigAttributes() ----- " + requestMap.values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
         return requestMap.values().stream()
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());

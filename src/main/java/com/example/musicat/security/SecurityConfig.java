@@ -61,10 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public AuthenticationProvider authenticationProvider() {
-//        return new CustomAutheticationProvider();
-//    }
     @Bean
     public AuthenticationProvider customAutheticationProvider() {
         return new CustomAutheticationProvider();
