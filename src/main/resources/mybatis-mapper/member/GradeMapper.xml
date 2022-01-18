@@ -91,7 +91,7 @@
 		SELECT grade_no FROM  grade WHERE auth = #{auth}
 	</select>
 
-<!-- 등급 목록 조회 (name 제외) -->
+<!-- 등급 목록 조회 -->
 	<resultMap type="gradeVo" id="selectGradeListResultMap">
 		<result property="gradeNo" javaType="int" column="grade_no" jdbcType="SMALLINT"/>
 		<result property="grade" javaType="String" column="auth" jdbcType="VARCHAR"/>

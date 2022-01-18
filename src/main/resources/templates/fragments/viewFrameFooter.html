@@ -43,22 +43,26 @@
                 <!-- .volume -->
 
                 <div class="playListBar-inner-img">
-                    <img src="/upload/main-4.jpg">
+                    <th:block th:if="${curPlaylist != null}">
+                    <img th:src="${curPlaylist[0].links[1].href}">
+                    </th:block>
                 </div>
 
                 <div class="playListBar-inner-title">
                     <div class="playListBar-inner-title-div">
-                        <span class="playListBar-title-song"></span>
-                        <span class="playListBar-title-singer"></span>
+                        <th:block th:if="${curPlaylist != null}">
+                        <span class="playListBar-title-song" th:text="${curPlaylist[0].title}"></span>
+                        <span class="playListBar-title-singer" th:text="${curPlaylist[0].memberNickname}"></span>
+                        </th:block>
                         <span class="playListBar-title-index" style="display:none"></span>
                     </div>
                 </div>
 
                 <div class="playListBar-inner-func-btn">
-<!--                    <button type="button" id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>-->
-<!--                    <button type="button" id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>-->
-<!--                    </button>-->
-<!--                    <button type="button" id="playlist-personAdd"><span class="material-icons">person_add</span></button>-->
+                    <!--                    <button type="button" id="playlist-heartEmpty"><span class="material-icons">favorite_border</span></button>-->
+                    <!--                    <button type="button" id="playlist-heart" style="display: none"><span class="material-icons">favorite</span>-->
+                    <!--                    </button>-->
+                    <!--                    <button type="button" id="playlist-personAdd"><span class="material-icons">person_add</span></button>-->
                     <div class="playlist-dropUp">
                         <button type="button" id="playlist-songList" class="playlist-dropUp-btn"><span class="material-icons">queue_music</span>
                         </button>
@@ -88,8 +92,8 @@
                                             </div>
                                             <div class="dropUp-inner-time">
                                                 <!--                                            <span>2:06</span>-->
-                                                 <button type="button" th:onclick="'addMusicToPlaylist(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">playlist_add</span></button>
-                                                 <button type="button" th:onclick="'deleteMusicFromNow(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">close</span></button>
+                                                <button type="button" th:onclick="'addMusicToPlaylist(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">playlist_add</span></button>
+                                                <button type="button" th:onclick="'deleteMusicFromNow(' + ${music.id} + ',' + ${#authentication.principal.getMemberVo().getNo()} + ')'"><span class="material-icons">close</span></button>
                                                 <!--                                            <button id="song-addInfo" type="button"><span class="material-icons">dehaze</span>-->
                                                 <!--                                            </button>-->
                                                 <!--                                            <div id="songInfo-dropbox">-->
@@ -106,9 +110,11 @@
                 </div>
 
 
-<!--                <iframe src = "https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" allow="autoplay" id="audio"></iframe>-->
-                <audio style="display: none" id="audio" autoplay controls src="https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" >
-<!--                    <source type="audio/mp3">-->
+                <!--                <iframe src = "https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" allow="autoplay" id="audio"></iframe>-->
+                <th:block th:if="${curPlaylist != null}">
+                <audio style="display: none" id="audio" controls th:src="${curPlaylist[0].links[0].href}" >
+                </th:block>
+                    <!--                    <source type="audio/mp3">-->
                 </audio>
             </div>
         </div>

@@ -10,7 +10,7 @@ $(document).ready(function () {
 
         audio.src = audioSrc;
 
-        playlistPlay();
+        // playlistPlay();
     }
 
 

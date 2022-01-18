@@ -102,12 +102,6 @@
                   <span th:text="${#authentication.principal.getMemberVo.getEmail}"></span>
             </a>
           </li>
-          <!-- 계층 권한 적용 여부 테스트-->
-          <li sec:authorize="hasAnyRole('ROLE_ADMIN')">ROLE_ADMIN 권한 보유</li>
-          <li sec:authorize="hasAnyRole('ROLE_MANAGER')">ROLE_MANAGER 권한 보유</li>
-          <li sec:authorize="hasAnyRole('ROLE_USER')">ROLE_USER 권한 보유</li>
-          <li sec:authorize="hasAnyRole('ROLE_ANONYMOUS')">ROLE_ANONYMOUS 권한 보유</li>
-
           <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
 
           <li><hr class="dropdown-divider" /></li>
