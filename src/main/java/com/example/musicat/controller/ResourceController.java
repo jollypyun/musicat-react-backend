@@ -5,6 +5,7 @@ import com.example.musicat.domain.member.GradeVO;
 import com.example.musicat.domain.member.ResourceVO;
 import com.example.musicat.mapper.member.ResourceMapper;
 import com.example.musicat.service.member.GradeService;
+import com.example.musicat.service.member.ResourceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class ResourceController {
 
     @Autowired
-    private ResourceMapper resourceMapper;
+    private ResourceService resourceService;
 
     @Autowired
     private GradeService gradeService;
@@ -29,7 +30,7 @@ public class ResourceController {
     //리소스 + 권한 목록 조회
     @GetMapping("/resourceManager")
     public String resourceManager(Model model) throws Exception {
-        List<GradeResourceVO> gradeResourceList = this.resourceMapper.selectGradeResourceList();
+        List<GradeResourceVO> gradeResourceList = this.resourceService.retrieveGradeResourceList();
         model.addAttribute("gradeResourceList", gradeResourceList);
 
         List<GradeVO> gradeList = this.gradeService.retrieveGradeList();
@@ -51,7 +52,7 @@ public class ResourceController {
         ArrayList<GradeVO> gradeList = this.gradeService.retrieveGradeList();
         map.put("gradeList", gradeList);
 
-        List<ResourceVO> resourceList = this.resourceMapper.selectResourceList();
+        List<ResourceVO> resourceList = this.resourceService.retrieveResourceList();
         map.put("resourceList", resourceList);
 
         return map;
@@ -64,7 +65,8 @@ public class ResourceController {
 
         Map<String, Object> map = new HashMap<>();
 
-        Map<String, Integer> duplicatedResource = resourceMapper.selectDuplicatedResource(gradeResourceVo.getResourceName(), gradeResourceVo.getGradeNo());
+        //Map<String, Integer> duplicatedResource = resourceService.retrieveDuplicatedResource(gradeResourceVo.getResourceName(), gradeResourceVo.getGradeNo());
+        Integer duplicatedResource = resourceService.retrieveDuplicatedResource(gradeResourceVo.getResourceName());
         if(duplicatedResource != null) {
             map.put("duplicated", 1);
         } else {
@@ -72,10 +74,10 @@ public class ResourceController {
             gradeResourceVo.setResourceName(gradeResourceVo.getResourceName());
             gradeResourceVo.setResourceType(gradeResourceVo.getResourceType());
             gradeResourceVo.setGradeNo(gradeResourceVo.getGradeNo());
-            this.resourceMapper.insertGradeResource(gradeResourceVo);
+            this.resourceService.registerGradeResource(gradeResourceVo);
         }
 
-        List<GradeResourceVO> gradeResourceList = this.resourceMapper.selectGradeResourceList();
+        List<GradeResourceVO> gradeResourceList = this.resourceService.retrieveGradeResourceList();
         map.put("gradeResourceList", gradeResourceList);
 
         return map;
@@ -91,10 +93,10 @@ public class ResourceController {
         ArrayList<GradeVO> gradeList = this.gradeService.retrieveGradeList();
         map.put("gradeList", gradeList);
 
-        List<ResourceVO> resourceList = this.resourceMapper.selectResourceList();
+        List<ResourceVO> resourceList = this.resourceService.retrieveResourceList();
         map.put("resourceList", resourceList);
 
-        GradeResourceVO oneGradeResource = this.resourceMapper.selectOneGradeResource(gradeResourceNo);
+        GradeResourceVO oneGradeResource = this.resourceService.retrieveOneGradeResource(gradeResourceNo);
         map.put("oneGradeResource", oneGradeResource);
 
         return map;
@@ -105,23 +107,20 @@ public class ResourceController {
     public Map<String, Object> modifyResource( @ModelAttribute("gradeResourceVo") GradeResourceVO gradeResourceVo) {
         Map<String, Object> map = new HashMap<>();
 
-        Map<String, Integer> duplicatedResource = resourceMapper.selectDuplicatedResource(gradeResourceVo.getResourceName(), gradeResourceVo.getGradeNo());
-
+        //Map<String, Integer> duplicatedResource = resourceService.retrieveDuplicatedResource(gradeResourceVo.getResourceName(), gradeResourceVo.getGradeNo());
+        Integer duplicatedResource = resourceService.retrieveDuplicatedResource(gradeResourceVo.getResourceName());
         if(duplicatedResource == null) { //중복x
             map.put("duplicated", 0);
-            log.info("1");
-            this.resourceMapper.updateGradeResource(gradeResourceVo);
+            this.resourceService.modifyGradeResource(gradeResourceVo);
         } else { //중복o
-            if (duplicatedResource.get("resource_no") == gradeResourceVo.getResourceNo()) {
+            if (duplicatedResource == gradeResourceVo.getResourceNo()) {
                 map.put("duplicated", 0);
-                log.info("2");
-                this.resourceMapper.updateGradeResource(gradeResourceVo);
+                this.resourceService.modifyGradeResource(gradeResourceVo);
             } else {
                 map.put("duplicated", 1);
-                log.info("3");
             }
         }
-        gradeResourceVo = this.resourceMapper.selectOneGradeResource(gradeResourceVo.getGradeResourceNo());
+        gradeResourceVo = this.resourceService.retrieveOneGradeResource(gradeResourceVo.getGradeResourceNo());
         map.put("gradeResourceVo", gradeResourceVo);
         return map;
     }
@@ -131,10 +130,10 @@ public class ResourceController {
     @PostMapping("/deleteResource")
     public Map<String, Object> deleteResource(@ModelAttribute("gradeResourceVo") GradeResourceVO gradeResourceVo) {
 
-        this.resourceMapper.deleteGradeResource(gradeResourceVo.getGradeResourceNo());
+        this.resourceService.removeGradeResource(gradeResourceVo.getGradeResourceNo());
 
         Map<String, Object> map = new HashMap<>();
-        List<GradeResourceVO> gradeResourceList = this.resourceMapper.selectGradeResourceList();
+        List<GradeResourceVO> gradeResourceList = this.resourceService.retrieveGradeResourceList();
         map.put("gradeResourceList", gradeResourceList);
 
         return map;

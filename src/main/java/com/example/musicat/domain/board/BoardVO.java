@@ -1,12 +1,10 @@
 package com.example.musicat.domain.board;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,7 +18,6 @@ public class BoardVO {
 
     private int boardNo;
 
-    @NotNull
     private String boardName;
     private int boardkind; //게시판종류  / TINYINT / NotNull, 0, 1
     private String boardkindName;
@@ -30,12 +27,12 @@ public class BoardVO {
     private int no; //회원 넘버
 
     //
-    public BoardVO(int categoryNo, int boardNo, String boardName, int boardkind) {
-        this.categoryNo = categoryNo;
-        this.boardNo = boardNo;
-        this.boardName = boardName;
-        this.boardkind = boardkind;
-    }
+//    public BoardVO(int categoryNo, int boardNo, String boardName, int boardkind) {
+//        this.categoryNo = categoryNo;
+//        this.boardNo = boardNo;
+//        this.boardName = boardName;
+//        this.boardkind = boardkind;
+//    }
     //
 
     public BoardVO(int boardNo, String boardName, int boardkind) {
@@ -43,8 +40,6 @@ public class BoardVO {
         this.boardName = boardName;
         this.boardkind = boardkind;
     }
-
-
 
     private List<BoardVO> boardGradeList = new ArrayList<>();
 

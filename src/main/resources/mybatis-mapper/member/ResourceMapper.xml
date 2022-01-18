@@ -30,15 +30,6 @@
 		WHERE grade_resource_no = #{gradeResourceNo}
 	</select>
 
-	<select id="selectLastOneGradeResource" resultType="gradeResourceVo" resultMap="selectGradeResourceResultMap">
-		SELECT gr.grade_resource_no, gr.resource_no, r.resource_name,  r.resource_type, g.grade_no, g.auth, g.name
-		FROM grade_resource gr INNER JOIN grade g INNER JOIN resource r
-															 ON gr.grade_no = g.grade_no AND gr.resource_no = r.resource_no
-		WHERE gr.grade_resource_no = (SELECT MAX(grade_resource_no) FROM grade_resource)
-	</select>
-
-<!--	WHERE gr.resource_no = #{resourceNo} AND g.grade_no = #{gradeNo};-->
-
 <!--	resource + grade 추가-->
 	<insert id="insertGradeResource" parameterType="gradeResourceVo" statementType="CALLABLE">
 		{ CALL sp_insert_grade_resource(#{resourceName}, #{resourceType}, #{gradeNo}) }
@@ -55,12 +46,19 @@
 	</delete>
 
 <!--	resource + grade 중복 조회-->
-	<select id="selectDuplicatedResource" resultType="HashMap">
-		SELECT resource_no, grade_no
+<!--	<select id="selectDuplicatedResource" resultType="HashMap">-->
+<!--		SELECT resource_no, grade_no-->
+<!--		FROM grade_resource-->
+<!--		WHERE grade_no = #{gradeNo} AND resource_no = (SELECT resource_no-->
+<!--														FROM resource-->
+<!--														WHERE resource_name = #{resourceName})-->
+<!--	</select>-->
+	<select id="selectDuplicatedResource" resultType="INTEGER">
+		SELECT resource_no
 		FROM grade_resource
-		WHERE grade_no = #{gradeNo} AND resource_no = (SELECT resource_no
-														FROM resource
-														WHERE resource_name = #{resourceName})
+		WHERE  resource_no = (SELECT resource_no
+							   FROM resource
+							   WHERE resource_name = #{resourceName})
 	</select>
 
 <!--	resource-->
@@ -76,20 +74,6 @@
 		FROM resource
 	</select>
 
-<!--	MemberGrade-->
-<!--	회원의 등급과 접근 가능한 resource 조회-->
-	<resultMap id="selectMemberGradeListResultMap" type="memberGradeVo">
-		<result property="memberNo" javaType="int" column="memberNo" jdbcType="INTEGER" />
-		<result property="grade" javaType="string" column="auth" jdbcType="VARCHAR" />
-		<result property="resourceName" javaType="string" column="resourceName" jdbcType="VARCHAR" />
-	</resultMap>
-
-	<select id="selectMemberGradeList" resultType="memberGradeVo" resultMap="selectMemberGradeListResultMap">
-		SELECT mg.member_no AS memberNo, g.auth AS grade, r.resource_name AS resourceName
-		FROM member_grade mg INNER JOIN grade g INNER JOIN grade_resource gs INNER JOIN resource r
-																						ON mg.grade_no = g.grade_no AND g.grade_no = gs.grade_no AND gs.resource_no = r.resource_no
-		WHERE mg.member_no = (select member_no from member where email = #{email})
-	</select>
 
 
 </mapper>

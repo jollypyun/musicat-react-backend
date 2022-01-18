@@ -16,7 +16,6 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @ToString
 @Repository("boardGradeVo")
 public class BoardGradeVO {
@@ -30,11 +29,11 @@ public class BoardGradeVO {
 
 
 	//
-	public BoardGradeVO(int boardNo, int readGrade, int writeGrade) {
-		this.boardNo = boardNo;
-		this.readGrade = readGrade;
-		this.writeGrade = writeGrade;
-	}
+//	public BoardGradeVO(int boardNo, int readGrade, int writeGrade) {
+//		this.boardNo = boardNo;
+//		this.readGrade = readGrade;
+//		this.writeGrade = writeGrade;
+//	}
 	//
 
 
