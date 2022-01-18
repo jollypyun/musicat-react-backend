@@ -238,7 +238,7 @@ public class MusicApiService {
         map.put("playlistKey", playlistKey);
       
         //restTemplate.delete("http://localhost:20000/api/playlists/pull/{playlistKey}/{musicNos}", map);
-        restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistNo}/{musicNos}", map);
+        restTemplate.delete("http://13.124.245.202:20000/api/playlists/pull/{playlistKey}/{musicNos}", map);
     }
 
     // 플레이리스트 정보 가져오기

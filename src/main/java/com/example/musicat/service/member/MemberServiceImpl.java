@@ -47,11 +47,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public int joinCheck(Map<String, Object> map) {
 		return this.memberdao.joinCheck(map);
 	}
 
 	@Override //회원 자진 탈퇴
+	@Transactional
 	public void modifyMember(int memberNo, String password) {
 		memberdao.updateMember(memberNo, password);	//@Autowired해서 memberdao로 씀.
 
@@ -139,21 +141,25 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override // 회원의 게시글 +1
+	@Transactional
 	public void upMemberDocs(int no) {
 		this.memberMapper.plusMemberDocs(no);
 	}
 
 	@Override // 회원의 게시글 -1
+	@Transactional
 	public void downMemberDocs(int no) {
 		this.memberMapper.minusMemberDocs(no);
 	}
 
 	@Override // 회원의 댓글 +1
+	@Transactional
 	public void upMemberComms(int no) {
 		this.memberMapper.plusMemberComms(no);
 	}
 
 	@Override // 회원의 댓글 -1
+	@Transactional
 	public void downMemberComms(int no) {
 		this.memberMapper.minusMemberComms(no);
 	}
@@ -174,11 +180,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public void updatePassword(MemberVO memberVo) {
 		// TODO Auto-generated method stub
 		this.memberdao.updatePassword(memberVo);
   }
-  
+
+	@Transactional
 	public int updateTempPassword(MemberVO mVo) {
 		// TODO Auto-generated method stub
 		
@@ -193,6 +201,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public void modifyLastDate(int no) {
 		this.memberdao.updateLastDate(no);
 	}

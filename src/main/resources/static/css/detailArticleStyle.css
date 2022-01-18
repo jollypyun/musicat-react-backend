@@ -59,7 +59,22 @@
 .detailArticle-function-style{
 	/*margin-right: 10px;*/
 	display: flex;
-	width: 80px;
+	width: 100%;
+	justify-content: flex-end;
+
+	color: #666666;
+}
+
+.detailArticle-function-style button,
+.detailArticle-function-style input{
+	border: none;
+	background-color: transparent;
+}
+
+.detailArticle-function-style button:hover,
+.detailArticle-function-style input:hover{
+	color: #000000;
+	cursor: pointer;
 }
 
 .detailArticle-like-style{
@@ -109,9 +124,9 @@
 	color: #0c63e4;
 }
 
-.detail-userBtn-style input:first-child{
-	margin-right: 10px;
-}
+/*.detail-userBtn-style input:first-child{*/
+/*	margin-right: 10px;*/
+/*}*/
 .detailArticle-reply-style {
 	display: flex;
 	width: 100%;

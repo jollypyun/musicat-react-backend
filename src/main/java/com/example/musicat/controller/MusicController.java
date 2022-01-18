@@ -118,8 +118,8 @@ public class MusicController {
 
     // 특정 플레이리스트 안에 곡 넣기
     @PostMapping("/pushmusic/{playlistKey}")
-    //public List<Music> insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name="musicNos") int musicNos/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistKey) {
-    public List<Map<String, Object>> insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name="musicNos") int musicNos/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistKey) {
+    public List<Map<String, Object>> insertMusicIntoPlaylist(@RequestParam(name = "musicNo") int musicNos, @PathVariable String playlistKey) {
+    //public List<Map<String,Object>> insertMusicIntoPlaylist(@RequestParam("musi")/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistKey) {
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); //이게 제대로 된 방법
         //int memberNo = 6; // 임시방편
         log.info("playlistKey : " + playlistKey);
@@ -148,11 +148,13 @@ public class MusicController {
 
     // 특정 플레이리스트 안의 곡 빼기
     @DeleteMapping("/pullmusic/{playlistKey}")
-    public ModelAndView deleteMusicFromPlaylist(@PathVariable String playlistKey, @RequestParam(name = "musicNos") List<Integer> musicNos, @RequestParam(name = "memberNo") int memberNo) {
+    public ModelAndView deleteMusicFromPlaylist(@PathVariable String playlistKey, @RequestParam(name = "musicNos") int musicNos, @RequestParam(name = "memberNo") int memberNo) {
         ModelAndView mav = new ModelAndView();
         log.info("musicNos : " + musicNos);
         log.info("playlistKey : " + playlistKey);
-        musicApiService.pullMusic(musicNos, playlistKey);
+        List<Integer> m = new ArrayList<>();
+        m.add(musicNos);
+        musicApiService.pullMusic(m, playlistKey);
         if (!playlistKey.equals(memberNo+"pl1")) {
             mav.setView(new RedirectView("/myPage/Playlist/" + memberNo + playlistKey));
             return mav;
@@ -160,6 +162,36 @@ public class MusicController {
         else {
             return null;
         }
+    }
+
+    // 특정 플레이리스트 안에 곡 넣기
+    @PostMapping("/pushmusic2/{playlistKey}")
+    public ModelAndView insertMusicIntoPlaylistReturnMAV(@RequestParam(name = "musicNo") int musicNos, @RequestParam(name = "memberNo") int memberNo, @PathVariable String playlistKey) {
+        //public List<Map<String,Object>> insertMusicIntoPlaylist(@RequestParam("musi")/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistKey) {
+        //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); //이게 제대로 된 방법
+        //int memberNo = 6; // 임시방편
+        ModelAndView mav = new ModelAndView();
+        List<Integer> m = new ArrayList<Integer>();
+        m.add(musicNos);
+        List<Music> musics = musicApiService.pushMusic(m, playlistKey);
+
+        List<Map<String, Object>> newMusicInfos = new ArrayList<Map<String, Object>>();
+        try {
+
+            for (int i = 0; i < musics.size(); ++i) {
+                Map<String, Object> map = (Map<String, Object>) musics.get(i);
+                map.put("memberNickname", memberService.retrieveMemberByManager((Integer) map.get("memberNo")).getNickname());
+                newMusicInfos.add((Map<String, Object>) musics.get(i));
+            }
+
+        } catch(Exception e){
+            log.error("플레이리스트 안에 곡 넣기 실패 {}", e);
+        }
+
+        //log.info("1 : " + musics.get(1).getLinks().get(1));
+        //return musics;
+        mav.setView(new RedirectView("/myPage/Playlist/" + memberNo));
+        return mav;
     }
 
     // 플레이리스트 수정

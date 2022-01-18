@@ -77,7 +77,7 @@
                             <ul id="currentPlayList_ul" style="overflow-y : auto">
                                 <!--                                <button type="button" onclick="testinggg()">테스트트</button>-->
                                 <th:block th:each="music , index : ${curPlaylist}">
-                                    <li th:id="'cpl' + ${index.index}">
+                                    <li th:id="'cpl' + ${index.index}" th:class="${music.id}">
                                         <div class="playlist-dropUp-content-inner">
                                             <div class="dropUp-inner-info position-relative">
                                                 <img th:src="${music.links[1].href}"/>
