@@ -215,7 +215,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             request.setAttribute("loginFailMessage", "탈퇴처리 된 계정입니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
                         } else if (exception instanceof SessionAuthenticationException) {
-                            request.setAttribute("loginFailMessage", "최대 로그인 가능 어쩌구저쩌구 세션 개수를 초과해서 로그인 안 되는 거거든요?  멘트 추천좀 부탁드려요");
+                            request.setAttribute("loginFailMessage", "생성 가능한 세션 개수를 초과하였습니다. 브라우저에서 로그아웃 후 다시 시도해주세요.");
                         }
 
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/musicatlogin");
@@ -235,7 +235,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .sessionManagement() //세션 관리
                 .sessionFixation().changeSessionId() //세션 고정 보호. 세션 조작을 통한 보안 공격 방지를 위해, 인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지 (security가 기본으로 제공해주기 때문에 별도로 설정해줄 필요 없음)
-                .maximumSessions(2) //최대 세션 개수
+                .maximumSessions(5) //최대 세션 개수
                 .expiredUrl("/expiredUrl") //session 만료 시 이동 페이지
                 .maxSessionsPreventsLogin(true); //false : 이전에 로그인한 세션 만료, true : 나중에 로그인 시도하는 세션 생성 불가(로그인 불가)
 
