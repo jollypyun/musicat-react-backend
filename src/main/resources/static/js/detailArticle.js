@@ -89,7 +89,7 @@ $(document).ready(function () {
 				htmlStr.push('</div>');
 				htmlStr.push('<span class="Content reply-text-style">'+replyList[i].content+'</span>');
 				htmlStr.push('</div>');
-				htmlStr.push('<div class="mt-2 detail-replyBtn-style id="' + replyList[i].groupNo +'>');
+				htmlStr.push('<div class="mt-2 detail-replyBtn-style id="' + replyList[i].groupNo +'">');
 				htmlStr.push('<input type="button" class="depth_reply_btn me-2" value="답글쓰기"/>');
 				if (replyList[i].memberNo == $('#login_no').val()) {
 					htmlStr.push('<input type="button" class="modify_Reply_Form_Btn me-2" value="수정" />');
