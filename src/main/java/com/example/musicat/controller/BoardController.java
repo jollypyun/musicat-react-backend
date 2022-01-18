@@ -1,36 +1,28 @@
 package com.example.musicat.controller;
 
-import java.util.*;
-
 import com.example.musicat.domain.board.*;
+import com.example.musicat.domain.member.GradeVO;
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.paging.Criteria;
 import com.example.musicat.service.board.ArticleService;
+import com.example.musicat.service.board.BoardService;
+import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.board.FileService;
-
-import com.example.musicat.util.TemplateModelFactory;
+import com.example.musicat.service.member.GradeService;
 import com.example.musicat.service.music.MusicApiService;
+import com.example.musicat.util.TemplateModelFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.musicat.service.board.BoardService;
-import com.example.musicat.service.board.CategoryService;
-import com.example.musicat.service.member.GradeService;
-import com.example.musicat.domain.member.GradeVO;
-
-import lombok.extern.slf4j.Slf4j;
-
-import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -78,7 +70,6 @@ public class BoardController {
 
 	@GetMapping("/accessDenideGrade")
 	public String accessDenied(Model model) {
-		log.info("/accessDenideGrade------------------------------------");
 		model.addAttribute("managerContent", "view/security/accessDenideGrade");
 		return "view/home/viewManagerTemplate";
 	}
@@ -372,14 +363,9 @@ public class BoardController {
 			} else { //오디오 게시판 썸네일 설정
 				setAudioBoardThumbnail(articles);
 			}
-
 			model.addAttribute("articles", articles); // 게시글 정보 전송
-
 		}
 
-
-		//MemberVO member = HomeController.checkMemberNo();
-    
 		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
 		model.addAttribute("likeBoardList", likeBoardList);
 
@@ -391,13 +377,6 @@ public class BoardController {
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
 		model.addAttribute("boardkind", boardkind); // 게시글 유형
-
-		// 양 ~
-//		int memberNo = 2;
-//		int likeBoard = this.boardService.retrieveLikeBoard(memberNo, boardNo);
-//		log.info("목록조회하는 게시판의 즐찾 추가된 거 여부 : " + likeBoard);
-//		model.addAttribute("likeBorad", likeBoard);
-		// ~ 양
 
 		templateModelFactory.setCurPlaylistModel(model);
 		log.info("boardKind: {}", boardkind);
