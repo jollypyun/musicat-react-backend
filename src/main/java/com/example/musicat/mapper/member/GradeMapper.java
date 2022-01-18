@@ -12,9 +12,6 @@ import org.springframework.stereotype.Repository;
 
 @Mapper
 public interface GradeMapper {
-	// 등급 조회
-	// ArrayList<GradeVO> selectGradeList();
-
 	// 등급 수정
 	void updateGrade(GradeVO grade) throws Exception;
 

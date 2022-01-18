@@ -57,16 +57,7 @@
                                 </tr>
 
                             </thead>
-<!--                            <div class="reply_list" th:each="reply : ${replyListOneMember}">-->
-<!--                                <tbody>-->
-<!--                                    <td class="Content" th:text="${reply.no}"></td>-->
-<!--&lt;!&ndash;                                    <td class="Content" th:text="${게시판이름....}}"></td>&ndash;&gt;-->
-<!--                                    <td><a class="Content"  th:text="${reply.content}"-->
-<!--                                       th:href="|/articles/${reply.articleNo}|"></a></td>-->
-<!--                                    <td class="Content" th:text="${reply.writeDate}"></td>-->
-<!--                                </tbody>-->
-<!--                            </div>-->
-                            <div class="reply_list" th:each="reply : ${replyListOneMember}">
+                            <div class="reply_list">
                                 <tbody>
                                     <tr th:each="reply : ${replyListOneMember}">
                                         <td th:text="${reply.no}"></td>
