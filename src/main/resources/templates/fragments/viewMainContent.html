@@ -14,10 +14,15 @@
                     <div class="content-top-left">
                         <!-- Swiper -->
                         <div class="swiper mySwiper">
-                            <div class="swiper-wrapper" th:each="bestArticle : ${bestArticles}">
+                            <div class="swiper-wrapper">
                                 <th:block th:each="bestArticle : ${bestArticles}">
-                                    <div class="swiper-slide"><img th:src="${bestArticle.systemFileName}"></div>
+                                    <div class="swiper-slide">
+                                        <a th:href="|/articles/${bestArticle.articleNo}|">
+                                            <img style="width:500px; height:350px; object-fit: cover;" th:src="${bestArticle.systemFileName}">
+                                        </a>
+                                    </div>
                                 </th:block>
+
                             </div>
                             <div class="swiper-button-next"></div>
                             <div class="swiper-button-prev"></div>
@@ -32,7 +37,7 @@
                             <table>
                                 <tbody>
                                 <tr th:each="bestArticle : ${bestArticles}">
-<!--                                    <td><img src="http://13.124.245.202:20000/api/musics/78ba0de4-7f75-4282-8b57-aac68198770c.audio"></td>-->
+                                    <!--                                    <td><img src="http://13.124.245.202:20000/api/musics/78ba0de4-7f75-4282-8b57-aac68198770c.audio"></td>-->
                                     <td><img th:src="${bestArticle.systemFileName}"></td>
                                     <td th:text="${bestArticle.rank}"></td>
                                     <td style="display: inline-block">
