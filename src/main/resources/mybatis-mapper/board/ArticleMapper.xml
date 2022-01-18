@@ -28,11 +28,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		{ CALL sp_article_select_board_totalcount(${boardNo}) }
 	</select>
 
-	
+
+	<resultMap id="gradaArticleMap" type="gradeArticleVo">
+		<result property="no" javaType="int" column="article_no" jdbcType="INTEGER" />
+		<result property="memberNo" javaType="int" column="member_no" jdbcType="INTEGER" />
+		<result property="nickname" javaType="String" column="nickname" jdbcType="VARCHAR" />
+		<result property="proGrade" javaType="String" column="prograde" jdbcType="VARCHAR" />
+		<result property="nowGrade" javaType="String" column="nowgrade" jdbcType="VARCHAR" />
+		<result property="visits" javaType="int" column="visits" jdbcType="INTEGER" />
+		<result property="docs" javaType="int" column="docs" jdbcType="INTEGER" />
+		<result property="comms" javaType="int" column="comms" jdbcType="INTEGER" />
+		<result property="regdate" javaType="String" column="regdate" jdbcType="VARCHAR" />
+		<result property="writedate" javaType="String" column="writedate" jdbcType="VARCHAR" />
+		<result property="content" javaType="String" column="content" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 등업 게시판 -->
+	<select id="selectGradeArticles" resultType="gradeArticleVo" resultMap="gradaArticleMap">
+		SELECT * FROM grade_article ORDER BY writedate DESC
+	</select>
+
 	<select id="selectAllArticle" resultType="articleVo" resultMap="articleVOResult">
 		SELECT * FROM article ORDER BY writedate DESC
 	</select>
-	
+
+	<insert id="inserGradeArticle" parameterType="gradeArticleVo" statementType="CALLABLE">
+		{ CALL sp_insert_grade_article(#{memberNo},#{nickname},#{proGrade},#{nowGrade},#{visits},#{docs},#{comms},#{regdate},#{content} ) }
+	</insert>
+
+	<delete id="deleteGradeArticle" parameterType="INTEGER">
+		DELETE FROM grade_article WHERE article_no = #{articleNo}
+	</delete>
+
 
 	<resultMap type="articleVo" id="detailArticleVOResult">
 		<result property="no" javaType="int" column="article_no"  jdbcType="INTEGER"/>

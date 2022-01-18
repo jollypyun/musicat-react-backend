@@ -9,8 +9,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.example.musicat.controller.form.GradeArticleForm;
 import com.example.musicat.controller.form.JoinForm;
+import com.example.musicat.domain.board.GradeArticleVO;
+import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.member.ProfileService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,11 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.musicat.service.member.GradeService;
 import com.example.musicat.service.member.MemberService;
@@ -50,6 +54,8 @@ public class MemberController {
 	private GradeService gradeService;
 	@Autowired
 	private ProfileService profileService;
+	@Autowired
+	private ArticleService articleService;
 
 //	회원가입
 //	@PostMapping("/join") // 이걸 실행하는 값의 주소
@@ -343,4 +349,33 @@ public class MemberController {
 		return "view/member/findPassword";
 
 	}
+
+	@GetMapping("/update/member/grade")
+	private ModelAndView updateMemberGrade(@RequestParam("result") String[] result, @RequestParam(value = "resultChoice", required = false) int choice) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.setView(new RedirectView("/board/76/articles"));
+
+		String resultStr = "";
+		for (int i = 0; i < result.length; i++) {
+			resultStr += result[i];
+			log.info(result[i]);
+		}
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(resultStr.substring(1, resultStr.length() - 1));
+			//4. To JsonObject
+			JSONObject jsonObj = (JSONObject) obj;
+		log.info("JSOn: {}", jsonObj.toString());
+			Integer articleNo = Integer.parseInt((String) jsonObj.get("articleNo"));
+			Integer memberNoNo = Integer.parseInt((String) jsonObj.get("memberNo"));
+			String proGrade = (String) jsonObj.get("prograde");
+
+			if (choice == 0) {
+				this.articleService.removeGradeArticle(articleNo);
+			} else if (choice == 1) {
+				this.memberService.modifyGrade(memberNoNo, proGrade);
+				this.articleService.removeGradeArticle(articleNo);
+			}
+		return mv;
+	}
 }
+

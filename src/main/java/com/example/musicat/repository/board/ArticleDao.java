@@ -3,10 +3,7 @@ package com.example.musicat.repository.board;
 import java.util.List;
 import java.util.Map;
 
-import com.example.musicat.domain.board.ArticleVO;
-import com.example.musicat.domain.board.BestArticleVO;
-import com.example.musicat.domain.board.SelectArticleVO;
-import com.example.musicat.domain.board.TagVO;
+import com.example.musicat.domain.board.*;
 
 public interface ArticleDao {
 
@@ -97,4 +94,7 @@ public interface ArticleDao {
 	List<ArticleVO> selectMyLikeArticle(int memberNo);
 
 
+    void insertGradeArticle(GradeArticleVO gradeArticleVO);
+
+	void deleteGradeArticle(Integer articleNo);
 }

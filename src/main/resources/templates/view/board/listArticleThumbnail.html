@@ -95,6 +95,26 @@
                         <a th:id="${endPage}" th:if="${endPage > pageSize}" class="page_num" th:text=">>"></a>
                     </th:block>
 
+<<<<<<< HEAD
+                <th:block th:if="${endPage < pageSize}">
+                    <div class="board_pagging">
+                        <th:block th:each="num : ${#numbers.sequence(startPage,endPage)}">
+    <!--                        <a th:id="${num}" onclick="paging(this);" th:text="${num}"></a>-->
+                            <a th:id="${num}" class="page_num" th:text="${num}"></a>
+                        </th:block>
+                    </div>
+                </th:block>
+                <th:block th:if="${endPage >= pageSize}">
+                    <div class="board_pagging">
+                        <th:block th:each="num : ${#numbers.sequence(startPage,pageSize)}">
+    <!--                        <a th:id="${num}" onclick="paging(this);" th:text="${num}"></a>-->
+                            <a th:id="${num}"  class="page_num"  th:text="${num}"></a>
+                        </th:block>
+                    </div>
+                    <a th:id="${startPage + pageSize}" class="page_num" th:text=">"></a>
+                    <a th:id="${endPage}" class="page_num" th:text=">>"></a>
+=======
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
                 </th:block>
             </div>
             <div id="search_area" class="search_area-style d-flex mt-3">

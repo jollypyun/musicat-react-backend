@@ -118,14 +118,18 @@ public class MusicController {
 
     // 특정 플레이리스트 안에 곡 넣기
     @PostMapping("/pushmusic/{playlistKey}")
+<<<<<<< HEAD
+    public List<Music> insertMusicIntoPlaylist(HttpServletRequest req, @RequestParam(name = "musicNos") List<Integer> musicNos, @PathVariable String playlistKey) {
+=======
     public List<Map<String, Object>> insertMusicIntoPlaylist(@RequestParam(name = "musicNos") int musicNos, @PathVariable String playlistKey) {
     //public List<Map<String,Object>> insertMusicIntoPlaylist(@RequestParam("musi")/*@RequestParam(name = "musicNos") List<Integer> musicNos*/, @PathVariable String playlistKey) {
+>>>>>>> 759c8fbeaaec7ad29902b1a52a7453fe4a4d2cc0
         //MemberVO member = (MemberVO) req.getSession().getAttribute("principal"); //이게 제대로 된 방법
         //int memberNo = 6; // 임시방편
         log.info("playlistKey : " + playlistKey);
         log.info("musicNo : " + musicNos);
         List<Integer> m = new ArrayList<Integer>();
-        m.add(musicNos);
+//        m.add(musicNos);
         List<Music> musics = musicApiService.pushMusic(m, playlistKey);
 
         List<Map<String, Object>> newMusicInfos = new ArrayList<Map<String, Object>>();
@@ -143,7 +147,7 @@ public class MusicController {
 
         //log.info("1 : " + musics.get(1).getLinks().get(1));
         //return musics;
-        return newMusicInfos;
+        return musics;
     }
 
     // 특정 플레이리스트 안의 곡 빼기
