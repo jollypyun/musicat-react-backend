@@ -23,7 +23,7 @@ public class DailyStatisticsServiceImpl implements DailyStatisticsService {
 		return this.dailyDao.selectDaily();
 	}
 
-//	@Transactional(readOnly = true)
+	@Transactional(readOnly = true)
 	@Override
 	public ArrayList<DailyStatisticsVO> retrieveList() {
 		return this.dailyDao.selectList();
