@@ -23,6 +23,7 @@
 
                     <div class="detailArticle-table-style">
                         <h1>
+                            <input type="hidden" id="grp_no" value="">
                             <input type="hidden" id="login_no" th:value="${loginMemberNo}">
                             <input type="hidden" id="member_no" th:value="${article.memberNo}">
                             <input type="hidden" id="article_no" th:value="${article.no}">
@@ -95,11 +96,11 @@
 
                                 <th:block th:if="${not #strings.isEmpty(musicList)}">
                                     <div class="mt-4 content-audioList-style">
-                                        <span class="material-icons md-36 float-end">playlist_add</span>
+                                        <!--                                        <span class="material-icons md-36 float-end">playlist_add</span>-->
 
 
                                         <div th:each="music : ${musicList}" class="mb-2">
-                                            <div class="detail-audio-part-style">
+                                            <div class="detail-audio-part-style mb-4">
                                                 <img id="detailAudioImg" th:src="${music.links[1].href}"
                                                      alt=""
                                                      srcset="">
@@ -113,7 +114,7 @@
                                                                 onclick="onAddtoPlayClick(this)">
                                                         <span id="audioPlayIcon"
                                                               class="material-icons md-36">add</span>
-                                                            <input type="hidden" th:value="${music.id}"
+                                                            <input type="hidden" th:value="${music.id}">
                                                         </button>
                                                     </div>
                                                     <div class="detail-audioControls-style"
@@ -127,7 +128,7 @@
 
                                                     </div>
 
-<!--                                                    <div class="dropdown-divider"></div>-->
+                                                    <!--                                                    <div class="dropdown-divider"></div>-->
 
                                                 </div>
 
@@ -146,6 +147,15 @@
 
 
                             <div class="detailArticle-function-style">
+                                <div id="like_area" class="detailArticle-like-style">
+                                    <div th:if="${article.likeCheck eq 0}">
+                                        <button type='button' id='add_like_btn'><i class='far fa-heart fa-lg'></i></button>
+                                    </div>
+                                    <div th:unless="${article.likeCheck eq 0}">
+                                        <button type='button' id='del_like_btn'><i class='fas fa-heart fa-lg'></i> </button>
+                                    </div>
+
+                                </div>
                                 <button th:if="${#authorization.expr('isAuthenticated()')}"
                                         id="writeForm_btn"
                                         onclick="writeForm()" type="button" class="btn">글쓰기

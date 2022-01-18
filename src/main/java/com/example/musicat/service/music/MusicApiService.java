@@ -1,5 +1,6 @@
 package com.example.musicat.service.music;
 
+import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
 import com.example.musicat.domain.music.PlaylistImage;
@@ -50,6 +51,8 @@ public class MusicApiService {
     private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
     private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/playlists/detail/{playlistKey}";
     private final String URI_MUSICS_TEST = "http://13.124.245.202:20000/api/posttest";
+    //private final String URI_PLAYLIST_MAKE_NOW = "http://13.124.245.202:20000/api/playlists/makeNow/{memberNo}";
+    private final String URI_PLAYLIST_MAKE_NOW = "http://localhost:20000/api/playlists/makeNow/{memberNo}";
 
     private final RestTemplate restTemplate;
 
@@ -59,6 +62,14 @@ public class MusicApiService {
     public MusicApiService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         //this.restTemplate.setErrorHandler(new RestErrorHandler());
+    }
+
+    public void makeNowPlaying(MemberVO memberVO) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        log.info("makeNowPlaying no : {}", memberVO.getNo());
+        map.put("memberNo", memberVO.getNo());
+        log.info("map value no : {}", map.get("memberNo"));
+        restTemplate.postForEntity("http://13.124.245.202:20000/api/playlists/makeNow/"+memberVO.getNo(), memberVO.getNo(), String.class);
     }
 
     public void retrieveMusicById(Long id) {
@@ -243,8 +254,8 @@ public class MusicApiService {
 
     // 플레이리스트 정보 가져오기
     public Playlist getOnePlaylist(String playlistKey) {
-        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://localhost:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistKey);
-//        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistKey}", Playlist.class, playlistKey);
+        //ResponseEntity<Playlist> response = restTemplate.getForEntity("http://localhost:20000/api/onePlaylists/{playlistNo}", Playlist.class, playlistKey);
+        ResponseEntity<Playlist> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/onePlaylists/{playlistKey}", Playlist.class, playlistKey);
         return response.getBody();
     }
 

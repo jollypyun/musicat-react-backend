@@ -21,24 +21,35 @@
                     </div>
                     <div class="myPage-top-profile">
 
-                        <span>NickName</span>
-                        <span th:text="${#authorization.expr('isAuthenticated()')}"></span>
-                        <th:block th:if="${#authorization.expr('isAuthenticated()')}">
-                            <button onclick="location.href='/ChangePwd'"
-                                    th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">비밀번호 변경
-                            </button>
-
-                            <div id="ezy">
-                                <button th:onclick="'follow(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'"
-                                        th:if="${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 0">
-                                    Follow
+                        <div class="myPage-top-profile-info">
+                            <span th:text="${member.getNickname()}"></span>
+                            <th:block th:if="${#authorization.expr('isAuthenticated()')}">
+                                <button onclick="location.href='/ChangePwd'"
+                                        th:if="${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">비밀번호
+                                    변경
                                 </button>
-                                <button th:onclick="'cancel(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'"
-                                        th:if="${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 1">
-                                    Cancel
-                                </button>
+                                <div id="ezy">
+                                    <button th:onclick="'follow(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'"
+                                            th:if="${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 0">
+                                        Follow
+                                    </button>
+                                    <button th:onclick="'cancel(' + ${member.getNo()} + ',' + ${#authentication.principal.getMemberVo.getNo} +')'"
+                                            th:if="${#authentication.principal.getMemberVo.getNo} != ${member.getNo()} AND ${checkFollow} == 1">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </th:block>
+                        </div>
+                        <div class="myPage-top-profile-follow">
+                            <div>
+                                <a th:href="|/followedList/${member.getNo()}|" class="me-2">Followers</a>
+                                <a th:href="|/followingList/${member.getNo()}|">Following</a>
                             </div>
-                        </th:block>
+                            <div>
+                                <span th:text="${follow.followed}" class="me-2"></span>
+                                <span th:text="${follow.following}"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -64,18 +75,9 @@
                                     <th>작성날짜</th>
                                 </tr>
 
-                            </thead>
-<!--                            <div class="reply_list" th:each="reply : ${replyListOneMember}">-->
-<!--                                <tbody>-->
-<!--                                    <td class="Content" th:text="${reply.no}"></td>-->
-<!--&lt;!&ndash;                                    <td class="Content" th:text="${게시판이름....}}"></td>&ndash;&gt;-->
-<!--                                    <td><a class="Content"  th:text="${reply.content}"-->
-<!--                                       th:href="|/articles/${reply.articleNo}|"></a></td>-->
-<!--                                    <td class="Content" th:text="${reply.writeDate}"></td>-->
-<!--                                </tbody>-->
-<!--                            </div>-->
-                            <div class="reply_list" th:each="reply : ${replyListOneMember}">
-                                <tbody>
+                                </thead>
+                                <div class="reply_list">
+                                    <tbody>
                                     <tr th:each="reply : ${replyListOneMember}">
                                         <td th:text="${reply.no}"></td>
                                         <!--                                    <td class="Content" th:text="${게시판이름....}}"></td>-->
@@ -85,37 +87,11 @@
                                         </td>
                                         <td th:text="${reply.writeDate}"></td>
                                     </tr>
-                                </tbody>
-                            </div>
-                        </table>
-                    </div>
-                    <div class="myPage-content-right">
-                        <div class="myPage-content-right-top">
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <a th:href="|/followedList/${member.getNo()}|">Followers</a>
-                                    </th>
-                                    <th>
-                                        <a th:href="|/followingList/${member.getNo()}|">Following</a>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <td th:text="${follow.followed}"></td>
-                                <td th:text="${follow.following}"></td>
-                                </tbody>
+                                    </tbody>
+                                </div>
                             </table>
                         </div>
-                        <div class="myPage-content-right-bottom">
-                            <ul>
-                                <li>1</li>
-                                <li>2</li>
-                                <li>3</li>
-                                <li>4</li>
-                            </ul>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -126,24 +102,32 @@
 </html>
 <script th:src="@{../js/jquery-3.6.0.min.js}"></script>
 <script th:inline="javascript">
-    $(function () {
-        $.ajax({
-            url: "/profile",
-            success: function (data) {
-                $("#profileModalHolder").html(data);
-            },
-        });
-    });
+    // $(function () {
+    //     $.ajax({
+    //         url: "/profile",
+    //         success: function (data) {
+    //             $("#profileModalHolder").html(data);
+    //         },
+    //     });
+    // });
 
     function openProfile() {
-        $.ajax({
-            url: "/profile",
-            success: function (data) {
-                $("#modal-profile").modal("show");
-            },
-        });
+        // $.ajax({
+        //     url: "/profile",
+        //     success: function (data) {
+        //         $("#modal-profile").modal("show");
+        //         console.log("모달 열어");
+        //     },
+        // });
+        // window.name = "부모창 이름";
+        window.name = "MyPage";
+        // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+        openWin = window.open(
+            "/profile",
+            "profile-edit",
+            "width=570, height=450, resizable = no, scrollbars = no"
+        );
     }
-
     function follow(opponent, my) {
         $.ajax({
             url: "/follow",
@@ -194,4 +178,3 @@
         });
     }
 </script>
-

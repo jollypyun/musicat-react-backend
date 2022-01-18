@@ -9,8 +9,17 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.example.musicat.controller.form.GradeArticleForm;
 import com.example.musicat.controller.form.JoinForm;
+import com.example.musicat.domain.board.GradeArticleVO;
+import com.example.musicat.service.board.ArticleService;
 import com.example.musicat.service.member.ProfileService;
+import com.example.musicat.service.music.MusicApiService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,11 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.musicat.service.member.GradeService;
 import com.example.musicat.service.member.MemberService;
@@ -50,6 +55,11 @@ public class MemberController {
 	private GradeService gradeService;
 	@Autowired
 	private ProfileService profileService;
+	@Autowired
+	private ArticleService articleService;
+
+	@Autowired
+	private MusicApiService musicApiService;
 
 //	회원가입
 //	@PostMapping("/join") // 이걸 실행하는 값의 주소
@@ -86,6 +96,10 @@ public class MemberController {
 		String encodePassword = encodePwd.encode(form.getPassword()); //비밀번호 암호화
 		MemberVO mvo = MemberVO.joinMember(form.getEmail(), encodePassword, form.getNickname());
 		this.memberService.registerMember(mvo);
+
+		mvo = this.memberService.retrieveMemberByEmail(mvo.getEmail());
+		log.info("방금 가입한 멤버 넘버 : " + mvo.getNo());
+		this.musicApiService.makeNowPlaying(mvo);
 //		this.profileService.addProfile(mvo.getNo());
 
 //		return "redirect:/musicatlogin"; // string으로 리턴되는건 html 파일로 넘어감! (회원가입 다음 로그인화면으로 넘어가고 싶다면 templates 안에 있는 로그인
@@ -343,4 +357,33 @@ public class MemberController {
 		return "view/member/findPassword";
 
 	}
+
+	@GetMapping("/update/member/grade")
+	private ModelAndView updateMemberGrade(@RequestParam("result") String[] result, @RequestParam(value = "resultChoice", required = false) int choice) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.setView(new RedirectView("/board/76/articles"));
+
+		String resultStr = "";
+		for (int i = 0; i < result.length; i++) {
+			resultStr += result[i];
+			log.info(result[i]);
+		}
+			JSONParser parser = new JSONParser();
+			Object obj = parser.parse(resultStr.substring(1, resultStr.length() - 1));
+			//4. To JsonObject
+			JSONObject jsonObj = (JSONObject) obj;
+		log.info("JSOn: {}", jsonObj.toString());
+			Integer articleNo = Integer.parseInt((String) jsonObj.get("articleNo"));
+			Integer memberNoNo = Integer.parseInt((String) jsonObj.get("memberNo"));
+			String proGrade = (String) jsonObj.get("prograde");
+
+			if (choice == 0) {
+				this.articleService.removeGradeArticle(articleNo);
+			} else if (choice == 1) {
+				this.memberService.modifyGrade(memberNoNo, proGrade);
+				this.articleService.removeGradeArticle(articleNo);
+			}
+		return mv;
+	}
 }
+

@@ -3,10 +3,7 @@ package com.example.musicat.repository.board;
 import java.util.List;
 import java.util.Map;
 
-import com.example.musicat.domain.board.ArticleVO;
-import com.example.musicat.domain.board.BestArticleVO;
-import com.example.musicat.domain.board.SelectArticleVO;
-import com.example.musicat.domain.board.TagVO;
+import com.example.musicat.domain.board.*;
 import com.example.musicat.mapper.board.ArticleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -43,6 +40,16 @@ public class ArticleDaoImpl implements ArticleDao {
 	@Override
 	public int boardTotalCount(int boardNo){
 		return this.articleMapper.boardTotalCount(boardNo);
+	}
+
+	@Override
+	public void insertGradeArticle(GradeArticleVO gradeArticleVO) {
+		this.articleMapper.inserGradeArticle(gradeArticleVO);
+	}
+
+	@Override
+	public void deleteGradeArticle(Integer articleNo) {
+		this.articleMapper.deleteGradeArticle(articleNo);
 	}
 
 	@Override
