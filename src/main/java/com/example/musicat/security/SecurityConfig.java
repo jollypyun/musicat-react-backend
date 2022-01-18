@@ -215,7 +215,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             request.setAttribute("loginFailMessage", "탈퇴처리 된 계정입니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
                         } else if (exception instanceof SessionAuthenticationException) {
-                            request.setAttribute("loginFailMessage", "최대 로그인 가능 어쩌구저쩌구 세션 개수를 초과해서 로그인 안 되는 거거든요?  멘트 추천좀 부탁드려요");
+                            request.setAttribute("loginFailMessage", "생성 가능한 세션 개수를 초과하였습니다. 브라우저에서 로그아웃 후 다시 시도해주세요.");
                         }
 
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/musicatlogin");
