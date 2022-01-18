@@ -43,21 +43,13 @@
                 <!-- .volume -->
 
                 <div class="playListBar-inner-img">
-                    <th:block th:if="${curPlaylist != null}">
-                        <th:block th:if="${curPlaylist.size > 0}">
-                        <img th:src="${curPlaylist[0].links[1].href}">
-                        </th:block>
-                    </th:block>
+                    <img src="/upload/defaultImg.png">
                 </div>
 
                 <div class="playListBar-inner-title">
                     <div class="playListBar-inner-title-div">
-                        <th:block th:if="${curPlaylist != null}">
-                            <th:block th:if="${curPlaylist.size > 0}">
-                        <span class="playListBar-title-song" th:text="${curPlaylist[0].title}"></span>
-                        <span class="playListBar-title-singer" th:text="${curPlaylist[0].memberNickname}"></span>
-                            </th:block>
-                        </th:block>
+                        <span class="playListBar-title-song"></span>
+                        <span class="playListBar-title-singer"></span>
                         <span class="playListBar-title-index" style="display:none"></span>
                     </div>
                 </div>
@@ -115,11 +107,7 @@
 
 
                 <!--                <iframe src = "https://cdn.producerloops.com/files/audio/53707/Trap Aura Demo.mp3" allow="autoplay" id="audio"></iframe>-->
-                <th:block th:if="${curPlaylist != null}">
-                    <th:block th:if="${curPlaylist.size > 0}">
-                        <audio style="display: none" id="audio" controls th:src="${curPlaylist[0].links[0].href}" />
-                    </th:block>
-                </th:block>
+                <audio style="display: none" id="audio" controls src="#">
                     <!--                    <source type="audio/mp3">-->
                 </audio>
             </div>
