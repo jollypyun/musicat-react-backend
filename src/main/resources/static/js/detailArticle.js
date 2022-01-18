@@ -134,8 +134,8 @@ $(document).ready(function () {
 	//답글 폼
 	$(document).on('click', '.depth_reply_btn', function () {
 		console.log("답글 폼 입장")
-		//const no = $(this).parents('.reply-style').attr('id');
-		const no = $(this).parents('.detail-replyBtn-style').attr('id');
+		const no = $(this).parents('div').attr('id');
+		//const no = $(this).parents('.detail-replyBtn-style').attr('id');
 		console.log('no::::::::::', no);
 		// var grpCheck = $('#write_depth_reply_form').find('grp_no');
         var grpCheck = $('#grp_no').val();
