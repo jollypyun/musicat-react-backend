@@ -1,5 +1,6 @@
 package com.example.musicat.domain.member;
 
+import com.example.musicat.domain.board.CategoryVO;
 import org.apache.ibatis.type.Alias;
 
 import lombok.AllArgsConstructor;
@@ -7,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,4 +33,7 @@ public class GradeVO {
 		this.docs = docs;
 		this.comms = comms;
 	}
+
+	private List<GradeVO> gradeList = new ArrayList<>();
+
 }

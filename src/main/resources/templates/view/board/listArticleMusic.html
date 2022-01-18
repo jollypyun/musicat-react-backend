@@ -11,10 +11,13 @@
 				<h1 th:text="${boardName}"></h1>
 
 				<th:block th:if="${#authorization.expr('isAuthenticated()')}">
-					<button type="button" id="insertLikeBoard" th:value="${#authentication.principal.getMemberVo.getNo}">즐겨찾기</button>
+					<button class="border-0 bg-transparent" type="button" id="insertLikeBoard"
+							th:value="${#authentication.principal.getMemberVo.getNo}"><span class="material-icons">star</span>
+					</button>
 				</th:block>
 				<th:block th:if="${#authorization.expr('isAnonymous()')}">
-					<button type="button" id="insertLikeBoardAnonymous" >즐겨찾기</button>
+					<button class="border-0 bg-transparent" type="button" id="insertLikeBoardAnonymous"><span
+							class="material-icons">star</span></button>
 				</th:block>
 
 			</div>

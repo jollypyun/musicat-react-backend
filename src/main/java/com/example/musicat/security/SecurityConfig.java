@@ -61,16 +61,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public AuthenticationProvider authenticationProvider() {
-//        return new CustomAutheticationProvider();
-//    }
+    //인증 커스텀
     @Bean
     public AuthenticationProvider customAutheticationProvider() {
         return new CustomAutheticationProvider();
     }
 
-    //ApplicationListener<SessionDestroyedEvent> 를 사용하기 위한 Bean 등록
+    //ApplicationListener<SessionDestroyedEvent> ( SessionDestroyListener )를 사용하기 위한 Bean 등록
     @Bean
     public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher(){
         return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher(){
@@ -79,6 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
    // 인가 - DB연동 및 권한 계층 부여를 위한 작업
    //----------------------------------------------------------------------------------------------
+
+    //security 기본 필터 작동 전에 처리할 내용들 적시
     @Bean
     public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
         FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
@@ -88,6 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return filterSecurityInterceptor;
     }
 
+    //DB에서 리소스와 권한 정보 매칭
     @Bean
     public FilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
         return new UrlFilterInvocationSecurityMetadataSource();
@@ -132,6 +132,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return affirm;
     }
 
+    //인증에 대한 지원을 설정하는 메소드를 가지고 있음 ( customAutheticationProvider : 인증 커스텀 )
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(customAutheticationProvider());
@@ -214,7 +215,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             request.setAttribute("loginFailMessage", "탈퇴처리 된 계정입니다.");
                             log.info(request.getAttribute("loginFailMessage").toString());
                         } else if (exception instanceof SessionAuthenticationException) {
-                            request.setAttribute("loginFailMessage", "최대 로그인 가능 어쩌구저쩌구 세션 개수를 초과해서 로그인 안 되는 거거든요?  멘트 추천좀 부탁드려요");
+                            request.setAttribute("loginFailMessage", "생성 가능한 세션 개수를 초과하였습니다. 브라우저에서 로그아웃 후 다시 시도해주세요.");
                         }
 
                         RequestDispatcher dispatcher = request.getRequestDispatcher("/musicatlogin");
