@@ -124,7 +124,7 @@ public class MusicController {
         log.info("playlistKey : " + playlistKey);
         log.info("musicNo : " + musicNos);
         List<Integer> m = new ArrayList<Integer>();
-//        m.add(musicNos);
+        m.add(musicNos);
         List<Music> musics = musicApiService.pushMusic(m, playlistKey);
 
         List<Map<String, Object>> newMusicInfos = new ArrayList<Map<String, Object>>();
