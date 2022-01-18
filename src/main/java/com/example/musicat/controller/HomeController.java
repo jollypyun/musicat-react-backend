@@ -171,7 +171,6 @@ public class HomeController {
     @GetMapping("/myPage/Playlist/{userNo}")
     public String myPage(Model model, @PathVariable int userNo) {
         MemberVO me = checkMemberNo();
-
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
         List<Playlist> playlists = new ArrayList<>();
@@ -246,6 +245,7 @@ public class HomeController {
     //작성한 게시글 조회 ------------------- 게시글별 댓글 수 추가하면 좋겠다
     @GetMapping("/myPage/Board/{userNo}")
     public String myPageBoard(Model model, @PathVariable int userNo) {
+        MemberVO me = HomeController.checkMemberNo();
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
 	      int checkFollow = 0;
@@ -282,6 +282,7 @@ public class HomeController {
     //작성한 댓글 조회--------------------- 작성자 이름에 링크, 게시글 제목 띄우기
     @GetMapping("/myPage/Reply/{userNo}")
     public String myPageReply(Model model, @PathVariable int userNo) {
+        MemberVO me = HomeController.checkMemberNo();
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
 	      int checkFollow = 0;
@@ -329,6 +330,7 @@ public class HomeController {
     //추천 누른 게시글 조회
     @GetMapping("/myPage/Like/{userNo}")
     public String myPageLike(Model model, @PathVariable int userNo) {
+        MemberVO me = HomeController.checkMemberNo();
         MemberVO member = new MemberVO();
         FollowVO follow = new FollowVO();
 	      int checkFollow = 0;

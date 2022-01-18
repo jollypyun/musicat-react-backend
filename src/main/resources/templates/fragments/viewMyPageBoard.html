@@ -10,12 +10,15 @@
             <div class="row mt-3 mb-5">
                 <div class="myPage-top">
                     <div class="myPage-top-image">
-                        <!--                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>-->
-                        <button style="border: none;outline: none; background-color: transparent;"
-                                onclick="openProfile()">
+                        <button style="border: none;outline: none; background-color: transparent;" onclick="openProfile()" th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                             <img th:src="|/profileImage/${member.getNo()}|"/>
                         </button>
-                        <div id="profileModalHolder"></div>
+                        <th:block th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} != ${member.getNo()}">
+                            <img th:src="|/profileImage/${member.getNo()}|"/>
+                        </th:block>
+                        <th:block th:if="${!#authorization.expr('isAuthenticated()')}">
+                            <img th:src="|/profileImage/${member.getNo()}|"/>
+                        </th:block>
                     </div>
                     <div class="myPage-top-profile">
                         <div class="myPage-top-profile-info">
@@ -123,6 +126,7 @@
             "width=570, height=450, resizable = no, scrollbars = no"
         );
     }
+
     function follow(opponent, my) {
         $.ajax({
             url: "/follow",
