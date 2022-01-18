@@ -46,13 +46,6 @@
 	</delete>
 
 <!--	resource + grade 중복 조회-->
-<!--	<select id="selectDuplicatedResource" resultType="HashMap">-->
-<!--		SELECT resource_no, grade_no-->
-<!--		FROM grade_resource-->
-<!--		WHERE grade_no = #{gradeNo} AND resource_no = (SELECT resource_no-->
-<!--														FROM resource-->
-<!--														WHERE resource_name = #{resourceName})-->
-<!--	</select>-->
 	<select id="selectDuplicatedResource" resultType="INTEGER">
 		SELECT resource_no
 		FROM grade_resource
