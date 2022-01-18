@@ -217,6 +217,7 @@
                             <!--                            <span th:text="${subArticle.viewcount}">조회수</span>-->
                             <!--                            <span th:text="${subArticle.likecount}">추천</span>-->
                         </div>
+
                     </div>
 
                     <div class="dropdown-divider"></div>
@@ -295,7 +296,29 @@
                                         </div>
 
 
+                                <th:block th:unless="${reply.depth == 1}">
+                                    <div class="reply-style" th:id="${reply.groupNo}">
+                                        <div class="reply-info-style">
+                                            <div>
+                                            <span class="me-3 dropdown">
+<!--                                                <span class="fw-bold fs-5" th:text="${reply.nickname}"></span>-->
+                                                <a class="dropdown-toggle fw-bold" data-bs-toggle="dropdown"
+                                                   th:text="${reply.nickname}">
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a class="dropdown-item"
+                                                           th:href="|/myPage/Playlist/${reply.memberNo}|">MyPage</a></li>
+                                                    <li><a class="dropdown-item" href="/notelist">쪽지함</a></li>
+                                                </ul>
+                                            </span>
+                                                <span th:text="${reply.writeDate}"></span>
+                                            </div>
+                                            <span class="Content reply-text-style" th:text="${reply.content}"></span>
+                                        </div>
+
+
                                         <div class="mt-2 detail-replyBtn-style" th:id="${reply.groupNo}">
+
                                             <input th:if="${#authorization.expr('isAuthenticated()')}" type="button"
                                                    class="depth_reply_btn me-2" value="답글쓰기"/>
 
@@ -331,6 +354,7 @@
 
                             <input type="hidden" id="no"/>
                             <textarea id="reply_content" rows="5" cols="50" placeholder=""></textarea>
+
                             <button class="modify_cancle">취소</button>
                             <button class="modify_reply_btn">수정</button>
                         </div>
