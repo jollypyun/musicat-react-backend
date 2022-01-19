@@ -68,7 +68,7 @@
       <p id="musiclink" class="hidden" th:text="*{music.links[0].href}"></p>
       <p id="imagelink" class="hidden" th:text="*{music.links[1].href}"></p>
       <p id="musictitle" class="hidden" th:text="${music.title}"></p>
-      <p id="musicId" th:text="${music.id}"></p>
+      <p id="musicId" class="hidden" th:text="${music.id}"></p>
       <span>등록이 되었습니다.</span>
 
       <button onclick="setParentText()">닫기</button>
