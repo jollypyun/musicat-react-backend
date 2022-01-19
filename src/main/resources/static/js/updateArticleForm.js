@@ -195,4 +195,50 @@ $(document).ready(function () {
         });
 
     // end tag
+
+
+
 });
+
+const getAjaxAlterMusicDelete = function (url, musicId) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            method: "DELETE",
+            dataType: "json",
+            data: {
+                musicId: musicId,
+            },
+            success: function (data) {
+                // 비동기 작업 성공 시 호출
+                resolve(data);
+            },
+            error: function (e) {
+                // 비동기 작업 실패 시 호출
+                reject(e);
+            },
+        });
+    });
+};
+
+async function requestProcessAlterMusicDelete(url, musicId) {
+    try {
+        // await 다음에는 비동기 처리 작업이 와야함.
+        const result = await getAjaxMusic(url, musicId);
+        console.log("ajax")
+        if (result.success == 1) {
+            //$("#receive").empty();
+            $("#receive_thymeleaf").hide();
+            console.log("success");
+        } else {
+            console.log(result);
+        }
+    } catch (error) {
+        console.log("error : ", error);
+    }
+}
+
+function alter_delete(e) {
+    console.log($(e).attr("id"));
+    requestProcessAlterMusicDelete("/musicDelete", $(e).attr("id"));
+}

@@ -34,7 +34,7 @@ public interface ArticleService {
 	void registerArticle(ArticleVO article, Long audioNo);
 	
 	//게시글 수정
-	void modifyArticle(ArticleVO article);
+	void modifyArticle(ArticleVO article, Long audioNo);
 	
 	//게시글 삭제
 	int removeArticle(int articleNo,int memberNo);

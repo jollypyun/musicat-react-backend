@@ -115,11 +115,14 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public void modifyArticle(ArticleVO article) {
+	public void modifyArticle(ArticleVO article, Long audioNo) {
 		this.articleDao.updateArticle(article);
 		this.fileService.uploadFile(article);
 		if (article.getTagList() != null) { // 입력태그가 있을 때만 동작
 			this.articleDao.insertTags(article.getNo(), article.getTagList());
+		}
+		if (audioNo != null) {
+			this.musicApiService.connectToArticle(audioNo, article.getNo());
 		}
 	}
 
