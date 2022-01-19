@@ -26,7 +26,7 @@
             <input type="hidden" id="searchKeyword">
             <input type="hidden" id="searchContent">
             <th:block th:if="${articles.size() > 0}">
-                <div class="fixed_img_col">
+                <div class="fixed_img_col mx-auto">
                     <ui id="img_container" style="list-style: none;" class="Thumbnail-ul">
                         <li th:each="article : ${articles}" class="Thumbnail-li">
                             <!-- <div class="notEmpty" th:if="{articleVO.getThumbnail() == null}"></div> -->
