@@ -9,7 +9,7 @@
             <div class="row mt-3 mb-5">
                 <div class="myPage-top">
                     <div class="myPage-top-image">
-                        <!--                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>-->
+                        <a href="/profile"><img th:src="|/profileImage/${member.getNo()}|"></a>
                         <button style="border: none;outline: none; background-color: transparent;" onclick="openProfile()" th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                             <img th:src="|/profileImage/${member.getNo()}|"/>
                         </button>
