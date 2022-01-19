@@ -43,11 +43,14 @@
 
 						<div id="write_area" class="write-area-style">
 
+
 							<div id="in_subject" class="write-subject-style">
 								<textarea id="utitle" th:field="*{subject}"
 									placeholder="제목" maxlength="100" th:value="${article.subject}"
 									required></textarea>
 							</div>
+
+
 
 							<div id="in_content" class="write-content-style">
 								<textarea id="ucontent" th:field="*{content}"
@@ -76,7 +79,93 @@
 								</div>
 								<div id="image_container">
 								</div>
+								<label class="write-audio-style" for="write-audiofile-upload">
+									<i class="fas fa-file-audio fa-2x"></i>
+								</label>
+								<input type="button" value="노래 등록" onclick="openChild()" id="write-audiofile-upload"/><br />
 							</div>
+
+                            <!-- 음악 등록 칸 -->
+
+                            <th:block th:if="${musics.size > 0}">
+                                <th:block th:each="music : ${musics}">
+                                    <div id="receive_thymeleaf" class="detail-audio-style">
+                                        <div class="detail-audio-part-style">
+                                            <img id="detailAudioImg_thymeleaf" th:src="${music.links[1].href}" alt=""
+                                                 srcset=""/>
+
+                                            <div id="audioDiv_thymeleaf" class="detail-audioDiv-style">
+                                                <div id="audioInfoDiv_thymeleaf" class="detail-audioInfo-style">
+                                                    <!--                                                    <button-->
+                                                    <!--                                                            id="audioPlayBtn_thymeleaf"-->
+                                                    <!--                                                            class="audioPlayBtn"-->
+                                                    <!--                                                            onclick="detailPlayAudio()"-->
+                                                    <!--                                                            style="visibility: hidden"-->
+                                                    <!--                                                    >-->
+                                                    <!--                                                        <span id="audioPlayIcon_thymeleaf" class="material-icons">play_circle</span>-->
+                                                    <!--                                                    </button>-->
+
+                                                    <span id="audioTitle_thymeleaf" class="audioTitle"
+                                                          th:text="${music.title}">제목입니다~</span>
+<!--                                                    <input type="hidden" id="audioNo_thymeleaf" name="audioNo"-->
+<!--                                                           value=""/>-->
+                                                    <button type="button" th:id = "${music.id}" class="audioDelBtn" onclick="alter_delete(this)">
+                                                        <span id="audioDelIcon_thymeleaf"
+                                                              class="material-icons">close</span>
+                                                    </button>
+                                                </div>
+                                                <div class="detail-audioControls-style">
+                                                    <!--            <div id="waveform"></div>-->
+                                                    <!--            <p id="audioResource" style="display: none"></p>-->
+                                                    <audio
+                                                            src="${music.links[0].href}"
+                                                            id="detail-audio_thymeleaf"
+                                                            controls
+
+                                                    ></audio>
+                                                    <!--              style="display: none"-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </th:block>
+                            <!-- 음악 등록 칸 -->
+                            <div id="receive" style="display:none" class="detail-audio-style">
+                                <div class="detail-audio-part-style">
+                                    <img id="detailAudioImg" src="images/시보.png" alt="" srcset=""/>
+
+                                    <div id="audioDiv" class="detail-audioDiv-style">
+                                        <div id="audioInfoDiv" class="detail-audioInfo-style">
+                                            <button
+                                                    id="audioPlayBtn"
+                                                    class="audioPlayBtn"
+                                                    onclick="detailPlayAudio()"
+                                                    style="visibility: hidden"
+                                            >
+                                                <span id="audioPlayIcon" class="material-icons">play_circle</span>
+                                            </button>
+
+                                            <span id="audioTitle" class="audioTitle">제목입니다~</span>
+                                            <input type="hidden" id="audioNo" name="audioNo" value=""/>
+                                            <button type="button" class="audioDelBtn" onclick="test(this)">
+                                                <span id="audioDelIcon" class="material-icons">close</span>
+                                            </button>
+                                        </div>
+                                        <div class="detail-audioControls-style">
+                                            <!--            <div id="waveform"></div>-->
+                                            <!--            <p id="audioResource" style="display: none"></p>-->
+                                            <audio
+                                                    src="file_example_MP3_2MG.mp3"
+                                                    id="detail-audio"
+                                                    controls
+
+                                            ></audio>
+                                            <!--              style="display: none"-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 							<input type="button" value="취소" onclick="history.back(-1)">
 							<input type="button" id="update_btn" value="등록">
 						</div>

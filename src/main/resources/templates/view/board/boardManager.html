@@ -39,7 +39,6 @@
 								</tr>
 
 								<th:block th:if="${category.getBoardList() != null}">
-
 									<th:block th:each="board : ${category.boardList}">
 
 										<tr th:id="${board.getBoardNo()}">
@@ -63,19 +62,21 @@
 
 						<!-- 카테고리 추가 -->
 						<div id="writeCategory" style="display: none;">
-							<form th:action="@{/writeCategory}" th:object="${categoryVo}" method="post">
-								<table>
-									<tbody>
-									<tr>
-										<td>카테고리 이름:</td>
-										<td><input type="text" th:field="*{categoryName}" placeholder="카테고리명(1 ~ 20자)" maxlength="20"></td>
-									</tr>
-									</tbody>
-								</table>
-								<div class="boardManager-func">
-								<button type="reset">취소</button>
-								<button type="button" id="writeCategoryBtn">저장</button>
-								</div>
+							<form>
+								<th:block th:object="${categoryVo}">
+									<table>
+										<tbody>
+											<tr>
+												<td>카테고리 이름:</td>
+												<td><input type="text" th:field="*{categoryName}" placeholder="카테고리명(1 ~ 20자)" maxlength="20"></td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="boardManager-func">
+										<button type="reset">취소</button>
+										<button type="button" id="writeCategoryBtn">저장</button>
+									</div>
+								</th:block>
 							</form>
 						</div>
 
@@ -83,22 +84,22 @@
 
 						<!-- 카테고리 수정 -->
 						<div id="modifyCategory" style="display: none;">
-							<form th:action="@{/modifyCategory}" th:object="${categoryVo}" method="post">
-								<div id="modifyCategoryForm"></div>
+							<form>
+								<th:block th:object="${categoryVo}">
+									<div id="modifyCategoryForm"></div>
 
-								<div class="boardManager-func">
-									<button type="button" id="removeCategoryBtn" > 삭제 </button>
-<!--									<button type="button" id="removeCategoryBtn">삭제</button>-->
-<!--									onclick="removeCategory(this.form)"-->
-									<button type="reset">취소</button>
-									<button type="button" id="modifyCategoryBtn">저장</button>
-								</div>
+									<div class="boardManager-func">
+										<button type="button" id="removeCategoryBtn" > 삭제 </button>
+										<button type="reset">취소</button>
+										<button type="button" id="modifyCategoryBtn">저장</button>
+									</div>
+								</th:block>
 							</form>
 						</div>
 
 						<!-- 게시판 추가 -->
 						<div id="writeBoard" style="display: none;">
-							<form th:action="@{/writeBoard}" method="post">
+							<form>
 								<div id="addBoardForm"></div>
 
 								<div class="boardManager-func">
@@ -110,7 +111,7 @@
 
 						<!-- 게시판 수정 -->
 						<div id="modifyBoard" style="display: none;">
-							<form th:action="@{/modifyBoard}" method="post">
+							<form>
 								<div id="modifyBoardForm"></div>
 
 								<div class="boardManager-func">
@@ -124,7 +125,6 @@
 				</div>
 			</div>
 		</div>
-<!--		<p class = "hidden" id = "test" th:text="${errorMsg}"></p>-->
 	</main>
 
 
@@ -132,7 +132,6 @@
 
 	<script th:src="@{../js/jquery-3.6.0.min.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
-
 		// ------------------------------------------------------------- 카테고리 추가
 		function addCategory() {
 
@@ -142,13 +141,18 @@
 			$('#writeCategory').appendTo('#Blank');
 			$('#writeCategory').show();
 		};
+//-------------------------------------------------------- 카테고리 추가 공백 + 중복 검사
 
-		// ------------------------------------------------------------- 카테고리 추가 공백 + 중복 검사
+		$('#writeCategory').keypress(function(event) {
+			 if(event.which == 13) {
+				 event.preventDefault();
+			}
+		});
 
 		$('#writeCategoryBtn').on('click', function () {
 			const categoryName = $('#categoryName').val();
-			if(categoryName == "" || categoryName == " " || categoryName.indexOf("  ") != -1) {
-				alert("카테고리명은 1 ~ 20자로 입력해주세요.(공백 불가)");
+			if (!categoryName.trim().length) {
+				alert("카테고리명은 1 ~ 20자로 입력해주세요.");
 				return false;
 			}
 			requestWriteCategory('/writeCategory', categoryName);
@@ -187,19 +191,6 @@
 				console.log("error : ", error);
 			}
 		}
-
-		// ------------------------------------------------------------- 카테고리 추가 공백 검사
-		// $('#writeCategoryBtn').on("click", function () {
-		// 	const categoryName = $('#categoryName').val();
-		// 	if (categoryName == "" ){
-		// 		alert("카테고리 이름은 1~20자로 입력해주세요.");
-		// 		return false;
-		// 	}
-		// 	else {
-		// 		$('#writeCategoryController').submit();
-		// 	}
-		// });
-
 
 		// ------------------------------------------------------------- 카테고리 수정
 		function modifyCategory(e) {
@@ -243,11 +234,18 @@
 		}
 
 		// ------------------------------------------------------------- 카테고리 수정 공백 + 중복 검사
+		$('#modifyCategory').keypress(function(event) {
+			if(event.which == 13) {
+				event.preventDefault();
+			}
+		});
+
+
 		$('#modifyCategoryBtn').on('click', function () {
 			const categoryNo = $('#modifyCategoryNo').val();
 			const categoryName = $('#modifyCategoryName').val();
-			if (categoryName == "" || categoryName == " " || categoryName.indexOf("  ") != -1) {
-				alert("카테고리명은 1 ~ 20자로 입력해주세요.(공백 불가)");
+			if (!categoryName.trim().length) {
+				alert("카테고리명은 1 ~ 20자로 입력해주세요.");
 				return false;
 			}
 			requestModifyCategory('/modifyCategory', categoryNo, categoryName);
@@ -417,13 +415,19 @@
 		}
 
 		// ------------------------------------------------------------- 게시판 추가 공백 + 중복 검사
+		$('#writeBoard').keypress(function(event) {
+			if(event.which == 13) {
+				$('#writeBoardBtn').click();
+			}
+		});
+
 		$('#writeBoardBtn').on('click', function () {
 			const categoryNo = $('#writeBoardCategoryNo').val();
 			const boardName = $('#boardName').val();
 			const writeGrade = $('#writeGrade').val();
 			const readGrade = $('#readGrade').val();
 			const boardkind = $('#boardkind').val();
-			if (boardName == "" || boardName == " " || boardName.indexOf("  ") != -1) {
+			if (!boardName.trim().length) {
 				alert("게시판명은 1 ~ 20자로 입력해주세요.");
 				return false;
 			}
@@ -589,6 +593,12 @@
 
 
 		// ------------------------------------------------------------- 게시판 수정 공백 + 중복 검사
+	$('#modifyBoard').keypress(function(event) {
+		if(event.which == 13) {
+			event.preventDefault();
+		}
+	});
+
 		$('#modifyBoardBtn').on('click', function () {
 			const boardNo = $('#modifyBoardNo').val();
 			const categoryNo = $('#modifyBoardCategoryNo').val();
@@ -596,7 +606,7 @@
 			const writeGrade = $('#modifyWriteGrade').val();
 			const readGrade = $('#modifyReadGrade').val();
 			const boardkind = $('#modifyBoardkind').val();
-			if (boardName == "" || boardName == " " || boardName.indexOf("  ") != -1) {
+			if (!boardName.trim().length) {
 				alert("게시판명은 1 ~ 20자로 입력해주세요.");
 				return false;
 			}
@@ -689,7 +699,6 @@
 			} else {
 			}
 		}
-
 	</script>
 
 </div>

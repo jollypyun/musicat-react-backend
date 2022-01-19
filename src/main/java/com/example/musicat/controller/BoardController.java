@@ -1,36 +1,28 @@
 package com.example.musicat.controller;
 
-import java.util.*;
-
 import com.example.musicat.domain.board.*;
+import com.example.musicat.domain.member.GradeVO;
 import com.example.musicat.domain.member.MemberVO;
 import com.example.musicat.domain.paging.Criteria;
 import com.example.musicat.service.board.ArticleService;
+import com.example.musicat.service.board.BoardService;
+import com.example.musicat.service.board.CategoryService;
 import com.example.musicat.service.board.FileService;
-
-import com.example.musicat.util.TemplateModelFactory;
+import com.example.musicat.service.member.GradeService;
 import com.example.musicat.service.music.MusicApiService;
+import com.example.musicat.util.TemplateModelFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.musicat.service.board.BoardService;
-import com.example.musicat.service.board.CategoryService;
-import com.example.musicat.service.member.GradeService;
-import com.example.musicat.domain.member.GradeVO;
-
-import lombok.extern.slf4j.Slf4j;
-
-import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -68,8 +60,6 @@ public class BoardController {
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("managerContent", "/view/board/boardManager");
 
-		log.info("boardManager--------" + categoryList.toString());
-		
 		//카테고리 추가
 		CategoryVO categoryVo = new CategoryVO();
 		model.addAttribute("categoryVo", categoryVo);
@@ -78,7 +68,6 @@ public class BoardController {
 
 	@GetMapping("/accessDenideGrade")
 	public String accessDenied(Model model) {
-		log.info("/accessDenideGrade------------------------------------");
 		model.addAttribute("managerContent", "view/security/accessDenideGrade");
 		return "view/home/viewManagerTemplate";
 	}
@@ -107,7 +96,7 @@ public class BoardController {
 	//카테고리 수정 페이지
 	@ResponseBody
 	@PostMapping("/selectOneCategory")
-	public CategoryVO selectOneCategory(@RequestBody HashMap<String, Object> map) throws Exception {
+	public CategoryVO selectOneCategory(@RequestBody HashMap<String, Object> map) {
 
 		CategoryVO cVO = new CategoryVO();
 
@@ -141,7 +130,6 @@ public class BoardController {
 				map.put("result", 1); //다른 카테고리면 저장x
 			}
 		}
-
 		return map;
 	}
 
@@ -159,7 +147,6 @@ public class BoardController {
 			map.put("result", 1);
 		} else {
 			map.put("result", 0);
-
 			this.categoryService.removeCategory(categoryNo);
 		}
 		return map;
@@ -169,7 +156,7 @@ public class BoardController {
 	//게시판 추가 페이지 드롭박스 목록
 	@ResponseBody
 	@PostMapping("/selectListAdd")
-	public CreateBoardVO selectListAdd() throws Exception {
+	public CreateBoardVO selectListAdd() {
 		CreateBoardVO cbVO = new CreateBoardVO();
 		//카테고리 목록
 		ArrayList<CategoryVO> categoryList = this.categoryService.retrieveCategoryList();
@@ -181,8 +168,6 @@ public class BoardController {
 		cbVO.setCategoryList(categoryList);
 		cbVO.setGradeList(gradeList);
 		cbVO.setBoardkindList(boardkindList);
-
-		log.info("/selectListAdd");
 
 		return cbVO;
 	}
@@ -222,7 +207,7 @@ public class BoardController {
 	//게시판 수정 페이지
 	@ResponseBody
 	@PostMapping("/selectListModify")
-	public CreateBoardVO selectListModify(@RequestBody HashMap<String, Object> map ) throws Exception {
+	public CreateBoardVO selectListModify(@RequestBody HashMap<String, Object> map ) {
 
 		CreateBoardVO cbVO = new CreateBoardVO();
 		//카테고리 목록
@@ -316,7 +301,7 @@ public class BoardController {
 
 	// 게시판 목록 조회
 	@GetMapping("/board/{boardNo}/articles")
-	public String selectAllNomalArticle(@PathVariable("boardNo") int boardNo, // @RequestParam("memberNo") int memberNo,
+	public String selectAllNomalArticle(@PathVariable("boardNo") int boardNo,
 										Model model) {
 		// create
 		BoardBoardGradeVO bbgVO = this.boardService.retrieveOneBoard(boardNo);
@@ -372,14 +357,9 @@ public class BoardController {
 			} else { //오디오 게시판 썸네일 설정
 				setAudioBoardThumbnail(articles);
 			}
-
 			model.addAttribute("articles", articles); // 게시글 정보 전송
-
 		}
 
-
-		//MemberVO member = HomeController.checkMemberNo();
-    
 		List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
 		model.addAttribute("likeBoardList", likeBoardList);
 
@@ -391,13 +371,6 @@ public class BoardController {
 		model.addAttribute("categoryBoardList", categoryList);
 		model.addAttribute("boardName", boardName); // 차후 이름으로 변경할것
 		model.addAttribute("boardkind", boardkind); // 게시글 유형
-
-		// 양 ~
-//		int memberNo = 2;
-//		int likeBoard = this.boardService.retrieveLikeBoard(memberNo, boardNo);
-//		log.info("목록조회하는 게시판의 즐찾 추가된 거 여부 : " + likeBoard);
-//		model.addAttribute("likeBorad", likeBoard);
-		// ~ 양
 
 		templateModelFactory.setCurPlaylistModel(model);
 		log.info("boardKind: {}", boardkind);
@@ -417,13 +390,6 @@ public class BoardController {
 		}
 	}
 
-//	@ResponseBody
-//	@GetMapping("/board/paging")
-//	public List<ArticleVO> pagingBoardList(@RequestParam("movePage") int movePage,
-//										   @RequestParam("boardNo") int boardNo){
-//		List<ArticleVO> articles = this.articleService.selectBoardList(boardNo, movePage);
-//		return articles;
-//	}
 
 	@ResponseBody
 	@GetMapping("/board/paging")
@@ -497,24 +463,19 @@ public class BoardController {
 	@ResponseBody
 	@PostMapping("/likeBoard")
 	public Map<String, Integer> likeBoard(@RequestParam("memberNo") int memberNo, @RequestParam("boardNo") int boardNo) {
-		log.info("memberNo : " + memberNo + " boardNo : " + boardNo);
 
 		Map<String, Integer> map = new HashMap<>();
 
 		//즐찾 한 게시판인지 여부
 		int likeboard = this.boardService.retrieveLikeBoard(memberNo, boardNo);
-		log.info("즐찾에 있나요? : ", likeboard);
 
-		if (likeboard == 0) { //즐찾 안된 게시판이면
+		if (likeboard == 0) {
 			map.put("result", 0);
 			this.boardService.registerLikeBoard(memberNo, boardNo);
-		} else { //즐찾게시판면
+		} else {
 			map.put("result", 1);
 			this.boardService.removeLikeBoard(memberNo, boardNo);
 		}
-
-		log.info("result {} : ", map.get("result").toString());
-
 		return map;
 	}
 

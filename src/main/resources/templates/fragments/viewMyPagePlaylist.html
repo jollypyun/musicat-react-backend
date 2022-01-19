@@ -70,13 +70,13 @@
 
                 <div class="myPage-btn-style" th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
                     <form class="me-3" method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
-                        <button type="submit">추가</button>
+                        <button class="btn btn-primary" type="submit">추가</button>
                     </form>
                     <form
                             th:action="|/deleteplaylist/*{memberNo}/*{id}|"
                             method="POST">
                         <input type="hidden" name="_method" value="DELETE"/>
-                        <button id="class">삭제</button>
+                        <button id="class" class="btn btn-primary">삭제</button>
                     </form>
 
                 </div>
@@ -117,13 +117,13 @@
                                 </tbody>
                             </table>
                             <div class="myPage-content-left-playlist-btn">
-                                <button>전체 재생</button>
-                                <form th:action="|/changePlaylistForm/*{id}|" method="get">
-                                    <button type="submit">편집...</button>
+                                <button class="btn btn-primary">전체 재생</button>
+                                <form th:action="|/changePlaylistForm/*{id}|" method="get" class="mx-3">
+                                    <button class="btn btn-primary" type="submit">편집...</button>
                                 </form>
                                 <form th:action="|/deleteplaylist/*{memberNo}/*{id}|" method="POST">
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <button class="delete-Btn">삭제</button>
+                                    <button class="delete-Btn btn btn-primary">삭제</button>
                                 </form>
 
                             </div>

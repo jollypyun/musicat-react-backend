@@ -76,12 +76,9 @@ public class MusicApiService {
         Map<String, Long> params = new HashMap<String, Long>();
         params.put("id", id);
 
-        System.out.println("call getforentity");
         ResponseEntity<String> responseEntity =  restTemplate.getForEntity(
                 URI_MUSICS_ID, String.class, params);
         String fileName = responseEntity.getBody();
-        System.out.println("respise Entity : " + responseEntity);
-        System.out.println("fileName : " + fileName);
     }
 
     public Music registerMusic(MultipartFile file, MultipartFile imagefile, String title, int memberNo) throws HttpClientErrorException {

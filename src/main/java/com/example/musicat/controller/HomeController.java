@@ -5,16 +5,6 @@ import com.example.musicat.controller.form.JoinForm;
 import com.example.musicat.domain.board.*;
 import com.example.musicat.domain.member.FollowVO;
 import com.example.musicat.domain.member.MemberVO;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-
-import com.example.musicat.controller.form.JoinForm;
-import com.example.musicat.domain.board.*;
-import com.example.musicat.domain.member.FollowVO;
 import com.example.musicat.domain.music.Music;
 import com.example.musicat.domain.music.Playlist;
 import com.example.musicat.security.MemberAccount;
@@ -26,13 +16,8 @@ import com.example.musicat.service.member.FollowService;
 import com.example.musicat.service.member.GradeService;
 import com.example.musicat.service.member.MemberService;
 import com.example.musicat.service.music.MusicApiService;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.java.Log;
 import com.example.musicat.util.TemplateModelFactory;
-
-import org.apache.catalina.session.StandardSession;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,7 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -205,6 +189,8 @@ public class HomeController {
 
 
         model.addAttribute("HomeContent", "fragments/viewMyPagePlaylist");
+
+        templateModelFactory.setCurPlaylistModel(model);
         return "view/home/viewHomeTemplate";
 
     }
@@ -212,6 +198,9 @@ public class HomeController {
     @GetMapping("/myPage/Playlist/{userNo}/{playlistKey}")
     public String myPagePlaylistDetail(Model model, @PathVariable(name = "playlistKey") String playlistKey, @PathVariable(name = "userNo") int userNo) {
         MemberVO member = new MemberVO();
+
+        //MemberVO member = HomeController.checkMemberNo();
+
         FollowVO follow = new FollowVO();
 
         List<Music> musics = null;
@@ -275,6 +264,8 @@ public class HomeController {
 	      model.addAttribute("checkFollow", checkFollow);
         log.info("대체 뭐가 문젠데 Board " + member.getNo());
         model.addAttribute("HomeContent", "fragments/viewMyPageBoard");
+
+        templateModelFactory.setCurPlaylistModel(model);
         return "view/home/viewHomeTemplate";
 
     }
@@ -303,13 +294,6 @@ public class HomeController {
         List<BoardVO> likeBoardList = this.boardService.retrieveLikeBoardList(member.getNo());
         model.addAttribute("likeBoardList", likeBoardList);
 
-
-
-//         List<BoardVO> boardNameList = this.boardService.retrieveBoardNameList();
-//         model.addAttribute("boardNameList", boardNameList);
-//         log.info(boardNameList.toString());
-
-
         List<CategoryVO> categoryList = this.categoryService.retrieveCategoryBoardList();
         model.addAttribute("categoryBoardList", categoryList);
 
@@ -320,9 +304,11 @@ public class HomeController {
 
         model.addAttribute("follow", follow);
       
-	      model.addAttribute("checkFollow", checkFollow);
+        model.addAttribute("checkFollow", checkFollow);
 
         model.addAttribute("HomeContent", "fragments/viewMyPageReply");
+
+        templateModelFactory.setCurPlaylistModel(model);
         return "view/home/viewHomeTemplate";
 
     }
@@ -359,6 +345,8 @@ public class HomeController {
         model.addAttribute("follow", follow);
 	      model.addAttribute("checkFollow", checkFollow);
         model.addAttribute("HomeContent", "fragments/viewMyPageLike");
+
+        templateModelFactory.setCurPlaylistModel(model);
         return "view/home/viewHomeTemplate";
 
     }

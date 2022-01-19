@@ -18,7 +18,7 @@
         <form th:action="|/pushmusic2/*{id}|" method="post" >
             <input type="hidden" name = "musicNo" th:value="${musicNo}">
             <input type="hidden" name = "memberNo" th:value="*{memberNo}">
-            <td class="py-2 dropdown-divider"><button type="submit" th:onclick="console.log([[${musicNo}]])">Add</button></td>
+            <td class="py-2 dropdown-divider"><button type="submit" class="btn btn-primary" th:onclick="console.log([[${musicNo}]])">Add</button></td>
         </form>
     </tr>
     </tbody>
