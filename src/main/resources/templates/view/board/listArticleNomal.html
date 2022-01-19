@@ -140,8 +140,8 @@
                     aContent: allContent
                 },
                 success: function (data) {
-                    results = data;
-                    console.log(1004, results.length);
+                    results = data.results;
+//                     console.log(1004, results.length);
                     htmlStr = "";
                     $('#article_list').html(""); //view창 비우기
                     if (results.length == 0) {
