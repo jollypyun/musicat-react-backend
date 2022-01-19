@@ -1,0 +1,23 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'구현
+' -------------- Dao -------------------
+ResourceDao <|.. ResourceDaoImpl
+' -------------- Service -------------------
+ResourceSerivce <|.. ResourceSerivceImpl
+
+ResourceMapper <.. ResourceDao
+
+ResourceService <.. ResourceController
+
+
+interface ResourceMapper{
+GradeResourceVO selectOneGradeResource(int gradeResourceNo);
+List<GradeResourceVO> selectGradeResourceList();
+void insertGradeResource(GradeResourceVO gradeResourceVo);
+Integer selectDuplicatedResource(String resourceName);
+void updateGradeResource(GradeResourceVO gradeResourceVo);
+void deleteGradeResource(int gradeResourceNo);
+List<ResourceVO> selectResourceList();
+}

@@ -3,30 +3,17 @@
 
 '구현
 ' -------------- Dao -------------------
-ReplyDao <|.. ReplyDaoImpl
 BoardDao <|.. BoardDaoImpl
 CategoryDao <|.. CategoryDaoImpl
 ' -------------- Service -------------------
-ReplySerivce <|.. ReplyServiceImpl
 BoardSerivce <|.. BoardServiceImpl
 CategorySerivce <|.. CategoryServiceImpl
 
-ReplyMapper <.. ReplyDao
 BoardMapper <.. BoardDao
 CategoryMapper <.. CategoryDao
 
-
-ReplyDao <.. ReplyService
-MemberMapper <.. ReplyService
-
-
-
-
-ReplyService <.. ReplyController
-
-interface MemberMapper{}
-
-
+BoardService <.. BoardController
+CategoruService <.. BoardController
 
 
 
@@ -41,28 +28,22 @@ interface BoardMapper{
 + selectOneBoard(int boardNo): BoardBoardGradeVO
 + selectAllBoard(): ArrayList<BoardBoardGradeVO>
 + selectDuplicatedBoard(String boardName): Integer
-+ insertFavoriteBoard(BoardVO boardVo): void
-+ deleteFavoriteBoard(BoardVO boardVo): void
-+ selectFavoriteBoardList(int no): ArrayList<BoardVO>
++ insertLikeBoard(int memberNo, int boardNo): void
++ deleteLikeBoard(int memberNo, int boardNo): void
++ selectLikeBoard(int memberNo, int boardNo): int
++ selectLikeBoardList(int no) : ArrayList<BoardVO>
 }
 
 interface CategoryMapper{
-+ insertCategory(String categoryName): void
-+ updateCategory(int categoryNo, String categoryName): void
++ insertCategory(String categoryName) : void
++ updateCategory(int categoryNo, String categoryName) : void
 + selectConnectBoard(int categoryNo): int
 + deleteCategory(int categoryNo): void
-+ selectOneCategory(int categoryNo): CategoryVO
-+ selectDuplicatedCategory(String categoryName): int
++ selectOneCategory(int categoryNo); CategoryVO
++ selectDuplicatedCategory(String categoryName): Integer
 + selectCategoryList(): ArrayList<CategoryVO>
 + selectCategoryBoardList(): ArrayList<CategoryBoardVO>
 }
-
-
-
-
-
-
-
 
 
 class BestArticleVO{
@@ -70,6 +51,7 @@ class BestArticleVO{
 - int articleNo
 - String subject
 - int likecount
+- String systemFileName
 - int rank
 
 + BestArticleVO()
@@ -82,6 +64,8 @@ class BestArticleVO{
 + setSubject(String subject): void
 + getLikecount(): int
 + setLikecount(int likecount): void
++ getSystemFileName(): String
++ setSystemFileName(String systemFileName): void
 + getRank(): int
 + setRank(int rank): void
 }
@@ -108,8 +92,6 @@ class BoardGradeVO{
 - String gradeName
 
 + BoardGradeVO()
-+ BoardGradeVO(int readGrade, int writeGrade)
-+ BoardGradeVO(int boardNo, int readGrade, int writeGrade)
 + BoardGradeVO(int boardNo, int readGrade, int writeGrade, int readwrite, int gradeNo, String gradeName)
 + toString()
 + getBoardNo(): int
@@ -132,12 +114,9 @@ class BoardVO{
 - String boardName
 - int boardkind
 - String boardkindName
-- int favoriteNo
-- int no
 
 + BoardVO()
 + BoardVO(int boardNo, String boardName, int boardkind)
-+ BoardVO(int categoryNo, int boardNo, String boardName, int boardkind)
 + BoardVO(int categoryNo, int boardNo, String boardName, int boardkind, String boardkindName, int favoriteNo, int no, List<BoardVO> boardGradeList)
 + toString()
 + getCategoryNo(): int
@@ -150,10 +129,6 @@ class BoardVO{
 + setBoardkind(int boardkind): void
 + getBoardkindName(): String
 + setBoardkindName(String boardkindName): void
-+ getFavoriteNo(): int
-+ setFavoriteNo(int favoriteNo): void
-+ getNo(): int
-+ setNo(int no): void
 }
 
 class CategoryBoardVO{
@@ -187,6 +162,14 @@ class CategoryVO{
 + getBoardList(): ArrayList<BoardVO>
 + setBoardList(List<BoardVO> boardList): void
 + addBoardList(BoardVO board): void
+}
+
+class CreateBoardVO{
++ List<CategoryVO> categoryList;
++ List<GradeVO> gradeList;
++ List<BoardVO> boardkindList;
++ BoardBoardGradeVO bbg;
+
 }
 
 class SelectArticleVO{
@@ -224,9 +207,10 @@ interface BoardDao{
 + selectOneBoard(int boardNo): BoardBoardGradeVO
 + selectAllBoard(): ArrayList<BoardBoardGradeVO>
 + selectDuplicatedBoard(String boardName): Integer
-+ insertFavoriteBoard(BoardVO boardVo): void
-+ deleteFavoriteBoard(BoardVO boardVo): void
-+ selectFavoriteBoardList(int no): ArrayList<BoardVO>
++ insertLikeBoard(int memberNo, int boardNo): void
++ deleteLikeBoard(int memberNo, int boardNo): void
++ selectLikeBoard(int memberNo, int boardNo): int
++ selectLikeBoardList(int no): ArrayList<BoardVO>
 }
 
 interface CategoryDao{
@@ -236,10 +220,11 @@ interface CategoryDao{
 + updateCategory(int categoryNo, String categoryName): void
 + selectConnectBoard(int categoryNo): int
 + deleteCategory(int categoryNo): void
++ selectConnectBoard(int categoryNo): int
++ selectOneCategory(int categoryNo): CategoryVO
 + selectCategoryList(): ArrayList<CategoryVO>
 + selectCategoryBoardList(): ArrayList<CategoryBoardVO>
-+ selectOneCategory(int categoryNo): CategoryVO
-+ selectDuplicatedCategory(String categoryName): int
++ selectDuplicatedCategory(String categoryName): Integer
 }
 
 
@@ -260,6 +245,7 @@ interface BoardService{
 + registerBoard(BoardVO boardVo, BoardGradeVO boardGradeVo): void
 + retrieveBoardkind(): ArrayList<BoardVO>
 + retrieveConnectArticle(int boardNo): int
++ checkWriteGrade(int boardNo, int gradeNo): int
 + removeBoard(int boardNo): void
 + modifyBoard(BoardVO boardVo, BoardGradeVO boardGradeVo): void
 + retrieveOneBoard(int boardNo): BoardBoardGradeVO
@@ -267,6 +253,10 @@ interface BoardService{
 + retrieveAllWriteBoard(int gradeNo): List<BoardVO>
 + retrieveAllReadBoard(int boardNo, int gradeNo): boolean
 + retrieveDuplicatedBoard(String boardName): Integer
++ registerLikeBoard(int memberNo, int boardNo):  void
++ removeLikeBoard(int memberNo, int boardNo):  void
++ retrieveLikeBoard(int memberNo, int boardNo):  int
++ retrieveLikeBoardList(int memberNo):  ArrayList<BoardVO>
 }
 
 interface CategoryService{
@@ -274,12 +264,12 @@ interface CategoryService{
 
 + registerCategory(String categoryName): void
 + modifyCategory(int categoryNo, String categoryName): void
-+ retrieveConnectBoard(int categoryNo): int
 + removeCategory(int categoryNo): void
++ retrieveConnectBoard(int categoryNo): int
++ retrieveOneCategory(int categoryNo): CategoryVO
 + retrieveCategoryList(): ArrayList<CategoryVO>
 + retrieveCategoryBoardList(): ArrayList<CategoryVO>
-+ retrieveOneCategory(int categoryNo): CategoryVO
-+ retrieveDuplicatedCategory(String categoryName): int
++ retrieveDuplicatedCategory(String categoryName): Integer
 }
 
 ' Service 구현 Class
