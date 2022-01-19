@@ -265,7 +265,7 @@ public class BoardController {
 	}
 
 	//게시판 수정 sub
-	public void modifyBoardSub(BoardVO boardVo, BoardGradeVO boardGradeVo,
+	private void modifyBoardSub(BoardVO boardVo, BoardGradeVO boardGradeVo,
 							   int boardNo, int categoryNo, String boardName, int writeGrade, int readGrade, int boardkind) {
 		boardVo.setBoardNo(boardNo);
 		boardVo.setCategoryNo(categoryNo);
