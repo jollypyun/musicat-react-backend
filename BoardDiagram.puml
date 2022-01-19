@@ -281,4 +281,41 @@ class CategoryServiceImpl
 
 '--------------------Controller------------------------
 
+class BoardController{
+- BoardService boardService
+- CategoryService categoryService
+- GradeService gradeService
+- ArticleService articleService
+- FileService fileService
+- MusicApiService musicApiService
+- TemplateModelFactory templateModelFactory
+
++ petopiaMain(Model model): String
++ boardManager(Model model): String
++ accessDenied(Model model): String
++ writeCategory(@ModelAttribute("categoryVo") CategoryVO categoryVo): Map<String, Integer>
++ selectOneCategory(@RequestBody HashMap<String, Object> map): CategoryVO
++ modifyCategory ( @ModelAttribute("categoryVo") CategoryVO categoryVo): Map<String, Integer>
++ deleteCategory(@ModelAttribute("categoryVo") CategoryVO categoryVo): Map<String, Integer>
++ selectListAdd(): CreateBoardVO
++ writeBoard(@RequestParam("categoryNo") int categoryNo, @RequestParam("boardName") String boardName,
++		@RequestParam("writeGrade") int writeGrade, @RequestParam("readGrade") int readGrade,
++		@RequestParam("boardkind") int boardkind): Map<String, Integer>
++ selectListModify(@RequestBody HashMap<String, Object> map ): CreateBoardVO
++ modifyBoard(@RequestParam("boardNo") int boardNo, @RequestParam("categoryNo") int categoryNo,
++		@RequestParam("boardName") String boardName, @RequestParam("writeGrade") int writeGrade,
++		@RequestParam("readGrade") int readGrade, @RequestParam("boardkind") int boardkind): Map<String, Integer>
++ modifyBoardSub(BoardVO boardVo, BoardGradeVO boardGradeVo,
++      int boardNo, int categoryNo, String boardName, int writeGrade, int readGrade, int boardkind): void
++ deleteBoard(@ModelAttribute("boardVo") BoardVO boardVo): Map<String, Integer>
++ selectAllNomalArticle(@PathVariable("boardNo") int boardNo, Model model): String
++ setAudioBoardThumbnail(List<ArticleVO> articles): void
++ pagingBoardList(@RequestParam("movePage") int movePage, @RequestParam("boardNo") int boardNo,
++      @RequestParam(value = "keyword", required = false) String keyword,
++		@RequestParam(value = "content", required = false) String content): Map<String, Object>
++ searchByBoard(@RequestParam("keyword") String keyword ,@RequestParam("content") String content
++		,@RequestParam("boardNo") Integer boardNo ,@RequestParam(value = "aKeyword", required = false) String aKeyword
++		,@RequestParam(value = "aContent", required = false) String aContent): Map<String, Object>
++ likeBoard(@RequestParam("memberNo") int memberNo, @RequestParam("boardNo") int boardNo): Map<String, Integer>
+}
 @enduml
