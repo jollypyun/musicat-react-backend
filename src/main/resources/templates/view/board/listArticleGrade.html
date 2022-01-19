@@ -24,14 +24,14 @@
                     <input type="hidden" id="memberNo" name="memberNo" th:value="${memberNo}">
 
                     <!-- 등업신청하기 -->
-                    <div><input th:if="${#authorization.expr('isAuthenticated()')}" type="button" id="write_btn" name="write_btn" value="등업 신청하기" /></div>
+                    <div><input th:if="${#authorization.expr('isAuthenticated()')}" type="button" id="write_btn" class="mx-3 my-3" name="write_btn" value="등업 신청하기" /></div>
                     <div class="articleVOS card-body">
                         <input type="hidden" id="boardNo" th:value="${boardNo}">
                         <input type="hidden" id="allSearchKeyword" th:value="${keyword}">
                         <input type="hidden" id="allSearchContent" th:value="${content}">
 
                         <form id="write_grade_article_form" action="/articles/insert/grade" method="post">
-                            <table id="write_form_table" style="display: none">
+                            <table id="write_form_table" class="border w-100 grade-article-style" style="display: none">
                                 <thead>
                                 <th>신청자</th>
                                 <th>신청등급</th>
@@ -47,7 +47,7 @@
                         </form>
 
                         <form id="grade_insert_from" method="GET" action="/update/member/grade">
-                        <table id="list_table">
+                        <table id="list_table" class="w-100 border">
                             <thead>
                             <th>선 택</th>
                             <th>신청자</th>
@@ -67,7 +67,7 @@
                                         <input type="hidden" id="articleNo" class="articleNo" name="articleNo" th:value="${article.no}">
                                         <input type="hidden" class="prograde" th:value="${article.proGrade}">
                                         <input type="hidden" class="gradeMemberNo"  th:value="${article.memberNo}">
-                                        <input type="radio" name="selectMember">
+                                        <input class="ms-3" type="radio" name="selectMember">
                                     </td>
                                     <td rowspan="2" th:text="${article.nickname}">신청자</td>
                                     <td th:text="${article.proGrade}">>신청등급</td>
@@ -85,7 +85,7 @@
                             </tbody>
                         </table>
                         <!--관리자만 가능-->
-                        <div sec:authorize="hasAnyRole('ROLE_ADMIN')">
+                        <div class="my-3" sec:authorize="hasAnyRole('ROLE_ADMIN')">
                             <select id="result-choice" name="resultChoice">
                                 <option value="0">거절</option>
                                 <option value="1" selected>수락</option>
