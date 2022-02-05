@@ -18,9 +18,7 @@ public class BestArticleScheduler {
     @Autowired ArticleDao articleDao;
     @Autowired BestArticle bestArticleUtil;
 
-//    @Scheduled(cron = "0*9**?")
-//    @Scheduled(fixedDelay = 1000 * 20)
-    @Scheduled(fixedDelay = 1000 * 604800) // 일주일(매주 월요일)?
+//    @Scheduled(fixedDelay = 1000 * 604800) // 일주일(매주 월요일)?
     public void cronJobSch() {
         System.out.println("LocalDateTime.now() = " + LocalDateTime.now());
         // best Table 비우기
