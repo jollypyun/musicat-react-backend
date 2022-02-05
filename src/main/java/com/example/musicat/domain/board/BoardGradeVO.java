@@ -27,22 +27,4 @@ public class BoardGradeVO {
 	private int gradeNo;
 	private String gradeName;
 
-
-	//
-//	public BoardGradeVO(int boardNo, int readGrade, int writeGrade) {
-//		this.boardNo = boardNo;
-//		this.readGrade = readGrade;
-//		this.writeGrade = writeGrade;
-//	}
-	//
-
-
-//	public BoardGradeVO(int readGrade, int writeGrade) {
-//		this.readGrade = readGrade;
-//		this.writeGrade = writeGrade;
-//	}
-
-	
-	
-	
 }
