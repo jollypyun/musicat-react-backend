@@ -26,7 +26,6 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
     //authentication : AuthenticationManager로부터 전달받은 인증객체로, username, password가 담겨 있음
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        //log.info("커스텀한 인증처리 하러 왔습니다.");
 
         String email = authentication.getName();
         String password = (String) authentication.getCredentials(); //Credentials : 비밀번호
@@ -54,7 +53,7 @@ public class CustomAutheticationProvider implements AuthenticationProvider {
         }
 
 //        //휴면 회원 여부
-//        if(memberContext.getMemberVo().getLastDate() 2년이 지났나용? ) {
+//        if(memberContext.getMemberVo().getLastDate()) {
 //            log.info("lastdate : " + memberContext.getMemberVo().getLastDate());
 //            throw new LockedException("LockedException");
 //        }

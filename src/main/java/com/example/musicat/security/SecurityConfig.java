@@ -48,7 +48,7 @@ import java.util.List;
 
 @Log
 @Configuration
-@EnableWebSecurity //스프링 시큐리티 필터(SecurityConfig)를 스프링 필터 체인에 등록
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
@@ -74,10 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         });
     }
 
-   // 인가 - DB연동 및 권한 계층 부여를 위한 작업
-   //----------------------------------------------------------------------------------------------
-
-    //security 기본 필터 작동 전에 처리할 내용들 적시
+    //security 기본 필터 작동 전에 처리할 내용들
     @Bean
     public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
         FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
@@ -93,8 +90,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new UrlFilterInvocationSecurityMetadataSource();
     }
 
-    // 인증 매니저
-    //AuthenticationManager를 외부에서 사용 하기 위해 AuthenticationManagerBean을 이용해 spring security 밖으로 AuthenticationManager 빼 내야 함 무슨말이야
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -105,7 +100,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_MANAGER > ROLE_USER > ROLE_ANONYMOUS");
-        log.info("1 roleHierarchy ----- " + roleHierarchy);
         return roleHierarchy;
     }
 
@@ -117,17 +111,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //RoleHierarchyVoter : 계층형 Role 지원
         RoleVoter roleVoter = new RoleHierarchyVoter(roleHierarchy());
         roleVoter.setRolePrefix("");
-        log.info("2 roleVoter.getRolePrefix() ----- " + roleVoter.getRolePrefix());
 
-        decisionVoters.add(roleVoter); //security filter default
-        log.info("3 decisionVoters ----- " + decisionVoters);
+        decisionVoters.add(roleVoter);
 
         AffirmativeBased affirm = new AffirmativeBased(decisionVoters);
         affirm.setAllowIfAllAbstainDecisions(true);
-        //affirmativeBased : 하나라도 승인이 있으면 승인 처리
-        //ConsensusBased   : 승인과 거부의 개수를 따져서 다수결 쪽으로 처리
-        //UnanimousBased   : 하나라도 거부가 있으면 거부 처리
-        log.info("4 affirm ----- " + affirm.getDecisionVoters());
 
         return affirm;
     }
@@ -159,47 +147,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 //        http
 //                .authorizeRequests()
-//                //인증된 사용자이면 접근 가능한 페이지
 //                .antMatchers("/user/**", "/ChangePwd/**", "/logout", "/articles/insert").authenticated() //
-//                //매니저 + root(admin) 부터 접근 가능한 페이지
 //                .antMatchers("/manager/**", "/members/**", "/boardManager/**").access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')" )
-//                //root(admin)만 접근 개능한 페이지
 //                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-//                //그 외 요청은 모두 허용 ex) /main, /musicatlogin 등
 //                .anyRequest().permitAll();
 
         http
-                .formLogin() //로그인 페이지 설정
-                .loginPage("/musicatlogin") //권한 없는 경우 로그인 페이지로 이동
+                .formLogin()
+                .loginPage("/musicatlogin")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email") //view에서 들어오는 아이디 파라미터명 명시
                 .passwordParameter("password") //view에서 들어오는 비밀번호 파라미터명 명시
-                .successHandler(new AuthenticationSuccessHandler() { //로그인 성공
+                .successHandler(new AuthenticationSuccessHandler() {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         //인증 성공 시 인증 결과를 담은 인증 객체를 파라미터로 받음 (인증 요청하지 않은 사용자의 정보는 HomController(/main)에서 처리해줌
                         MemberVO member = ((MemberAccount) authentication.getPrincipal()).getMemberVo();
-                        log.info("principal : " + member.toString());
 
                         //사용자 요청페이지 저장
                         RequestCache requestCache = new HttpSessionRequestCache();
                         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
                         if(savedRequest == null) { //요청페이지가 없으면 보낼 url
-                            log.info("별도 요청 페이지 없음(main에서 로그인)");
                             response.sendRedirect("/main");
-
                         } else { //요청 페이지가 있으면 보낼 url
-                            log.info("요청페이지 savedRequest.getRedirectUrl() : " + savedRequest.getRedirectUrl());
                             response.sendRedirect(savedRequest.getRedirectUrl());
                         }
                     }
                 })
-                .failureHandler(new AuthenticationFailureHandler() { //로그인 실패
+                .failureHandler(new AuthenticationFailureHandler() {
                     @Override
                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-                        //이전에 입력한 이메일
-                        log.info("email : " + request.getParameter("email"));
 
                         //로그인 실패 예외 발생 시 처리
                         if (exception instanceof UsernameNotFoundException) { //DB에 일치하는 email이 없는 경우
@@ -234,8 +212,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .sessionManagement() //세션 관리
-                .sessionFixation().changeSessionId() //세션 고정 보호. 세션 조작을 통한 보안 공격 방지를 위해, 인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지 (security가 기본으로 제공해주기 때문에 별도로 설정해줄 필요 없음)
-                .maximumSessions(4) //최대 세션 개수
+                .sessionFixation().changeSessionId() //인증이 필요할 때마다 새로운 세션을 만들어 쿠키 조작을 방지
+                .maximumSessions(3) //최대 세션 개수
                 .expiredUrl("/expiredUrl") //session 만료 시 이동 페이지
                 .maxSessionsPreventsLogin(true); //false : 이전에 로그인한 세션 만료, true : 나중에 로그인 시도하는 세션 생성 불가(로그인 불가)
 
@@ -249,10 +227,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(3600) //rememberMe 토큰 만료 기간
                 .alwaysRemember(false) //remember Me 기능이 활성화되지 않아도 항상 실행
                 .userDetailsService(userDetailsService); //rememberMe 인증 시 인증 계정 조회를 위해 필요
-
-
-        log.info("SecurityConfig 순회 완--------------------");
-
     }
 
 }

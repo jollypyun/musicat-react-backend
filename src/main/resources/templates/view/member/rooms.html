@@ -1,4 +1,5 @@
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -33,7 +34,7 @@
             <a th:href="@{/chat/room(roomId=${room.roomId})}">[[${room.name}]]</a>
           </li>
         </ul>
-        <form class="chat-form" th:action="@{/chat/room}" method="post">
+        <form class="chat-form" th:action="@{/chat/room}" method="post" sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
           <input
                   type="text"
                   name="name"

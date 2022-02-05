@@ -6,17 +6,10 @@ import java.util.Map;
 import com.example.musicat.domain.member.GradeVO;
 
 public interface GradeService {
-	
-	// 양 ~
-	
-	// 특정 등급의 등급번호 조회
-	Integer retrieveGradeNo(String auth);
 
 	// 등급 조회
 	ArrayList<GradeVO> retrieveGradeList();
 
-	// ~ 양
-	
 	// 등급 수정
 	void modifyGrade(GradeVO grade) throws Exception;
 	

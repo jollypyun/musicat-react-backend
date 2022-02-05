@@ -41,7 +41,6 @@ public class BoardController {
 	private FileService fileService;
 	@Autowired
 	private MusicApiService musicApiService;
-
 	@Autowired
 	private TemplateModelFactory templateModelFactory;
 
@@ -287,12 +286,9 @@ public class BoardController {
 		Map<String, Integer> map = new HashMap<>();
 
 		if (count != 0) {
-			int connectArticle = 1;
-			map.put("result", connectArticle);
+			map.put("result", 1);
 		} else {
-			int connectArticle = 0;
-			map.put("result", connectArticle);
-
+			map.put("result", 0);
 			this.boardService.removeBoard(boardNo);
 		}
 		return map;
