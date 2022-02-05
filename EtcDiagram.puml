@@ -2,6 +2,17 @@
 'https://plantuml.com/class-diagram
 
 ' -- etc--
+class StompChatController {
+- SimpMessagingTemplate template
+- NotifyManager notifyManager
+
++ init() : void
++ enter(ChatVO message) : void
++ message(ChatVO message) : void
++ notifyRegister(Integer no) : void
++ notifyRead(@PathVariable int notify_no) : String
+}
+
 class ChatRoomVO{
 - String roomId
 - String name

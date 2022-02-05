@@ -30,7 +30,6 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
 
         //DB에서 url과 권한 정보 가져오기
         List<GradeResourceVO> gradeResourceList = resourceMapper.selectGradeResourceList();
-        //log.info("8 gradeResourceList ----- " + gradeResourceList.toString());
 
         //url에 권한 리스트 매칭
         for(GradeResourceVO gradeResource : gradeResourceList) {
@@ -38,36 +37,20 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
                     Arrays.asList(new SecurityConfig(gradeResource.getGrade())));
         }
 
-
-        //해당 url의 권한 리스트를 리턴
-//        if(requestMap != null) {
-//            var flag = requestMap.entrySet().stream()
-//                    .filter(entry -> entry.getKey().matches(request))
-//                    .findFirst()
-//                    .map(Map.Entry::getValue)
-//                    .orElseGet(ArrayList::new);
-//            log.info("11 flag ----- " + flag);
-//            return flag;
-//        }
-
         if(requestMap != null) {
             for(Map.Entry<RequestMatcher, List<ConfigAttribute>> entry : requestMap.entrySet()) {
                 RequestMatcher matcher = entry.getKey();
-                //log.info("matcher ----- " + matcher);
                 if(matcher.matches(request)) {
-                    //log.info("entry.getValue() ----- " + entry.getValue());
                     return entry.getValue();
                 }
             }
         }
-
         return null;
     }
 
     @Override
     //모든 권한 리스트 가져오기
     public Collection<ConfigAttribute> getAllConfigAttributes() {
-        //log.info("12 getAllConfigAttributes() ----- " + requestMap.values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
         return requestMap.values().stream()
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());

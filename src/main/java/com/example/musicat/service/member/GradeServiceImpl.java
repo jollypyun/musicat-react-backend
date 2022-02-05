@@ -18,25 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class GradeServiceImpl implements GradeService{
 	@Autowired private GradeMapper gradeMapper;
 
-	// 양 ~
-
-	@Override
-	@Transactional(readOnly = true)
-	public Integer retrieveGradeNo(String auth) {
-		auth = auth.replace("[", "");
-		auth = auth.replace("]", "");
-		int gradeNo = this.gradeMapper.selectGradeNo(auth);
-		log.info("auth : " + auth + " gradeNo : " + gradeNo);
-		return gradeNo;
-	}
-
 	@Override
 	@Transactional(readOnly = true)
 	public ArrayList<GradeVO> retrieveGradeList() {
 		return this.gradeMapper.selectGradeList();
 	}
-
-	// ~ 양
 
 	@Override
 	public void modifyGrade(GradeVO grade) throws Exception {

@@ -10,11 +10,11 @@
 <!--		<result property="comms" javaType="int" column="comms" jdbcType="INTEGER"/>-->
 <!--		<result property="person" javaType="int" column="person" jdbcType="INTEGER"/>-->
 <!--	</resultMap>-->
-	
+
 	<resultMap type="boardVO" id="boardNameInfo">
 		<result property="boardName" javaType="string" column="boardname" jdbcType="VARCHAR"/>
 	</resultMap>
-	
+
 <!--	<select id="selectGradeList" resultType="gradeVo" resultMap="gradeInfo">-->
 <!--		SELECT G.grade_no, name, G.docs, G.comms, COUNT(M.grade_no) AS person-->
 <!--		FROM member M RIGHT JOIN grade G-->
@@ -22,11 +22,11 @@
 <!--		GROUP BY G.grade_no, name, G.docs, G.comms-->
 <!--		ORDER BY G.grade_no ASC-->
 <!--	</select>-->
-	
+
 	<update id="rearrangeMemberGrade" statementType="CALLABLE">
 		{ CALL sp_member_grade_modification() }
 	</update>
-	
+
 	<select id="selectReadBoardByGrade" parameterType="int" resultType="boardVO" resultMap="boardNameInfo">
 		SELECT boardName
 		FROM board

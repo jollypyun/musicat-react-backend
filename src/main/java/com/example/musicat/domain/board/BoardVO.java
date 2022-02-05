@@ -29,23 +29,4 @@ public class BoardVO {
     }
 
 
-
-
-    //private int favoriteNo;
-    //private int no; //회원 넘버
-
-    //
-//    public BoardVO(int categoryNo, int boardNo, String boardName, int boardkind) {
-//        this.categoryNo = categoryNo;
-//        this.boardNo = boardNo;
-//        this.boardName = boardName;
-//        this.boardkind = boardkind;
-//    }
-    //
-
-
-
-    //private List<BoardVO> boardGradeList = new ArrayList<>();
-
-
 }
