@@ -76,13 +76,6 @@ public class BoardServiceImpl implements BoardService {
 		return this.boardDao.selectOneBoard(boardNo);
 	}
 
-	// 게시판 정보 조회 (전체)
-	@Override
-	@Transactional(readOnly = true)
-	public ArrayList<BoardBoardGradeVO> retrieveAllBoard() {
-		return this.boardDao.selectAllBoard();
-	}
-
 	//게시판 이름 중복 여부 조회
 	@Override
 	@Transactional(readOnly = true)

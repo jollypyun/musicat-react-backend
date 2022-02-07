@@ -21,7 +21,7 @@ import java.util.List;
 public class GradeVO {
 	private int gradeNo;
 	private String name;
-	private String grade; //양
+	private String grade;
 	private int docs;
 	private int comms;
 	private int person;

@@ -24,15 +24,11 @@ public interface BoardService {
 	
 	public BoardBoardGradeVO retrieveOneBoard(int boardNo);
 	
-	public ArrayList<BoardBoardGradeVO> retrieveAllBoard();
-	
 	public List<BoardVO> retrieveAllWriteBoard(int gradeNo);
 	
 	public boolean retrieveAllReadBoard(int boardNo, int gradeNo);
 	
 	public Integer retrieveDuplicatedBoard(String boardName);
-
-	//public List<BoardVO> retrieveBoardNameList();
 
 	public void registerLikeBoard(int memberNo, int boardNo);
 

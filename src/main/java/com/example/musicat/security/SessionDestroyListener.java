@@ -26,11 +26,8 @@ public class SessionDestroyListener implements ApplicationListener<SessionDestro
         for(SecurityContext securityContext : securityContextsList) {
             MemberAccount memberAccount = (MemberAccount) securityContext.getAuthentication().getPrincipal();
 
+            //세션이 종료된 회원의 번호
             notifyManager.deleteFromNotifyList(memberAccount.getMemberVo().getNo());
-
-            log.info("세션 종료 회원 번호 : " + memberAccount.getMemberVo().getNo());
-            log.info("세션 종료 회원 이메일 : " + memberAccount.getMemberVo().getEmail());
-
         }
     }
 }

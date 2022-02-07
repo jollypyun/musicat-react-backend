@@ -49,7 +49,7 @@ public class MusicApiService {
     private final String URI_PLAYLIST_PUSHNOW = "http://13.124.245.202:20000/api/playlists/pushNow";
     private final String URI_PLAYLIST_CHANGE = "http://13.124.245.202:20000/api/playlists/update";
     private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
-    private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/playlists/detail/{playlistKey}";
+    private final String URI_PLAYLIST_DETAIL = "http://13.124.245.202:20000/api/detailPlaylists/{playlistKey}";
     private final String URI_MUSICS_TEST = "http://13.124.245.202:20000/api/posttest";
     //private final String URI_PLAYLIST_MAKE_NOW = "http://13.124.245.202:20000/api/playlists/makeNow/{memberNo}";
     private final String URI_PLAYLIST_MAKE_NOW = "http://localhost:20000/api/playlists/makeNow/{memberNo}";
