@@ -43,9 +43,9 @@ public class MusicApiService {
 //    private final String URI_MUSICS_TEST = "http://localhost:20000/api/posttest";
 
     private final String URI_MUSICS_ID = "http://13.124.245.202:20000/api/musics/find/{id}";
-    private final String URI_MUSICS_UPLOAD = "http://13.124.245.202:20000/api/musics/uploadFile";
+    private final String URI_MUSICS_UPLOAD = "http://13.124.245.202:20000/api/music";
     private final String URI_PLAYLIST_CREATE = "http://13.124.245.202:20000/api/playlists/create";
-    private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/muscis";
+    private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/musics";
     private final String URI_PLAYLIST_PUSHNOW = "http://13.124.245.202:20000/api/playlists/pushNow";
     private final String URI_PLAYLIST_CHANGE = "http://13.124.245.202:20000/api/playlists/update";
     private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
@@ -132,13 +132,13 @@ public class MusicApiService {
     public void deleteMusicByArticleNo(int articleNo) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put("articleNo", articleNo);
-        restTemplate.delete("http://13.124.245.202:20000/api/musics/deleteByArticleNo/{articleNo}", params);
+        restTemplate.delete("http://13.124.245.202:20000/api/musics/article/{articleNo}", params);
     }
 
     public void deleteByMusicId(Long musicId) {
         Map<String, Long> params = new HashMap<String, Long>();
         params.put("musicId", musicId);
-        restTemplate.delete("http://13.124.245.202:20000/api/musics/deleteById/{musicId}", params);
+        restTemplate.delete("http://13.124.245.202:20000/api/musics/id/{musicId}", params);
     }
 
     public void connectToArticle(Long musicId, int articleNo) {
@@ -146,12 +146,12 @@ public class MusicApiService {
         params.put("musicId", musicId);
         params.put("articleNo", articleNo);
         log.info(params.toString());
-        restTemplate.put("http://13.124.245.202:20000/api/musics/connectToArticle/{musicId}/{articleNo}",String.class, params);
+        restTemplate.put("http://13.124.245.202:20000/api/music/{musicId}/{articleNo}",String.class, params);
     }
 
     public List<Music> retrieveMusics(int articleNo){
 
-        ResponseEntity<List> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
+        ResponseEntity<List> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/musics/article/{articleNo}", List.class, articleNo);
        
         log.info("response body : " + response.getBody());
 
