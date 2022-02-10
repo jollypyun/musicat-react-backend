@@ -45,7 +45,7 @@ public class MusicApiService {
     private final String URI_MUSICS_ID = "http://13.124.245.202:20000/api/musics/find/{id}";
     private final String URI_MUSICS_UPLOAD = "http://13.124.245.202:20000/api/musics/uploadFile";
     private final String URI_PLAYLIST_CREATE = "http://13.124.245.202:20000/api/playlists/create";
-    private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/push";
+    private final String URI_PLAYLIST_PUSH = "http://13.124.245.202:20000/api/playlists/muscis";
     private final String URI_PLAYLIST_PUSHNOW = "http://13.124.245.202:20000/api/playlists/pushNow";
     private final String URI_PLAYLIST_CHANGE = "http://13.124.245.202:20000/api/playlists/update";
     private final String URI_PLAYLIST_ID = "http://13.124.245.202:20000/api/playlists/{memberNo}";
