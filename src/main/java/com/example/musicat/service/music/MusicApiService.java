@@ -151,7 +151,7 @@ public class MusicApiService {
 
     public List<Music> retrieveMusics(int articleNo){
 
-        ResponseEntity<List> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/musics/findMusics/{articleNo}", List.class, articleNo);
+        ResponseEntity<List> response = restTemplate.getForEntity("http://13.124.245.202:20000/api/musics/article/{articleNo}", List.class, articleNo);
        
         log.info("response body : " + response.getBody());
 
