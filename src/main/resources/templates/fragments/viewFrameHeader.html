@@ -123,7 +123,7 @@
 
         </ul>
       </li>
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown" th:if="${#authorization.expr('isAuthenticated()')}">
         <a
                 class="nav-link dropdown-toggle position-relative dropdown-alram"
                 id="alramToggle"
@@ -183,6 +183,7 @@
 
 
             var i;
+            var noticeCount = 0;
             for(i = 0; i < content.length; i++){
               //$('#noticeList').append("<li><a href=" + "/main" + ">" + content[i].content +"</a></li>");
               let li = document.createElement("li");
@@ -198,12 +199,20 @@
               console.log(content[i].content + " : " + content[i].readDate);
               if(content[i].readDate == null) {
                 console.log(content[i].content + " : " + "n 아이콘 출력");
+                ++noticeCount;
                 li.append(nIcon);
               }
 
               $('#noticeList').append(li);
             }
-            $('#noticeCount').text(i);
+            $('#noticeCount').show();
+
+            if(noticeCount == 0 )
+              $('#noticeCount').hide();
+            else
+              $('#noticeCount').text(noticeCount);
+
+
             //console.log("noticecount : " + i);
           });
 
