@@ -50,7 +50,7 @@
                         <div class="myPage-content-left-playlist" th:each = "music : ${musics}" th:object="${music}">
                             <div class="myPage-content-left-playlist-img">
 
-                                <img src="*{links[1].href}">
+                                <img th:src="*{links[1].href}">
 
                             </div>
                             <div class="myPage-content-left-playlist-table">
