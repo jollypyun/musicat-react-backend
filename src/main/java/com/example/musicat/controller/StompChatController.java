@@ -5,6 +5,7 @@ import com.example.musicat.domain.etc.NoteVO;
 import com.example.musicat.domain.etc.NotifyVO;
 import com.example.musicat.exception.customException.InvalidNotifyException;
 import com.example.musicat.websocket.manager.NotifyManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,20 +19,12 @@ import javax.annotation.PostConstruct;
 
 @Slf4j
 @Controller
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class StompChatController {
 
-    //private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
+    private final SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
 
-    @Autowired
-    NotifyManager notifyManager;
-
-    private SimpMessagingTemplate template;
-
-    @PostConstruct
-    private void init(){
-        template = notifyManager.getTemplate();
-    }
+    private final NotifyManager notifyManager;
 
     //Client가 SEND할 수 있는 경로
     //stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합됨
@@ -62,7 +55,6 @@ public class StompChatController {
     @GetMapping(value="/notifyRead/{notify_no}")
     public String notifyRead(@PathVariable int notify_no){
         log.info("notifyRead");
-
 
         NotifyVO notifyVO = notifyManager.selectNotifyOne(notify_no);
         if(notifyVO == null) {

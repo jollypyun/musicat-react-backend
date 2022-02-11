@@ -32,6 +32,12 @@
         <ul>
           <li th:each="room : ${list}">
             <a th:href="@{/chat/room(roomId=${room.roomId})}">[[${room.name}]]</a>
+            <form th:action="@{/chat/room/delete}" method="post" sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
+              <input type="hidden" name="roomId" th:value="${room.roomId}" />
+              <button class="btn btn-secondary">
+                <span>[X]</span>
+              </button>
+            </form>
           </li>
         </ul>
         <form class="chat-form" th:action="@{/chat/room}" method="post" sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
@@ -57,7 +63,6 @@
     <!--  비동기 메시시 처리 방식 -->
     <script th:inline="javascript">
       $(document).ready(function(){
-
           var roomName = [[${roomName}]];
 
           if(roomName != null)

@@ -1,12 +1,14 @@
 package com.example.musicat.repository.etc;
 
 import com.example.musicat.domain.etc.ChatRoomVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Stream;
 
+@Slf4j
 @Repository
 public class ChatRoomRepository {
 
@@ -38,9 +40,14 @@ public class ChatRoomRepository {
 
     public String deleteChatRoom(String chatRoomId) {
 
-        if(chatRoomDTOMap.remove(chatRoomId) == null)
+        if(chatRoomDTOMap.remove(chatRoomId) == null) {
+            log.info("room not exist");
             return "room not exist";
-        else
+        }
+        else{
+            log.info("delete success");
             return "delete Success";
+        }
+
     }
 }
