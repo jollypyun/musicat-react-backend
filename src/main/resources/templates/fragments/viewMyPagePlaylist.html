@@ -69,16 +69,9 @@
                 </div>
 
                 <div class="myPage-btn-style" th:if="${#authorization.expr('isAuthenticated()')} AND ${#authentication.principal.getMemberVo.getNo} == ${member.getNo()}">
-                    <form class="me-3" style="display: none" method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
-                        <button class="btn btn-primary" type="submit">추가</button>
+                    <form method="get" th:action="|/addPlaylistForm/${member.getNo()}|">
+                        <button id = "class" class="btn btn-primary" type="submit">추가</button>
                     </form>
-                    <form
-                            th:action="|/deleteplaylist/*{memberNo}/*{id}|"
-                            method="POST">
-                        <input type="hidden" name="_method" value="DELETE"/>
-                        <button id="class" class="btn btn-primary">전체 삭제</button>
-                    </form>
-
                 </div>
                 </th:block>
             </div>
