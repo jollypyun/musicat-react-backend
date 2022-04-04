@@ -10,4 +10,8 @@ http://www.musicat.life/main
 - 장르 혹은 태그에 따라 상세한 정보 조회 가능
 - 자신만의 플레이리스트 설정 가능
 
-![시스템구축환경_하드웨어](https://user-images.githubusercontent.com/84134297/161502989-4b232b36-25c8-42a7-b2de-5b84a5af785f.JPG)
+시스템 구축환경
+![시스템구축환경](https://user-images.githubusercontent.com/84134297/161503193-1883c491-53f5-4093-9117-55f98b896a46.JPG)
+
+기술 스택
+![기술스택](https://user-images.githubusercontent.com/84134297/161503203-b171616d-e692-441c-8b68-a1578a75c97d.JPG)
