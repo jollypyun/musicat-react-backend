@@ -29,26 +29,16 @@
 |**REST API**|**github**|
 |:------:|:---:|
 |Msicat_audio|https://github.com/jollypyun/musicat_audio|  
-<br>
-<br>
----
-<br><br>
+
+
+<div><br><br><br><br></div>
+
 # 홈페이지 소개  
 
 웹사이트 : http://www.musicat.life/main
 
 
-   ## 카페 기능 (게시판 즐겨찾기, 게시글, 댓글, 프로필, 팔로우)
-   <img src ="https://user-images.githubusercontent.com/84134297/161533347-e20f8d9f-ed5f-4bcf-9192-952a35373515.jpg" width="50%" height ="50%" />
-   <img src ="https://user-images.githubusercontent.com/84134297/161533430-8c8115d8-0793-4458-90cb-8f0ae3b4e250.jpg" width="50%" height ="50%" />
-   <img src ="https://user-images.githubusercontent.com/84134297/161533455-5a25f171-aa6b-49fc-a30e-0f63af9c8684.jpg" width="50%" height ="50%" />
-   
-   ## 관리자 기능 (회원관리, 게시판관리, security 리소스 테이블)
-   <img src="https://user-images.githubusercontent.com/84134297/161533579-2b37b7b1-4012-4ec4-b09c-d132864c8667.jpg" width ="50%" height ="50%"/>
-   <img src="https://user-images.githubusercontent.com/84134297/161533583-6fa26ff9-520a-4a8b-9036-cf17478758ad.jpg" width ="50%" height ="50%"/>   
-   <img src="https://user-images.githubusercontent.com/84134297/161533593-cced46d2-cbf0-4f05-9bee-ac2be2e2d552.jpg" width ="50%" height ="50%"/>
-   
-   ## 음악 (음악 등록/재생, 재생 목록, 플레이 리스트)**
+   ## 음악 (음악 등록/재생, 재생 목록, 플레이 리스트)
    <img src="https://user-images.githubusercontent.com/84134297/161533734-2fac28c7-dde2-4b5e-a2e5-49ba26f6d2b1.png" width ="50%" height ="50%"/>   
    <img src="https://user-images.githubusercontent.com/84134297/161533737-e134f8b6-68fa-4057-bf47-11b42e34f692.jpg" width ="50%" height ="50%"/>   
    <img src="https://user-images.githubusercontent.com/84134297/161533783-31d3f84c-8892-4562-b2e1-2739d419ff94.jpg" width ="50%" height ="50%"/>
@@ -56,3 +46,17 @@
    ## 웹소켓을 이용한 실시간 기능 (채팅, 알림)
    <img src="https://user-images.githubusercontent.com/84134297/161534080-e9dece0c-ff2c-4fae-99a8-e596362a44c9.jpg" width ="50%" height ="50%"/>
    <img src="https://user-images.githubusercontent.com/84134297/161534089-62d1f2ee-9f63-47b3-9ad5-e6998c8cd2b6.jpg" width ="50%" height ="50%"/>
+   
+   ## 관리자 기능 (회원관리, 게시판관리, security 리소스 테이블)
+   <img src="https://user-images.githubusercontent.com/84134297/161533579-2b37b7b1-4012-4ec4-b09c-d132864c8667.jpg" width ="50%" height ="50%"/>
+   <img src="https://user-images.githubusercontent.com/84134297/161533583-6fa26ff9-520a-4a8b-9036-cf17478758ad.jpg" width ="50%" height ="50%"/>   
+   <img src="https://user-images.githubusercontent.com/84134297/161533593-cced46d2-cbf0-4f05-9bee-ac2be2e2d552.jpg" width ="50%" height ="50%"/>
+   
+   ## 카페 기능 (게시판 즐겨찾기, 게시글, 댓글, 프로필, 팔로우)
+   <img src ="https://user-images.githubusercontent.com/84134297/161533347-e20f8d9f-ed5f-4bcf-9192-952a35373515.jpg" width="50%" height ="50%" />
+   <img src ="https://user-images.githubusercontent.com/84134297/161533430-8c8115d8-0793-4458-90cb-8f0ae3b4e250.jpg" width="50%" height ="50%" />
+   <img src ="https://user-images.githubusercontent.com/84134297/161533455-5a25f171-aa6b-49fc-a30e-0f63af9c8684.jpg" width="50%" height ="50%" />
+   
+
+   
+
