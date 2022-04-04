@@ -13,3 +13,20 @@ http://www.musicat.life/main
 # 개발환경
 
 ![musicat개발환경](https://user-images.githubusercontent.com/84134297/161516388-841fcc22-8869-4ea7-b480-2b7879810424.png)
+
+# 팀원 소개
+
+|**팀원**|**github**|
+|:------:|:---:|
+|강종훈|https://github.com/jhk1231|
+|김성중|https://github.com/Gapus|
+|김연주|https://github.com/cocoada|
+|박예나|https://github.com/Fidget278|
+|양다예|https://github.com/da77777|
+|편근형|https://github.com/jollypyun|
+
+# REST API
+
+|**REST API**|**github**|
+|:------:|:---:|
+|Msicat_audio|https://github.com/jollypyun/musicat_audio|
