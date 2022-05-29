@@ -58,5 +58,15 @@
    <img src ="https://user-images.githubusercontent.com/84134297/161533455-5a25f171-aa6b-49fc-a30e-0f63af9c8684.jpg" width="50%" height ="50%" />
    
 
-   
+# 작성 문서
 
+Musicat ERD
+![musicat_erd](https://user-images.githubusercontent.com/46017367/170855414-233a20f5-5acd-4df0-aa25-c0ba8e43fe53.png)
+
+Musicat_audio (음악 REST API 서버) ERD
+![musicat_audio](https://user-images.githubusercontent.com/46017367/170855436-c2afebfc-7571-4d53-a5e6-3c714500b39d.png)
+
+스토리보드 : https://docs.google.com/presentation/d/1CT5rOUXLF3YRw29W2SvhUJ4tkSGM_MsM/edit#slide=id.gf3581bb510_14_1901
+클래스 다이어그램 : https://drive.google.com/drive/folders/1wkykMS0aJz2i1AP3EVlpRc1Rw4WYveEo
+오퍼레이션 명세서 : https://docs.google.com/spreadsheets/d/1k6uNxotW-iIw0QqDdqVFOyhwd-KssNH6/edit#gid=450068953
+유즈케이스 명세서 : https://docs.google.com/spreadsheets/d/1p2Rh-vJiGZ4zxu78tcTN96jTbrDz2hGm/edit#gid=960756777
