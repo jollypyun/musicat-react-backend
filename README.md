@@ -1,21 +1,18 @@
 # musciat-react-backend
 
 ## 목적
-1. 현 Musicat 프로젝트는 SPA를 활용하지 못 하여 음원의 백그라운드 재생을 지원하지 못함.
-2. 이를 개선하고자 F/E를 React로 전환하고자 함.
-3. 더불어 현재 maven으로 구성한 라이브러리 관리 도구를 gradle로 전환하고자 함.
+1. 현 Musicat 프로젝트는 REST로 이루어져 있다.
+2. gRPC를 공부하고자 함.
 
 ## 기대 효과
-1. B/E와 B/E의 분리
-2. 빌드 시간 단축
-3. 음원의 백그라운드 재생
+1. 표준이 정해져 있는 형식의 통신
 
 ## 일정
-2022.06.18 ~ 2022
+2022.06.30 ~ 2022
 
 ## 해야할 것들
-1. 기존 thymeleaf, html5, js, css로 작성하였던 F/E를 React로 refactoring
-2. React와의 통신을 위해서 기존 musicat에서 Controller부분을 Restcontroller로 refactoring
+1. gradle로의 전환
+2. REST에서 gRPC로의 전환
 
 ## 역할
 편근형 : https://github.com/jollypyun, https://github.com/pyun-geunhyung
